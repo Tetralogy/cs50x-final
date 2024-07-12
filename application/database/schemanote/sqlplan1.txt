@@ -1,0 +1,212 @@
+-- Users table
+CREATE TABLE users (
+    user_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    username TEXT NOT NULL UNIQUE,
+    email TEXT NOT NULL UNIQUE,
+    password_hash TEXT NOT NULL,
+    profile_picture_url TEXT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    last_login DATETIME NULL
+);
+
+
+-- User abilities and disabilities table
+CREATE TABLE user_abilities (
+    ability_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER,
+    ability_type TEXT,
+    description TEXT,
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
+);
+
+-- Create a new user_preferences table
+CREATE TABLE user_preferences (
+    user_id INTEGER PRIMARY KEY,
+    measurement_unit TEXT NOT NULL DEFAULT 'metric',
+    notification_frequency TEXT DEFAULT 'daily',
+    theme TEXT DEFAULT 'light',
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
+);
+
+-- Homes table
+CREATE TABLE homes (
+    home_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER,
+    --home_address TEXT,
+    home_size_sqm REAL,  -- Store size in square meters
+    num_floors INTEGER,
+    layout TEXT,
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
+);
+
+
+
+-- Rooms table
+CREATE TABLE Rooms (
+    room_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    home_id INTEGER,
+    room_name TEXT,
+    room_type TEXT,
+    room_size REAL,
+    room_flooring_type TEXT,
+    room_windows INTEGER,
+    room_function TEXT,
+    room_frequency_of_use TEXT,
+    room_importance TEXT,
+    room_dirtiness_level REAL,
+    room_tools_supplies_on_hand TEXT,
+    room_tools_supplies_required TEXT,
+    FOREIGN KEY (home_id) REFERENCES homes(home_id)
+);
+-- Room details table
+CREATE TABLE room_details (
+    detail_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    room_id INTEGER,
+    appliance TEXT,
+    surface_type TEXT,
+    usage_frequency TEXT,
+    importance INTEGER,
+    aesthetic_score INTEGER,
+    dirtiness_score INTEGER,
+    effort_required INTEGER,
+    FOREIGN KEY (room_id) REFERENCES rooms(room_id)
+);
+
+-- Photos table
+CREATE TABLE photos (
+    photo_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER,
+    room_id INTEGER,
+    photo_url TEXT,
+    is_before_photo BOOLEAN,
+    photo_timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(user_id),
+    FOREIGN KEY (room_id) REFERENCES rooms(room_id)
+);
+
+-- Tasks table
+CREATE TABLE tasks (
+    task_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER,
+    room_id INTEGER,
+    task_title TEXT,
+    task_description TEXT,
+    task_created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    task_due_time DATETIME,
+    task_priority INTEGER,
+    task_status TEXT,
+    task_tags TEXT,
+    task_scheduled_time DATETIME,
+    task_type TEXT,
+    completed_at DATETIME,
+    FOREIGN KEY (user_id) REFERENCES users(user_id),
+    FOREIGN KEY (room_id) REFERENCES rooms(room_id)
+);
+
+-- Task annotations table
+CREATE TABLE task_annotations (
+    annotation_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    task_id INTEGER,
+    x_coordinate REAL,
+    y_coordinate REAL,
+    annotation_text TEXT,
+    FOREIGN KEY (task_id) REFERENCES tasks(task_id)
+);
+
+-- TaskProgress table
+CREATE TABLE TaskProgress (
+    progress_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    task_id INTEGER,
+    progress_photo_url TEXT,
+    progress_timestamp DATETIME,
+    progress_description TEXT,
+    completion_percentage REAL,
+    FOREIGN KEY (task_id) REFERENCES Tasks(task_id)
+);
+
+-- SharedTasks table
+CREATE TABLE SharedTasks (
+    share_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    task_id INTEGER,
+    shared_with TEXT,
+    share_timestamp DATETIME,
+    comments TEXT,
+    likes INTEGER,
+    feedback TEXT,
+    FOREIGN KEY (task_id) REFERENCES Tasks(task_id)
+);
+
+-- Notifications table
+CREATE TABLE Notifications (
+    notification_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER,
+    task_id INTEGER,
+    notification_message TEXT,
+    notification_status TEXT,
+    reminder_time DATETIME,
+    FOREIGN KEY (user_id) REFERENCES Users(user_id),
+    FOREIGN KEY (task_id) REFERENCES Tasks(task_id)
+);
+
+
+-- Tools and supplies table
+CREATE TABLE tools_supplies (
+    item_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    room_id INTEGER,
+    item_name TEXT,
+    item_type TEXT,
+    is_on_hand BOOLEAN,
+    FOREIGN KEY (room_id) REFERENCES rooms(room_id)
+);
+
+-- User status table
+CREATE TABLE user_status (
+    status_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER,
+    current_room_id INTEGER,
+    focus TEXT,
+    mood TEXT,
+    energy_level INTEGER,
+    last_updated DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(user_id),
+    FOREIGN KEY (current_room_id) REFERENCES rooms(room_id)
+);
+
+-- User schedule table
+CREATE TABLE user_schedule (
+    schedule_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER,
+    event_name TEXT,
+    start_time DATETIME,
+    end_time DATETIME,
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
+);
+
+-- Product recommendations table
+CREATE TABLE product_recommendations (
+    recommendation_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    task_id INTEGER,
+    product_name TEXT,
+    product_url TEXT,
+    price REAL,
+    FOREIGN KEY (task_id) REFERENCES tasks(task_id)
+);
+
+-- Service recommendations table
+CREATE TABLE service_recommendations (
+    recommendation_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    task_id INTEGER,
+    service_name TEXT,
+    service_url TEXT,
+    price REAL,
+    FOREIGN KEY (task_id) REFERENCES tasks(task_id)
+);
+
+-- Task completion history table
+CREATE TABLE task_completion_history (
+    completion_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    task_id INTEGER,
+    completed_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    after_photo_url TEXT,
+    FOREIGN KEY (task_id) REFERENCES tasks(task_id)
+);
