@@ -1,0 +1,69 @@
+Basic user experience outline
+Register/create an account
+Login
+Logout
+Session cookies and user activity etc.
+Onboarding
+Establish the user’s home environment
+House size
+Number of levels
+Layout
+Important rooms
+Bedrooms
+Bathrooms
+kitchen
+Others
+Etc.
+User’s abilities and disabilities are entered
+This will affect the evaluation of effort required and advice for tasks, as well as products/services suggested
+Initial Walkthrough
+Systematically go to every room in the house to note workload
+App guides and prompts and User takes wide photo of each area to annotate later
+Interior spaces documented
+Exterior spaces if applicable based on user’s initial setup
+Annotation and organization of tasks
+User clicks on each area in the photos to be cleaned and maintained and is visually marked up
+Information about specific spots is entered
+Appliances
+Surface types per room
+General usage and lifestyle of spaces
+Frequency of use
+Importance
+Aesthetical issues
+Dirtiness and effort required
+Tools/supplies on hand
+Tools/supplies required
+User needs to do 
+Map of house with visualizations of amount of work and type of tasks is populated
+Markers, colors, graphs and other ways to show progress at a glance
+A master task list is generated
+The tasks must be reasonably simplified such that each are not whole projects but easily completed in a short period of time.
+The list of tasks is organized as a “Do next” or “Do now” based on urgency score and user availability.
+The urgency score for each task is updated dynamically based on several factors
+Preparing for visits
+Messes by pets or kids
+Things need repair or replacement
+etc.
+The user’s current status is the main determinant of what the next task should be and when
+Where in the house is the user currently?
+Does the user have the supplies on hand for the task?
+If not, acquiring the tools will be an attached guided task
+What is the user’s current focus?
+What is most important for the user currently?
+What is the user’s mental mood and physical energy currently?
+Biometric data or user input
+User’s schedule and availability
+Tasks are reasonably spaced out and logically sequenced and intelligently scheduled
+Guidance
+General advice and “how to” is provided for common tasks
+Product recommendations are linked, $ purchases can be made
+Unique tailored suggestions are given for disabilities and difficulties
+Services can be linked or integrated into the app for ease of use and consolidation
+$ subscriptions
+Encouragement and other “juice” to keep the user motivated
+Original walkthrough photo is the visual for the before image unless otherwise updated
+Task completion
+As each task is completed the user is required to upload an “after” photo to officially mark them as completed
+Statistics and graphs are updated to show progress over time and other things the user might be interested in
+Automation
+Combined with the products and services suggestions the user is guided to practical ways to automate tasks and make home maintenance easier until all tasks are fully automated and accounted for
