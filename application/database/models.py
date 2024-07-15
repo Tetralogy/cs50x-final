@@ -20,7 +20,7 @@ class User(db.Model):
         return f"User(id={self.id}, username={self.username!r}, email={self.email!r})"
     
 '''
-    #TODO organize the tables
+    #TODO #1 organize the tables
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy import ForeignKey
@@ -28,6 +28,8 @@ from datetime import datetime
 from typing import Optional, List
 
 db = SQLAlchemy()
+
+#todo #2 test the issues workflow
 
 class User(db.Model):
     user_id: Mapped[int] = mapped_column(primary_key=True)
