@@ -57,7 +57,7 @@ def register():
 
 #TODO: #15 A master task list is generated
 
-#TODO: create customtips and tricks and suggestions schema
+#TODO: #16 create customtips and tricks and suggestions schema
 '''
 if __name__ == '__main__':
     with app.app_context():
