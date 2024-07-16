@@ -1,44 +1,39 @@
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import Mapped, mapped_column
-from sqlalchemy import String, Integer, DateTime, func
+from sqlalchemy import String, Integer, DateTime, func, ForeignKey
 from datetime import datetime, timezone
+from typing import Optional, List
+from sqlalchemy.ext.declarative import declared_attr
+from sqlalchemy.ext.declarative import as_declarative
+import inspect
 
 db = SQLAlchemy()
 
+@as_declarative()                       # Base class that all models will inherit from
+class Base:
+    @declared_attr
+    def __tablename__(cls):
+        return cls.__name__.lower()     # Automatically sets the table name to the lowercase version of the class name
+
+class ReprMixin:                        # Mixin class to add a generic __repr__ method to models
+    def __repr__(self):
+        cls = self.__class__                                                             # Get the class of the current instance
+        attrs = inspect.getmembers(cls, lambda a: not(inspect.isroutine(a)))             # Get all attributes of the class that are not methods
+        fields = {a[0]: getattr(self, a[0]) for a in attrs if not(a[0].startswith('_'))} # Create a dictionary of attribute names and their values, excluding private attributes
+        fields_str = ', '.join(f"{k}={v!r}" for k, v in fields.items())                  # Create a string representation of all the attributes
+        return f"{cls.__name__}({fields_str})"                                           # Return a string formatted with the class name and the attributes
+    
 class User(db.Model):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     username: Mapped[str] = mapped_column(String(80), unique=True, nullable=False)
     email: Mapped[str] = mapped_column(String(120), unique=True, nullable=False)
-    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.now(tz=timezone.utc))
-    created_at: Mapped[datetime] = mapped_column(DateTime, default=func.now())
-    last_login: Mapped[datetime] = mapped_column(DateTime, nullable=True)
-
-    def __repr__(self) -> str:
-        return f"<User {self.username}>"
-
-    def __repr__(self) -> str:
-        return f"User(id={self.id}, username={self.username!r}, email={self.email!r})"
-    
-'''
-    #TODO #1 organize the tables
-from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.orm import Mapped, mapped_column
-from sqlalchemy import ForeignKey
-from datetime import datetime
-from typing import Optional, List
-
-db = SQLAlchemy()
-
-#todo #2 test the issues workflow
-
-class User(db.Model):
-    user_id: Mapped[int] = mapped_column(primary_key=True)
-    username: Mapped[str] = mapped_column(unique=True, nullable=False)
-    email: Mapped[str] = mapped_column(unique=True, nullable=False)
     password_hash: Mapped[str] = mapped_column(nullable=False)
     profile_picture_url: Mapped[Optional[str]]
-    created_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
-    last_login: Mapped[Optional[datetime]]
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=func.now())
+    last_login: Mapped[datetime] = mapped_column(DateTime, nullable=True)
+    
+
+    #TODO #1 organize the tables
 
 class UserAbility(db.Model):
     ability_id: Mapped[int] = mapped_column(primary_key=True)
@@ -91,15 +86,15 @@ class Photo(db.Model):
     room_id: Mapped[int] = mapped_column(ForeignKey('room.room_id'))
     photo_url: Mapped[str]
     is_before_photo: Mapped[bool]
-    photo_timestamp: Mapped[datetime] = mapped_column(default=datetime.utcnow)
-
+    photo_timestamp: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=func.now())
+    
 class Task(db.Model):
     task_id: Mapped[int] = mapped_column(primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey('user.user_id'))
     room_id: Mapped[int] = mapped_column(ForeignKey('room.room_id'))
     task_title: Mapped[str]
     task_description: Mapped[str]
-    task_created_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
+    task_created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=func.now())
     task_due_time: Mapped[datetime]
     task_priority: Mapped[int]
     task_status: Mapped[str]
@@ -154,7 +149,7 @@ class UserStatus(db.Model):
     focus: Mapped[str]
     mood: Mapped[str]
     energy_level: Mapped[int]
-    last_updated: Mapped[datetime] = mapped_column(default=datetime.utcnow)
+    last_updated: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=func.now())
 
 class UserSchedule(db.Model):
     schedule_id: Mapped[int] = mapped_column(primary_key=True)
@@ -180,7 +175,5 @@ class ServiceRecommendation(db.Model):
 class TaskCompletionHistory(db.Model):
     completion_id: Mapped[int] = mapped_column(primary_key=True)
     task_id: Mapped[int] = mapped_column(ForeignKey('task.task_id'))
-    completed_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
+    completed_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=func.now())
     after_photo_url: Mapped[str]
-
-    '''
