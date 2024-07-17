@@ -1,76 +1,28 @@
 from flask import Flask, redirect, render_template, request, session, url_for
 from database.models import db, User #TODO: #20 Import all the models after the schema is edited
 from functools import wraps
+from utils import login_required, handle_error, apology
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///your_database.db'
 
 db.init_app(app)
 
-@app.errorhandler(404)
-def page_not_found(e):
-    return render_template('error.html'), 404
-@app.errorhandler(500)
-def internal_server_error(e):
-    return render_template('error.html'), 500
+# Register blueprints
+app.register_blueprint(auth) # TODO: #22 Register blueprints
 
-def login_required(f):
-    """
-    Decorate routes to require login.
-
-    https://flask.palletsprojects.com/en/latest/patterns/viewdecorators/
-    """
-
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        if session.get("user_id") is None:
-            return redirect("/login")
-        return f(*args, **kwargs)
-
-    return decorated_function
+# Register the error handler
+app.errorhandler(Exception)(handle_error)
 
 @app.route('/')
 @login_required
 def index():
     return render_template("index.html")
 
-@app.route('/register', methods=['GET', 'POST'])
-def register():
-    if request.method == 'POST':
-        username = request.form.get('username')
-        email = request.form.get('email')
-        password = request.form.get('password')
-        confirmation = request.form.get("confirmation")
-#TODO: #21 Add hashing to password
-        user = User(username=username, email=email, password=password)
-        db.session.add(user)
-        db.session.commit()
 
-    return render_template('register.html')
 
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    if request.method == 'POST':
-        username = request.form.get('username')
-        password = request.form.get('password')
 
-        user = User.query.filter_by(username=username).first()
-        if user and user.check_password(password):
-            # Log the user in
-            current_user = user
-            #TODO: #21 Add session management
-            return redirect(url_for('onboarding'))
-        else:
-            return render_template('login.html', error='Invalid username or password')
-    else:
-        return render_template('login.html')
-
-# Logout
-@app.route('/logout')
-def logout():
-    current_user = None
-    return redirect("/")
-
+'''
 @app.route('/onboarding', methods=['GET', 'POST'])
 @login_required
 def onboarding():
@@ -92,6 +44,7 @@ def onboarding():
             layout=layout,
             user_abilities=user_abilities
         )
+        
 
         # Insert the important rooms into the database
         for room in important_rooms:
@@ -245,7 +198,7 @@ def tasklist():
     return render_template('tasklist.html', master_task_list=master_task_list)
 
 #TODO: #16 create customtips and tricks and suggestions schema
-
+'''
 
 if __name__ == '__main__':
     with app.app_context():
@@ -253,3 +206,4 @@ if __name__ == '__main__':
     app.run(debug=True)
 
     #todo #3 test again
+
