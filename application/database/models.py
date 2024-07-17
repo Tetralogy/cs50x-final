@@ -31,9 +31,6 @@ class User(db.Model):
     profile_picture_url: Mapped[Optional[str]]
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=func.now())
     last_login: Mapped[datetime] = mapped_column(DateTime, nullable=True)
-    
-
-    #TODO #1 organize the tables
 
 class UserAbility(db.Model):
     ability_id: Mapped[int] = mapped_column(primary_key=True)
@@ -87,7 +84,7 @@ class Photo(db.Model):
     photo_url: Mapped[str]
     is_before_photo: Mapped[bool]
     photo_timestamp: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=func.now())
-    
+
 class Task(db.Model):
     task_id: Mapped[int] = mapped_column(primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey('user.user_id'))

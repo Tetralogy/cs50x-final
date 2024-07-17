@@ -1,64 +1,252 @@
-from flask import Flask
-from database.models import db, User  # Assuming models.py is in a 'database' folder
+from flask import Flask, redirect, render_template, request, session, url_for
+from database.models import db, User #TODO: #20 Import all the models after the schema is edited
+from functools import wraps
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///your_database.db'
 
 db.init_app(app)
 
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('error.html'), 404
+@app.errorhandler(500)
+def internal_server_error(e):
+    return render_template('error.html'), 500
+
+def login_required(f):
+    """
+    Decorate routes to require login.
+
+    https://flask.palletsprojects.com/en/latest/patterns/viewdecorators/
+    """
+
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if session.get("user_id") is None:
+            return redirect("/login")
+        return f(*args, **kwargs)
+
+    return decorated_function
+
 @app.route('/')
+@login_required
 def index():
-    return 'Hello, World! 111324654346535'
-'''
-app.route('/register', methods=['GET', 'POST'])
+    return render_template("index.html")
+
+@app.route('/register', methods=['GET', 'POST'])
 def register():
-    return render template 'Register.html'
+    if request.method == 'POST':
+        username = request.form.get('username')
+        email = request.form.get('email')
+        password = request.form.get('password')
+        confirmation = request.form.get("confirmation")
+#TODO: #21 Add hashing to password
+        user = User(username=username, email=email, password=password)
+        db.session.add(user)
+        db.session.commit()
 
+    return render_template('register.html')
 
-        #TODO: #5 Register/create an account
-        #TODO: #6 Login
-        #TODO: #7 Logout
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
 
-        #TODO: #9 complete Onboarding experience loop
-            #TODO: #8 initial questions and info input from user
-            
-            House size
-        Number of levels
-        Layout
-        Important rooms
-        Bedrooms
-        Bathrooms
-        kitchen
-        Others
-        Etc.
+        user = User.query.filter_by(username=username).first()
+        if user and user.check_password(password):
+            # Log the user in
+            current_user = user
+            #TODO: #21 Add session management
+            return redirect(url_for('onboarding'))
+        else:
+            return render_template('login.html', error='Invalid username or password')
+    else:
+        return render_template('login.html')
+
+# Logout
+@app.route('/logout')
+def logout():
+    current_user = None
+    return redirect("/")
+
+@app.route('/onboarding', methods=['GET', 'POST'])
+@login_required
+def onboarding():
+    if request.method == 'POST':
+        house_size = request.form.get('house_size')
+        number_of_levels = request.form.get('number_of_levels')
+        layout = request.form.get('layout')
+        important_rooms = request.form.getlist('important_rooms')
+        bedrooms = request.form.getlist('bedrooms')
+        bathrooms = request.form.getlist('bathrooms')
+        kitchen = request.form.getlist('kitchen')
+        others = request.form.getlist('others')
+        user_abilities = request.form.get('user_abilities')
+# TODO: #18 edit the models to have rooms as an item and room-type as a value instead of "bathroom/bedroom/kitchen"etc.
+        # Save the user's data to the database
+        user = User(
+            house_size=house_size,
+            number_of_levels=number_of_levels,
+            layout=layout,
+            user_abilities=user_abilities
+        )
+
+        # Insert the important rooms into the database
+        for room in important_rooms:
+            db.session.add(UserImportantRoom(user_id=user.id, room=room))
+
+        # Insert the bedrooms into the database
+        for bedroom in bedrooms:
+            db.session.add(UserBedroom(user_id=user.id, bedroom=bedroom))
+
+        # Insert the bathrooms into the database
+        for bathroom in bathrooms:
+            db.session.add(UserBathroom(user_id=user.id, bathroom=bathroom))
+
+        # Insert the kitchen into the database
+        for kitchen_item in kitchen:
+            db.session.add(UserKitchen(user_id=user.id, kitchen_item=kitchen_item))
+
+        # Insert the others into the database
+        for other in others:
+            db.session.add(UserOther(user_id=user.id, other=other))
+
+        # Commit the changes to the database
+        db.session.commit()
+        return render_template('onboarding_complete.html')
+
+    return render_template('onboarding.html')
         
-            #TODO: #10 User inputs self-assessment of abilities and disabilities
-            #TODO: #11 Initial full home Walkthrough
-            Systematically go to every room in the house to note workload
-        App guides and prompts and User takes wide photo of each area to annotate later
-        Interior spaces documented
-        Exterior spaces if applicable based on user’s initial setup
-        
+@app.route('/walkthrough', methods=['GET', 'POST'])
+@login_required
+def walkthrough():
+    if request.method == 'POST':
+        # Systematically go to every room in the house to note workload
+        rooms = [
+            'bedroom',
+            'bathroom',
+            'kitchen',
+            'living_room',
+            'dining_room',
+            'home_office',
+            'laundry_room',
+            'garage',
+            'other'
+        ] # TODO: #19 edit this to match the models
+        for room in rooms:
+            workload = request.form.get(room)
+            db.session.add(Walkthrough(
+                user_id=current_user.id,
+                room=room,
+                workload=workload
+            ))
+        db.session.commit()
+
+    # Retrieve the walkthrough data from the database
+    walkthrough_data = Walkthrough.query.filter_by(user_id=current_user.id).all()
+
+    return render_template('walkthrough.html', walkthrough_data=walkthrough_data)
+
         # TODO: #12 Annotation and organization of tasks
-            #TODO: #13 User clicks on each area in the photos to be cleaned and maintained and is visually marked up
-            Information about specific spots is entered
-                Appliances
-                Surface types per room
-                General usage and lifestyle of spaces
-                Frequency of use
-                Importance
-                Aesthetical issues
-                Dirtiness and effort required
-                Tools/supplies on hand
-                Tools/supplies required
-                
-        #TODO: #14 Map of house with visualizations of amount of work and type of tasks is populated
-            Markers, colors, graphs and other ways to show progress at a glance
+@app.route('/annotate', methods=['GET', 'POST'])
+@login_required
+def annotate():
+    if request.method == 'POST':
+        # Retrieve the form data
+        room = request.form.get('room')
+        x_coordinate = request.form.get('x_coordinate')
+        y_coordinate = request.form.get('y_coordinate')
+        annotation_text = request.form.get('annotation_text')
+
+        # Create a new TaskAnnotation object and add it to the database
+        task_annotation = TaskAnnotation(
+            user_id=current_user.id,
+            room=room,
+            x_coordinate=x_coordinate,
+            y_coordinate=y_coordinate,
+            annotation_text=annotation_text
+        )
+        db.session.add(task_annotation)
+        db.session.commit()
+
+    # Retrieve the task annotations for the current user
+    task_annotations = TaskAnnotation.query.filter_by(user_id=current_user.id).all()
+
+    return render_template('annotate.html', task_annotations=task_annotations)
+
+@app.route('/map', methods=['GET', 'POST'])
+@login_required
+def map():
+    # Get the walkthrough data for the current user
+    walkthrough_data = Walkthrough.query.filter_by(user_id=current_user.id).all()
+
+    # Calculate the total workload for each room
+    room_workload = {}
+    for walkthrough in walkthrough_data:
+        room = walkthrough.room
+        workload = walkthrough.workload
+        if room in room_workload:
+            room_workload[room] += workload
+        else:
+            room_workload[room] = workload
+
+    # Calculate the relative workload for each room
+    total_workload = sum(room_workload.values())
+    room_relative_workload = {room: workload / total_workload for room, workload in room_workload.items()}
+
+    # Get the task annotations for the current user
+    task_annotations = TaskAnnotation.query.filter_by(user_id=current_user.id).all()
+
+    # Group the task annotations by room
+    room_task_annotations = {}
+    for task_annotation in task_annotations:
+        room = task_annotation.room
+        if room in room_task_annotations:
+            room_task_annotations[room].append(task_annotation)
+        else:
+            room_task_annotations[room] = [task_annotation]
+
+    return render_template('map.html', room_workload=room_relative_workload, room_task_annotations=room_task_annotations)
 
 #TODO: #15 A master task list is generated
+@app.route('/tasklist', methods=['GET', 'POST'])
+@login_required
+def tasklist():
+    # Get all tasks for the current user
+    tasks = Task.query.filter_by(user_id=current_user.id).all()
+
+    # Generate a master task list
+    master_task_list = []
+    for task in tasks:
+        task_annotation = TaskAnnotation.query.filter_by(task_id=task.id).first()
+        if task_annotation:
+            master_task_list.append({
+                'task_id': task.id,
+                'title': task.title,
+                'description': task.description,
+                'scheduled_time': task.scheduled_time,
+                'priority': task.priority,
+                'completed': task.completed,
+                'product_recommendation_id': task.product_recommendation_id,
+                'room': task_annotation.room,
+                'workload': task_annotation.workload,
+                'urgency_score': task_annotation.urgency_score,
+                'task_tags': task_annotation.task_tags,
+                'task_comments': task_annotation.task_comments,
+                'task_attachments': task_annotation.task_attachments,
+                'task_collaborators': task_annotation.task_collaborators,
+                'task_recurring_pattern': task_annotation.task_recurring_pattern,
+                'task_subtasks': task_annotation.task_subtasks,
+                'task_notes': task_annotation.task_notes,
+            })
+
+    return render_template('tasklist.html', master_task_list=master_task_list)
 
 #TODO: #16 create customtips and tricks and suggestions schema
-'''
+
+
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
