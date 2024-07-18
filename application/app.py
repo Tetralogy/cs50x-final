@@ -2,14 +2,19 @@ from flask import Flask, redirect, render_template, request, session, url_for
 from database.models import db, User #TODO: #20 Import all the models after the schema is edited
 from functools import wraps
 from utils import login_required, handle_error, apology
-
+from auth import auth
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///your_database.db'
+
 
 db.init_app(app)
 
 # Register blueprints
-app.register_blueprint(auth) # TODO: #22 Register blueprints
+app.register_blueprint(auth) 
+
+
+
+
+# TODO: #22 Register blueprints
 
 # Register the error handler
 app.errorhandler(Exception)(handle_error)

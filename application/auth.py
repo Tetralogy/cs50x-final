@@ -1,10 +1,13 @@
 #TODO: #21 login and register routes
 
-from flask import Flask, redirect, render_template, request, session
+from flask import Blueprint, Flask, redirect, render_template, request, session, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_session import Session
+from database.models import User
 from utils import login_required, apology
 import secrets
+
+auth = Blueprint('auth', __name__)
 
 secret_key = secrets.token_hex(16)
 
@@ -23,7 +26,7 @@ app.config['SECRET_KEY'] = secret_key  # Change this to a random secret key
 
 Session(app)
 
-@app.route("/login", methods=["GET", "POST"])
+@auth.route("/login", methods=["GET", "POST"])
 def login():
     # Forget any user_id
     session.clear()
@@ -71,7 +74,7 @@ def login():
         return render_template("login.html")'''
 
 
-@app.route("/logout")
+@auth.route("/logout")
 def logout():
     """Log user out"""
 
@@ -81,7 +84,7 @@ def logout():
     # Redirect user to login form
     return redirect("/")
 
-@app.route('/register', methods=['GET', 'POST'])
+@auth.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
         username = request.form.get('username')
@@ -94,7 +97,7 @@ def register():
         db.session.commit()
 
     return render_template('register.html')
-@app.route("/register", methods=["GET", "POST"])
+@auth.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == 'POST':
         username = request.form.get('username')
@@ -135,7 +138,7 @@ def register():
         return render_template("login.html")'''
 
 
-@app.route("/password", methods=["GET", "POST"])
+@auth.route("/password", methods=["GET", "POST"])
 @login_required
 def password():
     """reset password"""
