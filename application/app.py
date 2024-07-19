@@ -1,15 +1,16 @@
 from flask import Flask, redirect, render_template, request, session, url_for
-from database.models import db, User #TODO: #20 Import all the models after the schema is edited
 from functools import wraps
-from utils import login_required, handle_error, apology
-from auth import auth
-app = Flask(__name__)
+from .utils import login_required, handle_error, apology
+from .auth import auth
+from .database.models import models, db
+
+from .__init__ import app
 
 
-db.init_app(app)
 
 # Register blueprints
-app.register_blueprint(auth) 
+app.register_blueprint(auth)
+app.register_blueprint(models)
 
 
 

@@ -3,20 +3,22 @@
 from flask import Blueprint, Flask, redirect, render_template, request, session, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_session import Session
-from database.models import User
-from utils import login_required, apology
+from .database.models import db, User  #20 Import all the models after the schema is edited
+from .utils import login_required, apology
+from werkzeug.security import generate_password_hash
 import secrets
+
+from .__init__ import app
 
 auth = Blueprint('auth', __name__)
 
 secret_key = secrets.token_hex(16)
 
-app = Flask(__name__)
 
 # Configure SQLAlchemy
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///your_database.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db = SQLAlchemy(app)
+db.init_app(app)
 
 # Configure Flask-Session
 app.config['SESSION_TYPE'] = 'sqlalchemy'
@@ -38,7 +40,8 @@ def login():
         # Ensure password was submitted
         elif not request.form.get("password"):
             return apology("must provide password", 403)
-
+        # Get the username from the request form
+        username = request.form.get("username")
         # Query database for username
         user = User.query.filter_by(username=username).first()
         if user and user.check_password(password):
@@ -50,6 +53,8 @@ def login():
             return render_template('login.html', error='Invalid username or password')
     else:
         return render_template('login.html')
+        
+        
         
         #Old code
 '''        rows = db.execute(
@@ -84,19 +89,7 @@ def logout():
     # Redirect user to login form
     return redirect("/")
 
-@auth.route('/register', methods=['GET', 'POST'])
-def register():
-    if request.method == 'POST':
-        username = request.form.get('username')
-        email = request.form.get('email')
-        password = request.form.get('password')
-        confirmation = request.form.get("confirmation")
-#TODO: #21 Add hashing to password
-        user = User(username=username, email=email, password=password)
-        db.session.add(user)
-        db.session.commit()
 
-    return render_template('register.html')
 @auth.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == 'POST':

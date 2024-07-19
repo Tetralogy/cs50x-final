@@ -1,3 +1,4 @@
+from flask import Blueprint
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy import String, Integer, DateTime, func, ForeignKey
@@ -8,6 +9,8 @@ from sqlalchemy.ext.declarative import as_declarative
 import inspect
 
 db = SQLAlchemy()
+
+models = Blueprint('models', __name__)
 
 @as_declarative()                       # Base class that all models will inherit from
 class Base:
