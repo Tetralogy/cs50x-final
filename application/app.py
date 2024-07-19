@@ -13,12 +13,8 @@ app.register_blueprint(auth)
 app.register_blueprint(models)
 
 
-
-
-# TODO: #22 Register blueprints
-
 # Register the error handler
-app.errorhandler(Exception)(handle_error)
+#app.errorhandler(Exception)(handle_error)
 
 @app.route('/')
 @login_required

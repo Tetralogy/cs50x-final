@@ -92,6 +92,8 @@ def logout():
 
 @auth.route("/register", methods=["GET", "POST"])
 def register():
+    if request.method == 'GET':
+        return render_template("register.html")
     if request.method == 'POST':
         username = request.form.get('username')
         email = request.form.get('email')
