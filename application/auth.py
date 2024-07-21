@@ -3,9 +3,9 @@
 from flask import Blueprint, Flask, redirect, render_template, request, session, url_for
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
-
+from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from .database.models import User  #TODO: #20 Import all the models after the schema is edited
-from .utils import login_required, apology
+from .utils import apology
 
 from .extention import db  
 
