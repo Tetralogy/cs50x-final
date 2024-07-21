@@ -2,9 +2,11 @@ from flask import Flask, redirect, render_template, request, session, url_for
 from functools import wraps
 from .utils import login_required, handle_error, apology
 from .auth import auth
-from .database.models import models, db
+from .database.models import models
 
-from .__init__ import app
+from .__init__ import create_app
+
+app = create_app()
 
 
 
@@ -23,7 +25,7 @@ def index():
 
 
 
-
+#TODO: LAYOUT ALL ROUTES
 '''
 @app.route('/onboarding', methods=['GET', 'POST'])
 @login_required
@@ -201,11 +203,3 @@ def tasklist():
 
 #TODO: #16 create customtips and tricks and suggestions schema
 '''
-
-if __name__ == '__main__':
-    with app.app_context():
-        db.create_all()
-    app.run(debug=True)
-
-    #todo #3 test again
-

@@ -2,35 +2,46 @@
 
 from flask import Blueprint, Flask, redirect, render_template, request, session, url_for
 from flask_sqlalchemy import SQLAlchemy
-from flask_session import Session
-from .database.models import db, User  #20 Import all the models after the schema is edited
-from .utils import login_required, apology
-from werkzeug.security import generate_password_hash
-import secrets
+from werkzeug.security import generate_password_hash, check_password_hash
 
-from .__init__ import app
+from .database.models import User  #TODO: #20 Import all the models after the schema is edited
+from .utils import login_required, apology
+
+from .extention import db  
 
 auth = Blueprint('auth', __name__)
 
-secret_key = secrets.token_hex(16)
-
-
-# Configure SQLAlchemy
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///your_database.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db.init_app(app)
-
-# Configure Flask-Session
-app.config['SESSION_TYPE'] = 'sqlalchemy'
-app.config['SESSION_SQLALCHEMY'] = db
-app.config['SESSION_SQLALCHEMY_TABLE'] = 'sessions'
-app.config['SECRET_KEY'] = secret_key  # Change this to a random secret key
-
-Session(app)
 
 @auth.route("/login", methods=["GET", "POST"])
 def login():
     # Forget any user_id
+    session.clear()
+    if request.method == "POST":
+        # Ensure username was submitted
+        if not request.form.get("username"):
+            return apology("must provide username", 403)
+
+        # Ensure password was submitted
+        elif not request.form.get("password"):
+            return apology("must provide password", 403)
+        
+        # Get the username from the request form
+        username = request.form.get("username")
+        password = request.form.get("password")
+        
+        # Query database for username
+        user = User.query.filter_by(username=username).first()
+        
+        if user and check_password_hash(user.password_hash, password):
+            # Log the user in
+            session['user_id'] = user.id
+            return redirect(url_for('index'))
+        else:
+            return render_template('login.html', error='Invalid username or password') #TODO: add wrong password message for user
+    else:
+        return render_template('login.html')
+    #todo: clean up old code
+'''    # Forget any user_id
     session.clear()
     if request.method == "POST":
         # Ensure username was submitted
@@ -53,7 +64,7 @@ def login():
             return render_template('login.html', error='Invalid username or password')
     else:
         return render_template('login.html')
-        
+        '''
         
         
         #Old code
@@ -92,7 +103,35 @@ def logout():
 
 @auth.route("/register", methods=["GET", "POST"])
 def register():
-    if request.method == 'GET':
+    if request.method == 'POST':
+        username = request.form.get('username')
+        email = request.form.get('email')
+        password = request.form.get('password')
+        confirmation = request.form.get("confirmation")
+        
+        if not username or not email or not password or not confirmation:
+            return apology("All fields are required", 400)
+        
+        if password != confirmation:
+            return apology("Passwords do not match", 400)
+        
+        if User.query.filter_by(username=username).first():
+            return apology("Username already exists", 400)
+        
+        if User.query.filter_by(email=email).first():
+            return apology("Email already exists", 400)
+        
+        hashed_password = generate_password_hash(password)
+        new_user = User(username=username, email=email, password_hash=hashed_password)
+        
+        db.session.add(new_user)
+        db.session.commit()
+        
+        return redirect(url_for('auth.login'))
+    
+    return render_template("register.html")
+
+'''    if request.method == 'GET':
         return render_template("register.html")
     if request.method == 'POST':
         username = request.form.get('username')
@@ -104,7 +143,7 @@ def register():
         db.session.add(user)
         db.session.commit()
         return render_template("login.html")
-       
+       '''
        #OLD CODE 
 '''    if request.method == "GET":
         return render_template("register.html")
@@ -138,7 +177,7 @@ def register():
 def password():
     """reset password"""
     user_id = session["user_id"]
-    username_row = db.execute("SELECT username FROM users WHERE id = ?", user_id)
+    username_row = db.execute("SELECT username FROM users WHERE id = ?", user_id)#TODO: CONVERT TO sqlalchemy
     username = username_row[0]['username']
     print(f"username: {username}")
     if request.method == "GET":
