@@ -12,19 +12,13 @@ session = Session()
 
 def create_app(config_filename=None):
     app = Flask(__name__)
-    '''
-    print(f"Current app root path: {app.root_path}")
-    DATABASE_URI = 'sqlite:///' + os.path.join(app.root_path, 'database', 'database.db')
-    print(f"Constructed DATABASE_URI: {DATABASE_URI}")
-    '''
+
     # Debug: Print current working directory
     print(f"Current working directory: {os.getcwd()}")
     print(f"Application root: {app.root_path}")
     
     # Load configurations from environment variables
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(app.root_path, 'database', 'test_database.db') # 
-    #app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URI')
-    #app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////Users/kyle/Documents/Repos/cs50/cs50x-final/application/database/test_database.db'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
     
