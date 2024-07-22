@@ -12,6 +12,8 @@ from .extension import db
 auth = Blueprint('auth', __name__)
 
 
+
+
 @auth.route("/login", methods=["GET", "POST"])
 def login():
     # Forget any user_id
@@ -34,8 +36,11 @@ def login():
         
         if user and check_password_hash(user.password_hash, password):
             # Log the user in
-            session['user_id'] = user.id
-            return redirect(url_for('index'))
+            login_user(user) 
+            print(f"User is authenticated: {current_user.is_authenticated}")
+            print(f"User id: {current_user.id}")
+            print(f"User username: {current_user.username}")
+            return redirect(url_for('main.index'))
         else:
             return render_template('login.html', error='Invalid username or password') #TODO: add wrong password message for user
     else:
@@ -95,7 +100,8 @@ def logout():
     """Log user out"""
 
     # Forget any user_id
-    session.clear()
+    #session.clear()
+    logout_user()
 
     # Redirect user to login form
     return redirect("/")

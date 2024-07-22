@@ -7,6 +7,7 @@ from typing import Optional, List
 from sqlalchemy.ext.declarative import declared_attr
 from sqlalchemy.ext.declarative import as_declarative
 import inspect
+from flask_login import UserMixin
 
 from application.extension import db  
 
@@ -26,7 +27,7 @@ class ReprMixin:                        # Mixin class to add a generic __repr__ 
         fields_str = ', '.join(f"{k}={v!r}" for k, v in fields.items())                  # Create a string representation of all the attributes
         return f"{cls.__name__}({fields_str})"                                           # Return a string formatted with the class name and the attributes
     
-class User(db.Model):
+class User(db.Model, UserMixin):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     username: Mapped[str] = mapped_column(String(80), unique=True, nullable=False)
     email: Mapped[str] = mapped_column(String(120), unique=True, nullable=False) # TODO: Add email verification

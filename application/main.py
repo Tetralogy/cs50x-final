@@ -1,24 +1,28 @@
-from flask import Flask, redirect, render_template, request, session, url_for
+from flask import Flask, redirect, render_template, request, session, url_for, Blueprint, current_app
 from functools import wraps
-from .utils import login_required, handle_error, apology
-from .auth import auth
-from .database.models import models
-
-from .__init__ import create_app
-
-app = create_app()
+from flask_login import current_user, login_required
+from .utils import handle_error, apology
 
 
 
-# Register blueprints
-app.register_blueprint(auth)
-app.register_blueprint(models)
+
+
+main = Blueprint('main', __name__)
+
+
+
+
 
 
 # Register the error handler
-#app.errorhandler(Exception)(handle_error)
+#main.errorhandler(Exception)(handle_error)
 
-@app.route('/')
+# Define a context processor to make current_user available in every template
+@main.context_processor
+def inject_current_user():
+    return dict(current_user=current_user)
+
+@main.route('/')
 @login_required
 def index():
     return render_template("index.html")
@@ -27,7 +31,7 @@ def index():
 
 #TODO: LAYOUT ALL ROUTES
 '''
-@app.route('/onboarding', methods=['GET', 'POST'])
+@main.route('/onboarding', methods=['GET', 'POST'])
 @login_required
 def onboarding():
     if request.method == 'POST':
@@ -76,7 +80,7 @@ def onboarding():
 
     return render_template('onboarding.html')
         
-@app.route('/walkthrough', methods=['GET', 'POST'])
+@main.route('/walkthrough', methods=['GET', 'POST'])
 @login_required
 def walkthrough():
     if request.method == 'POST':
@@ -107,7 +111,7 @@ def walkthrough():
     return render_template('walkthrough.html', walkthrough_data=walkthrough_data)
 
         # TODO: #12 Annotation and organization of tasks
-@app.route('/annotate', methods=['GET', 'POST'])
+@main.route('/annotate', methods=['GET', 'POST'])
 @login_required
 def annotate():
     if request.method == 'POST':
@@ -133,7 +137,7 @@ def annotate():
 
     return render_template('annotate.html', task_annotations=task_annotations)
 
-@app.route('/map', methods=['GET', 'POST'])
+@main.route('/map', methods=['GET', 'POST'])
 @login_required
 def map():
     # Get the walkthrough data for the current user
@@ -161,14 +165,14 @@ def map():
     for task_annotation in task_annotations:
         room = task_annotation.room
         if room in room_task_annotations:
-            room_task_annotations[room].append(task_annotation)
+            room_task_annotations[room].mainend(task_annotation)
         else:
             room_task_annotations[room] = [task_annotation]
 
     return render_template('map.html', room_workload=room_relative_workload, room_task_annotations=room_task_annotations)
 
 #TODO: #15 A master task list is generated
-@app.route('/tasklist', methods=['GET', 'POST'])
+@main.route('/tasklist', methods=['GET', 'POST'])
 @login_required
 def tasklist():
     # Get all tasks for the current user
@@ -179,7 +183,7 @@ def tasklist():
     for task in tasks:
         task_annotation = TaskAnnotation.query.filter_by(task_id=task.id).first()
         if task_annotation:
-            master_task_list.append({
+            master_task_list.mainend({
                 'task_id': task.id,
                 'title': task.title,
                 'description': task.description,
