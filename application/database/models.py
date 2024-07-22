@@ -8,7 +8,7 @@ from sqlalchemy.ext.declarative import declared_attr
 from sqlalchemy.ext.declarative import as_declarative
 import inspect
 
-from application.extention import db  
+from application.extension import db  
 
 models = Blueprint('models', __name__)
 

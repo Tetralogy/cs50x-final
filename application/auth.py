@@ -7,7 +7,7 @@ from flask_login import LoginManager, UserMixin, login_user, login_required, log
 from .database.models import User  #TODO: #20 Import all the models after the schema is edited
 from .utils import apology
 
-from .extention import db  
+from .extension import db  
 
 auth = Blueprint('auth', __name__)
 
