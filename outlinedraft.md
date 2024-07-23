@@ -21,13 +21,14 @@ Conversion notes:
 
 Basic user experience outline
 
-TODO #4 1. Register/create an account
+TODO: #23 FULL APP MOCKUP
 
-1. Login
-2. Logout
-3. Session cookies and user activity etc.
-4. Onboarding
-    1. Establish the user’s home environment
+DONE #4 1. Register/create an account
+    1. Login
+    2. Logout
+    3. Session cookies and user activity etc.
+2. Onboarding
+    4. Establish the user’s home environment
         1. House size
         2. Number of levels
         3. Layout

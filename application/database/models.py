@@ -1,3 +1,4 @@
+from flask import Blueprint
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy import String, Integer, DateTime, func, ForeignKey
@@ -6,8 +7,11 @@ from typing import Optional, List
 from sqlalchemy.ext.declarative import declared_attr
 from sqlalchemy.ext.declarative import as_declarative
 import inspect
+from flask_login import UserMixin
 
-db = SQLAlchemy()
+from application.extension import db  
+
+models = Blueprint('models', __name__)
 
 @as_declarative()                       # Base class that all models will inherit from
 class Base:
@@ -23,7 +27,7 @@ class ReprMixin:                        # Mixin class to add a generic __repr__ 
         fields_str = ', '.join(f"{k}={v!r}" for k, v in fields.items())                  # Create a string representation of all the attributes
         return f"{cls.__name__}({fields_str})"                                           # Return a string formatted with the class name and the attributes
     
-class User(db.Model):
+class User(db.Model, UserMixin):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     username: Mapped[str] = mapped_column(String(80), unique=True, nullable=False)
     email: Mapped[str] = mapped_column(String(120), unique=True, nullable=False)
@@ -34,19 +38,19 @@ class User(db.Model):
 
 class UserAbility(db.Model):
     ability_id: Mapped[int] = mapped_column(primary_key=True)
-    user_id: Mapped[int] = mapped_column(ForeignKey('user.user_id'))
+    user_id: Mapped[int] = mapped_column(ForeignKey('user.id'))
     ability_type: Mapped[str]
     description: Mapped[str]
 
 class UserPreference(db.Model):
-    user_id: Mapped[int] = mapped_column(ForeignKey('user.user_id'), primary_key=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey('user.id'), primary_key=True)
     measurement_unit: Mapped[str] = mapped_column(default='metric')
     notification_frequency: Mapped[str] = mapped_column(default='daily')
     theme: Mapped[str] = mapped_column(default='light')
 
 class Home(db.Model):
     home_id: Mapped[int] = mapped_column(primary_key=True)
-    user_id: Mapped[int] = mapped_column(ForeignKey('user.user_id'))
+    user_id: Mapped[int] = mapped_column(ForeignKey('user.id'))
     home_size_sqm: Mapped[float]
     num_floors: Mapped[int]
     layout: Mapped[str]
@@ -79,7 +83,7 @@ class RoomDetail(db.Model):
 
 class Photo(db.Model):
     photo_id: Mapped[int] = mapped_column(primary_key=True)
-    user_id: Mapped[int] = mapped_column(ForeignKey('user.user_id'))
+    user_id: Mapped[int] = mapped_column(ForeignKey('user.id'))
     room_id: Mapped[int] = mapped_column(ForeignKey('room.room_id'))
     photo_url: Mapped[str]
     is_before_photo: Mapped[bool]
@@ -87,7 +91,7 @@ class Photo(db.Model):
 
 class Task(db.Model):
     task_id: Mapped[int] = mapped_column(primary_key=True)
-    user_id: Mapped[int] = mapped_column(ForeignKey('user.user_id'))
+    user_id: Mapped[int] = mapped_column(ForeignKey('user.id'))
     room_id: Mapped[int] = mapped_column(ForeignKey('room.room_id'))
     task_title: Mapped[str]
     task_description: Mapped[str]
@@ -126,7 +130,7 @@ class SharedTask(db.Model):
 
 class Notification(db.Model):
     notification_id: Mapped[int] = mapped_column(primary_key=True)
-    user_id: Mapped[int] = mapped_column(ForeignKey('user.user_id'))
+    user_id: Mapped[int] = mapped_column(ForeignKey('user.id'))
     task_id: Mapped[int] = mapped_column(ForeignKey('task.task_id'))
     notification_message: Mapped[str]
     notification_status: Mapped[str]
@@ -141,7 +145,7 @@ class ToolSupply(db.Model):
 
 class UserStatus(db.Model):
     status_id: Mapped[int] = mapped_column(primary_key=True)
-    user_id: Mapped[int] = mapped_column(ForeignKey('user.user_id'))
+    user_id: Mapped[int] = mapped_column(ForeignKey('user.id'))
     current_room_id: Mapped[int] = mapped_column(ForeignKey('room.room_id'))
     focus: Mapped[str]
     mood: Mapped[str]
@@ -150,7 +154,7 @@ class UserStatus(db.Model):
 
 class UserSchedule(db.Model):
     schedule_id: Mapped[int] = mapped_column(primary_key=True)
-    user_id: Mapped[int] = mapped_column(ForeignKey('user.user_id'))
+    user_id: Mapped[int] = mapped_column(ForeignKey('user.id'))
     event_name: Mapped[str]
     start_time: Mapped[datetime]
     end_time: Mapped[datetime]
