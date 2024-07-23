@@ -1,6 +1,6 @@
 #TODO: #21 login and register routes
 
-from flask import Blueprint, Flask, redirect, render_template, request, session, url_for
+from flask import Blueprint, Flask, flash, redirect, render_template, request, session, url_for
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
@@ -11,89 +11,28 @@ from .extension import db
 
 auth = Blueprint('auth', __name__)
 
-
-
-
 @auth.route("/login", methods=["GET", "POST"])
 def login():
     # Forget any user_id
     session.clear()
     if request.method == "POST":
-        # Ensure username was submitted
-        if not request.form.get("username"):
-            return apology("must provide username", 403)
-
-        # Ensure password was submitted
-        elif not request.form.get("password"):
-            return apology("must provide password", 403)
-        
-        # Get the username from the request form
         username = request.form.get("username")
         password = request.form.get("password")
-        
-        # Query database for username
-        user = User.query.filter_by(username=username).first()
-        
-        if user and check_password_hash(user.password_hash, password):
-            # Log the user in
-            login_user(user) 
-            print(f"User is authenticated: {current_user.is_authenticated}")
-            print(f"User id: {current_user.id}")
-            print(f"User username: {current_user.username}")
-            return redirect(url_for('main.index'))
+        if not username:
+            flash("must provide username", category="danger")
+        elif not password:
+            flash("must provide password", category="danger")
         else:
-            return render_template('login.html', error='Invalid username or password') #TODO: add wrong password message for user
-    else:
-        return render_template('login.html')
-    #todo: clean up old code
-'''    # Forget any user_id
-    session.clear()
-    if request.method == "POST":
-        # Ensure username was submitted
-        if not request.form.get("username"):
-            return apology("must provide username", 403)
-
-        # Ensure password was submitted
-        elif not request.form.get("password"):
-            return apology("must provide password", 403)
-        # Get the username from the request form
-        username = request.form.get("username")
-        # Query database for username
-        user = User.query.filter_by(username=username).first()
-        if user and user.check_password(password):
-            # Log the user in
-            session['user_id'] = user.id
-            #TODO: #21 Add session management
-            return redirect(url_for('/'))
-        else:
-            return render_template('login.html', error='Invalid username or password')
-    else:
-        return render_template('login.html')
-        '''
-        
-        
-        #Old code
-'''        rows = db.execute(
-            "SELECT * FROM users WHERE username = ?", request.form.get("username")
-        )
-        if len(rows) == 0:
-            return apology("invalid username and/or password", 403)
-        # Ensure username exists and password is correct
-        if len(rows) != 1 or not check_password_hash(
-            rows[0]["hash"], request.form.get("password")
-        ):
-            return apology("invalid username and/or password", 403)
-
-        # Remember which user has logged in
-        session["user_id"] = rows[0]["id"]
-
-        # Redirect user to home page
-        return redirect("/")
-
-    # User reached route via GET (as by clicking a link or via redirect)
-    else:
-        return render_template("login.html")'''
-
+            user = User.query.filter_by(username=username).first()
+            if user is None:
+                flash("Username does not exist", category="danger")
+            elif not check_password_hash(user.password_hash, password):
+                flash("Invalid password", category="danger")
+            else:
+                login_user(user) 
+                flash("Successful login", category="success")
+                return redirect(url_for('main.index'))
+    return render_template('login.html')
 
 @auth.route("/logout")
 def logout():
@@ -116,99 +55,45 @@ def register():
         confirmation = request.form.get("confirmation")
         
         if not username or not email or not password or not confirmation:
-            return apology("All fields are required", 400)
-        
-        if password != confirmation:
-            return apology("Passwords do not match", 400)
-        
-        if User.query.filter_by(username=username).first():
-            return apology("Username already exists", 400)
-        
-        if User.query.filter_by(email=email).first():
-            return apology("Email already exists", 400)
-        
-        hashed_password = generate_password_hash(password)
-        new_user = User(username=username, email=email, password_hash=hashed_password)
-        
-        db.session.add(new_user)
-        db.session.commit()
-        
-        return redirect(url_for('auth.login'))
+            flash("All fields are required", category="danger")
+        elif password != confirmation:
+            flash("Passwords do not match", category="danger")
+        elif User.query.filter_by(username=username).first():
+            flash("Username already exists", category="danger")
+        elif User.query.filter_by(email=email).first():
+            flash("Email already exists", category="danger")
+        else:
+            hashed_password = generate_password_hash(password)
+            new_user = User(username=username, email=email, password_hash=hashed_password)
+            
+            db.session.add(new_user)
+            db.session.commit()
+            # Log in the new user
+            login_user(new_user)
+            return redirect(url_for('auth.index'))
     
     return render_template("register.html")
-
-'''    if request.method == 'GET':
-        return render_template("register.html")
-    if request.method == 'POST':
-        username = request.form.get('username')
-        email = request.form.get('email')
-        password = request.form.get('password')
-        confirmation = request.form.get("confirmation")
-#TODO: #21 Add hashing to password
-        user = User(username=username, email=email, password=password)
-        db.session.add(user)
-        db.session.commit()
-        return render_template("login.html")
-       '''
-       #OLD CODE 
-'''    if request.method == "GET":
-        return render_template("register.html")
-    if request.method == "POST":
-        username = request.form.get("username")
-        password = request.form.get("password")
-        confirmation = request.form.get("confirmation")
-        rows = db.execute("SELECT * FROM users WHERE username = ?", username)
-        hashed_password = generate_password_hash(password)
-        if username == "":
-            return apology("invalid username, you left it blank", 400)
-        if password == "":
-            return apology("invalid password, you left it blank", 400)
-        if rows:
-            return apology("username is already taken", 400)
-        if confirmation != password:
-            return apology("passwords do not match", 400)
-        if len(rows) != 0:
-            return apology("username already exists", 400)
-        else:
-            try:
-                db.execute("INSERT INTO users (username, hash) VALUES (?, ?)",
-                           username, hashed_password)
-            except Exception as e:
-                return apology("An error occurred: " + str(e), 400)
-        return render_template("login.html")'''
-
 
 @auth.route("/password", methods=["GET", "POST"])
 @login_required
 def password():
     """reset password"""
-    user_id = session["user_id"]
-    username_row = db.execute("SELECT username FROM users WHERE id = ?", user_id)#TODO: CONVERT TO sqlalchemy
-    username = username_row[0]['username']
-    print(f"username: {username}")
-    if request.method == "GET":
-        return render_template("password.html", username=username)
+    user = current_user
+    flash("All fields are required")
     if request.method == "POST":
-        # username = request.form.get("username")
-        password = request.form.get("password")
+        new_password = request.form.get("password")
         confirmation = request.form.get("confirmation")
-        # rows = db.execute("SELECT * FROM users WHERE username = ?", username)
-        hashed_password = generate_password_hash(password)
-        if username == "":
-            return apology("invalid username, you left it blank", 403)
-        if password == "":
-            return apology("invalid password, you left it blank", 403)
-        # if rows:
-            # return apology("username is already taken", 403)
-        if confirmation != password:
-            return apology("passwords do not match", 403)
-        # if len(rows) != 0:
-            # return apology("username already exists", 403)
+        
+        if not new_password or not confirmation:
+            flash("All fields are required")#todo: fix flash not showing
+        elif new_password != confirmation:
+            flash("Passwords do not match")
         else:
-            try:
-                db.execute('UPDATE users SET hash = ? WHERE ID = ?', hashed_password, user_id)
-                # db.execute("INSERT INTO users (username, hash) VALUES (?, ?)", username, hashed_password)
-            except Exception as e:
-                return apology("An error occurred: " + str(e), 403)
-        return logout()
-        # return render_template("login.html")
+            user.password_hash = generate_password_hash(new_password)
+            db.session.commit()
+            
+            logout_user()
+            flash("Password successfully changed")
+            return redirect(url_for('auth.login'))
+        
+    return render_template("password.html", username=user.username)

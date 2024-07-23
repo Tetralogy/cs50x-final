@@ -43,6 +43,8 @@ def create_app(config_filename=None):
     app.config['SESSION_TYPE'] = 'sqlalchemy'
     app.config['SESSION_SQLALCHEMY'] = db
     app.config['SESSION_SQLALCHEMY_TABLE'] = 'sessions'
+    
+    app.config['FLASH_MESSAGE_EXPIRES'] = 5
 
     # Initialize extensions
     db.init_app(app)

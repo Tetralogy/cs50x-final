@@ -1,5 +1,5 @@
 from functools import wraps
-from flask import redirect, render_template, session
+from flask import flash, redirect, render_template, session
 
 
 def apology(message, code=400):
@@ -23,7 +23,7 @@ def apology(message, code=400):
         ]:
             s = s.replace(old, new)
         return s
-
+    flash(f'{message}, {code}')
     return render_template("apology.html", top=code, bottom=escape(message)), code
 
 
