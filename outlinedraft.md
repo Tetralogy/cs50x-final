@@ -23,7 +23,7 @@ Conversion notes:
 
 Basic user experience outline
 
-
+TODO: #23 FULL APP MOCKUP
 
 DONE #4 1. Register/create an account
     1. Login
