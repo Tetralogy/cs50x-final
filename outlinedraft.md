@@ -25,7 +25,7 @@ Basic user experience outline
 
 
 
-TODO #4 1. Register/create an account
+DONE #4 1. Register/create an account
     1. Login
     2. Logout
     3. Session cookies and user activity etc.

@@ -1,10 +1,8 @@
-#TODO: #21 login and register routes
-
 from flask import Blueprint, Flask, flash, redirect, render_template, request, session, url_for
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
-from .database.models import User  #TODO: #20 Import all the models after the schema is edited
+from .database.models import User
 from .utils import apology
 
 from .extension import db  
@@ -59,9 +57,9 @@ def register():
         elif password != confirmation:
             flash("Passwords do not match", category="danger")
         elif User.query.filter_by(username=username).first():
-            flash("Username already exists", category="danger")
+            flash(f"Username: {username} already exists", category="danger")
         elif User.query.filter_by(email=email).first():
-            flash("Email already exists", category="danger")
+            flash(f"Email: {email} already exists", category="danger")
         else:
             hashed_password = generate_password_hash(password)
             new_user = User(username=username, email=email, password_hash=hashed_password)
@@ -70,7 +68,8 @@ def register():
             db.session.commit()
             # Log in the new user
             login_user(new_user)
-            return redirect(url_for('auth.index'))
+            flash("Account Successfully created", category="success")
+            return redirect(url_for('main.index'))
     
     return render_template("register.html")
 
