@@ -14,7 +14,7 @@ auth = Blueprint('auth', __name__)
 @auth.route("/login", methods=["GET", "POST"])
 def login():
     # Forget any user_id
-    session.clear()
+    #session.clear()
     if request.method == "POST":
         username = request.form.get("username")
         password = request.form.get("password")
@@ -79,21 +79,21 @@ def register():
 def password():
     """reset password"""
     user = current_user
-    flash("All fields are required")
+    
     if request.method == "POST":
         new_password = request.form.get("password")
         confirmation = request.form.get("confirmation")
         
         if not new_password or not confirmation:
-            flash("All fields are required")#todo: fix flash not showing
+            flash("All fields are required", category="danger")
         elif new_password != confirmation:
-            flash("Passwords do not match")
+            flash("Passwords do not match", category="danger")
         else:
             user.password_hash = generate_password_hash(new_password)
             db.session.commit()
             
             logout_user()
-            flash("Password successfully changed")
+            flash("Password successfully changed", category="success")
             return redirect(url_for('auth.login'))
         
     return render_template("password.html", username=user.username)
