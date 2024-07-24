@@ -1,26 +1,20 @@
 from flask import Flask, redirect, render_template, request, session, url_for, Blueprint, current_app
 from functools import wraps
 from flask_login import current_user, login_required
+
+from application.database.models import Home
 from .utils import handle_error, apology
-
-
-
-
 
 main = Blueprint('main', __name__)
 
-
-
-
-
-
 # Register the error handler
-#main.errorhandler(Exception)(handle_error)
+main.errorhandler(Exception)(handle_error)
 
 # Define a context processor to make current_user available in every template
 @main.context_processor
 def inject_current_user():
-    return dict(current_user=current_user)
+    onboarded = Home.query.filter_by(user_id=current_user.id).first() is not None
+    return dict(current_user=current_user, onboarded=onboarded)
 
 @main.route('/')
 @login_required
@@ -30,7 +24,7 @@ def index():
 
 
 #xxx TODO: LAYOUT onboarding route
-'''
+
 @main.route('/onboarding', methods=['GET', 'POST'])
 @login_required
 def onboarding():
@@ -46,12 +40,7 @@ def onboarding():
         user_abilities = request.form.get('user_abilities')
 # TODO: #18 edit the models to have rooms as an item and room-type as a value instead of "bathroom/bedroom/kitchen"etc.
         # Save the user's data to the database
-        user = User(
-            house_size=house_size,
-            number_of_levels=number_of_levels,
-            layout=layout,
-            user_abilities=user_abilities
-        )
+
         
 
         # Insert the important rooms into the database

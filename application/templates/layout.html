@@ -19,12 +19,18 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
                     {% if current_user.is_authenticated %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="/tasks">Tasks</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/users">Users</a>
-                    </li>
+                        {% if onboarded %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('main.home') }}">Logout</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('main.tasks') }}">Logout</a>
+                            </li>
+                        {% else %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('main.onboarding') }}">Get Started</a>
+                            </li>
+                        {% endif %}
                     <li>
                         <a class="nav-link" href="{{ url_for('auth.logout') }}">Logout</a>
                     </li>
