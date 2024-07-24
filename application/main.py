@@ -29,7 +29,7 @@ def index():
 
 
 
-#TODO: LAYOUT ALL ROUTES
+#xxx TODO: LAYOUT onboarding route
 '''
 @main.route('/onboarding', methods=['GET', 'POST'])
 @login_required

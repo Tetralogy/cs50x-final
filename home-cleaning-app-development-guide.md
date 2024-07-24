@@ -26,11 +26,12 @@
 
 5. TODO: Develop the onboarding process:
 
-   - [ ] Create multi-step forms for collecting home environment details
-       - [ ] User can input home details (size, levels, layout)
-       - [ ] User can add rooms and their characteristics
-   - [ ] Implement form for user abilities and disabilities input
-       - [ ] User can specify abilities and limitations
+- [ ] Create multi-step forms for collecting home environment details
+    - [ ] User can input home details (size, levels, layout)
+    - [ ] User can add rooms and their characteristics
+- [ ] Implement form for user abilities and disabilities input
+    - [ ] User can specify abilities and limitations
+
 6. Create the home profile system:
 
    - [ ] Develop database models and relationships for homes and rooms
