@@ -9,4 +9,116 @@
     <p>This app helps you keep your home clean by automating tasks and providing personalized recommendations.</p>
 
 </div>
+
+<div class="container">
+    <h1>Welcome, {{ user.username }}!</h1>
+    
+    <div class="section">
+        <h2>User Information</h2>
+        <p>Email: {{ user.email }}</p>
+        <p>Member since: {{ user.created_at.strftime('%Y-%m-%d') }}</p>
+    </div>
+    
+    {% if home %}
+    <div class="section">
+        <h2>Home Information</h2>
+        <p>Size: {{ home.home_size_sqm }} m²</p>
+        <p>Number of floors: {{ home.num_floors }}</p>
+        <p>Layout: {{ home.layout }}</p>
+    </div>
+    {% else %}
+    <p>No home information available.</p>
+    {% endif %}
+    
+    {% if rooms %}
+    <div class="section">
+        <h2>Rooms</h2>
+        {% for room in rooms %}
+        <div>
+            <h3>{{ room.room_name }}</h3>
+            <p>Type: {{ room.room_type }}</p>
+            <p>Size: {{ room.room_size }} m²</p>
+            <p>Flooring: {{ room.room_flooring_type }}</p>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p>No room information available.</p>
+    {% endif %}
+    
+    {% if tasks %}
+    <div class="section">
+        <h2>Upcoming Tasks</h2>
+        <ul class="task-list">
+            {% for task in tasks %}
+            <li>
+                <strong>{{ task.task_title }}</strong>
+                <p>Due: {{ task.task_due_time.strftime('%Y-%m-%d %H:%M') }}</p>
+                <p>Status: {{ task.task_status }}</p>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% else %}
+    <p>No upcoming tasks available.</p>
+    {% endif %}
+    
+    {% if user_status %}
+    <div class="section">
+        <h2>Current Status</h2>
+        <p>Focus: {{ user_status.focus }}</p>
+        <p>Mood: {{ user_status.mood }}</p>
+        <p>Energy Level: {{ user_status.energy_level }}/10</p>
+        <p>Last Updated: {{ user_status.last_updated.strftime('%Y-%m-%d %H:%M') }}</p>
+    </div>
+    {% else %}
+    <p>No current status available.</p>
+    {% endif %}
+    
+    {% if user_schedule %}
+    <div class="section">
+        <h2>Upcoming Schedule</h2>
+        <ul class="schedule-list">
+            {% for event in user_schedule %}
+            <li>
+                <strong>{{ event.event_name }}</strong>
+                <p>Start: {{ event.start_time.strftime('%Y-%m-%d %H:%M') }}</p>
+                <p>End: {{ event.end_time.strftime('%Y-%m-%d %H:%M') }}</p>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% else %}
+    <p>No upcoming schedule available.</p>
+    {% endif %}
+
+
+    <h1>Database Spreadsheet</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>User ID</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Task ID</th>
+                <th>Task Title</th>
+                <th>Task Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+                {% for task in user.tasks %}
+                    <tr>
+                        <td>{{ user.id }}</td>
+                        <td>{{ user.username }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>{{ task.task_id }}</td>
+                        <td>{{ task.task_title }}</td>
+                        <td>{{ task.task_description }}</td>
+                    </tr>
+                {% endfor %}
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
 {% endblock %}

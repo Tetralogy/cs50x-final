@@ -16,14 +16,14 @@
           "FLASK_APP": "application:create_app"
         },
         "files.exclude": {
-          "**/.git": false,
-          "**/.svn": false,
-          "**/.hg": false,
-          "**/CVS": false,
-          "**/.DS_Store": false,
-          "**/Thumbs.db": false,
-          "**/__pycache__": false,
-          "**/.venv": false
+          "**/.git": true,
+          "**/.svn": true,
+          "**/.hg": true,
+          "**/CVS": true,
+          "**/.DS_Store": true,
+          "**/Thumbs.db": true,
+          "**/__pycache__": true,
+          "**/.venv": true
         },
         "explorer.excludeGitIgnore": false,
         "explorerExclude.backup": {}

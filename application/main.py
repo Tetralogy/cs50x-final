@@ -2,7 +2,7 @@ from flask import Flask, redirect, render_template, request, session, url_for, B
 from functools import wraps
 from flask_login import current_user, login_required
 
-from application.database.models import Home
+from application.database.models import Home, Room, Task, User, UserSchedule, UserStatus
 from .utils import handle_error, apology
 
 main = Blueprint('main', __name__)
@@ -19,15 +19,53 @@ def inject_current_user():
 @main.route('/')
 @login_required
 def index():
-    return render_template("index.html")
+    # Fetch user data
+    user = User.query.get(current_user.id)
+    
+    # Fetch home data
+    home = Home.query.filter_by(user_id=user.id).first()
+    
+    # Fetch rooms data
+    rooms = Room.query.filter_by(home_id=home.home_id).all() if home else []
+    
+    # Fetch tasks data
+    tasks = Task.query.filter_by(user_id=user.id).order_by(Task.task_due_time).limit(5).all()
+    
+    # Fetch user status
+    user_status = UserStatus.query.filter_by(user_id=user.id).order_by(UserStatus.last_updated.desc()).first()
+    
+    # Fetch user schedule
+    user_schedule = UserSchedule.query.filter_by(user_id=user.id).order_by(UserSchedule.start_time).limit(3).all()
+    
+    # todo add all data columns here
+    
+        
+class User(db.Model, User
+    id: Mapped[int] = map
+    username: Mapped[str]
+    email: Mapped[str] = 
+    password_hash: Mapped
+    profile_picture_url: 
+    created_at: Mapped[da
+    last_login: Mapped[da
+                       
+                       #todo joinedload FOR ALL TABLES IN 1 LINE
+    users = User.query.options(joinedload(User.tasks)).all()
+    
+    return render_template('index.html', user=user)
+                           user=user, 
+                           home=home, 
+                           rooms=rooms, 
+                           tasks=tasks, 
+                           user_status=user_status, 
+                           user_schedule=user_schedule)
 
-
-
-#xxx TODO: LAYOUT onboarding route
 
 @main.route('/onboarding', methods=['GET', 'POST'])
 @login_required
 def onboarding():
+    pass
+'''
     if request.method == 'POST':
         house_size = request.form.get('house_size')
         number_of_levels = request.form.get('number_of_levels')

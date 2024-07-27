@@ -52,6 +52,7 @@ def register():
         password = request.form.get('password')
         confirmation = request.form.get("confirmation")
         
+        # form validation check
         if not username or not email or not password or not confirmation:
             flash("All fields are required", category="danger")
         elif password != confirmation:

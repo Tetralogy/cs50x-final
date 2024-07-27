@@ -21,27 +21,25 @@
                     {% if current_user.is_authenticated %}
                         {% if onboarded %}
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ url_for('main.home') }}">Logout</a>
+                                <a class="nav-link" href="{{ url_for('main.index') }}">Logout</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ url_for('main.tasks') }}">Logout</a>
+                                <a class="nav-link" href="{{ url_for('main.tasklist') }}">Logout</a>
                             </li>
                         {% else %}
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ url_for('main.onboarding') }}">Get Started</a>
+                               <a class="nav-link" href="{{ url_for('main.onboarding') }}">Get Started</a>
                             </li>
                         {% endif %}
-                    <li>
-                        <a class="nav-link" href="{{ url_for('auth.logout') }}">Logout</a>
-                    </li>
-                    <li>
-                        <a class="nav-link" href="{{ url_for('auth.password') }}">Password Reset</a>
-                    </li>
-
-                    <div>
-                        <h4 class="text-primary">Welcome, {{current_user.username}}! Email: {{current_user.email}} User ID: {{current_user.id}}</h4>
-                    </div>
-
+                        <li>
+                            <a class="nav-link" href="{{ url_for('auth.logout') }}">Logout</a>
+                        </li>
+                        <li>
+                            <a class="nav-link" href="{{ url_for('auth.password') }}">Password Reset</a>
+                        </li>
+                        <div>
+                            <h4 class="text-primary">Welcome, {{current_user.username}}! Email: {{current_user.email}} User ID: {{current_user.id}}</h4>
+                        </div>
                     {% else %}
                     <li>
                         <a class="nav-link" href="{{ url_for('auth.register') }}">Register</a>
