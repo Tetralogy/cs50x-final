@@ -39,6 +39,10 @@ class User(db.Model, UserMixin):
     abilities = relationship('UserAbility', back_populates="user", lazy='dynamic')
     preferences = relationship('UserPreference', back_populates="user", lazy='dynamic')
     homes = relationship('Home', back_populates="user", lazy='dynamic')
+    photos = relationship('Photo', back_populates="user", lazy='dynamic')
+    tasks = relationship('Task', back_populates="user", lazy='dynamic')
+    supply = relationship('Supply', back_populates="user", lazy='dynamic')
+    status = relationship('UserStatus', back_populates="user", lazy='dynamic')
 
 
 class UserAbility(db.Model):
@@ -47,6 +51,16 @@ class UserAbility(db.Model):
     ability_type: Mapped[str]
     description: Mapped[str]
     user = relationship("User", back_populates="abilities")
+    
+class UserStatus(db.Model):
+    status_id: Mapped[int] = mapped_column(primary_key=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey('user.id'))
+    current_room_id: Mapped[int] = mapped_column(ForeignKey('room.room_id'))
+    focus: Mapped[str]
+    mood: Mapped[str]
+    energy_level: Mapped[int]
+    last_updated: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=func.now())
+    user = relationship("User", back_populates="status")
     
 class UserPreference(db.Model):
     user_id: Mapped[int] = mapped_column(ForeignKey('user.id'), primary_key=True)
@@ -78,19 +92,28 @@ class Room(db.Model):
     room_dirtiness_level: Mapped[float]
     room_tools_supplies_on_hand: Mapped[str]
     room_tools_supplies_required: Mapped[str]
-    homes = relationship("Home", back_populates="rooms") #todo the rest of the relationships
+    homes = relationship("Home", back_populates="rooms")
+    zones = relationship('Zone', back_populates="rooms", lazy='dynamic')
+    supply = relationship('Supply', back_populates="rooms", lazy='dynamic')
+    
 
-class RoomDetail(db.Model):
-    detail_id: Mapped[int] = mapped_column(primary_key=True)
+class Zone(db.Model):
+    zone_id: Mapped[int] = mapped_column(primary_key=True)
     room_id: Mapped[int] = mapped_column(ForeignKey('room.room_id'))
-    appliance: Mapped[str]
     surface_type: Mapped[str]
     usage_frequency: Mapped[str]
     importance: Mapped[int]
-    aesthetic_score: Mapped[int]
     dirtiness_score: Mapped[int]
     effort_required: Mapped[int]
-
+    rooms = relationship('Room', back_populates="zones")
+    appliances = relationship('Appliance', back_populates="zones", lazy='dynamic')
+    
+class Appliance(db.Model):
+    appliance_id: Mapped[int] = mapped_column(primary_key=True)
+    zone_id: Mapped[int] = mapped_column(ForeignKey('zone.zone_id'))
+    appliance: Mapped[str]
+    zones = relationship('Zone', back_populates="appliance")
+    
 class Photo(db.Model):
     photo_id: Mapped[int] = mapped_column(primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey('user.id'))
@@ -98,6 +121,9 @@ class Photo(db.Model):
     photo_url: Mapped[str]
     is_before_photo: Mapped[bool]
     photo_timestamp: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=func.now())
+    user = relationship("User", back_populates="photos")
+    tasks = relationship('Task', back_populates="photos", lazy='dynamic')
+    annotations = relationship('TaskAnnotation', back_populates="photos", lazy='dynamic')
 
 class Task(db.Model):
     task_id: Mapped[int] = mapped_column(primary_key=True)
@@ -113,13 +139,20 @@ class Task(db.Model):
     task_scheduled_time: Mapped[datetime]
     task_type: Mapped[str]
     completed_at: Mapped[Optional[datetime]]
+    photos = relationship('Photo', back_populates="tasks")
+    user = relationship("User", back_populates="tasks")
+    room = relationship("Room", back_populates="tasks")
+    progress = relationship('TaskProgress', back_populates="tasks")
 
 class TaskAnnotation(db.Model):
     annotation_id: Mapped[int] = mapped_column(primary_key=True)
     task_id: Mapped[int] = mapped_column(ForeignKey('task.task_id'))
+    photo_id: Mapped[int] = mapped_column(ForeignKey('photo.photo_id'))
     x_coordinate: Mapped[float]
     y_coordinate: Mapped[float]
     annotation_text: Mapped[str]
+    photos = relationship('Photo', back_populates="annotations")
+    tasks = relationship('Task', back_populates="photos")
 
 class TaskProgress(db.Model):
     progress_id: Mapped[int] = mapped_column(primary_key=True)
@@ -128,29 +161,30 @@ class TaskProgress(db.Model):
     progress_timestamp: Mapped[datetime]
     progress_description: Mapped[str]
     completion_percentage: Mapped[float]
+    tasks = relationship('Task', back_populates="progress")
     
-class TaskCompletionHistory(db.Model):
+'''class TaskCompletionHistory(db.Model):
     completion_id: Mapped[int] = mapped_column(primary_key=True)
     task_id: Mapped[int] = mapped_column(ForeignKey('task.task_id'))
     completed_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=func.now())
-    after_photo_url: Mapped[str]
+    after_photo_url: Mapped[str]'''
     
-class SharedTask(db.Model):
+'''class SharedTask(db.Model):
     share_id: Mapped[int] = mapped_column(primary_key=True)
     task_id: Mapped[int] = mapped_column(ForeignKey('task.task_id'))
     shared_with: Mapped[str]
     share_timestamp: Mapped[datetime]
     comments: Mapped[str]
     likes: Mapped[int]
-    feedback: Mapped[str]
+    feedback: Mapped[str]'''
 
-class Notification(db.Model):
+'''class Notification(db.Model):
     notification_id: Mapped[int] = mapped_column(primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey('user.id'))
     task_id: Mapped[int] = mapped_column(ForeignKey('task.task_id'))
     notification_message: Mapped[str]
     notification_status: Mapped[str]
-    reminder_time: Mapped[datetime]
+    reminder_time: Mapped[datetime]'''
 
 class Supply(db.Model):
     item_id: Mapped[int] = mapped_column(primary_key=True)
@@ -159,24 +193,17 @@ class Supply(db.Model):
     item_name: Mapped[str]
     item_type: Mapped[str]
     quantity: Mapped[int]
+    rooms = relationship('Room', back_populates="supply")
+    user = relationship("User", back_populates="supply")
 
-class UserStatus(db.Model):
-    status_id: Mapped[int] = mapped_column(primary_key=True)
-    user_id: Mapped[int] = mapped_column(ForeignKey('user.id'))
-    current_room_id: Mapped[int] = mapped_column(ForeignKey('room.room_id'))
-    focus: Mapped[str]
-    mood: Mapped[str]
-    energy_level: Mapped[int]
-    last_updated: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=func.now())
-
-class UserSchedule(db.Model):
+'''class UserSchedule(db.Model):
     schedule_id: Mapped[int] = mapped_column(primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey('user.id'))
     event_name: Mapped[str]
     start_time: Mapped[datetime]
-    end_time: Mapped[datetime]
+    end_time: Mapped[datetime]'''
 
-class ProductRecommendation(db.Model):
+'''class ProductRecommendation(db.Model):
     recommendation_id: Mapped[int] = mapped_column(primary_key=True)
     task_id: Mapped[int] = mapped_column(ForeignKey('task.task_id'))
     product_name: Mapped[str]
@@ -188,4 +215,4 @@ class ServiceRecommendation(db.Model):
     task_id: Mapped[int] = mapped_column(ForeignKey('task.task_id'))
     service_name: Mapped[str]
     service_url: Mapped[str]
-    price: Mapped[float]
+    price: Mapped[float]'''
