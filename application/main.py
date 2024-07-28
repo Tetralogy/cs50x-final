@@ -2,7 +2,7 @@ from flask import Flask, redirect, render_template, request, session, url_for, B
 from functools import wraps
 from flask_login import current_user, login_required
 from sqlalchemy.orm import joinedload
-from application.database.models import Home, Room, Task, User, UserSchedule, UserStatus
+from application.database.models import Home, Room, Task, User, UserStatus
 from .utils import handle_error, apology
 from .extension import db  
 
@@ -39,181 +39,182 @@ def get_comprehensive_user_data(user_id):
 @main.route('/')
 @login_required
 def index():
-    # Fetch user data
-    #user_id = User.query.get(current_user.id)
- User
- UserAbility
-UserPreference
- 
-    # Fetch home data
-    home = Home.query.filter_by(user_id=current_user.id).first()
+    return render_template('index.html', user=current_user)
+    '''    # Fetch user data
+        #user_id = User.query.get(current_user.id)
+    User
+    UserAbility
+    UserPreference
     
-    # Fetch rooms data
-    rooms = Room.query.filter_by(home_id=home.home_id).all() if home else []
-    RoomDetail
-    Photo
-    # Fetch tasks data
-    tasks = Task.query.filter_by(user_id=current_user.id).order_by(Task.task_due_time).limit(5).all()
-    TaskAnnotation
-    TaskProgress
-    # Fetch user status
-    user_status = UserStatus.query.filter_by(user_id=current_user.id).order_by(UserStatus.last_updated.desc()).first()
-    
-    # Fetch user schedule
-    user_schedule = UserSchedule.query.filter_by(user_id=current_user.id).order_by(UserSchedule.start_time).limit(3).all()
-    
-    # todo add all data columns here
-    
-
-
-#fill in user details
-User
-    id = current_user.id
-    username = current_user.id
-    email = current_user.email
-    password_hash = current_user.password_hash
-    profile_picture_url = current_user.profile_picture_url
-    created_at = current_user.created_at
-    last_login = current_user.last_login
-        #abilities and disabilities
-UserAbility
-    ability_id = UserAbility.query.filter_by(user_id=current_user.id).all()
-    ability_type = UserAbility.query.filter_by(user_id=current_user.id).all()
-    description = UserAbility.query.filter_by(user_id=current_user.id).all()
-        #preferences
-UserPreference
-    user_id: 
-    measurement_unit: 
-    notification_frequency:
-    theme:
+        # Fetch home data
+        home = Home.query.filter_by(user_id=current_user.id).first()
         
-#continuously update user status
-UserStatus
-    status_id:
-    user_id:
-    current_room_id:
-    focus:
-    mood:
-    energy_level:
-    last_updated:
-
-# home details
-Home
-   home_id: 
-   user_id:
-   home_size_sqm:
-   num_floors: 
-   layout: 
-       
-    # room details
-    Room
-    room_id: 
-    home_id: 
-    room_name: 
-    room_type: 
-    room_size: 
-    room_flooring_type: 
-    room_windows: 
-    room_function: 
-    room_frequency_of_use:
-    room_importance: 
-    room_dirtiness_level: 
-    room_tools_supplies_on_hand:
-    room_tools_supplies_required:
-
-    RoomDetail
-        detail_id:
-        room_id: 
-        appliance: 
-        surface_type:
-        usage_frequency:
-        importance:
-        aesthetic_score:
-        dirtiness_score:
-        effort_required:
-            
-    Supply
-    item_id:
-    room_id:
-    user_id:
-    item_name:
-    item_type:
-    quantity:
-            
-        ProductRecommendation
-        recommendation_id:
-        task_id:
-        product_name: 
-        product_url:
-        price:
-
-        ServiceRecommendation
-        recommendation_id:
-        task_id: 
-        service_name:
-        service_url:
-        price:
-        
-#photo details
-Photo
- photo_id: 
- user_id: 
- room_id: 
- photo_url: 
- is_before_photo:
- photo_timestamp:
-     
-#task details
-Task
-task_id: 
-user_id: 
-room_id: 
-task_title:
-task_description: 
-task_created_at: 
-task_due_time:
-task_priority:
-task_status:
-task_tags:
-task_scheduled_time:
-task_type:
-completed_at: 
-    TaskAnnotation
-    annotation_id: 
-    task_id: 
-    x_coordinate:
-    y_coordinate:
-    annotation_text: 
+        # Fetch rooms data
+        rooms = Room.query.filter_by(home_id=home.home_id).all() if home else []
+        RoomDetail
+        Photo
+        # Fetch tasks data
+        tasks = Task.query.filter_by(user_id=current_user.id).order_by(Task.task_due_time).limit(5).all()
+        TaskAnnotation
         TaskProgress
-        progress_id:
-        task_id: 
-        progress_photo_url:
-        progress_timestamp:
-        progress_description:
-        completion_percentage:
-            SharedTask
-            share_id:
+        # Fetch user status
+        user_status = UserStatus.query.filter_by(user_id=current_user.id).order_by(UserStatus.last_updated.desc()).first()
+        
+        # Fetch user schedule
+        user_schedule = UserSchedule.query.filter_by(user_id=current_user.id).order_by(UserSchedule.start_time).limit(3).all()
+        
+        # todo add all data columns here
+        
+
+
+    #fill in user details
+    User
+        id = current_user.id
+        username = current_user.id
+        email = current_user.email
+        password_hash = current_user.password_hash
+        profile_picture_url = current_user.profile_picture_url
+        created_at = current_user.created_at
+        last_login = current_user.last_login
+            #abilities and disabilities
+    UserAbility
+        ability_id = UserAbility.query.filter_by(user_id=current_user.id).all()
+        ability_type = UserAbility.query.filter_by(user_id=current_user.id).all()
+        description = UserAbility.query.filter_by(user_id=current_user.id).all()
+            #preferences
+    UserPreference
+        user_id: 
+        measurement_unit: 
+        notification_frequency:
+        theme:
+            
+    #continuously update user status
+    UserStatus
+        status_id:
+        user_id:
+        current_room_id:
+        focus:
+        mood:
+        energy_level:
+        last_updated:
+
+    # home details
+    Home
+    home_id: 
+    user_id:
+    home_size_sqm:
+    num_floors: 
+    layout: 
+        
+        # room details
+        Room
+        room_id: 
+        home_id: 
+        room_name: 
+        room_type: 
+        room_size: 
+        room_flooring_type: 
+        room_windows: 
+        room_function: 
+        room_frequency_of_use:
+        room_importance: 
+        room_dirtiness_level: 
+        room_tools_supplies_on_hand:
+        room_tools_supplies_required:
+
+        RoomDetail
+            detail_id:
+            room_id: 
+            appliance: 
+            surface_type:
+            usage_frequency:
+            importance:
+            aesthetic_score:
+            dirtiness_score:
+            effort_required:
+                
+        Supply
+        item_id:
+        room_id:
+        user_id:
+        item_name:
+        item_type:
+        quantity:
+                
+            ProductRecommendation
+            recommendation_id:
+            task_id:
+            product_name: 
+            product_url:
+            price:
+
+            ServiceRecommendation
+            recommendation_id:
             task_id: 
-            shared_with: 
-            share_timestamp: 
-            comments: 
-            likes:
-            feedback:
-                Notification
-                notification_id:
-                user_id:
-                task_id:
-                notification_message:
-                notification_status: 
-                reminder_time:
-                    TaskCompletionHistory
-                    completion_id:
+            service_name:
+            service_url:
+            price:
+            
+    #photo details
+    Photo
+    photo_id: 
+    user_id: 
+    room_id: 
+    photo_url: 
+    is_before_photo:
+    photo_timestamp:
+        
+    #task details
+    Task
+    task_id: 
+    user_id: 
+    room_id: 
+    task_title:
+    task_description: 
+    task_created_at: 
+    task_due_time:
+    task_priority:
+    task_status:
+    task_tags:
+    task_scheduled_time:
+    task_type:
+    completed_at: 
+        TaskAnnotation
+        annotation_id: 
+        task_id: 
+        x_coordinate:
+        y_coordinate:
+        annotation_text: 
+            TaskProgress
+            progress_id:
+            task_id: 
+            progress_photo_url:
+            progress_timestamp:
+            progress_description:
+            completion_percentage:
+                SharedTask
+                share_id:
+                task_id: 
+                shared_with: 
+                share_timestamp: 
+                comments: 
+                likes:
+                feedback:
+                    Notification
+                    notification_id:
+                    user_id:
                     task_id:
-                    completed_at:
-                    after_photo_url:
-                    
-    user_data = get_comprehensive_user_data(current_user.id)
-    return render_template('index.html', user_data=user_data)
+                    notification_message:
+                    notification_status: 
+                    reminder_time:
+                        TaskCompletionHistory
+                        completion_id:
+                        task_id:
+                        completed_at:
+                        after_photo_url:
+                        
+        user_data = get_comprehensive_user_data(current_user.id)
+        return render_template('index.html', user_data=user_data)'''
 
 @main.route('/onboarding', methods=['GET', 'POST'])
 @login_required

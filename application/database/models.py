@@ -95,6 +95,7 @@ class Room(db.Model):
     homes = relationship("Home", back_populates="rooms")
     zones = relationship('Zone', back_populates="rooms", lazy='dynamic')
     supply = relationship('Supply', back_populates="rooms", lazy='dynamic')
+    tasks = relationship('Task', back_populates="rooms", lazy='dynamic')
     
 
 class Zone(db.Model):
@@ -112,7 +113,7 @@ class Appliance(db.Model):
     appliance_id: Mapped[int] = mapped_column(primary_key=True)
     zone_id: Mapped[int] = mapped_column(ForeignKey('zone.zone_id'))
     appliance: Mapped[str]
-    zones = relationship('Zone', back_populates="appliance")
+    zones = relationship('Zone', back_populates="appliances")
     
 class Photo(db.Model):
     photo_id: Mapped[int] = mapped_column(primary_key=True)
@@ -122,7 +123,6 @@ class Photo(db.Model):
     is_before_photo: Mapped[bool]
     photo_timestamp: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=func.now())
     user = relationship("User", back_populates="photos")
-    tasks = relationship('Task', back_populates="photos", lazy='dynamic')
     annotations = relationship('TaskAnnotation', back_populates="photos", lazy='dynamic')
 
 class Task(db.Model):
@@ -139,10 +139,10 @@ class Task(db.Model):
     task_scheduled_time: Mapped[datetime]
     task_type: Mapped[str]
     completed_at: Mapped[Optional[datetime]]
-    photos = relationship('Photo', back_populates="tasks")
     user = relationship("User", back_populates="tasks")
-    room = relationship("Room", back_populates="tasks")
+    rooms = relationship("Room", back_populates="tasks")
     progress = relationship('TaskProgress', back_populates="tasks")
+    annotations = relationship("TaskAnnotation", back_populates="tasks")
 
 class TaskAnnotation(db.Model):
     annotation_id: Mapped[int] = mapped_column(primary_key=True)
@@ -152,7 +152,7 @@ class TaskAnnotation(db.Model):
     y_coordinate: Mapped[float]
     annotation_text: Mapped[str]
     photos = relationship('Photo', back_populates="annotations")
-    tasks = relationship('Task', back_populates="photos")
+    tasks = relationship('Task', back_populates="annotations")
 
 class TaskProgress(db.Model):
     progress_id: Mapped[int] = mapped_column(primary_key=True)
