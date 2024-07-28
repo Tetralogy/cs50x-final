@@ -2,6 +2,7 @@ from flask import Blueprint, Flask, flash, redirect, render_template, request, s
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
+from datetime import datetime, timezone
 from .database.models import User
 from .utils import apology
 
@@ -29,6 +30,8 @@ def login():
             else:
                 login_user(user) 
                 flash("Successful login", category="success")
+                user.last_login = datetime.now(timezone.utc)
+                db.session.commit()
                 return redirect(url_for('main.index'))
     return render_template('login.html')
 
