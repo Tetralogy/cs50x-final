@@ -13,112 +13,204 @@
 <div class="container">
     <h1>Welcome, {{ user.username }}!</h1>
     
-    <div class="section">
-        <h2>User Information</h2>
-        <p>Email: {{ user.email }}</p>
-        <p>Member since: {{ user.created_at.strftime('%Y-%m-%d') }}</p>
-    </div>
     
-    {% if home %}
-    <div class="section">
-        <h2>Home Information</h2>
-        <p>Size: {{ home.home_size_sqm }} m²</p>
-        <p>Number of floors: {{ home.num_floors }}</p>
-        <p>Layout: {{ home.layout }}</p>
-    </div>
-    {% else %}
-    <p>No home information available.</p>
-    {% endif %}
-    
-    {% if rooms %}
-    <div class="section">
-        <h2>Rooms</h2>
-        {% for room in rooms %}
-        <div>
-            <h3>{{ room.room_name }}</h3>
-            <p>Type: {{ room.room_type }}</p>
-            <p>Size: {{ room.room_size }} m²</p>
-            <p>Flooring: {{ room.room_flooring_type }}</p>
-        </div>
-        {% endfor %}
-    </div>
-    {% else %}
-    <p>No room information available.</p>
-    {% endif %}
-    
-    {% if tasks %}
-    <div class="section">
-        <h2>Upcoming Tasks</h2>
-        <ul class="task-list">
-            {% for task in tasks %}
-            <li>
-                <strong>{{ task.task_title }}</strong>
-                <p>Due: {{ task.task_due_time.strftime('%Y-%m-%d %H:%M') }}</p>
-                <p>Status: {{ task.task_status }}</p>
-            </li>
-            {% endfor %}
-        </ul>
-    </div>
-    {% else %}
-    <p>No upcoming tasks available.</p>
-    {% endif %}
-    
-    {% if user_status %}
-    <div class="section">
-        <h2>Current Status</h2>
-        <p>Focus: {{ user_status.focus }}</p>
-        <p>Mood: {{ user_status.mood }}</p>
-        <p>Energy Level: {{ user_status.energy_level }}/10</p>
-        <p>Last Updated: {{ user_status.last_updated.strftime('%Y-%m-%d %H:%M') }}</p>
-    </div>
-    {% else %}
-    <p>No current status available.</p>
-    {% endif %}
-    
-    {% if user_schedule %}
-    <div class="section">
-        <h2>Upcoming Schedule</h2>
-        <ul class="schedule-list">
-            {% for event in user_schedule %}
-            <li>
-                <strong>{{ event.event_name }}</strong>
-                <p>Start: {{ event.start_time.strftime('%Y-%m-%d %H:%M') }}</p>
-                <p>End: {{ event.end_time.strftime('%Y-%m-%d %H:%M') }}</p>
-            </li>
-            {% endfor %}
-        </ul>
-    </div>
-    {% else %}
-    <p>No upcoming schedule available.</p>
-    {% endif %}
-
-
-    <h1>Database Spreadsheet</h1>
-    <table>
-        <thead>
-            <tr>
-                <th>User ID</th>
-                <th>Username</th>
-                <th>Email</th>
-                <th>Task ID</th>
-                <th>Task Title</th>
-                <th>Task Description</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for user in users %}
-                {% for task in user.tasks %}
-                    <tr>
-                        <td>{{ user.id }}</td>
-                        <td>{{ user.username }}</td>
-                        <td>{{ user.email }}</td>
-                        <td>{{ task.task_id }}</td>
-                        <td>{{ task.task_title }}</td>
-                        <td>{{ task.task_description }}</td>
-                    </tr>
+</div>
+<div>
+    <table class="table table-striped table-dark">
+        <tr>
+            <th>Field</th>
+            <th>Value</th>
+        </tr>
+        <tr>
+            <td>User</td>
+            <td>
+                id: {{ user.id }}<br>
+                username: {{ user.username }}<br>
+                email: {{ user.email }}<br>
+                password_hash: {{ user.password_hash }}<br>
+                profile_picture_url: {{ user.profile_picture_url }}<br>
+                created_at: {{ user.created_at }}<br>
+                last_login: {{ user.last_login }}
+            </td>
+        </tr>
+        <tr>
+            <td>UserAbility</td>
+            <td>
+                {% for ability in user.abilities %}
+                ability_id: {{ ability.ability_id }}<br>
+                ability_type:{{ ability.ability_type }} <br>
+                description: {{ ability.description }}<br>
                 {% endfor %}
-            {% endfor %}
-        </tbody>
+            </td>
+        </tr>
+        <tr>
+            <td>UserPreference</td>
+            <td>
+                {% for preference in user.preferences %}
+                user_id: {{ preference.user_id }}<br>
+                measurement_unit: {{ preference.measurement_unit }}<br>
+                notification_frequency: {{ preference.notification_frequency }}<br>
+                theme: {{ preference.theme }}<br>
+                {% endfor %}
+            </td>
+        </tr>
+        <tr>
+            <td>UserStatus</td>
+            <td>
+                {% for status in user.status %}
+                status_id: {{ status.status_id }}<br>
+                user_id: {{ status.user_id }}<br>
+                current_room_id: {{ status.current_room_id }}<br>
+                focus: {{ status.focus }}<br>
+                mood: {{ status.mood }}<br>
+                energy_level: {{ status.energy_level }}<br>
+                last_updated: {{ status.last_updated }}<br>
+                {% endfor %}
+            </td>
+        </tr>
+        <tr>
+            <td>Home</td>
+            <td>
+                {% for home in user.homes %}
+                home_id: {{ home.home_id }}<br>
+                user_id: {{ home.user_id }}<br>
+                home_size_sqm: {{ home.home_size_sqm }}<br>
+                num_floors: {{ home.num_floors }}<br>
+                layout: {{ home.layout }}<br>
+                {% endfor %}
+            </td>
+        </tr>
+        <tr>
+            <td>Room</td>
+            <td>
+                {% for room in user.rooms %}
+                room_id: {{ room.room_id }}<br>
+                home_id: {{ room.home_id }}<br>
+                room_name: {{ room.room_name }}<br>
+                room_type: {{ room.room_type }}<br>
+                room_size: {{ room.room_size }}<br>
+                room_flooring_type: {{ room.room_flooring_type }}<br>
+                room_windows: {{ room.room_windows }}<br>
+                room_function: {{ room.room_function }}<br>
+                room_frequency_of_use: {{ room.room_frequency_of_use }}<br>
+                room_importance: {{ room.room_importance }}<br>
+                room_dirtiness_level: {{ room.room_dirtiness_level }}<br>
+                room_tools_supplies_on_hand: {{ room.room_tools_supplies_on_hand }}<br>
+                room_tools_supplies_required: {{ room.room_tools_supplies_required }}<br>
+                {% endfor %}
+            </td>
+        </tr>
+        <tr>
+            <td>RoomDetail</td> # todo fix the column names and order for room
+            <td>
+                {% for roomdetail in user.roomdetails %}
+                detail_id: {{ roomdetail.detail_id }}<br>
+                room_id: {{ roomdetail.room_id }}<br>
+                appliance: {{ roomdetail.appliance }}<br>
+                surface_type: {{ roomdetail.surface_type }}<br>
+                usage_frequency: {{ roomdetail.usage_frequency }}<br>
+                importance: {{ roomdetail.importance }}<br>
+                aesthetic_score: {{ roomdetail.aesthetic_score }}<br>
+                dirtiness_score: {{ roomdetail.dirtiness_score }}<br>
+                effort_required: {{ roomdetail.efficiency_required }}<br>
+                {% endfor %}
+            </td>
+        </tr>
+        <tr>
+            <td>Supply</td>
+            <td>
+                {% for supply in user.supply %}
+                item_id: {{ supply.item_id }}<br>
+                room_id: {{ supply.room_id }}<br>
+                user_id: {{ supply.user_id }}<br>
+                item_name: {{ supply.item_name }}<br>
+                item_type: {{ supply.item_type }}<br>
+                quantity: {{ supply.quantity }}<br>
+                {% endfor %}
+            </td>
+        </tr>
+        <tr>
+            <td>ProductRecommendation</td>
+            <td>
+                {% for prod_rec in user.productrecommendations %}
+                recommendation_id: {{ prod_rec.recommendation_id }}<br>
+                task_id: {{ prod_rec.task_id }}<br>
+                product_name: {{ prod_rec.product_name }}<br>
+                product_url: {{ prod_rec.product_url }}<br>
+                price: {{ prod_rec.price }}<br>
+                {% endfor %}
+            </td>
+        </tr>
+        <tr>
+            <td>ServiceRecommendation</td>
+            <td>
+                {% for service_rec in user.servicerecommendations %}
+                recommendation_id: {{ service_rec.recommendation_id }}<br>
+                task_id: {{ service_rec.task_id }}<br>
+                service_name: {{ service_rec.service_name }}<br>
+                service_url: {{ service_rec.service_url }}<br>
+                price: {{ service_rec.price }}<br>
+                {% endfor %}
+            </td>
+        </tr>
+        <tr>
+            <td>Photo</td>
+            <td>
+                {% for photo in user.photos %}
+                photo_id: {{ photo.photo_id }}<br>
+                user_id: {{ photo.user_id }}<br>
+                room_id: {{ photo.room_id }}<br>
+                photo_url: {{ photo.photo_url }}<br>
+                is_before_photo: {{ photo.is_before_photo }}<br>
+                photo_timestamp: {{ photo.photo_timestamp }}<br>
+                {% endfor %}
+            </td>
+        </tr>
+        <tr>
+            <td>Task</td>
+            <td>
+                {% for task in user.tasks %}
+                task_id: {{ task.task_id }}<br>
+                user_id: {{ task.user_id }}<br>
+                room_id: {{ task.room_id }}<br>
+                task_title: {{ task.task_title }}<br>
+                task_description: {{ task.task_description }}<br>
+                task_created_at: {{ task.task_created_at }}<br>
+                task_due_time: {{ task.task_due_time }}<br>
+                task_priority: {{ task.task_priority }}<br>
+                task_status: {{ task.task_status }}<br>
+                task_tags: {{ task.task_tags }}<br>
+                task_scheduled_time: {{ task.task_scheduled_time }}<br>
+                task_type: {{ task.task_type }}<br>
+                completed_at: {{ task.completed_at }}<br>
+                {% endfor %}
+            </td>
+        </tr>
+        <tr>
+            <td>TaskAnnotation</td>
+            <td>
+                {% for annotation in user.task_annotations %}
+                annotation_id: {{ annotation.annotation_id }}<br>
+                task_id: {{ annotation.task_id }}<br>
+                x_coordinate: {{ annotation.x_coordinate }}<br>
+                y_coordinate: {{ annotation.y_coordinate }}<br>
+                annotation_text: {{ annotation.annotation_text }}<br>
+                {% endfor %}
+            </td>
+        </tr>
+        <tr>
+            <td>TaskProgress</td>
+            <td>
+                {% for progress in user.task_progresses %}
+                progress_id: {{ progress.progress_id }}<br>
+                task_id: {{ progress.task_id }}<br>
+                progress_photo_url: {{ progress.progress_photo_url }}<br>
+                progress_timestamp: {{ progress.progress_timestamp }}<br>
+                progress_description: {{ progress.progress_description }}<br>
+                completion_percentage: {{ progress.completion_percentage }}<br>
+                {% endfor %}
+            </td>
+        </tr>
     </table>
 </div>
 
