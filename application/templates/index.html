@@ -101,18 +101,28 @@
             </td>
         </tr>
         <tr>
-            <td>RoomDetail</td> # todo fix the column names and order for room
+            <td>Zone</td>
             <td>
-                {% for roomdetail in user.roomdetails %}
-                detail_id: {{ roomdetail.detail_id }}<br>
-                room_id: {{ roomdetail.room_id }}<br>
-                appliance: {{ roomdetail.appliance }}<br>
-                surface_type: {{ roomdetail.surface_type }}<br>
-                usage_frequency: {{ roomdetail.usage_frequency }}<br>
-                importance: {{ roomdetail.importance }}<br>
-                aesthetic_score: {{ roomdetail.aesthetic_score }}<br>
-                dirtiness_score: {{ roomdetail.dirtiness_score }}<br>
-                effort_required: {{ roomdetail.efficiency_required }}<br>
+                {% for zone in user.zones %}
+                zone_id: {{ zone.zone_id }}<br>
+                room_id: {{ zone.room_id }}<br>
+                appliance: {{ zone.appliance }}<br>
+                surface_type: {{ zone.surface_type }}<br>
+                usage_frequency: {{ zone.usage_frequency }}<br>
+                importance: {{ zone.importance }}<br>
+                aesthetic_score: {{ zone.aesthetic_score }}<br>
+                dirtiness_score: {{ zone.dirtiness_score }}<br>
+                effort_required: {{ zone.efficiency_required }}<br>
+                {% endfor %}
+            </td>
+        </tr>
+        <tr>
+            <td>Appliance</td>
+            <td>
+                {% for appliance in user.appliances %}
+                appliance_id: {{ appliance.appliance_id }}<br>
+                zone_id: {{ appliance.zone_id }}<br>
+                appliance: {{ appliance.appliance }}<br>
                 {% endfor %}
             </td>
         </tr>
