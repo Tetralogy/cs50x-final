@@ -1,6 +1,6 @@
 from flask import Blueprint
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import String, Integer, DateTime, func, ForeignKey
 from datetime import datetime, timezone
 from typing import Optional, List
@@ -35,18 +35,25 @@ class User(db.Model, UserMixin):
     profile_picture_url: Mapped[Optional[str]]
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=func.now())
     last_login: Mapped[datetime] = mapped_column(DateTime, nullable=True)
+    # Define relationships
+    abilities = relationship('UserAbility', back_populates="user", lazy='dynamic')
+    preferences = relationship('UserPreference', back_populates="user", lazy='dynamic')
+    homes = relationship('Home', back_populates="user", lazy='dynamic')
+
 
 class UserAbility(db.Model):
     ability_id: Mapped[int] = mapped_column(primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey('user.id'))
     ability_type: Mapped[str]
     description: Mapped[str]
-
+    user = relationship("User", back_populates="abilities")
+    
 class UserPreference(db.Model):
     user_id: Mapped[int] = mapped_column(ForeignKey('user.id'), primary_key=True)
     measurement_unit: Mapped[str] = mapped_column(default='metric')
     notification_frequency: Mapped[str] = mapped_column(default='daily')
     theme: Mapped[str] = mapped_column(default='light')
+    user = relationship("User", back_populates="preferences")
 
 class Home(db.Model):
     home_id: Mapped[int] = mapped_column(primary_key=True)
@@ -54,6 +61,8 @@ class Home(db.Model):
     home_size_sqm: Mapped[float]
     num_floors: Mapped[int]
     layout: Mapped[str]
+    user = relationship("User", back_populates="homes")
+    rooms = relationship('Room', back_populates="homes", lazy='dynamic')
 
 class Room(db.Model):
     room_id: Mapped[int] = mapped_column(primary_key=True)
@@ -69,6 +78,7 @@ class Room(db.Model):
     room_dirtiness_level: Mapped[float]
     room_tools_supplies_on_hand: Mapped[str]
     room_tools_supplies_required: Mapped[str]
+    homes = relationship("Home", back_populates="rooms") #todo the rest of the relationships
 
 class RoomDetail(db.Model):
     detail_id: Mapped[int] = mapped_column(primary_key=True)
@@ -118,7 +128,13 @@ class TaskProgress(db.Model):
     progress_timestamp: Mapped[datetime]
     progress_description: Mapped[str]
     completion_percentage: Mapped[float]
-
+    
+class TaskCompletionHistory(db.Model):
+    completion_id: Mapped[int] = mapped_column(primary_key=True)
+    task_id: Mapped[int] = mapped_column(ForeignKey('task.task_id'))
+    completed_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=func.now())
+    after_photo_url: Mapped[str]
+    
 class SharedTask(db.Model):
     share_id: Mapped[int] = mapped_column(primary_key=True)
     task_id: Mapped[int] = mapped_column(ForeignKey('task.task_id'))
@@ -136,12 +152,13 @@ class Notification(db.Model):
     notification_status: Mapped[str]
     reminder_time: Mapped[datetime]
 
-class ToolSupply(db.Model):
+class Supply(db.Model):
     item_id: Mapped[int] = mapped_column(primary_key=True)
     room_id: Mapped[int] = mapped_column(ForeignKey('room.room_id'))
+    user_id: Mapped[int] = mapped_column(ForeignKey('user.id'))
     item_name: Mapped[str]
     item_type: Mapped[str]
-    is_on_hand: Mapped[bool]
+    quantity: Mapped[int]
 
 class UserStatus(db.Model):
     status_id: Mapped[int] = mapped_column(primary_key=True)
@@ -172,9 +189,3 @@ class ServiceRecommendation(db.Model):
     service_name: Mapped[str]
     service_url: Mapped[str]
     price: Mapped[float]
-
-class TaskCompletionHistory(db.Model):
-    completion_id: Mapped[int] = mapped_column(primary_key=True)
-    task_id: Mapped[int] = mapped_column(ForeignKey('task.task_id'))
-    completed_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=func.now())
-    after_photo_url: Mapped[str]
