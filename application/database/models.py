@@ -137,7 +137,6 @@ class Task(db.Model):
     task_status: Mapped[str]
     task_tags: Mapped[str]
     task_scheduled_time: Mapped[datetime]
-    task_type: Mapped[str]
     completed_at: Mapped[Optional[datetime]]
     user = relationship("User", back_populates="tasks")
     rooms = relationship("Room", back_populates="tasks")

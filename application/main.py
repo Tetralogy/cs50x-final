@@ -26,6 +26,75 @@ def index():
 @login_required
 def onboarding():
     pass
+
+
+@main.route('/new_task', methods=['POST'])
+@login_required
+def add_task():
+    if request.method == "POST":
+        task_title = request.form.get('task_title')
+        task_description = request.form.get('task_description')
+        task_urgency = request.form.get('task_urgency')
+        
+        task_title = request.form.get('task_title')
+        task_description = request.form.get('task_description')
+        task_urgency = request.form.get('task_urgency')
+        task_id = request.form.get('task_id')
+        user_id = request.form.get('user_id')
+        room_id = request.form.get('room_id')
+        task_title = request.form.get('task_title')
+        task_description = request.form.get('task_description')
+        task_created_at = request.form.get('task_created_at')
+        task_due_time = request.form.get('task_due_time')
+        task_priority = request.form.get('task_priority')
+        task_status = request.form.get('task_status')
+        task_tags = request.form.get('task_tags')
+        task_scheduled_time = request.form.get('task_scheduled_time')
+        completed_at = request.form.get('completed_at')
+
+        new_task = Task(name=task_name, description=task_description, urgency=task_urgency, user_id=current_user.id)
+        db.session.add(new_task)
+        db.session.commit()
+
+        return redirect(url_for('main.index'))
+    
+
+@main.route('/update_task/<int:task_id>', methods=['PUT'])
+@login_required
+def update_task(task_id):
+    task = Task.query.get_or_404(task_id)
+
+    if task.user_id != current_user.id:
+        return apology("Unauthorized", 403)
+
+    if request.method == "POST":
+        task_name = request.form.get('task_name')
+        task_description = request.form.get('task_description')
+        task_urgency = request.form.get('task_urgency')
+
+        task.name = task_name
+        task.description = task_description
+        task.urgency = task_urgency
+
+        db.session.commit()
+
+        return redirect(url_for('main.index'))
+
+
+@main.route('/delete_task/<int:task_id>', methods=['POST'])
+@login_required
+def delete_task(task_id):
+    task = Task.query.get_or_404(task_id)
+
+    if task.user_id != current_user.id:
+        return apology("Unauthorized", 403)
+
+    db.session.delete(task)
+    db.session.commit()
+
+    return redirect(url_for('main.index'))
+
+
 '''
     if request.method == 'POST':
         house_size = request.form.get('house_size')
