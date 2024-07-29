@@ -1,7 +1,7 @@
 from flask import Blueprint
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy import String, Integer, DateTime, func, ForeignKey
+from sqlalchemy import String, Integer, DateTime, UniqueConstraint, func, ForeignKey
 from datetime import datetime, timezone
 from typing import Optional, List
 from sqlalchemy.ext.declarative import declared_attr
@@ -72,9 +72,10 @@ class UserPreference(db.Model):
 class Home(db.Model):
     home_id: Mapped[int] = mapped_column(primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey('user.id'))
-    home_size_sqm: Mapped[float]
-    num_floors: Mapped[int]
-    layout: Mapped[str]
+    home_name: Mapped[str] = mapped_column(String(80), nullable=False)
+    __table_args__ = (UniqueConstraint('user_id', 'home_name', name='unique_home_name'),)
+    home_size_sqm: Mapped[float] = mapped_column(default=0.0)
+    num_floors: Mapped[int] = mapped_column(default=1)
     user = relationship("User", back_populates="homes")
     rooms = relationship('Room', back_populates="homes", lazy='dynamic')
 
@@ -82,16 +83,16 @@ class Room(db.Model):
     room_id: Mapped[int] = mapped_column(primary_key=True)
     home_id: Mapped[int] = mapped_column(ForeignKey('home.home_id'))
     room_name: Mapped[str]
-    room_type: Mapped[str]
-    room_size: Mapped[float]
-    room_flooring_type: Mapped[str]
-    room_windows: Mapped[int]
-    room_function: Mapped[str]
-    room_frequency_of_use: Mapped[str]
-    room_importance: Mapped[str]
-    room_dirtiness_level: Mapped[float]
-    room_tools_supplies_on_hand: Mapped[str]
-    room_tools_supplies_required: Mapped[str]
+    room_type: Mapped[str] = mapped_column(default='')
+    room_size: Mapped[float] = mapped_column(default=0.0)
+    room_flooring_type: Mapped[str] = mapped_column(default='')
+    room_windows: Mapped[int] = mapped_column(default=0)
+    room_function: Mapped[str] = mapped_column(default='')
+    room_frequency_of_use: Mapped[str] = mapped_column(default='')
+    room_importance: Mapped[str] = mapped_column(default='')
+    room_dirtiness_level: Mapped[float] = mapped_column(default=0.0)
+    room_tools_supplies_on_hand: Mapped[str] = mapped_column(default='')
+    room_tools_supplies_required: Mapped[str] = mapped_column(default='')
     homes = relationship("Home", back_populates="rooms")
     zones = relationship('Zone', back_populates="rooms", lazy='dynamic')
     supply = relationship('Supply', back_populates="rooms", lazy='dynamic')

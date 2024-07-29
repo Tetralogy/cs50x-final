@@ -1,3 +1,4 @@
+from datetime import datetime
 from flask import Flask, redirect, render_template, request, session, url_for, Blueprint, current_app
 from functools import wraps
 from flask_login import current_user, login_required
@@ -30,36 +31,60 @@ def onboarding():
 
 @main.route('/new_task', methods=['POST'])
 @login_required
-def add_task():
+def new_task():   
     if request.method == "POST":
-        task_title = request.form.get('task_title')
-        task_description = request.form.get('task_description')
-        task_urgency = request.form.get('task_urgency')
-        
-        task_title = request.form.get('task_title')
-        task_description = request.form.get('task_description')
-        task_urgency = request.form.get('task_urgency')
-        task_id = request.form.get('task_id')
-        user_id = request.form.get('user_id')
-        room_id = request.form.get('room_id')
-        task_title = request.form.get('task_title')
-        task_description = request.form.get('task_description')
-        task_created_at = request.form.get('task_created_at')
-        task_due_time = request.form.get('task_due_time')
-        task_priority = request.form.get('task_priority')
-        task_status = request.form.get('task_status')
-        task_tags = request.form.get('task_tags')
-        task_scheduled_time = request.form.get('task_scheduled_time')
-        completed_at = request.form.get('completed_at')
+        try:
+            task_due_time = datetime.fromisoformat(request.form.get('task_due_time'))
+            task_scheduled_time = datetime.fromisoformat(request.form.get('task_scheduled_time'))
+            completed_at = request.form.get('completed_at')
 
-        new_task = Task(name=task_name, description=task_description, urgency=task_urgency, user_id=current_user.id)
-        db.session.add(new_task)
-        db.session.commit()
+            if completed_at:
+                completed_at = datetime.fromisoformat(completed_at)
+            else:
+                completed_at = None
+                
+            room_id = request.form.get('room_id')
+            if room_id == None:
+                orphanage_home = Home.query.filter_by(home_name="Orphanage").first()
+                if orphanage_home is None:
+                    orphanage_home = Home(user_id=current_user.id, home_name="Orphanage")
+                    db.session.add(orphanage_home)
+                    db.session.commit()
+                    
+                orphan_room = Room.query.filter_by(room_name="Orphan", home_id=orphanage_home.home_id).first()
+                if orphan_room is None:
+                    orphan_room = Room(room_name="Orphan", home_id=orphanage_home.home_id)
+                    db.session.add(orphan_room)
+                    db.session.commit()
 
-        return redirect(url_for('main.index'))
+                orphanage_home.rooms.append(orphan_room)
+                db.session.commit()
+
+                room_id = orphan_room.room_id
+            
+            new_task = Task(
+                room_id = room_id,
+                task_title = request.form.get('task_title'),
+                task_description = request.form.get('task_description'),
+                task_created_at = request.form.get('task_created_at'),
+                task_due_time = task_due_time,
+                task_priority = request.form.get('task_priority'),
+                task_status = request.form.get('task_status'),
+                task_tags = request.form.get('task_tags'),
+                task_scheduled_time = task_scheduled_time,
+                completed_at = completed_at,
+                user_id = current_user.id)
+            
+            db.session.add(new_task)
+            db.session.commit()
+
+            return redirect(url_for('main.index'))
     
+        except ValueError as e:
+            # Handle the error if date conversion fails
+            return f"Error in date conversion: {e}", 400
 
-@main.route('/update_task/<int:task_id>', methods=['PUT'])
+@main.route('/update_task/<int:task_id>', methods=['PUT']) #TODO: complete this route
 @login_required
 def update_task(task_id):
     task = Task.query.get_or_404(task_id)
@@ -67,21 +92,20 @@ def update_task(task_id):
     if task.user_id != current_user.id:
         return apology("Unauthorized", 403)
 
-    if request.method == "POST":
-        task_name = request.form.get('task_name')
-        task_description = request.form.get('task_description')
-        task_urgency = request.form.get('task_urgency')
-
-        task.name = task_name
-        task.description = task_description
-        task.urgency = task_urgency
-
+    if request.method == 'PUT':
+        task.task_title = request.form.get('task_title')
+        task.task_description = request.form.get('task_description')
+        task.task_due_time = request.form.get('task_due_time')
+        task.task_priority = request.form.get('task_priority')
+        task.task_status = request.form.get('task_status')
+        task.task_tags = request.form.get('task_tags')
+        task.task_scheduled_time = request.form.get('task_scheduled_time')
+        task.completed_at = request.form.get('completed_at')
         db.session.commit()
-
         return redirect(url_for('main.index'))
 
 
-@main.route('/delete_task/<int:task_id>', methods=['POST'])
+@main.route('/delete_task/<int:task_id>', methods=['POST'])#TODO: complete this route
 @login_required
 def delete_task(task_id):
     task = Task.query.get_or_404(task_id)

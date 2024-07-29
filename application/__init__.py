@@ -2,6 +2,7 @@ import os
 from dotenv import load_dotenv
 from flask import Flask
 from flask_login import LoginManager
+from flask_migrate import Migrate
 from flask_session import Session
 from .extension import db
 
@@ -68,7 +69,8 @@ def create_app(config_filename=None):
     app.register_blueprint(main)
     app.register_blueprint(auth)
     app.register_blueprint(models)
-
+    
+    migrate = Migrate(app, db)
 
     with app.app_context():
         db.create_all()
