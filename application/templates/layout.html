@@ -21,7 +21,7 @@
                     {% if current_user.is_authenticated %}
                         {% if onboarded %}
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ url_for('main.index') }}">Logout</a>
+                                <a class="nav-link" href="{{ url_for('main.index') }}">Home</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ url_for('main.new_task') }}">new_task</a>

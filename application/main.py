@@ -1,5 +1,5 @@
 from datetime import datetime
-from flask import Flask, redirect, render_template, request, session, url_for, Blueprint, current_app
+from flask import Flask, flash, jsonify, redirect, render_template, request, session, url_for, Blueprint, current_app
 from functools import wraps
 from flask_login import current_user, login_required
 from sqlalchemy.orm import joinedload
@@ -34,9 +34,14 @@ def onboarding():
 def new_task():   
     if request.method == "POST":
         try:
-            task_due_time = datetime.fromisoformat(request.form.get('task_due_time'))
-            task_scheduled_time = datetime.fromisoformat(request.form.get('task_scheduled_time'))
-            completed_at = request.form.get('completed_at')
+            task_due_time_str = request.form.get('task_due_time', '')
+            task_due_time = datetime.fromisoformat(task_due_time_str) if task_due_time_str else None
+            
+            task_scheduled_time_str = request.form.get('task_scheduled_time', '')
+            task_scheduled_time = datetime.fromisoformat(task_scheduled_time_str) if task_scheduled_time_str else None
+            
+            completed_at_str = request.form.get('completed_at')
+            completed_at = datetime.fromisoformat(completed_at_str) if completed_at_str else None
 
             if completed_at:
                 completed_at = datetime.fromisoformat(completed_at)
@@ -78,11 +83,11 @@ def new_task():
             db.session.add(new_task)
             db.session.commit()
 
+            return jsonify(new_task) #TODO: complete this route #TODO: marshmallow schema?
+        except Exception as e:
+            flash(str(e))
             return redirect(url_for('main.index'))
-    
-        except ValueError as e:
-            # Handle the error if date conversion fails
-            return f"Error in date conversion: {e}", 400
+
 
 @main.route('/update_task/<int:task_id>', methods=['PUT']) #TODO: complete this route
 @login_required
@@ -104,19 +109,20 @@ def update_task(task_id):
         db.session.commit()
         return redirect(url_for('main.index'))
 
-
-@main.route('/delete_task/<int:task_id>', methods=['POST'])#TODO: complete this route
+#TODO: complete this route
+@main.route('/delete_task/<int:task_id>', methods=['DELETE'])
 @login_required
 def delete_task(task_id):
     task = Task.query.get_or_404(task_id)
-
+    if task is None:
+        flash(f"task_id: {task_id} does not exist in the database", category="danger")
     if task.user_id != current_user.id:
         return apology("Unauthorized", 403)
 
     db.session.delete(task)
     db.session.commit()
 
-    return redirect(url_for('main.index'))
+    return '', 200
 
 
 '''
