@@ -103,26 +103,25 @@ def edit_task(task_id):
 
     if request.method == 'PUT':
         try:
-            data = request.json
+            data = request.json #fixme
 
-            task.task_title = data.get('task_title', task.task_title)
-            task.task_description = data.get('task_description', task.task_description)
+            new_task = Task(
+                room_id = room_id,
+                task_title = request.form.get('task_title'),
+                task_description = request.form.get('task_description'),
+                task_created_at = request.form.get('task_created_at'),
+                task_due_time = task_due_time,
+                task_priority = request.form.get('task_priority'),
+                task_status = request.form.get('task_status'),
+                task_tags = request.form.get('task_tags'),
+                task_scheduled_time = task_scheduled_time,
+                completed_at = completed_at,
+                user_id = current_user.id)
             
-            task_due_time_str = data.get('task_due_time')
-            if task_due_time_str:
-                task.task_due_time = datetime.fromisoformat(task_due_time_str)
-            
-            task.task_priority = data.get('task_priority', task.task_priority)
-            task.task_status = data.get('task_status', task.task_status)
-            task.task_tags = data.get('task_tags', task.task_tags)
-            
-            task_scheduled_time_str = data.get('task_scheduled_time')
-            if task_scheduled_time_str:
-                task.task_scheduled_time = datetime.fromisoformat(task_scheduled_time_str)
-            
-            completed_at_str = data.get('completed_at')
-            if completed_at_str:
-                task.completed_at = datetime.fromisoformat(completed_at_str)
+            db.session.add(new_task)
+            db.session.commit()
+
+            return jsonify(task_schema.dump(new_task))
             
             db.session.commit()
             return jsonify(task_schema.dump(task)), 200

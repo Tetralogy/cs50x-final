@@ -118,6 +118,48 @@ function newTask(form, taskId) {
     return false; // Prevent form from submitting normally
 }
 
+function editTask(form, taskId) {
+    // Collect form data
+    const formData = new FormData(form);
+    
+    fetch(`/edit_task/${taskId}`, {
+        method: 'post',
+        body: formData
+    }).then(response => {
+        if (response.ok) {
+            // add the task element to the DOM
+            response.json().then(task => {
+                const table = document.getElementsByTagName('table')[0];
+                const row = document.createElement('tr');
+                row.id = `task-${task.task_id}`;
+                row.innerHTML = `
+                    <td>${task.task_id}</td>
+                    <td>${task.task_title}</td>
+                    <td>${task.task_description}</td>
+                    <td>${task.task_created_at}</td>
+                    <td>${task.task_due_time}</td>
+                    <td>${task.task_priority}</td>
+                    <td>${task.task_status}</td>
+                    <td>${task.task_tags}</td>
+                    <td>${task.task_scheduled_time}</td>
+                    <td>${task.task_type}</td>
+                    <td>${task.completed_at}</td>
+                    <td><a href="/edit_task/${task.task_id}"><button type="button" class="btn btn-primary">Edit</button></a></td>
+                    <td><form onsubmit="return deleteTask(this, '${task.task_id}')">
+                        <button type="submit" class="btn btn-danger">Delete Task</button>
+                    </form></td>       
+                `;
+                table.appendChild(row);
+            });
+        } else {
+            alert('Failed to create task');
+        }
+    }).catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred while creating the task');
+    });
+    return false; // Prevent form from submitting normally
+}
     function deleteTask(form, taskId) {
         fetch(`/delete_task/${taskId}`, {
             method: 'DELETE',
