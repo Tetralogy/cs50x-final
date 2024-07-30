@@ -7,6 +7,7 @@ from flask_session import Session
 from .extension import db
 
 
+
 # Load both .env and .flaskenv files
 load_dotenv()
 load_dotenv('.flaskenv')
@@ -53,7 +54,7 @@ def create_app(config_filename=None):
     
     from .main import main
     from .auth import auth
-    from .database.models import models, User
+    from .database.models import Base, models, User
 
     login_manager.init_app(app)  # Initialize login_manager with the app
 

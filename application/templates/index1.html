@@ -228,7 +228,7 @@
 
 <h2>Submit a new task</h2>
 
-<form action="/new_task" method="post">
+<form action="/new_task" method="post" onsubmit="return newTask(this, 'taskIdPlaceholder')">
     <label for="task_title">Task Title:</label>
     <input type="text" id="task_title" name="task_title" required><br>
     <label for="task_description">Task Description:</label>
@@ -246,7 +246,7 @@
     <input type="submit" value="Submit">
 </form>
 
-<form action="/new_task" method="post">
+<form action="/new_task" method="post" onsubmit="return newTask(this, 'taskIdPlaceholder')">
     <label for="submit">New blank task:</label>
     <input type="submit" value="Add" class="btn btn-success">
 </form>
@@ -291,8 +291,12 @@
 <script>
 
 function newTask(form, taskId) {
-    fetch(`/new_task/${taskId}`, {
+    // Collect form data
+    const formData = new FormData(form);
+    
+    fetch(`/new_task`, {
         method: 'post',
+        body: formData
     }).then(response => {
         if (response.ok) {
             // add the task element to the DOM

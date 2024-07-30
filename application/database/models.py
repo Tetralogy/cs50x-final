@@ -4,8 +4,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import String, Integer, DateTime, UniqueConstraint, func, ForeignKey, text
 from datetime import datetime, timezone
 from typing import Optional, List
-from sqlalchemy.ext.declarative import declared_attr
-from sqlalchemy.ext.declarative import as_declarative
+from sqlalchemy.ext.declarative import as_declarative, declared_attr
 import inspect
 from flask_login import UserMixin
 
