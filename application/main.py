@@ -2,6 +2,7 @@ from datetime import datetime
 from flask import Flask, flash, jsonify, redirect, render_template, request, session, url_for, Blueprint, current_app
 from functools import wraps
 from flask_login import current_user, login_required
+from marshmallow import ValidationError
 from sqlalchemy.orm import joinedload
 from application.database.models import Home, Room, Task, User, UserStatus
 from .utils import handle_error, apology
@@ -90,46 +91,50 @@ def new_task():
             flash(str(e))
             return redirect(url_for('main.index'))
 
-
-@main.route('/edit_task/<int:task_id>', methods=['PUT']) #TODO: complete this route
+@main.route('/get_task/<int:task_id>', methods=['GET'])
+@login_required
+def get_task(task_id):
+    task = Task.query.get(task_id)
+    
+    if not task or task.user_id != current_user.id:
+        return jsonify({"success": False, "error": "Task not found or unauthorized"}), 404
+    
+    return jsonify({
+        "success": True,
+        "task": task_schema.dump(task)
+    }), 200
+    
+@main.route('/edit_task/<int:task_id>', methods=['PUT'])
 @login_required
 def edit_task(task_id):
-    task = Task.query.get_or_404(task_id)
-    if task.user_id != current_user.id:
-        return apology("Unauthorized", 403)
-
-    if request.method == 'GET':
-        return jsonify(task_schema.dump(task))
-
-    if request.method == 'PUT':
-        try:
-            data = request.json #fixme
-
-            new_task = Task(
-                room_id = room_id,
-                task_title = request.form.get('task_title'),
-                task_description = request.form.get('task_description'),
-                task_created_at = request.form.get('task_created_at'),
-                task_due_time = task_due_time,
-                task_priority = request.form.get('task_priority'),
-                task_status = request.form.get('task_status'),
-                task_tags = request.form.get('task_tags'),
-                task_scheduled_time = task_scheduled_time,
-                completed_at = completed_at,
-                user_id = current_user.id)
-            
-            db.session.add(new_task)
-            db.session.commit()
-
-            return jsonify(task_schema.dump(new_task))
-            
-            db.session.commit()
-            return jsonify(task_schema.dump(task)), 200
-
-        except Exception as e:
-            db.session.rollback()
-            return jsonify({"error": str(e)}), 400
-
+    task = Task.query.get(task_id)
+    
+    if not task or task.user_id != current_user.id:
+        return jsonify({"success": False, "error": "Task not found or unauthorized"}), 404
+    
+    data = request.get_json()
+    
+    try:
+        # Validate the input data
+        task_data = task_schema.load(data, partial=True, session=db.session)
+    except ValidationError as err:
+        return jsonify({"success": False, "errors": err.messages}), 400
+    
+    # Update the task with validated data
+    for key, value in task_data.items():
+        setattr(task, key, value)
+    
+    try:
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"success": False, "error": str(e)}), 500
+    
+    return jsonify({
+        "success": True,
+        "message": "Task updated successfully",
+        "task": task_schema.dump(task)
+    }), 200
 
 @main.route('/delete_task/<int:task_id>', methods=['DELETE'])
 @login_required
@@ -142,8 +147,9 @@ def delete_task(task_id):
 
     db.session.delete(task)
     db.session.commit()
+    flash(f"task_id: {task_id} successfully deleted", category="success")
 
-    return '', 200
+    return f"task_id: {task_id} successfully deleted", 200
 
 @main.route('/walkthrough', methods=['GET', 'POST'])
 @login_required

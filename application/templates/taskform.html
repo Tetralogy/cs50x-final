@@ -45,13 +45,13 @@
         <th>Task Status</th>
         <th>Task Tags</th>
         <th>Task Scheduled Time</th>
-        <th>Task Type</th>
+        <th>Updated_at</th>
         <th>Completed At</th>
         <th>Edit</th>
         <th>Delete</th>
     </tr>
     {% for task in user.tasks %}
-    <tr id="task-{{ task.task_id }}"><p>TEST</p>
+    <tr id="task-{{ task.task_id }}">
         <td>{{ task.task_id }}</td>
         <td>{{ task.task_title }}</td>
         <td>{{ task.task_description }}</td>
@@ -61,7 +61,7 @@
         <td>{{ task.task_status }}</td>
         <td>{{ task.task_tags }}</td>
         <td>{{ task.task_scheduled_time }}</td>
-        <td>{{ task.task_type }}</td>
+        <td>{{ task.task_updated_at }}</td>
         <td>{{ task.completed_at }}</td>
         <td><form onsubmit="return editTask(this, '{{ task.task_id }}')">
                 <button type="submit" class="btn btn-primary">Edit Task</button>
@@ -99,7 +99,7 @@ function newTask(form, taskId) {
                     <td>${task.task_status}</td>
                     <td>${task.task_tags}</td>
                     <td>${task.task_scheduled_time}</td>
-                    <td>${task.task_type}</td>
+                    <td>${task.task_updated_at}</td>
                     <td>${task.completed_at}</td>
                     <td><a href="/edit_task/${task.task_id}"><button type="button" class="btn btn-primary">Edit</button></a></td>
                     <td><form onsubmit="return deleteTask(this, '${task.task_id}')">
@@ -118,68 +118,182 @@ function newTask(form, taskId) {
     return false; // Prevent form from submitting normally
 }
 
-function editTask(form, taskId) {
-    // Collect form data
-    const formData = new FormData(form);
-    
-    fetch(`/edit_task/${taskId}`, {
-        method: 'post',
-        body: formData
+function deleteTask(form, taskId) {
+    fetch(`/delete_task/${taskId}`, {
+        method: 'DELETE',
     }).then(response => {
         if (response.ok) {
-            // add the task element to the DOM
-            response.json().then(task => {
-                const table = document.getElementsByTagName('table')[0];
-                const row = document.createElement('tr');
-                row.id = `task-${task.task_id}`;
-                row.innerHTML = `
-                    <td>${task.task_id}</td>
-                    <td>${task.task_title}</td>
-                    <td>${task.task_description}</td>
-                    <td>${task.task_created_at}</td>
-                    <td>${task.task_due_time}</td>
-                    <td>${task.task_priority}</td>
-                    <td>${task.task_status}</td>
-                    <td>${task.task_tags}</td>
-                    <td>${task.task_scheduled_time}</td>
-                    <td>${task.task_type}</td>
-                    <td>${task.completed_at}</td>
-                    <td><a href="/edit_task/${task.task_id}"><button type="button" class="btn btn-primary">Edit</button></a></td>
-                    <td><form onsubmit="return deleteTask(this, '${task.task_id}')">
-                        <button type="submit" class="btn btn-danger">Delete Task</button>
-                    </form></td>       
-                `;
-                table.appendChild(row);
-            });
+            // Remove the task element from the DOM
+            const taskElement = document.getElementById(`task-${taskId}`);
+            if (taskElement) {
+                taskElement.remove();
+            } else {
+                console.error('Task element not found in the DOM');
+            }
         } else {
-            alert('Failed to create task');
+            alert('Failed to delete task');
         }
     }).catch(error => {
         console.error('Error:', error);
-        alert('An error occurred while creating the task');
+        alert('An error occurred while deleting the task');
     });
     return false; // Prevent form from submitting normally
 }
-    function deleteTask(form, taskId) {
-        fetch(`/delete_task/${taskId}`, {
-            method: 'DELETE',
-        }).then(response => {
-            if (response.ok) {
-                // Remove the task element from the DOM
-                const taskElement = document.getElementById(`task-${taskId}`);
-                if (taskElement) {
-                    taskElement.remove();
-                } else {
-                    console.error('Task element not found in the DOM');
-                }
-            } else {
-                alert('Failed to delete task');
+
+// Function to edit a task
+function editTask(form, taskId) {
+    // Fetch current task data from the server
+    fetch(`/get_task/${taskId}`)
+        .then(response => response.json())
+        .then(data => {
+            if (!data.success) {
+                throw new Error(data.error || 'Failed to fetch task data');
             }
-        }).catch(error => {
-            console.error('Error:', error);
-            alert('An error occurred while deleting the task');
+            return data.task;
+        })
+        .then(task => {
+            const row = document.getElementById(`task-${taskId}`);
+            const cells = row.getElementsByTagName('td');
+            const originalContent = {};
+
+            // Define the fields we want to edit
+            const fields = [
+                'task_title', 'task_description', 'task_due_time', 
+                'task_priority', 'task_status', 'task_tags', 
+                'task_scheduled_time'
+            ]; // todo: add task_updated_at
+
+            // Transform cells into input fields using data from the server
+            fields.forEach((field, index) => {
+                const cell = cells[index + 1]; // +1 to skip the ID cell
+                originalContent[field] = cell.textContent;
+                const input = document.createElement('input');
+                input.type = field.includes('time') ? 'datetime-local' : 'text';
+                input.value = task[field] || '';
+                if (field.includes('time') && task[field]) {
+                    input.value = task[field].slice(0, 16); // Format datetime for input
+                }
+                input.className = 'form-control';
+                input.name = field;
+                cell.textContent = '';
+                cell.appendChild(input);
+            });
+
+            // Change Edit button to Save
+            const editButton = form.querySelector('button');
+            editButton.textContent = 'Save';
+            editButton.className = 'btn btn-success';
+            
+            // Change Delete button to Cancel
+            const deleteForm = row.querySelector('form[onsubmit*="deleteTask"]');
+            const deleteButton = deleteForm.querySelector('button');
+            deleteButton.textContent = 'Cancel';
+            deleteButton.className = 'btn btn-secondary';
+            deleteButton.type = 'button';  // Prevent form submission
+
+            // Add event listener for Save
+            editButton.onclick = function(e) {
+                e.preventDefault();
+                saveTask(taskId, cells, originalContent);
+            };
+
+            // Add event listener for Cancel
+            deleteButton.onclick = function() {
+                cancelEdit(taskId, cells, originalContent);
+            };
+        })
+        .catch(error => {
+            console.error('Error fetching task data:', error);
+            alert('Failed to load task data for editing');
         });
-        return false; // Prevent form from submitting normally
+
+    return false;  // Prevent form submission
+}
+
+// Function to save edited task
+function saveTask(taskId, cells, originalContent) {
+    const updatedTask = {};
+    const inputs = cells[1].parentNode.querySelectorAll('input[name]');
+    
+    inputs.forEach(input => {
+        updatedTask[input.name] = input.value;
+    });
+
+    fetch(`/edit_task/${taskId}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedTask)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Update the UI with saved data
+            const task = data.task;
+            inputs.forEach(input => {
+                const cell = input.parentNode;
+                let displayValue = task[input.name];
+                if (input.type === 'datetime-local' && displayValue) {
+                    displayValue = new Date(displayValue).toLocaleString();
+                }
+                cell.textContent = displayValue || '';
+            });
+            restoreButtons(taskId);
+        } else {
+            let errorMessage = "Failed to update task: ";
+            if (data.errors) {
+                errorMessage += Object.entries(data.errors).map(([field, errors]) => `${field}: ${errors.join(', ')}`).join('; ');
+            } else if (data.error) {
+                errorMessage += data.error;
+            }
+            alert(errorMessage);
+            cancelEdit(taskId, cells, originalContent);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        cancelEdit(taskId, cells, originalContent);
+    });
+}
+
+// Function to cancel edit
+function cancelEdit(taskId, cells, originalContent) {
+    for (let i = 1; i < cells.length - 2; i++) {
+        cells[i].textContent = originalContent[i];
     }
-    </script>
+    restoreButtons(taskId);
+}
+
+// Function to restore original button state
+function restoreButtons(taskId) {
+    const row = document.getElementById(`task-${taskId}`);
+    const editForm = row.querySelector('form[onsubmit*="editTask"]');
+    const deleteForm = row.querySelector('form[onsubmit*="deleteTask"]');
+    
+    const editButton = editForm.querySelector('button');
+    editButton.textContent = 'Edit Task';
+    editButton.className = 'btn btn-primary';
+    editButton.onclick = null;
+
+    const deleteButton = deleteForm.querySelector('button');
+    deleteButton.textContent = 'Delete Task';
+    deleteButton.className = 'btn btn-danger';
+    deleteButton.type = 'submit';
+    deleteButton.onclick = null;
+}
+
+// Add event listeners to all edit buttons
+document.addEventListener('DOMContentLoaded', function() {
+    const editForms = document.querySelectorAll('form[onsubmit*="editTask"]');
+    editForms.forEach(form => {
+        form.onsubmit = function(e) {
+            e.preventDefault();
+            const taskId = this.getAttribute('onsubmit').match(/'(\d+)'/)[1];
+            editTask(this, taskId);
+        };
+    });
+});
+
+</script>
 {% endblock %}

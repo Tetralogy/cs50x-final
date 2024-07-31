@@ -132,6 +132,7 @@ class Task(db.Model):
     task_title: Mapped[str] = mapped_column(default=text("'task #' || (last_insert_rowid() + 1)"))
     task_description: Mapped[str] = mapped_column(nullable=True)
     task_created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=func.now())
+    #task_updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=func.now())
     task_due_time: Mapped[datetime] = mapped_column(nullable=True)
     task_priority: Mapped[int] = mapped_column(nullable=True)
     task_status: Mapped[str] = mapped_column(nullable=True)
