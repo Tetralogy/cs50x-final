@@ -1,5 +1,5 @@
 from datetime import datetime
-from flask import Flask, flash, jsonify, redirect, render_template, request, session, url_for, Blueprint, current_app
+from flask import Flask, flash, get_flashed_messages, jsonify, redirect, render_template, request, session, url_for, Blueprint, current_app
 from functools import wraps
 from flask_login import current_user, login_required
 from marshmallow import ValidationError
@@ -21,10 +21,21 @@ def inject_current_user():
     onboarded = Home.query.filter_by(user_id=current_user.id).first() is not None
     return dict(current_user=current_user, onboarded=onboarded)
 
+@main.route('/get-flash-messages')
+def get_flash_messages():
+    messages = get_flashed_messages(with_categories=True)
+    print(f"Retrieved flash messages: {messages}")
+    return render_template('flash_messages.html' , messages=messages)
+
+@main.route('/remove-flash')
+def remove_flash():
+    return '', 200  # Return empty response
+
 @main.route('/')
 @login_required
 def index():
-    return render_template('showtasks.html', user=current_user)
+    print('hello world testing!!!') 
+    return render_template('showtasks.html', user=current_user, page=1)
 
 @main.route('/onboarding', methods=['GET', 'POST'])
 @login_required
@@ -95,9 +106,25 @@ def new_task():
 @main.route('/get_tasks/', methods=['GET'])
 @login_required
 def get_tasks():
+    print('get_tasks called')
     page = int(request.args.get("page", 1))
-    time.sleep(1)    
-    return render_template("tasklist.html", user=current_user, page=page)
+    print(f'page: {page}')
+    
+    # Define the number of tasks per page
+    tasks_per_page = 10
+
+    # Calculate the offset
+    offset = (page - 1) * tasks_per_page
+
+    # Retrieve tasks with limit and offset
+    tasks = Task.query.filter_by(user_id=current_user.id).limit(tasks_per_page).offset(offset).all()
+    
+    print(f'Tasks retrieved: {len(tasks)}')
+    for task in tasks:
+        print(f'Task ID: {task.task_id}, Title: {task.task_title}')
+    
+    # Render the template with the retrieved tasks
+    return render_template("task_rows.html", tasks=tasks, page=page)
 
 @main.route('/get_task/<int:task_id>', methods=['GET'])
 @login_required
@@ -156,8 +183,9 @@ def delete_task(task_id):
     db.session.delete(task)
     db.session.commit()
     flash(f"task_id: {task_id} successfully deleted", category="success")
+    print(f"Flash message created: Task {task_id} deleted successfully")
 
-    return f"task_id: {task_id} successfully deleted", 200
+    return "", 200
 
 @main.route('/walkthrough', methods=['GET', 'POST'])
 @login_required
