@@ -4,6 +4,7 @@ from functools import wraps
 from flask_login import current_user, login_required
 from marshmallow import ValidationError
 from sqlalchemy.orm import joinedload
+import time
 from application.database.models import Home, Room, Task, User, UserStatus
 from .utils import handle_error, apology
 from .extension import db
@@ -23,7 +24,7 @@ def inject_current_user():
 @main.route('/')
 @login_required
 def index():
-    return render_template('taskform.html', user=current_user)
+    return render_template('showtasks.html', user=current_user)
 
 @main.route('/onboarding', methods=['GET', 'POST'])
 @login_required
@@ -90,6 +91,13 @@ def new_task():
         except Exception as e:
             flash(str(e))
             return redirect(url_for('main.index'))
+
+@main.route('/get_tasks/', methods=['GET'])
+@login_required
+def get_tasks():
+    page = int(request.args.get("page", 1))
+    time.sleep(1)    
+    return render_template("tasklist.html", user=current_user, page=page)
 
 @main.route('/get_task/<int:task_id>', methods=['GET'])
 @login_required

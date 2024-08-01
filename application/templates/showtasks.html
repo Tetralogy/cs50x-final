@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+{% block title %}
+    taskform
+{% endblock %}
+
+{% block main %}
+<div class="container">
+    <h1>Welcome, {{ user.username }}!</h1>
+</div>
+
+<h1>Task List</h1>
+<button hx-post="{{ url_for('main.new_task') }}" hx-target="this" class="btn btn-primary">New Task</button>
+<div>
+    {% include 'tasklist.html' %}
+</div>
+{% endblock %}

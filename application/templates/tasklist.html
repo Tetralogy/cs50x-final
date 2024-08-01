@@ -1,0 +1,45 @@
+<table hx-indicator="#ind" class="table table-striped table-dark">
+<thead>
+        <tr>
+            <th>Task ID</th>
+            <th>Task Title</th>
+            <th>Task Description</th>
+            <th>Task Created At</th>
+            <th>Task Due Time</th>
+            <th>Task Priority</th>
+            <th>Task Status</th>
+            <th>Task Tags</th>
+            <th>Task Scheduled Time</th>
+            <th>Updated_at</th>
+            <th>Completed At</th>
+            <th>Edit</th>
+            <th>Delete</th>
+        </tr>
+</thead>
+<tbody id="tbody">
+        {% for task in user.tasks %}
+        {% if loop.last %}
+        <tr hx-get="/get_tasks/?page={{ page + 1 }}" hx-trigger="revealed" hx-swap="afterend" hx-target="this">
+            {% else %}
+            <tr class="">
+                {% endif %}
+                <td>{{ task.task_id }}</td>
+                <td>{{ task.task_title }}</td>
+                <td>{{ task.task_description }}</td>
+                <td>{{ task.task_created_at }}</td>
+                <td>{{ task.task_due_time }}</td>
+                <td>{{ task.task_priority }}</td>
+                <td>{{ task.task_status }}</td>
+                <td>{{ task.task_tags }}</td>
+                <td>{{ task.task_scheduled_time }}</td>
+                <td>{{ task.task_updated_at }}</td>
+                <td>{{ task.completed_at }}</td>
+                <td><button hx-post="{{ url_for('main.edit_task', task_id=task.task_id) }}" hx-target="closest tr" class="btn btn-primary">Edit Task</button></td>
+                <td><button hx-delete="{{ url_for('main.delete_task', task_id=task.task_id) }}" hx-target="closest tr" class="btn btn-danger">Delete Task</button></td>    
+            </tr>
+        {% endfor %}
+</tbody>
+</table>
+<div class="spinner-border htmx-indicator" role="status">
+    <span class="visually-hidden">Loading...</span>
+</div>
