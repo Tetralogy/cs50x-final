@@ -8,7 +8,7 @@ import time
 from application.database.models import Home, Room, Task, User, UserStatus
 from .utils import handle_error, apology
 from .extension import db
-from .database.schemas import task_schema, user_schema  # Import other schemas as needed
+from .database.schemas import task_schema, user_schema  # Import other schemas as needed #todo: update requirements.txt on mbp
 
 main = Blueprint('main', __name__)
 
@@ -16,11 +16,11 @@ main = Blueprint('main', __name__)
 main.errorhandler(Exception)(handle_error)
 
 # Define a context processor to make current_user available in every template
-@main.context_processor
+'''@main.context_processor
 @login_required
 def inject_current_user():
     onboarded = Home.query.filter_by(user_id=current_user.id).first() is not None
-    return dict(current_user=current_user, onboarded=onboarded)
+    return dict(current_user=current_user, onboarded=onboarded)'''
 
 @main.route('/get-flash-messages')
 def get_flash_messages():

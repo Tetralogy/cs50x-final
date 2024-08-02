@@ -49,10 +49,6 @@
     padding: 1%;
 }
 
-/* TODO: each example should bring it's own styles, instead of putting them all here.
-But we cannot use jinja blocks for that if we use hx-boost/ajax for getting the examples,
-because the whole response goes into the hx-target, although the styles have to go here instead.
-We could use swap-oob or similar to do this. */
 
 /* for the delete_row example */
 tr.htmx-swapping td {

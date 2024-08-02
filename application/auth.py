@@ -26,19 +26,20 @@ def login():
         else:
             user = User.query.filter_by(username=username).first()
             if user is None:
-                flash("Username does not exist", category="danger")#fixme the flash message is not working
-
+                flash("Username does not exist", category="danger")
+                return '', 400
 
             elif not check_password_hash(user.password_hash, password):
                 flash("Invalid password", category="danger")
-
+                return '', 400
             else:
                 login_user(user) 
                 flash("Successful login", category="success")
                 user.last_login = datetime.now(timezone.utc)
                 db.session.commit()
                 return redirect(url_for('main.index'))
-    return render_template('login.html')
+    if request.method == "GET":
+        return render_template('login.html')
 
 @auth.route("/logout")
 def logout():
