@@ -5,8 +5,9 @@
 {% endblock %}
 
 {% block main %}
+
     <h1>Login</h1>
-    <form method="POST" class="mx-auto w-50">
+    <form class="mx-auto w-50">
         <div class="mb-3">
             <label for="username" class="form-label">Username</label>
             <input type="text" class="form-control form-control-lg" id="username" name="username" required>
@@ -21,7 +22,7 @@
                 Please provide a password.
             </div>
         </div>
-        <button type="submit" class="btn btn-primary btn-lg">Login</button>
+        <button type="submit" class="btn btn-primary btn-lg" hx-post="/login">Login</button>
     </form>
     <p>Don't have an account? <a href="{{ url_for('auth.register') }}">Register here</a></p>
 {% endblock %}

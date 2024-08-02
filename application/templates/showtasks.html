@@ -9,7 +9,11 @@
 </div>
 
 <h1>Task List</h1>
-<button hx-post="{{ url_for('main.new_task') }}" hx-target="this" class="btn btn-primary">New Task</button>
+<button hx-post="{{ url_for('main.new_task') }}" 
+hx-target="#task-body" hx-swap="beforeend" 
+class="btn btn-primary" 
+hx-on::after-request="htmx.trigger('#flash-messages', 'flashUpdate')">
+New Task</button>
 <div>
     {% include 'tasklist.html' %}
 </div>

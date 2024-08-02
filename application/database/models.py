@@ -1,7 +1,8 @@
 from flask import Blueprint
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy import String, Integer, DateTime, UniqueConstraint, func, ForeignKey, text
+from sqlalchemy import String, Integer, DateTime, UniqueConstraint, func, ForeignKey, text, event
+from sqlalchemy.ext.hybrid import hybrid_property
 from datetime import datetime, timezone
 from typing import Optional, List
 from sqlalchemy.ext.declarative import as_declarative, declared_attr
@@ -129,10 +130,10 @@ class Task(db.Model):
     task_id: Mapped[int] = mapped_column(primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey('user.id'))
     room_id: Mapped[int] = mapped_column(ForeignKey('room.room_id'))
-    task_title: Mapped[str] = mapped_column(default=text("'task #' || (last_insert_rowid() + 1)"))
+    task_title: Mapped[str] = mapped_column(default=text("'Task #' || (last_insert_rowid() + 1)"))
     task_description: Mapped[str] = mapped_column(nullable=True)
     task_created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=func.now())
-    #task_updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=func.now())
+    _task_updated_at: Mapped[datetime] = mapped_column('task_updated_at', DateTime(timezone=True), default=func.now())
     task_due_time: Mapped[datetime] = mapped_column(nullable=True)
     task_priority: Mapped[int] = mapped_column(nullable=True)
     task_status: Mapped[str] = mapped_column(nullable=True)
@@ -143,6 +144,18 @@ class Task(db.Model):
     rooms = relationship("Room", back_populates="tasks")
     progress = relationship('TaskProgress', back_populates="tasks")
     annotations = relationship("TaskAnnotation", back_populates="tasks")
+    
+    @hybrid_property
+    def task_updated_at(self):
+        return self._task_updated_at
+
+    @task_updated_at.setter
+    def task_updated_at(self, value):
+        self._task_updated_at = value
+
+@event.listens_for(Task, 'before_update')
+def receive_before_update(mapper, connection, target):
+    target.task_updated_at = func.now()
 
 class TaskAnnotation(db.Model):
     annotation_id: Mapped[int] = mapped_column(primary_key=True)

@@ -17,6 +17,7 @@ main.errorhandler(Exception)(handle_error)
 
 # Define a context processor to make current_user available in every template
 @main.context_processor
+@login_required
 def inject_current_user():
     onboarded = Home.query.filter_by(user_id=current_user.id).first() is not None
     return dict(current_user=current_user, onboarded=onboarded)
@@ -93,11 +94,19 @@ def new_task():
                 task_scheduled_time = task_scheduled_time,
                 completed_at = completed_at,
                 user_id = current_user.id)
-            
+
             db.session.add(new_task)
             db.session.commit()
-
-            return jsonify(task_schema.dump(new_task))
+            
+            new_task = Task.query.order_by(Task.task_id.desc()).first()
+            if new_task.task_title == 'Task #1':
+                new_task.task_title = f'Task #{new_task.task_id}'
+                db.session.commit()
+            
+            print(f"Task {new_task.task_id} created successfully")
+            
+            flash(f"task_title: {new_task.task_title} successfully created", category="success")
+            return render_template('task_cells.html',task = new_task)#, jsonify(task_schema.dump(new_task)), 200  #todo: fixme 
 
         except Exception as e:
             flash(str(e))
@@ -117,7 +126,7 @@ def get_tasks():
     offset = (page - 1) * tasks_per_page
 
     # Retrieve tasks with limit and offset
-    tasks = Task.query.filter_by(user_id=current_user.id).limit(tasks_per_page).offset(offset).all()
+    tasks = Task.query.filter_by(user_id=current_user.id).limit(tasks_per_page).offset(offset).all() #todo: convert query to modern SQLAlchemy select statement
     
     print(f'Tasks retrieved: {len(tasks)}')
     for task in tasks:

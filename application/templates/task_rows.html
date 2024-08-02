@@ -1,5 +1,10 @@
 {% for task in tasks %}
-<tr id="task-row" {% if loop.last %} hx-get="/get_tasks/?page={{ page + 1 }}" hx-trigger="revealed" hx-swap="afterend" hx-target="this" {% endif %}>
+<tr id="task-row" 
+{% if loop.last %} 
+hx-get="/get_tasks/?page={{ page + 1 }}" hx-trigger="revealed" 
+hx-swap="afterend" hx-target="this" 
+{% endif %}>
+<div id="task-cells">
     <td>{{ task.task_id }}</td>
     <td>{{ task.task_title }}</td>
     <td>{{ task.task_description }}</td>
@@ -20,8 +25,8 @@
         Delete Task
         </button></td>
 </tr>
+</div>
 {% endfor %}
-
 <script>
     function toggleConfirm(checked) {
         const buttons = document.querySelectorAll('.delete-button');

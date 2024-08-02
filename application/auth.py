@@ -1,4 +1,4 @@
-from flask import Blueprint, Flask, flash, redirect, render_template, request, session, url_for
+from flask import Blueprint, Flask, flash, make_response, redirect, render_template, request, session, url_for
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
@@ -19,14 +19,19 @@ def login():
         password = request.form.get("password")
         if not username:
             flash("must provide username", category="danger")
+
         elif not password:
             flash("must provide password", category="danger")
+
         else:
             user = User.query.filter_by(username=username).first()
             if user is None:
-                flash("Username does not exist", category="danger")
+                flash("Username does not exist", category="danger")#fixme the flash message is not working
+
+
             elif not check_password_hash(user.password_hash, password):
                 flash("Invalid password", category="danger")
+
             else:
                 login_user(user) 
                 flash("Successful login", category="success")
