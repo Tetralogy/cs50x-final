@@ -44,9 +44,9 @@ def onboarding():
     raise NotImplementedError("onboarding not yet implemented")
 
 
-@main.route('/new_task', methods=['POST'])
+@main.route('/create_task', methods=['POST'])
 @login_required
-def new_task():   
+def create_task():   
     if request.method == "POST":
         try:
             task_due_time_str = request.form.get('task_due_time', '')
@@ -95,14 +95,13 @@ def new_task():
                 completed_at = completed_at,
                 user_id = current_user.id)
 
-            db.session.add(new_task)
-            db.session.commit()
-            
-            new_task = Task.query.order_by(Task.task_id.desc()).first()
-            if new_task.task_title == 'Task #1':
-                new_task.task_title = f'Task #{new_task.task_id}'
+            if new_task.task_title == '' or new_task.task_title is None:
+                last_task = Task.query.order_by(Task.task_id.desc()).first()
+                new_task.task_title = f'Task #{int(last_task.task_id) + 1}'
                 db.session.commit()
             
+            db.session.add(new_task)
+            db.session.commit()
             print(f"Task {new_task.task_id} created successfully")
             
             flash(f"task_title: {new_task.task_title} successfully created", category="success")
@@ -111,6 +110,11 @@ def new_task():
         except Exception as e:
             flash(str(e))
             return redirect(url_for('main.index'))
+
+@main.route('/create_task_form', methods=['GET'])
+@login_required
+def create_task_form():
+    return render_template('forms/create_task_form.html')
 
 @main.route('/get_tasks/', methods=['GET'])
 @login_required
@@ -143,42 +147,40 @@ def get_task(task_id):
     if not task or task.user_id != current_user.id:
         return jsonify({"success": False, "error": "Task not found or unauthorized"}), 404
     
-    return jsonify({
+    return render_template('task_cells.html',task = task), jsonify({
         "success": True,
         "task": task_schema.dump(task)
     }), 200
     
-@main.route('/edit_task/<int:task_id>', methods=['PUT'])
+# Route to render the update task form
+@main.route('/edit_task/<int:task_id>', methods=['GET'])
 @login_required
 def edit_task(task_id):
     task = Task.query.get(task_id)
-    
     if not task or task.user_id != current_user.id:
         return jsonify({"success": False, "error": "Task not found or unauthorized"}), 404
-    
-    data = request.get_json()
-    
-    try:
-        # Validate the input data
-        task_data = task_schema.load(data, partial=True, session=db.session)
-    except ValidationError as err:
-        return jsonify({"success": False, "errors": err.messages}), 400
-    
-    # Update the task with validated data
-    for key, value in task_data.items():
-        setattr(task, key, value)
-    
-    try:
-        db.session.commit()
-    except Exception as e:
-        db.session.rollback()
-        return jsonify({"success": False, "error": str(e)}), 500
-    
-    return jsonify({
-        "success": True,
-        "message": "Task updated successfully",
-        "task": task_schema.dump(task)
-    }), 200
+    return render_template('forms/edit_task_form.html', task=task)
+
+# Route to handle the update task form submission
+@main.route('/update_task/<int:task_id>', methods=['PUT'])
+@login_required
+def update_task(task_id):
+    task = Task.query.get(task_id)
+    if not task or task.user_id != current_user.id:
+        return jsonify({"success": False, "error": "Task not found or unauthorized"}), 404
+
+    task.task_title = request.form.get('task_title')
+    task.task_description = request.form.get('task_description')
+    task.task_due_time = request.form.get('task_due_time')
+    task.task_priority = request.form.get('task_priority')
+    task.task_status = request.form.get('task_status')
+    task.task_tags = request.form.get('task_tags')
+    task.task_scheduled_time = request.form.get('task_scheduled_time')
+
+    db.session.commit()
+    print('Task updated successfully?')
+    return render_template('task_cells.html', task=task), 200
+
 
 @main.route('/delete_task/<int:task_id>', methods=['DELETE'])
 @login_required

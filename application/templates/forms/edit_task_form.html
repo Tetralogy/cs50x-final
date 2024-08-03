@@ -1,0 +1,21 @@
+<tr id="edit-task-row{{ task.task_id }}">
+    <form hx-put="/update_task/{{ task.task_id }}" hx-target="#edit-task-row{{ task.task_id }}" hx-swap="outerHTML" 
+    id="edit-task-form" name="edit-task-form" class="table table-striped table-dark" 
+    hx-on::after-request="htmx.trigger('#flash-messages', 'flashUpdate')">
+<td>{{ task.task_id }}</td>
+<td><input type="text" id="task_title" name="task_title" value="{{ task.task_title }}"></td>
+<td><textarea id="task_description" name="task_description">{{ task.task_description }}</textarea></td>
+<td>{{ task.task_created_at }}</td>
+<td><input type="datetime-local" id="task_due_time" name="task_due_time" value="{{ task.task_due_time }}"></td>
+<td><input type="number" id="task_priority" name="task_priority" min="1" max="5" value="{{ task.task_priority }}"></td>
+<td><input type="text" id="task_status" name="task_status" value="{{ task.task_status }}"></td>
+<td><input type="text" id="task_tags" name="task_tags" value="{{ task.task_tags }}"></td>
+<td><input type="datetime-local" id="task_scheduled_time" name="task_scheduled_time" value="{{ task.task_scheduled_time }}"></td>
+<td>{{ task.task_updated_at }}</td>
+<td>{{ task.completed_at }}</td>
+
+<td><button id="save-task-button{{ task.task_id }}" class="btn btn-primary" hx-include="#edit-task-form" hx-trigger="click">Save Task</button></td>#fixme wont work
+
+</form>
+<td><button hx-get="/get_task/{{ task.task_id }}" hx-target="#edit-task-row{{ task.task_id }}" hx-swap="outerHTML" class="btn btn-primary">Cancel</button></td>
+</tr>
