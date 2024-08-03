@@ -37,7 +37,9 @@ def login():
                 flash("Successful login", category="success")
                 user.last_login = datetime.now(timezone.utc)
                 db.session.commit()
-                return redirect(url_for('main.index'))
+                response = make_response('', 200)
+                response.headers['HX-Redirect'] = url_for('main.index')
+                return response
     if request.method == "GET":
         return render_template('login.html')
 

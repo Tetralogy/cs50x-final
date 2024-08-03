@@ -147,11 +147,8 @@ def get_task(task_id):
     if not task or task.user_id != current_user.id:
         return jsonify({"success": False, "error": "Task not found or unauthorized"}), 404
     
-    return render_template('task_cells.html',task = task), jsonify({
-        "success": True,
-        "task": task_schema.dump(task)
-    }), 200
-    
+    return render_template('task_cells.html',task = task)
+
 # Route to render the update task form
 @main.route('/edit_task/<int:task_id>', methods=['GET'])
 @login_required
@@ -165,17 +162,28 @@ def edit_task(task_id):
 @main.route('/update_task/<int:task_id>', methods=['PUT'])
 @login_required
 def update_task(task_id):
+    print(f'update_task called for task_id: {task_id}')
     task = Task.query.get(task_id)
     if not task or task.user_id != current_user.id:
         return jsonify({"success": False, "error": "Task not found or unauthorized"}), 404
+    
+    task_due_time_str = request.form.get('task_due_time', '')
+    task_due_time = datetime.fromisoformat(task_due_time_str) if task_due_time_str else None
+    
+    task_scheduled_time_str = request.form.get('task_scheduled_time', '')
+    task_scheduled_time = datetime.fromisoformat(task_scheduled_time_str) if task_scheduled_time_str else None
+    
+    #completed_at_str = request.form.get('completed_at')
+    #completed_at = datetime.fromisoformat(completed_at_str) if completed_at_str else None
 
     task.task_title = request.form.get('task_title')
     task.task_description = request.form.get('task_description')
-    task.task_due_time = request.form.get('task_due_time')
+    task.task_due_time = task_due_time
     task.task_priority = request.form.get('task_priority')
     task.task_status = request.form.get('task_status')
     task.task_tags = request.form.get('task_tags')
-    task.task_scheduled_time = request.form.get('task_scheduled_time')
+    task.task_scheduled_time = task_scheduled_time
+    #task.completed_at = completed_at
 
     db.session.commit()
     print('Task updated successfully?')
