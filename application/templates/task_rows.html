@@ -1,22 +1,10 @@
 {% for task in tasks %}
-<tr id="task-row" 
-{% if loop.last %} 
-hx-get="/get_tasks/?page={{ page + 1 }}" hx-trigger="revealed" 
-hx-swap="afterend" hx-target="this" 
-{% endif %}>
-<div id="task-cells">
+<div class="row table-striped table-dark" id="task-row{{ task.task_id }}" 
+    {% if loop.last %} 
+    hx-get="/get_tasks/?page={{ page + 1 }}" hx-trigger="revealed" 
+    hx-swap="afterend" hx-target="this" 
+    {% endif %}>
 {% include 'task_cells.html' %}
 </div>
 {% endfor %}
-<script>
-    function toggleConfirm(checked) {
-        const buttons = document.querySelectorAll('.delete-button');
-        buttons.forEach(button => {
-            if (checked) {
-                button.setAttribute('hx-confirm', 'Are you sure you want to delete this task?');
-            } else {
-                button.removeAttribute('hx-confirm');
-            }
-        });
-    }
-    </script>
+

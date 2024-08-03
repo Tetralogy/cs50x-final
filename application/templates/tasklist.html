@@ -1,31 +1,44 @@
 
-<table hx-indicator="#ind" class="table table-striped table-dark">
-<thead>
-        <tr>
-            <th>Task ID</th>
-            <th>Task Title</th>
-            <th>Task Description</th>
-            <th>Task Created At</th>
-            <th>Task Due Time</th>
-            <th>Task Priority</th>
-            <th>Task Status</th>
-            <th>Task Tags</th>
-            <th>Task Scheduled Time</th>
-            <th>Updated_at</th>
-            <th>Completed At</th>
-            <th>Edit</th>
-            <th>Delete<br>
-<div class="form-switch bg-danger">
-                    <input checked type="checkbox" id="toggle-buttons" onchange="toggleConfirm(this.checked)">
-                    <label for="toggle-buttons">Confirm Delete</label>
+<div class="container">
+    <div class="row">
+        <div class="col">Task ID</div>
+        <div class="col">Task Title</div>
+        <div class="col">Task Description</div>
+        <div class="col">Task Created At</div>
+        <div class="col">Task Due Time</div>
+        <div class="col">Task Priority</div>
+        <div class="col">Task Status</div>
+        <div class="col">Task Tags</div>
+        <div class="col">Task Scheduled Time</div>
+        <div class="col">Updated_at</div>
+        <div class="col">Completed At</div>
+        <div class="col">Edit</div>
+        <div class="col">
+            <div class="form-switch bg-danger">
+                <input checked type="checkbox" id="toggle-buttons" onchange="toggleConfirm(this.checked)">
+                <label for="toggle-buttons">Confirm Delete</label>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div id="task-body" hx-get="/get_tasks/?page=1" hx-trigger="load" class="col">
+            <!-- Rows will be populated here -->
+        </div>
+    </div>
+    <div class="htmx-indicator spinner-border" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
 </div>
-            </th>
-        </tr>
-</thead>
-<tbody id="task-body" hx-get="/get_tasks/?page=1" hx-trigger="load">
-    <!-- Rows will be populated here -->
-</tbody>
-</table>
-<div class="htmx-indicator spinner-border" role="status">
-    <span class="visually-hidden">Loading...</span>
-</div>
+
+<script>
+    function toggleConfirm(checked) {
+        const buttons = document.querySelectorAll('.delete-button');
+        buttons.forEach(button => {
+            if (checked) {
+                button.setAttribute('hx-confirm', 'Are you sure you want to delete this task?');
+            } else {
+                button.removeAttribute('hx-confirm');
+            }
+        });
+    }
+</script>

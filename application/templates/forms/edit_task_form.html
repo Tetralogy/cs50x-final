@@ -1,4 +1,4 @@
-<div id="edit-task-row{{ task.task_id }}" class="row table-striped table-dark">
+<div id="edit-task-row{{ task.task_id }}" class="">
     <form hx-put="/update_task/{{ task.task_id }}" hx-target="#edit-task-row{{ task.task_id }}" hx-swap="outerHTML" 
     id="edit-task-form" name="edit-task-form" class="table table-striped table-dark" 
     hx-on::after-request="htmx.trigger('#flash-messages', 'flashUpdate')">
@@ -16,6 +16,8 @@
 
     <div class="col-md-1"><button type="submit">Save Task</button></div>
     </form>
-    <div class="col-md-1"><button hx-get="/get_task/{{ task.task_id }}" hx-target="#edit-task-row{{ task.task_id }}" hx-swap="outerHTML" class="btn btn-primary">Cancel</button></div>
+    <div class="col-md-1"><button hx-get="/get_task/{{ task.task_id }}" 
+        hx-target="#edit-task-row{{ task.task_id }}" hx-swap="outerHTML" class="btn btn-primary">
+        Cancel</button></div>
 </div>
 

@@ -8,7 +8,7 @@ import time
 from application.database.models import Home, Room, Task, User, UserStatus
 from .utils import handle_error, apology
 from .extension import db
-from .database.schemas import task_schema, user_schema  # Import other schemas as needed #todo: update requirements.txt on mbp
+from .database.schemas import task_schema, user_schema  # Import other schemas as needed
 
 main = Blueprint('main', __name__)
 
@@ -105,7 +105,7 @@ def create_task():
             print(f"Task {new_task.task_id} created successfully")
             
             flash(f"task_title: {new_task.task_title} successfully created", category="success")
-            return render_template('task_cells.html',task = new_task)#, jsonify(task_schema.dump(new_task)), 200  #todo: fixme 
+            return render_template('task_cells.html',task = new_task)
 
         except Exception as e:
             flash(str(e))
@@ -147,7 +147,7 @@ def get_task(task_id):
     if not task or task.user_id != current_user.id:
         return jsonify({"success": False, "error": "Task not found or unauthorized"}), 404
     
-    return render_template('task_cells.html',task = task)
+    return render_template('task_cells.html', task=task)
 
 # Route to render the update task form
 @main.route('/edit_task/<int:task_id>', methods=['GET'])
