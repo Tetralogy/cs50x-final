@@ -1,0 +1,58 @@
+
+<form class="row flex-nowrap overflow-auto" style="white-space: nowrap;" hx-put="/update_task/{{ task.task_id }}" hx-swap="outerHTML" 
+    id="edit-task-cells{{ task.task_id }}" name="edit-task-form" 
+    hx-on::after-request="htmx.trigger('#flash-messages', 'flashUpdate')">
+
+
+        <div class="col">{{ task.task_id }}</div>
+        <div class="col-auto">
+            <div class="form-floating">
+                <input type="text" class="form-control" id="task_title" name="task_title" value="{{ task.task_title }}">
+                <label for="task_title">Task Title</label>
+            </div>
+        </div>
+        <div class="col-auto">
+            <div class="form-floating">
+                <textarea id="task_description" class="form-control" name="task_description">{{ task.task_description }}</textarea>
+                <label for="task_description">Task Description</label>
+            </div>
+        </div>
+        <div class="col-auto">{{ task.task_created_at }}</div>
+        <div class="col-auto">
+            <div class="form-floating">
+                <input type="datetime-local" class="form-control" id="task_due_time" name="task_due_time" value="{{ task.task_due_time }}">
+                <label for="task_due_time">Task Due Time</label>
+            </div>
+        </div>
+        <div class="col-auto">
+            <div class="form-floating">
+                <input type="number" class="form-control" id="task_priority" name="task_priority" min="1" max="5" value="{{ task.task_priority }}">
+                <label for="task_priority">Task Priority</label>
+            </div>
+        </div>
+        <div class="col-auto">
+            <div class="form-floating">
+                <input type="text" class="form-control" id="task_status" name="task_status" value="{{ task.task_status }}">
+                <label for="task_status">Task Status</label>
+            </div>
+        </div>
+        <div class="col-auto">
+            <div class="form-floating">
+                <input type="text" class="form-control" id="task_tags" name="task_tags" value="{{ task.task_tags }}">
+                <label for="task_tags">Task Tags</label>
+            </div>
+        </div>
+        <div class="col-auto">
+            <div class="form-floating">
+                <input type="datetime-local" class="form-control" id="task_scheduled_time" name="task_scheduled_time" value="{{ task.task_scheduled_time }}">
+                <label for="task_scheduled_time">Task Scheduled Time</label>
+            </div>
+        </div>
+        <div class="col-auto">{{ task.task_updated_at }}</div>
+        <div class="col-auto">{{ task.completed_at }}</div>
+    
+        <div class="col"><button type="submit">Save Task</button></div>
+        <div class="col"><button hx-get="/get_task/{{ task.task_id }}" 
+            hx-target="#edit-task-cells{{ task.task_id }}" hx-swap="outerHTML" class="btn btn-primary">
+            Cancel</button></div>
+</form>

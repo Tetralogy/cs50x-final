@@ -1,0 +1,11 @@
+<div class="striped">
+    {% for task in tasks %}
+    <div class="container table-striped table-dark" id="task-row{{ task.task_id }}" 
+        {% if loop.last %} 
+        hx-get="/get_tasks/?page={{ page + 1 }}" hx-trigger="revealed" 
+        hx-swap="afterend" hx-target="this" 
+        {% endif %}>
+    {% include 'tasklists/task_cells.html.jinja' %}
+    </div>
+    {% endfor %}
+</div>

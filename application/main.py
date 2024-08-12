@@ -137,7 +137,7 @@ def get_tasks():
         print(f'Task ID: {task.task_id}, Title: {task.task_title}')
     
     # Render the template with the retrieved tasks
-    return render_template("task_rows.html", tasks=tasks, page=page)
+    return render_template("tasklists/task_rows.html.jinja", tasks=tasks, page=page)
 
 @main.route('/get_task/<int:task_id>', methods=['GET'])
 @login_required
@@ -147,16 +147,17 @@ def get_task(task_id):
     if not task or task.user_id != current_user.id:
         return jsonify({"success": False, "error": "Task not found or unauthorized"}), 404
     
-    return render_template('task_cells.html', task=task)
+    return render_template('tasklists/task_cells.html.jinja', task=task)
 
 # Route to render the update task form
 @main.route('/edit_task/<int:task_id>', methods=['GET'])
 @login_required
 def edit_task(task_id):
     task = Task.query.get(task_id)
+    print(f'edit_task called for task_id: {task_id}')
     if not task or task.user_id != current_user.id:
         return jsonify({"success": False, "error": "Task not found or unauthorized"}), 404
-    return render_template('forms/edit_task_form.html', task=task)
+    return render_template('forms/edit_task_form.html.jinja', task=task)
 
 # Route to handle the update task form submission
 @main.route('/update_task/<int:task_id>', methods=['PUT'])
@@ -187,7 +188,7 @@ def update_task(task_id):
 
     db.session.commit()
     print('Task updated successfully?')
-    return render_template('task_cells.html', task=task), 200
+    return render_template('tasklists/task_cells.html.jinja', task=task), 200
 
 
 @main.route('/delete_task/<int:task_id>', methods=['DELETE'])

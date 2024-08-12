@@ -115,6 +115,14 @@ img {
     transition: opacity 1s ease-out;
 }
 
+.striped .container:nth-of-type(odd) {
+    background-color: Navy;
+}
+
+.striped .container:nth-of-type(even) {
+    background-color: MidnightBlue;
+}
+
 /* for the animations/fade_in_on_addition example */
 #fade-me-in.htmx-added {
     opacity: 0;
