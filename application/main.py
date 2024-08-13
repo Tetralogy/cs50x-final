@@ -105,7 +105,7 @@ def create_task():
             print(f"Task {new_task.task_id} created successfully")
             
             flash(f"task_title: {new_task.task_title} successfully created", category="success")
-            return render_template('task_cells.html',task = new_task)
+            return render_template('/tasklists/task_cells.html.jinja',task = new_task)
 
         except Exception as e:
             flash(str(e))
@@ -114,7 +114,7 @@ def create_task():
 @main.route('/create_task_form', methods=['GET'])
 @login_required
 def create_task_form():
-    return render_template('forms/create_task_form.html')
+    return render_template('forms/create_task_form.html.jinja')
 
 @main.route('/get_tasks/', methods=['GET'])
 @login_required
