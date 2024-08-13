@@ -215,7 +215,7 @@ def walkthrough():
 @main.route('/annotate', methods=['GET', 'POST'])
 @login_required
 def annotate():
-    raise NotImplementedError("annotate not yet implemented")
+    raise NotImplementedError("annotate not yet implemented") #TODO: UPLOAD PHOTO FEATURE
 
 @main.route('/map', methods=['GET', 'POST'])
 @login_required
