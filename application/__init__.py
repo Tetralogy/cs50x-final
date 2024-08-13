@@ -55,6 +55,8 @@ def create_app(config_filename=None):
     from .main import main
     from .auth import auth
     from .database.models import Base, models, User
+    from .utils import utils
+    from .crud import crud
 
     login_manager.init_app(app)  # Initialize login_manager with the app
 
@@ -70,6 +72,8 @@ def create_app(config_filename=None):
     app.register_blueprint(main)
     app.register_blueprint(auth)
     app.register_blueprint(models)
+    app.register_blueprint(utils)
+    app.register_blueprint(crud)
     
     migrate = Migrate(app, db)
 
