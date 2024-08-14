@@ -17,7 +17,7 @@ def index():
     print('index called') 
     return render_template('forms/upload.html.jinja')
 
-@photo.route('/upload', methods=['POST']) #TODO: UPLOAD PHOTO
+@photo.route('/upload', methods=['POST'])
 def upload():
     if 'file' not in request.files:
         print('No file part')
@@ -29,7 +29,8 @@ def upload():
     if file and allowed_file(file.filename):
         filename = secure_filename(file.filename)
         file.save(os.path.join(current_app.config['UPLOAD_FOLDER'], filename))
-        #return ("", image=filename)
+        print(f'File saved: {filename}')
+        return f'{filename} uploaded', 200
     return ("", 204)  # return empty response so htmx does not overwrite the progress bar value
 
 '''@app.route('/annotate', methods=['POST'])
