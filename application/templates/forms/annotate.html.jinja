@@ -1,0 +1,34 @@
+
+    <h1>Annotate Image</h1>
+    <div id="image-container">
+        <img src="{{ image_url }}" alt="Uploaded image" id="annotate-image" style="max-width: 100vw; height: auto;"
+             hx-post="/annotate"
+             hx-trigger="click"
+             hx-target="#annotations"
+             hx-include="[name='task']"
+             hx-params="x,y,task,image"
+             hx-swap="beforeend">
+    </div>
+    <form>
+        <label for="task">Task:</label>
+        <input type="text" id="task" name="task" required>
+        <input type="hidden" name="image" value="{{ image }}">
+    </form>
+    <div id="annotations" hx-get="/annotations" hx-trigger="load"></div>
+
+    <script>
+        document.getElementById('annotate-image').addEventListener('click', function(e) {
+            var rect = e.target.getBoundingClientRect();
+            var x = e.clientX - rect.left;
+            var y = e.clientY - rect.top;
+            
+            var marker = document.createElement('div');
+            marker.className = 'marker';
+            marker.style.left = x + 'px';
+            marker.style.top = y + 'px';
+            
+            document.getElementById('image-container').appendChild(marker);
+            
+            e.target.setAttribute('hx-vals', JSON.stringify({x: x, y: y}));
+        });
+    </script>

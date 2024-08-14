@@ -34,12 +34,6 @@ def upload():
         return render_template('forms/uploaded.html.jinja', filename=filename)
     return ("", 204)  # return empty response so htmx does not overwrite the progress bar value
 
-@photo.route('/view/<filename>')
-@login_required
-def view(filename):
-    print(f'view called for filename: {filename}') 
-    return render_template('media/view.html.jinja', image_url=f'/media/uploads/{filename}')
-
 @photo.route('/media/uploads/<filename>')
 def uploaded_file(filename):
     #return send_from_directory(current_app.config['UPLOAD_FOLDER'], filename)
@@ -47,7 +41,19 @@ def uploaded_file(filename):
     print(f'files in {upload_folder}: {os.listdir(upload_folder)}')  # print the contents of the folder
     return send_from_directory(upload_folder, filename)
 
-'''@app.route('/annotate', methods=['POST'])
+@photo.route('/view/<filename>')
+@login_required
+def view(filename):
+    print(f'view called for filename: {filename}') 
+    return render_template('media/view.html.jinja', image_url=f'/media/uploads/{filename}')
+
+@photo.route('/annotate_form/<filename>')
+@login_required
+def annotate_form(filename):
+    print('annotate_form called') 
+    return render_template('forms/annotate.html.jinja', image_url=f'/media/uploads/{filename}')
+
+@photo.route('/annotate', methods=['POST'])
 def annotate():
     x = request.form.get('x')
     y = request.form.get('y')
@@ -57,10 +63,10 @@ def annotate():
     annotation = {'x': x, 'y': y, 'task': task, 'image': image}
     annotations.append(annotation)
     
-    return render_template('annotation_list.html', annotations=annotations)
+    return render_template('tasklists/annotation_list.html.jinja', annotations=annotations)
 
-@app.route('/annotations')
+@photo.route('/annotations')
 def get_annotations():
-    return render_template('annotation_list.html', annotations=annotations)'''
+    return render_template('tasklists/annotation_list.html.jinja', annotations=annotations)
 
 #TODO: CLICK TO ANNOTATE

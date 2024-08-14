@@ -294,3 +294,17 @@ form.htmx-request {
         transform: scale(0.9);
     }
 }
+
+/* Annotations */
+#image-container {
+    position: relative;
+    display: inline-block;
+}
+.marker {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background-color: red;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+}
