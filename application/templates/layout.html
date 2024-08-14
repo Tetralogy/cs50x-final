@@ -3,10 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <meta name="color-scheme" content="dark light">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="/static/style.css">
     <title>Untitled Cleaning App: {% block title %}{% endblock %}</title>
+    <script src="https://unpkg.com/htmx.org@2.0.1" integrity="sha384-QWGpdj554B4ETpJJC9z+ZHJcA/i59TyjxEPXiiUgN2WmTyV5OEZWCD6gQhgkdpB/" crossorigin="anonymous"></script>
 </head>
 <body>
+
     <div class="container-fluid">
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <a class="navbar-brand" href="/">Todo App</a>
@@ -15,15 +19,50 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/tasks">Tasks</a>
+                    {% if current_user.is_authenticated %}
+                        {% if onboarded %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('main.index') }}">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('main.new_task') }}">new_task</a>
+                            </li>
+                        {% else %}
+                            <li class="nav-item">
+                               <a class="nav-link" href="{{ url_for('main.onboarding') }}">Get Started</a>
+                            </li>
+                        {% endif %}
+                        <li>
+                            <a class="nav-link" href="{{ url_for('auth.logout') }}">Logout</a>
+                        </li>
+                        <li>
+                            <a class="nav-link" href="{{ url_for('auth.password') }}">Password Reset</a>
+                        </li>
+                        <div>
+                            <h4 class="text-primary">Welcome, {{current_user.username}}! Email: {{current_user.email}} User ID: {{current_user.id}}</h4>
+                        </div>
+                    {% else %}
+                    <li>
+                        <a class="nav-link" href="{{ url_for('auth.register') }}">Register</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/users">Users</a>
+                    <li>
+                        <a class="nav-link" href="{{ url_for('auth.login') }}">Login</a>
                     </li>
+                    {% endif %}
                 </ul>
             </div>
         </nav>
+
+        <div id="flash-messages-container" class="flash-container">
+            <div id="flash-messages"
+                hx-get="/get-flash-messages"
+                hx-trigger="flashUpdate from:body, load"
+                hx-swap="beforeend">
+                    {% include 'flash_messages.html' %}
+            </div>
+        </div>
+
+
         <div class="row">
             <div class="col-md-12">
                 {% block main %}
@@ -31,5 +70,15 @@
             </div>
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            setTimeout(() => {
+                document.querySelectorAll('.flash-message').forEach((message) => {
+                    message.style.display = 'none';
+                });
+            }, 5000); // 5 seconds delay
+        });
+        </script>
 </body>
 </html>

@@ -1,0 +1,5 @@
+<button hx-post="{{ url_for('main.create_task') }}" 
+hx-target="#task-body" hx-swap="beforeend" 
+class="btn btn-primary" 
+hx-on::after-request="htmx.trigger('#flash-messages', 'flashUpdate')">
+Create New Blank Task</button>

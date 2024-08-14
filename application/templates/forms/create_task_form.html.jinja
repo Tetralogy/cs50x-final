@@ -1,0 +1,41 @@
+<div id="create-task"  hx-get="/create_task_form" hx-swap="outerHTML" hx-trigger="submit from:#create-task-form">
+    <form hx-post="/create_task" hx-target="#task-body" hx-swap="beforeend" 
+    id="create-task-form" class="table table-striped table-dark" 
+    hx-on::after-request="htmx.trigger('#flash-messages', 'flashUpdate', '#create-task')">
+    <table>
+        <thead>
+            <tr>
+            <th><label for="task_title">Task Title:</label></th>
+            <th><label for="task_description">Task Description:</label></th>
+            <th><label for="task_due_time">Task Due Time:</label></th>
+            <th><label for="task_priority">Task Priority:</label></th>
+            <th><label for="task_status">Task Status:</label></th>
+            <th><label for="task_tags">Task Tags:</label></th>
+            <th><label for="task_scheduled_time">Task Scheduled Time:</label></th>
+            <th>Submit</th>
+            <th>Cancel</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+            <td>
+                <input type="text" id="task_title" name="task_title" ></td>
+            <td>
+                <textarea id="task_description" name="task_description" ></textarea></td>
+            <td>
+                <input type="datetime-local" id="task_due_time" name="task_due_time" ></td>
+            <td>
+                <input type="number" id="task_priority" name="task_priority" min="1" max="5" ></td>
+            <td>
+                <input type="text" id="task_status" name="task_status" ></td>
+            <td>
+                <input type="text" id="task_tags" name="task_tags"></td>
+            <td>
+                <input type="datetime-local" id="task_scheduled_time" name="task_scheduled_time"></td>
+            <td><input type="submit" value="Submit" class="btn btn-success"></td>
+            <td><button hx-get="/create_task_form" hx-target="#create-task" hx-swap="outerHTML" class="btn btn-primary">Cancel</button></td>
+            </tr>
+        </tbody>
+    </table>
+    </form>
+</div>

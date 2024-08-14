@@ -1,0 +1,29 @@
+<div class="row" id="task-cells{{ task.task_id }}">
+    <div class="col">{{ task.task_id }}</div>
+    <div class="col">{{ task.task_title }}</div>
+    <div class="col">{{ task.task_description }}</div>
+    <div class="col">{{ task.task_created_at }}</div>
+    <div class="col">{{ task.task_due_time }}</div>
+    <div class="col">{{ task.task_priority }}</div>
+    <div class="col">{{ task.task_status }}</div>
+    <div class="col">{{ task.task_tags }}</div>
+    <div class="col">{{ task.task_scheduled_time }}</div>
+    <div class="col">{{ task.task_updated_at }}</div>
+    <div class="col">{{ task.completed_at }}</div>
+
+    <div class="col button-cell"><button id="edit-task-button{{ task.task_id }}" 
+        hx-get="/edit_task/{{ task.task_id }}" hx-swap="outerHTML" 
+        hx-target="#task-cells{{ task.task_id }}" 
+        class="btn btn-primary">
+        Edit Task
+        </button></div>
+
+    <div class="col button-cell"><button id="delete-task-button{{ task.task_id }}" 
+        hx-delete="{{ url_for('main.delete_task', task_id=task.task_id) }}" 
+        hx-target="#task-row{{ task.task_id }}" class="btn btn-danger delete-button" 
+        hx-confirm="Are you sure you want to delete this task?&#10;&#10;{{ task.task_title }}" 
+        hx-swap="outerHTML swap:1s"
+        hx-on::after-request="htmx.trigger('#flash-messages', 'flashUpdate')">
+        Delete Task
+        </button></div>
+</div>

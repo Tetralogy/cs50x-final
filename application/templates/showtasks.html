@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+{% block title %}
+    taskform
+{% endblock %}
+
+{% block main %}
+<div class="container">
+    <h1>Welcome, {{ user.username }}!</h1>
+</div>
+
+<h1>Task List</h1>
+<div>
+    {% include 'forms/create_task_form.html.jinja' %}
+    {% include 'forms/blank_task_button.html.jinja' %}
+</div>
+<div>
+    {% include 'tasklist.html' %}
+</div>
+{% endblock %}

@@ -1,5 +1,31 @@
 {
+    
     "todo-tree.tree.showBadges": true,
     "todo-tree.tree.showCountsInTree": true,
-    "todo-tree.tree.disableCompactFolders": false
+    "todo-tree.tree.disableCompactFolders": false,
+    
+    
+        "python.envFile": "${workspaceFolder}/.env",
+        "terminal.integrated.env.linux": {
+          "FLASK_APP": "application:create_app"
+        },
+        "terminal.integrated.env.osx": {
+          "FLASK_APP": "application:create_app"
+        },
+        "terminal.integrated.env.windows": {
+          "FLASK_APP": "application:create_app"
+        },
+        "files.exclude": {
+          "**/.git": true,
+          "**/.svn": true,
+          "**/.hg": true,
+          "**/CVS": true,
+          "**/.DS_Store": true,
+          "**/Thumbs.db": true,
+          "**/__pycache__": true,
+          "**/.venv": true
+        },
+        "explorer.excludeGitIgnore": false,
+        "explorerExclude.backup": {}
+    
 }
