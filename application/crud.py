@@ -94,7 +94,7 @@ def get_tasks():
     offset = (page - 1) * tasks_per_page
 
     # Retrieve tasks with limit and offset
-    tasks = Task.query.filter_by(user_id=current_user.id).limit(tasks_per_page).offset(offset).all() #todo: convert query to modern SQLAlchemy select statement
+    tasks = Task.query.filter_by(user_id=current_user.id).limit(tasks_per_page).offset(offset).all() #FIXME: convert query to modern SQLAlchemy select statement
     
     print(f'Tasks retrieved: {len(tasks)}')
     for task in tasks:

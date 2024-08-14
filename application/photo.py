@@ -72,4 +72,4 @@ def annotate():
 def get_annotations():
     return render_template('tasklists/annotation_list.html.jinja', annotations=annotations)
 
-#TODO: make annotations link to tasks
+#FIXME: make annotations link to tasks
