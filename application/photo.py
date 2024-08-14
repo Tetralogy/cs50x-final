@@ -26,6 +26,9 @@ def upload():
     if file.filename == '':
         print('No selected file')
         return 'No selected file'
+    if file and not allowed_file(file.filename):
+        print(f'Unexpected file type: {file.filename}')
+        return 'Unexpected file type', 415
     if file and allowed_file(file.filename):
         filename = secure_filename(file.filename)
         file.save(os.path.join(current_app.config['UPLOAD_FOLDER'], filename))
