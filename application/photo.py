@@ -1,4 +1,4 @@
-from flask import Blueprint, Flask, current_app, render_template, request, jsonify
+from flask import Blueprint, Flask, current_app, flash, render_template, request, jsonify, send_from_directory
 from flask_login import login_required
 from werkzeug.utils import secure_filename
 import os
@@ -11,11 +11,11 @@ def allowed_file(filename):
     return '.' in filename and \
         filename.rsplit('.', 1)[1].lower() in current_app.config['ALLOWED_EXTENSIONS']
 
-@photo.route('/upload-photo')
+@photo.route('/upload_form')
 @login_required
-def index():
-    print('index called') 
-    return render_template('forms/upload.html.jinja')
+def upload_form():
+    print('upload_form called') 
+    return render_template('forms/upload_form.html.jinja')
 
 @photo.route('/upload', methods=['POST'])
 def upload():
@@ -30,8 +30,22 @@ def upload():
         filename = secure_filename(file.filename)
         file.save(os.path.join(current_app.config['UPLOAD_FOLDER'], filename))
         print(f'File saved: {filename}')
-        return f'{filename} uploaded', 200
+        flash (f'{filename} uploaded', 'success')
+        return render_template('forms/uploaded.html.jinja', filename=filename)
     return ("", 204)  # return empty response so htmx does not overwrite the progress bar value
+
+@photo.route('/view/<filename>')
+@login_required
+def view(filename):
+    print(f'view called for filename: {filename}') 
+    return render_template('media/view.html.jinja', image_url=f'/media/uploads/{filename}')
+
+@photo.route('/media/uploads/<filename>')
+def uploaded_file(filename):
+    #return send_from_directory(current_app.config['UPLOAD_FOLDER'], filename)
+    upload_folder = current_app.config['UPLOAD_FOLDER']
+    print(f'files in {upload_folder}: {os.listdir(upload_folder)}')  # print the contents of the folder
+    return send_from_directory(upload_folder, filename)
 
 '''@app.route('/annotate', methods=['POST'])
 def annotate():

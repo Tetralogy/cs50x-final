@@ -49,7 +49,7 @@ def create_app(config_filename=None):
     app.config['FLASH_MESSAGE_EXPIRES'] = 5
     
     # Configure upload folder
-    app.config['UPLOAD_FOLDER'] = 'media/uploads'
+    app.config['UPLOAD_FOLDER'] = os.path.join(app.root_path, 'media/uploads')
     app.config['ALLOWED_EXTENSIONS'] = {'png', 'jpg', 'jpeg', 'gif'}
     # Ensure the upload folder exists
     upload_folder = app.config['UPLOAD_FOLDER']
