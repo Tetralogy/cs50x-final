@@ -47,7 +47,14 @@ def create_app(config_filename=None):
     app.config['SESSION_SQLALCHEMY_TABLE'] = 'sessions'
     
     app.config['FLASH_MESSAGE_EXPIRES'] = 5
-
+    
+    # Configure upload folder
+    app.config['UPLOAD_FOLDER'] = os.path.join(os.path.dirname(app.root_path), 'media/uploads') # Place media folder outside application folder
+    app.config['ALLOWED_EXTENSIONS'] = {'png', 'jpg', 'jpeg', 'gif', 'heic'} #FIXME: heic doesn't show up on the page after upload
+    # Ensure the upload folder exists
+    upload_folder = app.config['UPLOAD_FOLDER']
+    os.makedirs(upload_folder, exist_ok=True)
+    
     # Initialize extensions
     db.init_app(app)
     session.init_app(app)
@@ -55,6 +62,9 @@ def create_app(config_filename=None):
     from .main import main
     from .auth import auth
     from .database.models import Base, models, User
+    from .utils import utils
+    from .crud import crud
+    from .photo import photo
 
     login_manager.init_app(app)  # Initialize login_manager with the app
 
@@ -70,6 +80,9 @@ def create_app(config_filename=None):
     app.register_blueprint(main)
     app.register_blueprint(auth)
     app.register_blueprint(models)
+    app.register_blueprint(utils)
+    app.register_blueprint(crud)
+    app.register_blueprint(photo)
     
     migrate = Migrate(app, db)
 

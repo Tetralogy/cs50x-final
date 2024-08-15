@@ -1,0 +1,6 @@
+<h2>Annotations list</h2>
+<ul>
+{% for annotation in annotations %}
+    <li>Task: {{ annotation.task }} (x: {{ annotation.x }}, y: {{ annotation.y }})</li>
+{% endfor %}
+</ul>
