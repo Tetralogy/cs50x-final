@@ -24,7 +24,7 @@ def login():
             flash("must provide password", category="danger")
 
         else:
-            user = User.query.filter_by(username=username).first()
+            user = User.query.filter_by(username=username).first()#FIXME: convert query to modern SQLAlchemy select statement
             if user is None:
                 flash("Username does not exist", category="danger")
                 return '', 400
@@ -68,9 +68,9 @@ def register():
             flash("All fields are required", category="danger")
         elif password != confirmation:
             flash("Passwords do not match", category="danger")
-        elif User.query.filter_by(username=username).first():
+        elif User.query.filter_by(username=username).first():#FIXME: convert query to modern SQLAlchemy select statement
             flash(f"Username: {username} already exists", category="danger")
-        elif User.query.filter_by(email=email).first():
+        elif User.query.filter_by(email=email).first():#FIXME: convert query to modern SQLAlchemy select statement
             flash(f"Email: {email} already exists", category="danger")
         else:
             hashed_password = generate_password_hash(password)

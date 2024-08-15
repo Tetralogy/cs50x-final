@@ -1,6 +1,7 @@
 from datetime import datetime
 from flask import Blueprint, flash, jsonify, redirect, render_template, request, url_for
 from flask_login import current_user, login_required
+from sqlalchemy import select
 from application.database.models import Home, Room, Task, User, UserStatus
 from application.utils import apology
 from .extension import db
@@ -29,13 +30,13 @@ def create_task():
                 
             room_id = request.form.get('room_id')
             if room_id == None:
-                orphanage_home = Home.query.filter_by(home_name="Orphanage").first()
+                orphanage_home = Home.query.filter_by(home_name="Orphanage").first()#FIXME: convert query to modern SQLAlchemy select statement
                 if orphanage_home is None:
                     orphanage_home = Home(user_id=current_user.id, home_name="Orphanage")
                     db.session.add(orphanage_home)
                     db.session.commit()
                     
-                orphan_room = Room.query.filter_by(room_name="Orphan", home_id=orphanage_home.home_id).first()
+                orphan_room = Room.query.filter_by(room_name="Orphan", home_id=orphanage_home.home_id).first()#FIXME: convert query to modern SQLAlchemy select statement
                 if orphan_room is None:
                     orphan_room = Room(room_name="Orphan", home_id=orphanage_home.home_id)
                     db.session.add(orphan_room)
@@ -60,7 +61,7 @@ def create_task():
                 user_id = current_user.id)
 
             if new_task.task_title == '' or new_task.task_title is None:
-                last_task = Task.query.order_by(Task.task_id.desc()).first()
+                last_task = Task.query.order_by(Task.task_id.desc()).first()#FIXME: convert query to modern SQLAlchemy select statement
                 new_task.task_title = f'Task #{int(last_task.task_id) + 1}'
                 db.session.commit()
             
@@ -94,8 +95,14 @@ def get_tasks():
     offset = (page - 1) * tasks_per_page
 
     # Retrieve tasks with limit and offset
-    tasks = Task.query.filter_by(user_id=current_user.id).limit(tasks_per_page).offset(offset).all() #FIXME: convert query to modern SQLAlchemy select statement
-    
+    tasks_query = (
+        select(Task)
+        .where(Task.user_id == current_user.id)
+        .limit(tasks_per_page)
+        .offset(offset)
+    )
+    tasks = db.session.execute(tasks_query).scalars().all()
+
     print(f'Tasks retrieved: {len(tasks)}')
     for task in tasks:
         print(f'Task ID: {task.task_id}, Title: {task.task_title}')
@@ -106,7 +113,7 @@ def get_tasks():
 @crud.route('/get_task/<int:task_id>', methods=['GET'])
 @login_required
 def get_task(task_id):
-    task = Task.query.get(task_id)
+    task = Task.query.get(task_id)#FIXME: convert query to modern SQLAlchemy select statement
     
     if not task or task.user_id != current_user.id:
         return jsonify({"success": False, "error": "Task not found or unauthorized"}), 404
@@ -117,7 +124,7 @@ def get_task(task_id):
 @crud.route('/edit_task/<int:task_id>', methods=['GET'])
 @login_required
 def edit_task(task_id):
-    task = Task.query.get(task_id)
+    task = Task.query.get(task_id)#FIXME: convert query to modern SQLAlchemy select statement
     print(f'edit_task called for task_id: {task_id}')
     if not task or task.user_id != current_user.id:
         return jsonify({"success": False, "error": "Task not found or unauthorized"}), 404
@@ -128,7 +135,7 @@ def edit_task(task_id):
 @login_required
 def update_task(task_id):
     print(f'update_task called for task_id: {task_id}')
-    task = Task.query.get(task_id)
+    task = Task.query.get(task_id)#FIXME: convert query to modern SQLAlchemy select statement
     if not task or task.user_id != current_user.id:
         return jsonify({"success": False, "error": "Task not found or unauthorized"}), 404
     
@@ -158,7 +165,7 @@ def update_task(task_id):
 @crud.route('/delete_task/<int:task_id>', methods=['DELETE'])
 @login_required
 def delete_task(task_id):
-    task = Task.query.get_or_404(task_id)
+    task = Task.query.get_or_404(task_id)#FIXME: convert query to modern SQLAlchemy select statement
     if task is None:
         flash(f"task_id: {task_id} does not exist in the database", category="danger")
     if task.user_id != current_user.id:
