@@ -30,7 +30,7 @@ class ReprMixin:                        # Mixin class to add a generic __repr__ 
 class User(db.Model, UserMixin):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     username: Mapped[str] = mapped_column(String(80), unique=True, nullable=False)
-    email: Mapped[str] = mapped_column(String(120), unique=True, nullable=False)
+    #email: Mapped[str] = mapped_column(String(120), unique=True, nullable=False)
     password_hash: Mapped[str] = mapped_column(nullable=False)
     profile_picture_url: Mapped[Optional[str]]
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=func.now())

@@ -1,5 +1,6 @@
 from flask import Blueprint, Flask, flash, make_response, redirect, render_template, request, session, url_for
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import select
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from datetime import datetime, timezone
@@ -24,7 +25,8 @@ def login():
             flash("must provide password", category="danger")
 
         else:
-            user = User.query.filter_by(username=username).first()#FIXME: convert query to modern SQLAlchemy select statement
+            username_query = select(User).where(User.username == username)
+            user = db.session.execute(username_query).scalars().first()
             if user is None:
                 flash("Username does not exist", category="danger")
                 return '', 400
@@ -59,22 +61,24 @@ def logout():
 def register():
     if request.method == 'POST':
         username = request.form.get('username')
-        email = request.form.get('email')
+        #email = request.form.get('email')
         password = request.form.get('password')
         confirmation = request.form.get("confirmation")
         
+        username_query = select(User).where(User.username == username)
+        #email_query = select(User).where(User.email == email)
         # form validation check
-        if not username or not email or not password or not confirmation:
+        if not username or not password or not confirmation: #or not email
             flash("All fields are required", category="danger")
         elif password != confirmation:
             flash("Passwords do not match", category="danger")
-        elif User.query.filter_by(username=username).first():#FIXME: convert query to modern SQLAlchemy select statement
+        elif db.session.execute(username_query).scalars().first():
             flash(f"Username: {username} already exists", category="danger")
-        elif User.query.filter_by(email=email).first():#FIXME: convert query to modern SQLAlchemy select statement
-            flash(f"Email: {email} already exists", category="danger")
+        #elif db.session.execute(email_query).scalars().first():
+        #    flash(f"Email: {email} already exists", category="danger")
         else:
             hashed_password = generate_password_hash(password)
-            new_user = User(username=username, email=email, password_hash=hashed_password)
+            new_user = User(username=username, password_hash=hashed_password) #email=email,
             
             db.session.add(new_user)
             db.session.commit()

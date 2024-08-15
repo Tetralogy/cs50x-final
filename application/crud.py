@@ -2,7 +2,6 @@ from datetime import datetime
 from flask import Blueprint, flash, jsonify, redirect, render_template, request, url_for
 from flask_login import current_user, login_required
 from sqlalchemy import select
-from flask_sqlalchemy import get_or_404
 from application.database.models import Home, Room, Task, User, UserStatus
 from application.utils import apology
 from .extension import db
@@ -67,7 +66,10 @@ def create_task():
             if new_task.task_title == '' or new_task.task_title is None:
                 last_task_query = select(Task).where(Task.user_id == current_user.id).order_by(Task.task_id.desc()).limit(1)
                 last_task = db.session.execute(last_task_query).scalar_one_or_none()
-                new_task.task_title = f'Task #{int(last_task.task_id) + 1}'
+                if last_task is not None:
+                    new_task.task_title = f'Task #{int(last_task.task_id) + 1}'
+                else:
+                    new_task.task_title = 'Task #1'
                 db.session.commit()
             
             db.session.add(new_task)
@@ -123,7 +125,7 @@ def get_tasks():
 @crud.route('/get_task/<int:task_id>', methods=['GET'])
 @login_required
 def get_task(task_id):
-    task = get_or_404(Task, task_id)
+    task = db.get_or_404(Task, task_id)
     
     if not task or task.user_id != current_user.id:
         return jsonify({"success": False, "error": "Task not found or unauthorized"}), 404
@@ -131,10 +133,10 @@ def get_task(task_id):
     return render_template('tasklists/task_cells.html.jinja', task=task)
 
 # Route to render the update task form
-@crud.route('/edit_task/<int:task_id>', methods=['GET'])
+@crud.route('/edit_task/<int:task_id>', methods=['GET']) #FIXME EDIT NOT WORKING
 @login_required
 def edit_task(task_id):
-    task = get_or_404(Task, task_id)
+    task = db.get_or_404(Task, task_id)
     print(f'edit_task called for task_id: {task_id}')
     if not task or task.user_id != current_user.id:
         return jsonify({"success": False, "error": "Task not found or unauthorized"}), 404
@@ -145,7 +147,7 @@ def edit_task(task_id):
 @login_required
 def update_task(task_id):
     print(f'update_task called for task_id: {task_id}')
-    task = get_or_404(Task, task_id)
+    task = db.get_or_404(Task, task_id)
     if not task or task.user_id != current_user.id:
         return jsonify({"success": False, "error": "Task not found or unauthorized"}), 404
     
@@ -172,10 +174,10 @@ def update_task(task_id):
     return render_template('tasklists/task_cells.html.jinja', task=task), 200
 
 
-@crud.route('/delete_task/<int:task_id>', methods=['DELETE'])
+@crud.route('/delete_task/<int:task_id>', methods=['DELETE']) #FIXME DELETE NOT WORKING
 @login_required
 def delete_task(task_id):
-    task = get_or_404(Task, task_id)
+    task = db.get_or_404(Task, task_id)
     if task is None:
         flash(f"task_id: {task_id} does not exist in the database", category="danger")
     if task.user_id != current_user.id:

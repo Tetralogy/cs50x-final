@@ -13,3 +13,7 @@ application/__pycache__/photo.cpython-312.pyc
 application/__pycache__/utils.cpython-312.pyc
 application/database/__pycache__/models.cpython-312.pyc
 application/database/__pycache__/schemas.cpython-312.pyc
+migrations/versions/__pycache__/0db172b15d8c_.cpython-312.pyc
+migrations/versions/__pycache__/4e2a4ae79219_.cpython-312.pyc
+migrations/versions/__pycache__/fb7277b4e773_.cpython-312.pyc
+migrations/__pycache__/env.cpython-312.pyc
