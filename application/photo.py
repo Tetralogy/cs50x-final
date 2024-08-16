@@ -14,7 +14,7 @@ def allowed_file(filename):
 @photo.route('/upload_form')
 @login_required
 def upload_form():
-    print('upload_form called') 
+    print('upload_form called')
     return render_template('forms/upload_form.html.jinja')
 
 @photo.route('/upload', methods=['POST'])
