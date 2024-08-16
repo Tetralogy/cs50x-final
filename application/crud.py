@@ -133,7 +133,7 @@ def get_task(task_id):
     return render_template('tasklists/task_cells.html.jinja', task=task)
 
 # Route to render the update task form
-@crud.route('/edit_task/<int:task_id>', methods=['GET']) #FIXME EDIT NOT WORKING
+@crud.route('/edit_task/<int:task_id>', methods=['GET'])
 @login_required
 def edit_task(task_id):
     task = db.get_or_404(Task, task_id)
@@ -174,7 +174,7 @@ def update_task(task_id):
     return render_template('tasklists/task_cells.html.jinja', task=task), 200
 
 
-@crud.route('/delete_task/<int:task_id>', methods=['DELETE']) #FIXME DELETE NOT WORKING
+@crud.route('/delete_task/<int:task_id>', methods=['DELETE'])
 @login_required
 def delete_task(task_id):
     task = db.get_or_404(Task, task_id)
