@@ -43,7 +43,7 @@ def login():
                 response.headers['HX-Redirect'] = url_for('main.index')
                 return response
     if request.method == "GET":
-        return render_template('login.html')
+        return render_template('auth/login.html')
 
 @auth.route("/logout")
 def logout():
@@ -87,7 +87,7 @@ def register():
             flash("Account Successfully created", category="success")
             return redirect(url_for('main.index'))
     
-    return render_template("register.html")
+    return render_template("onboard/register.html")
 
 @auth.route("/password", methods=["GET", "POST"])
 @login_required
