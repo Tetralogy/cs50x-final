@@ -25,7 +25,8 @@ def inject_current_user():
 @main.route('/')
 @login_required
 def index():
-    print('index called') 
+    print('index called') #FIXME: If user is not onboarded, redirect to onboarding
+    #FIXME: If user is onboarded, redirect to DASHBOARD MAP
     return render_template('showtasks.html', user=current_user, page=1)
 
 @main.route('/onboarding', methods=['GET', 'POST'])

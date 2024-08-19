@@ -5,9 +5,17 @@
 {% endblock %}
 
 {% block main %}
-<p>Step 1: Signup for a new account</p>
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-4">
+		</div>
+		<div class="col-md-4">
+			<div class="d-flex align-items-center justify-content-center vh-100">
+				<div>
 
-<div class="d-flex justify-content-center align-items-center" style="height: 100vh">
+    <h3 class="text-center">
+        Sign Up here!
+    </h3>
     <form action="/register" method="post" class="d-flex flex-column align-items-center">
         <div class="form-floating mb-3">
             <input autocomplete="off" autofocus class="form-control" id="floatingUsername" name="username" placeholder="Username">
@@ -23,61 +31,12 @@
         </div>
         <button class="btn btn-primary" type="submit">Register</button>
     </form>
+
 </div>
-<h1 class="display-2">
-    #FIXME: STYLE THIS PAGE AND MAKE IT LOOK NICE on iphone!O
-    #TODO : Write out every step to using the app
-</h1>
+</div>
+</div>
+</div>
+<div class="col-md-4">
+</div>
 
-
-Step 1: Registration
-
-Open the app and navigate to the registration page (application/templates/onboard/register.html).
-Fill out the registration form with the required information, including username and password.
-Submit the form to create a new account.
-Step 2: Onboarding
-
-After registration, the user will be redirected to the onboarding process (application/main.py:onboarding).
-The onboarding process will guide the user through a multi-step form to collect home environment details, such as:
-House size (square footage)
-Number of levels
-Layout (open plan, traditional, etc.)
-Room inventory (bedrooms, bathrooms, kitchen, living areas, etc.)
-The user will also be asked to input their abilities and disabilities.
-Step 3: Home Profile Creation
-
-After completing the onboarding process, the user will be taken to the home profile creation page.
-The user will be able to add rooms and their characteristics, such as:
-Room type (bedroom, bathroom, kitchen, etc.)
-Room size
-Room layout
-The user will also be able to add tasks and areas to each room.
-Step 4: Initial Walkthrough
-
-The user will be guided through an initial walkthrough of their home, room by room.
-The user will be asked to take photos of each room and annotate specific areas or tasks.
-The user will be able to mark areas that need cleaning or maintenance.
-Step 5: Task Annotation and Organization
-
-The user will be able to annotate and organize tasks for each room and area.
-The user will be able to add detailed information about each task, such as:
-Task type (cleaning, maintenance, etc.)
-Task frequency
-Task importance
-The user will be able to prioritize tasks based on urgency and importance.
-Step 6: Dynamic Task List Generation
-
-The app will generate a dynamic task list based on the user's input and preferences.
-The task list will be prioritized based on urgency and importance.
-The user will be able to view and manage their task list.
-Step 7: Guided Cleaning Assistance
-
-The user will be able to access guided cleaning assistance for each task.
-The app will provide step-by-step instructions for each task.
-The user will be able to view product recommendations and tutorials.
-Step 8: Progress Tracking and Analytics
-
-The user will be able to track their progress and view analytics on their cleaning and maintenance habits.
-The app will provide before and after photo comparison features.
-The user will be able to view statistical analysis and visualizations of their progress.
 {% endblock %}
