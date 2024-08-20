@@ -111,4 +111,4 @@ def password():
             flash("Password successfully changed", category="success")
             return redirect(url_for('auth.login'))
         
-    return render_template("password.html", username=user.username)
+    return render_template("auth/password.html", username=user.username)

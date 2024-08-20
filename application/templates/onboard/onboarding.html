@@ -1,0 +1,44 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Onboarding
+{% endblock %}
+
+{% block main %}
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-4">
+		</div>
+		<div class="col-md-4">
+			<div class="d-flex align-items-center justify-content-center vh-100">
+				<div>
+					<h3 class="text-center">
+						new user setup
+						#FIXME: WRITE OUT ALL the questions the user needs to answer about themselves and their house
+					</h3>
+		            <form class="d-flex flex-column align-items-center" hx-post="/login" hx-on::after-request="htmx.trigger('#flash-messages', 'flashUpdate')" hx-swap="none">
+		                <div class="form-floating mb-3">
+		                    <input autocomplete="off" autofocus class="form-control" id="floatingUsername" name="username" placeholder="Username">
+		                    <label for="floatingUsername">Username</label>
+		                </div>
+		                <div class="form-floating mb-3">
+		                    <input class="form-control" id="floatingPassword" name="password" placeholder="Password" type="password">
+		                    <label for="floatingPassword">Password</label>
+		                </div>
+		                <button class="btn btn-primary" type="submit">Login</button>
+		            </form>
+		            
+			    <div class="text-center my-5">
+		                <div>Don't have an account?</div>
+		    			<a href="{{ url_for('auth.register') }}" class="btn btn-success">
+		    				Register Here
+		    			</a>
+			    </div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4">
+		</div>
+	</div>
+</div>
+{% endblock %}
