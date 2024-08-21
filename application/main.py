@@ -3,6 +3,7 @@ from flask import Flask, flash, get_flashed_messages, jsonify, redirect, render_
 from functools import wraps
 from flask_login import current_user, login_required
 from marshmallow import ValidationError
+from sqlalchemy import select
 from sqlalchemy.orm import joinedload
 import time
 from application.database.models import Home, Room, Task, User, UserStatus
@@ -25,9 +26,13 @@ def inject_current_user():
 @main.route('/')
 @login_required
 def index():
-    print('index called') #FIXME: If user is not onboarded, redirect to onboarding
-    #FIXME: If user is onboarded, redirect to DASHBOARD MAP
-    return render_template('showtasks.html', user=current_user, page=1)
+    print('index called')
+    home_query = select(Home).where(Home.user_id == current_user.id)
+    home_id = db.session.execute(home_query).scalars().first()
+    if home_id is not None:
+        return render_template('showtasks.html', user=current_user, page=1) #TODO: create user home page/dashboard
+    
+    return render_template('onboarding.html', user=current_user)#TODO: complete onboarding loop
 
 @main.route('/onboarding', methods=['GET', 'POST'])
 @login_required

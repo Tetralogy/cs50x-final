@@ -45,7 +45,7 @@ class User(db.Model, UserMixin):
     status = relationship('UserStatus', back_populates="user", lazy='dynamic')
 
 
-class UserAbility(db.Model):
+class UserAbility(db.Model): # User's ability to do something, disabilities to account for
     ability_id: Mapped[int] = mapped_column(primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey('user.id'))
     ability_type: Mapped[str]
