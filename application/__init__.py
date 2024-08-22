@@ -50,10 +50,12 @@ def create_app(config_filename=None):
     
     # Configure upload folder
     app.config['UPLOAD_FOLDER'] = os.path.join(os.path.dirname(app.root_path), 'media/uploads') # Place media folder outside application folder
-    app.config['ALLOWED_EXTENSIONS'] = {'png', 'jpg', 'jpeg', 'gif', 'heic'} #FIXME: heic doesn't show up on the page after upload
+    app.config['ALLOWED_EXTENSIONS'] = {'png', 'jpg', 'jpeg', 'gif', 'heic', 'svg'} #FIXME: heic doesn't show up on the page after upload
     # Ensure the upload folder exists
     upload_folder = app.config['UPLOAD_FOLDER']
     os.makedirs(upload_folder, exist_ok=True)
+    
+    app.config['ICONS_FOLDER'] = os.path.join(os.path.dirname(app.root_path), 'media/icons')
     
     # Initialize extensions
     db.init_app(app)

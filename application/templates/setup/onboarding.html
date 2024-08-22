@@ -5,6 +5,7 @@
 {% endblock %}
 
 {% block main %}
+
 <div class="container-fluid">
 	<div class="row">
 		<div class="col-md-4">
@@ -12,16 +13,9 @@
 		<div class="col-md-4">
 			<div class="d-flex align-items-center justify-content-center vh-100">
 				<div>
-					<h3 class="text-center">
-						new user setup
-						#FIXME: WRITE OUT ALL the questions the user needs to answer about themselves and their house
-					</h3>
-					questions go here
+					{% include 'setup/upload_profile_photo.html.jinja' %}
 					
-		            
-		            
-			  
-			    
+
 				</div>
 			</div>
 		</div>

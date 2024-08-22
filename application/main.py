@@ -32,7 +32,7 @@ def index():
     if home_id is not None:
         return render_template('showtasks.html', user=current_user, page=1) #TODO: create user home page/dashboard
     
-    return render_template('onboarding.html', user=current_user)#TODO: complete onboarding loop
+    return render_template('setup/onboarding.html', user=current_user)#TODO: complete onboarding loop
 
 @main.route('/onboarding', methods=['GET', 'POST'])
 @login_required

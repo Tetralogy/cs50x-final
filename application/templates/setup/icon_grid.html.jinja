@@ -1,0 +1,11 @@
+<div class="row row-cols-3 g-4">
+    {% for icon in icons %}
+    <div class="col">
+        <div class="card">
+            <img src="{{ url_for('photo.get_icon_file', filename=icon) }}" class="card-img-top" alt="{{ icon }}" 
+            hx-put="/set_profile_icon" hx-vals='{"icon": "{{ url_for("photo.get_icon_file", filename=icon) }}"}' 
+            hx-target="#profile-icon" hx-swap="outerHTML">
+        </div>
+    </div>
+    {% endfor %}
+</div>
