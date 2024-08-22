@@ -4,7 +4,7 @@ from werkzeug.utils import secure_filename
 import os
 from .database.models import User
 from .extension import db
-
+#FIXME: rename photo to upload and move annotate to annotate.py
 photo = Blueprint('photo', __name__)
 
 annotations = []
@@ -56,7 +56,7 @@ def profile_upload():
         file.save(os.path.join(current_app.config['UPLOAD_FOLDER'], filename))
         print(f'File saved: {filename}')
         flash (f'{filename} uploaded', 'success')
-        return render_template('forms/uploaded.html.jinja', filename=filename)
+        return render_template('profile/uploaded.html.jinja', filename=filename)
     return ("", 204)  # return empty response so htmx does not overwrite the progress bar value
 
 @photo.route('/media/uploads/<filename>')
@@ -109,19 +109,20 @@ def get_icon_file(filename):
 
 #FIXME: photo upload to profile
 
-@photo.route('/set_profile_icon', methods=['PUT'])
+@photo.route('/set_profile_icon', methods=['PUT', 'POST'])#fixme
 def set_profile_icon():
-    icon = request.form.get('icon')
-    print(f'set_profile_icon called with icon: {icon}')
-    current_user.profile_picture_url = icon
-    db.session.commit()
-    
-    # Optionally, return some response or updated HTML
-    return render_template('/profile/avatar.html.jinja') #jsonify(success=True)
+    if request.method == 'PUT':
+        icon = request.form.get('icon')
+        print(f'set_profile_icon called with icon: {icon}')
+        current_user.profile_picture_url = icon
+        db.session.commit()
+        
+        # Optionally, return some response or updated HTML
+        return render_template('/profile/avatar.html.jinja') #jsonify(success=True)
 
-@photo.route('/get_default_avatar')
+@photo.route('/get_default_avatar')#doesn't work
 def get_default_avatar():
     #TODO: make this a config option
-    default_avatar_url = url_for(current_app.config['ICONS_FOLDER'], 'person-circle.svg')
+    default_avatar_url = url_for('photo.get_icon_file', filename='person-circle.svg')
     print(f'default_avatar_url: {default_avatar_url}')
     return default_avatar_url

@@ -87,7 +87,7 @@ def register():
             flash("Account Successfully created", category="success")
             return redirect(url_for('main.index'))
     
-    return render_template("onboard/register.html")
+    return render_template("setup/register.html")
 
 @auth.route("/password", methods=["GET", "POST"])
 @login_required
