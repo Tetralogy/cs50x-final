@@ -1,32 +1,42 @@
-{% extends "layout.html" %} {% block title %} Onboarding {% endblock %} {% block
-main %}
-
-<div class="container-fluid">
-  <div class="row">
-    <div class="col-md-4"></div>
-    <div class="col-md-4">
-      <div
-        class="d-flex flex-column align-items-center justify-content-center vh-100"
-      >
-        <div id="onboarding" hx-get="/onboarding" hx-trigger="load">
-          {% if current_user.profile_picture_url is none %} {% include
-          'setup/upload_profile_photo.html.jinja' %} {% else %} {% include
-          'setup/floors.html.jinja' %} {# {% include
-          'setup/home_setup.html.jinja' %} #} {% endif %}
-        </div>
-        <div>
-          <button
-            hx-get="/onboarding"
-            hx-target="#onboarding"
-            hx-swap="innerHTML"
-            class="btn btn-primary"
-          >
-            Next Step: Home Setup
-          </button>
+{% extends "layout.html" %} {% block title %}Onboarding{% endblock %}
+{%
+  block
+  main
+%}
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-4"></div>
+      <div class="col-md-4">
+        <div
+          class="d-flex flex-column align-items-center justify-content-center vh-100"
+        >
+          <div id="onboarding" hx-get="/onboarding" hx-trigger="load">
+            {% if current_user.profile_picture_url is none %}
+              {%
+                include
+                'setup/upload_profile_photo.html.jinja'
+              %}
+            {% else %}
+              {%
+                include
+                'setup/floors.html.jinja'
+              %}
+              {# {% include'setup/home_setup.html.jinja' %} #}
+            {% endif %}
+          </div>
+          <div>
+            <button
+              hx-get="/onboarding"
+              hx-target="#onboarding"
+              hx-swap="innerHTML"
+              class="btn btn-primary"
+            >
+              Next Step: Home Setup
+            </button>
+          </div>
         </div>
       </div>
+      <div class="col-md-4"></div>
     </div>
-    <div class="col-md-4"></div>
   </div>
-</div>
 {% endblock %}
