@@ -1,35 +1,84 @@
 #Fixme: floors naming form
 
-<p>How many floors/stories/levels is your house? Add and name the floors that apply to you.</p>
+<p>
+    How many floors/stories/levels is your house? Add and name the floors that
+    apply to you.
+</p>
+                <h3 class="text-center">Name the Floors in your house or accept the default name</h3>
+                #Fixme: checkbox to activate each floor
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" value="" id="AtticCheck">
+        <label class="form-check-label" for="AtticCheck">
+            Attic
+        </label>
+    </div>
 
 <div class="container-fluid border border-secondary border-5 bg-gradient">
-	<div class="row">
-		<div class="col-md-12">
-			<div class="row h-100 ">
-				<div class="col-md-4">
-				</div>
-				<div class="col-md-4 bg-success bg-gradient">
-                    <h3 class="text-center">Floors</h3>
-				</div>
-				<div class="col-md-4">
-				</div>
-			</div>
-			<div class="row h-100">
-				<div class="col-md-12 bg-success bg-gradient">
-				</div>
-			</div>
-			<div class="row h-100">
-				<div class="col-md-12 bg-success bg-gradient">
-				</div>
-			</div>
-			<div class="row h-100">
-				<div class="col-md-12 bg-success border border-secondary border-5 bg-gradient"><h3 class="text-center">Floors</h3>
-				</div>
-			</div>
-			<div class="row h-100">
-				<div class="col-md-12">
-				</div>
-			</div>
-		</div>
-	</div>
+    <div class="row">
+        <div class="col-2">
+            test
+        </div>
+        <div class="col-10">
+            <div class="row">
+                <div class="col-4"></div>
+                <div class="col-4 bg-success bg-gradient">
+                    <div class="form-floating mb-3">
+                        <input
+                            autocomplete="off"
+                            autofocus
+                            class="form-control"
+                            id="attic"
+                            name="attic"
+                            placeholder="Attic"
+                        />
+                        <label for="attic">Attic</label>
+                    </div>
+                </div>
+                <div class="col-4"></div>
+            </div>
+            <div class="row bg-success bg-gradient">
+                <div class="form-floating mb-3">
+                    <input
+                        autocomplete="off"
+                        autofocus
+                        class="form-control"
+                        id="upstairs"
+                        name="upstairs"
+                        placeholder="Upstairs"
+                    />
+                    <label for="upstairs">Upstairs</label>
+                </div>
+            </div>
+            <div class="row bg-success bg-gradient">
+                <div class="form-floating mb-3">
+                    <input
+                        autocomplete="off"
+                        autofocus
+                        class="form-control"
+                        id="ground_floor"
+                        name="ground_floor"
+                        placeholder="Ground Floor"
+                    />
+                    <label for="ground_floor">Ground Floor</label>
+                </div>
+            </div>
+            <div class="row bg-success bg-gradient">
+                <div class="form-floating mb-3">
+                    <input
+                        autocomplete="off"
+                        autofocus
+                        class="form-control"
+                        id="basement"
+                        name="basement"
+                        placeholder="Basement"
+                    />
+                    <label for="basement">Basement</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
