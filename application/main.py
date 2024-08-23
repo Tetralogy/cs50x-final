@@ -46,7 +46,7 @@ def onboarding():
     if current_user has no tasks
     if current_user has no status'''
     """ raise NotImplementedError("onboarding not yet implemented") """
-
+    return '', 204
 
 @main.route('/walkthrough', methods=['GET', 'POST'])
 @login_required
