@@ -66,7 +66,8 @@ def create_app(config_filename=None):
     from .database.models import Base, models, User
     from .utils import utils
     from .crud import crud
-    from .photo import photo
+    from .upload import upload
+    from .annotate import annotate
 
     login_manager.init_app(app)  # Initialize login_manager with the app
 
@@ -84,7 +85,8 @@ def create_app(config_filename=None):
     app.register_blueprint(models)
     app.register_blueprint(utils)
     app.register_blueprint(crud)
-    app.register_blueprint(photo)
+    app.register_blueprint(upload)
+    app.register_blueprint(annotate)
     
     migrate = Migrate(app, db)
 

@@ -37,7 +37,15 @@ def index():
 @main.route('/onboarding', methods=['GET', 'POST'])
 @login_required
 def onboarding():
-    raise NotImplementedError("onboarding not yet implemented")
+    '''home_query = select(Home).where(Home.user_id == current_user.id)
+    home_id = db.session.execute(home_query).scalars().first()
+    
+    if current_user.profile_picture_url is None:
+    if currentuser has no home id
+    if current_user has no room id
+    if current_user has no tasks
+    if current_user has no status'''
+    """ raise NotImplementedError("onboarding not yet implemented") """
 
 
 @main.route('/walkthrough', methods=['GET', 'POST'])

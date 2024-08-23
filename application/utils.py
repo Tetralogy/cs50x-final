@@ -42,3 +42,4 @@ def get_flash_messages():
 @utils.route('/remove-flash')
 def remove_flash():
     return '', 200  # Return empty response
+
