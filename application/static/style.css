@@ -316,3 +316,9 @@ form.htmx-request {
     border-radius: 50%;
     transform: translate(-50%, -50%);
 }
+
+
+.glyphicon-move {
+    cursor: move;
+    cursor: -webkit-grabbing;
+  }
