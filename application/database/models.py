@@ -38,12 +38,13 @@ class User(db.Model, UserMixin):
     # Define relationships
     abilities = relationship('UserAbility', back_populates="user", lazy='dynamic')
     preferences = relationship('UserPreference', back_populates="user", lazy='dynamic')
-    homes = relationship('Home', back_populates="user", lazy='dynamic')
+    homes = relationship('Home', back_populates="user", lazy='dynamic', foreign_keys='Home.user_id')
     photos = relationship('Photo', back_populates="user", lazy='dynamic')
     tasks = relationship('Task', back_populates="user", lazy='dynamic')
     supply = relationship('Supply', back_populates="user", lazy='dynamic')
     status = relationship('UserStatus', back_populates="user", lazy='dynamic')
-
+    active_home_id: Mapped[int] = mapped_column(ForeignKey('home.home_id'), nullable=True)
+    active_home = relationship("Home", foreign_keys=[active_home_id])
 
 class UserAbility(db.Model): # User's ability to do something, disabilities to account for
     ability_id: Mapped[int] = mapped_column(primary_key=True)
@@ -76,7 +77,7 @@ class Home(db.Model):
     __table_args__ = (UniqueConstraint('user_id', 'home_name', name='unique_home_name'),)
     home_size_sqm: Mapped[float] = mapped_column(default=0.0)
     num_floors: Mapped[int] = mapped_column(default=1)
-    user = relationship("User", back_populates="homes")
+    user = relationship("User", back_populates="homes", foreign_keys=[user_id])
     rooms = relationship('Room', back_populates="homes", lazy='dynamic')
 
 class Room(db.Model): #FIXME: ROOM LEVEL AND LOCATION ON THE MAP

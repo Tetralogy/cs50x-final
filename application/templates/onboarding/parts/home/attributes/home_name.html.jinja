@@ -1,12 +1,19 @@
-            <div class="form-floating mb-3">
-                <input
-                    autocomplete="off"
-                    autofocus
-                    class="form-control"
-                    id="home_name"
-                    name="home_name"
-                    placeholder="New Home Name"
-                />
-                <label for="home_name">New Home Name</label>
-            </div>
-            <h1>#FIXME: MAKE FORM AUTO-SUBMIT HTMX!</h1>
+<div id="home-name" class="form-floating mb-3">
+    <input
+        autocomplete="off"
+        autofocus
+        class="form-control"
+        id="home_name"
+        name="new_home_name"
+        placeholder="New Home Name"
+        hx-post="/home/name"
+        hx-trigger="keyup changed"
+        hx-target="#home-name"
+        hx-swap="outerHTML"
+        hx-indicator=".htmx-indicator"
+        value="{{ home_name }}"
+    />
+    <label for="home_name">Home Name</label>
+    <div class="htmx-indicator">Updating...</div>
+</div>
+<h1>#FIXME: MAKE FORM AUTO-SUBMIT HTMX!</h1>

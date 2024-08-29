@@ -16,11 +16,12 @@ def onboarding():
     if not home_ids:
         print('homes is empty')
         return render_template('onboarding/parts/home/index.html.jinja')
-    get the current home id when it is created
+    
+    '''get the current home id when it is created
     room_ids = [room.room_id for room in current_user.room_ids]
     if not room_ids:
         print('rooms is empty')
-        return render_template('onboarding/parts/room/index.html.jinja')
+        return render_template('onboarding/parts/room/index.html.jinja')'''
     
 
         
