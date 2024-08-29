@@ -1,0 +1,81 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="/">Todo App</a>
+    <div class="d-flex">{% include 'profile/parts/avatar.html.jinja' %}</div>
+    <button
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarNav"
+        aria-controls="navbarNav"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+    >
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+            {% if current_user.is_authenticated %}
+                <div class="d-flex">
+                    {% include 'profile/parts/avatar.html.jinja' %}
+                </div>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('account.profile') }}"
+                        >Profile</a
+                    >
+                    {% if onboarded %}
+                        <li class="nav-item">
+                            <a
+                                class="nav-link"
+                                href="{{ url_for('main.index') }}"
+                                >Home</a
+                            >
+                        </li>
+                        <li class="nav-item">
+                            <a
+                                class="nav-link"
+                                href="{{ url_for('main.new_task') }}"
+                                >new_task</a
+                            >
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a
+                                class="nav-link"
+                                href="{{ url_for('onboard.start') }}"
+                                >Get Started</a
+                            >
+                        </li>
+                    {% endif %}
+                </li>
+
+                <li>
+                    <a class="nav-link" href="{{ url_for('auth.logout') }}"
+                        >Logout</a
+                    >
+                </li>
+                <li>
+                    <a class="nav-link" href="{{ url_for('auth.password') }}"
+                        >Password Reset</a
+                    >
+                </li>
+                <div>
+                    <h4 class="text-primary">
+                        Welcome, {{ current_user.username }}! Email:
+                        {{ current_user.email }} User ID: {{ current_user.id }}
+                    </h4>
+                </div>
+            {% else %}
+                <li>
+                    <a class="nav-link" href="{{ url_for('auth.register') }}"
+                        >Register</a
+                    >
+                </li>
+                <li>
+                    <a class="nav-link" href="{{ url_for('auth.login') }}"
+                        >Login</a
+                    >
+                </li>
+            {% endif %}
+        </ul>
+    </div>
+</nav>

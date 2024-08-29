@@ -1,6 +1,6 @@
 <div class="alert alert-success" role="alert">{{filename}} uploaded</div>
 <!-- <div hx-get="/annotate_form/{{ filename }}" hx-trigger="load delay:0s" hx-swap="outerHTML"></div> -->
 
-            <button hx-put="/set_profile_icon" hx-vals='{"icon": "{{ url_for("photo.uploaded_file", filename=filename) }}"}' hx-target="#profile-icon" hx-swap="outerHTML">
+            <button hx-put="/set_profile_icon" hx-vals='{"icon": "{{ url_for("upload.uploaded_file", filename=filename) }}"}' hx-target="#profile-icon" hx-swap="outerHTML">
                 Apply
             </button>

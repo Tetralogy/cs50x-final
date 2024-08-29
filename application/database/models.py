@@ -79,7 +79,7 @@ class Home(db.Model):
     user = relationship("User", back_populates="homes")
     rooms = relationship('Room', back_populates="homes", lazy='dynamic')
 
-class Room(db.Model):
+class Room(db.Model): #FIXME: ROOM LEVEL AND LOCATION ON THE MAP
     room_id: Mapped[int] = mapped_column(primary_key=True)
     home_id: Mapped[int] = mapped_column(ForeignKey('home.home_id'))
     room_name: Mapped[str]

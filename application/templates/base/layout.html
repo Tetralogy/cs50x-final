@@ -20,8 +20,8 @@
     </head>
     <body>
         <div class="container-fluid">
-            {% include 'base/nav_top.html.jinja' %}
-            {% include 'base/flash_container.html.jinja' %}
+            {% include 'base/parts/nav_top.html.jinja' %}
+            {% include 'base/parts/flash_container.html.jinja' %}
 
             <div class="row">
                 <div class="col-md-12">
@@ -30,7 +30,7 @@
                 </div>
             </div>
         </div>
-        <script
+        <script 
             src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
             crossorigin="anonymous"
@@ -51,7 +51,7 @@
         <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
 
         <script>
-            // Simple list
+            // Simple list #todo: cleanup
             Sortable.create(simpleList, {
                 /* options */
             });
@@ -63,6 +63,6 @@
             });
         </script>
 
-        <footer>{% include 'base/nav_bottom.html.jinja' %}</footer>
+        <footer>{% include 'base/parts/nav_bottom.html.jinja' %}</footer>
     </body>
 </html>

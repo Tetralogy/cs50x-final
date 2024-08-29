@@ -1,0 +1,30 @@
+{% extends "base/layout.html" %}
+{% block title %}
+    Profile and Preferences
+{% endblock %}
+
+{% block main %}
+    {% include 'profile/parts/upload_profile_photo.html.jinja' %}
+
+    <h1>Profile and Preferences and Settings and stuff</h1>
+#TODO: ADD PREFERENCES AND SETTINGS
+    <button
+        hx-post="/account/reset"
+        class="btn btn-danger"
+        hx-target="body"
+        hx-swap="outerHTML"
+        hx-on::after-request="htmx.trigger('#flash-messages', 'flashUpdate')"
+    >
+        Reset Account and Refresh Page
+    </button>
+
+    <button
+        hx-delete="/account/delete"
+        class="btn btn-danger"
+        hx-target="body"
+        hx-swap="outerHTML"
+        hx-on::after-request="htmx.trigger('#flash-messages', 'flashUpdate')"
+    >
+        Delete Account
+    </button>
+{% endblock %}

@@ -5,6 +5,13 @@
 
 {% block main %}
 
-Stuff here
+<div
+    id="onboarding"
+    hx-get="/onboarding"
+    hx-trigger="load">
+    <div class="htmx-indicator spinner-border" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+</div>
 
 {% endblock %}

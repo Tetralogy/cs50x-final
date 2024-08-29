@@ -55,7 +55,7 @@ def profile_upload():
         file.save(os.path.join(current_app.config['UPLOAD_FOLDER'], filename))
         print(f'File saved: {filename}')
         flash (f'{filename} uploaded', 'success')
-        return render_template('profile/uploaded.html.jinja', filename=filename)
+        return render_template('profile/parts/uploaded.html.jinja', filename=filename)
     return ("", 204)  # return empty response so htmx does not overwrite the progress bar value
 
 @upload.route('/media/uploads/<filename>')
@@ -77,7 +77,7 @@ def view(filename):
 def get_icons():
     icons_folder = current_app.config['ICONS_FOLDER']
     icons = os.listdir(icons_folder)
-    return render_template('/setup/icon_grid.html.jinja', icons=icons)
+    return render_template('profile/parts/icon_grid.html.jinja', icons=icons)
 
 @upload.route('/media/icons/<filename>')
 def get_icon_file(filename):
@@ -95,7 +95,7 @@ def set_profile_icon():
         db.session.commit()
         
         # Optionally, return some response or updated HTML
-        return render_template('/profile/avatar.html.jinja') #jsonify(success=True)
+        return render_template('/profile/parts/avatar.html.jinja') #jsonify(success=True)
 
 @upload.route('/get_default_avatar')#doesn't work
 def get_default_avatar():

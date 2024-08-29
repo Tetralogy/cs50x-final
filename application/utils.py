@@ -37,7 +37,7 @@ def handle_error(error):
 def get_flash_messages():
     messages = get_flashed_messages(with_categories=True)
     print(f"Retrieved flash messages: {messages}")
-    return render_template('base/flash_messages.html.jinja' , messages=messages)
+    return render_template('base/parts/flash_messages.html.jinja' , messages=messages)
 
 @utils.route('/remove-flash')
 def remove_flash():

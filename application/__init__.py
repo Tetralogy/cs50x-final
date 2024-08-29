@@ -68,6 +68,8 @@ def create_app(config_filename=None):
     from .crud import crud
     from .upload import upload
     from .annotate import annotate
+    from .onboard import onboard
+    from .account import account
 
     login_manager.init_app(app)  # Initialize login_manager with the app
 
@@ -87,6 +89,8 @@ def create_app(config_filename=None):
     app.register_blueprint(crud)
     app.register_blueprint(upload)
     app.register_blueprint(annotate)
+    app.register_blueprint(onboard)
+    app.register_blueprint(account)
     
     migrate = Migrate(app, db)
 

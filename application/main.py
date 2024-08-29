@@ -26,27 +26,17 @@ def inject_current_user():
 @main.route('/')
 @login_required
 def index():
-    print('index called')
+    return render_template('onboarding/index.html.jinja') #temporary
+    #return render_template('dashboard/index.html.jinja', user=current_user, page=1)
+    '''print('index called')
     home_query = select(Home).where(Home.user_id == current_user.id)
     home_id = db.session.execute(home_query).scalars().first()
     if home_id is not None:
-        return render_template('showtasks.html', user=current_user, page=1) #TODO: create user home page/dashboard
+        return render_template('dashboard/index.html.jinja', user=current_user, page=1) #TODO: create user home page/dashboard
     
-    return render_template('onboarding/index.html.jinja', user=current_user, onboarded=False)#TODO: complete onboarding loop
+    return render_template('onboarding/index.html.jinja', user=current_user, onboarded=False)#TODO: complete onboarding loop'''
 
-@main.route('/onboarding', methods=['GET', 'POST'])
-@login_required
-def onboarding():
-    '''home_query = select(Home).where(Home.user_id == current_user.id)
-    home_id = db.session.execute(home_query).scalars().first()
-    
-    if current_user.profile_picture_url is None:
-    if currentuser has no home id
-    if current_user has no room id
-    if current_user has no tasks
-    if current_user has no status'''
-    """ raise NotImplementedError("onboarding not yet implemented") """
-    return '', 204
+
 
 @main.route('/walkthrough', methods=['GET', 'POST'])
 @login_required
