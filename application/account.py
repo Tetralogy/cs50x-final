@@ -34,6 +34,7 @@ def reset_user_data():
         current_user.last_login = None
         current_user.username = username
         current_user.password_hash = password_hash
+        current_user.active_home_id = None
 
         db.session.commit()
         flash("User data has been reset successfully", category="success")

@@ -1,0 +1,17 @@
+
+    <input
+        autocomplete="off"
+        autofocus
+        class="form-control"
+        id="input_home_name"
+        name="input_home_name"
+        placeholder="New Home Name"
+        hx-post="/home/name"
+        hx-trigger="keyup changed delay:500ms"
+        hx-target="#home-name"
+        
+        hx-indicator=".htmx-indicator"
+        value="{{ new_home_name }}"
+    />
+    <label for="home_name">Home Name: {{ new_home_name }}</label>
+    <div class="htmx-indicator">Updating...</div>
