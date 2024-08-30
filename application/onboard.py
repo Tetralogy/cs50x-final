@@ -10,12 +10,13 @@ def onboarding():
     print('onboarding called')
     if current_user.profile_picture_url is None:
         print('profile_picture_url is None')
-        return render_template('onboarding/parts/upload_profile_photo.html.jinja')
+        return render_template('profile/parts/upload_profile_photo.html.jinja')
     home_ids = [home.home_id for home in current_user.homes]
     print(f'homes: {home_ids}')
     if not home_ids:
         print('homes is empty')
         return render_template('onboarding/parts/home/index.html.jinja')
+
     return render_template('onboarding/parts/home/index.html.jinja') #temporary
     
     '''get the current home id when it is created
