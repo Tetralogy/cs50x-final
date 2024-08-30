@@ -6,12 +6,14 @@
         id="input_home_name"
         name="input_home_name"
         placeholder="New Home Name"
-        hx-post="/home/name"
-        hx-trigger="keyup changed delay:500ms"
+        hx-put="/home/name"
+        hx-trigger="keyup[key=='Enter'], blur, keyup changed delay:5s"
+
         hx-target="#home-name"
         
         hx-indicator=".htmx-indicator"
         value="{{ new_home_name }}"
+        onfocus="this.setSelectionRange(this.value.length, this.value.length);"
     />
     <label for="home_name">Home Name: {{ new_home_name }}</label>
     <div class="htmx-indicator">Updating...</div>
