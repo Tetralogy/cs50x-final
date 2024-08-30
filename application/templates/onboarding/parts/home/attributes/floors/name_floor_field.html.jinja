@@ -1,0 +1,18 @@
+    <input
+        autocomplete="off"
+        autofocus
+        class="form-control"
+        id="input_floor_name"
+        name="input_floor_name"
+        placeholder="New Floor Name"
+        hx-put="/home/floor/name"
+        hx-trigger="keyup[key=='Enter'], blur, keyup changed delay:5s"
+
+        hx-target="#home-floor"
+        
+        hx-indicator=".htmx-indicator"
+        value="{{ new_floor_name }}"
+        onfocus="this.setSelectionRange(this.value.length, this.value.length);"
+    />
+    <label for="home_name">Floor Name: {{ new_floor_name }}</label>
+    <div class="htmx-indicator">Updating...</div>

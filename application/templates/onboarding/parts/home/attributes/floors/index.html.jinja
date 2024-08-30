@@ -1,0 +1,12 @@
+#fixme: levels should be renamable and re-orderable
+<h1>
+    this is onboarding/parts/home/attributes/floors/index.html.jinja
+</h1>
+
+<div id="home-floor" class="form-floating mb-3" hx-get="/home/floor/name" hx-trigger="load" >
+
+</div>
+
+    {% include 'onboarding/parts/home/attributes/floors/floors_list.html.jinja' %}
+
+    <div hx-get="/home/floors" hx-trigger="load" ></div>

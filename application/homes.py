@@ -1,8 +1,8 @@
-from flask import Blueprint, render_template, request
+from flask import Blueprint, jsonify, render_template, request
 from flask_login import current_user, login_required
 from sqlalchemy import select
 from application.extension import db
-from application.database.models import Home
+from application.database.models import Home, Floor
 
 
 homes = Blueprint('homes', __name__)
@@ -11,15 +11,19 @@ homes = Blueprint('homes', __name__)
 @login_required
 def home_setup():
     if not current_user.active_home:
-        return render_template('onboarding/parts/home/attributes/name/home_name.html.jinja')
+        return render_template('onboarding/parts/home/attributes/name/index.html.jinja')
     current_home = current_user.active_home
     print(f'current_home: {current_home} name: {current_home.home_name}')
     if not current_home.home_size_sqm:
         print('home_size_sqm is None')
-        return render_template('onboarding/parts/home/attributes/size/home_size.html.jinja')
-    if not current_home.num_floors:
+        return render_template('onboarding/parts/home/attributes/size/index.html.jinja')
+    
+    floor_ids_query = select(Floor.floor_id).where(Floor.home_id == current_home.home_id)
+    floor_ids = db.session.execute(floor_ids_query).scalars().all()
+    print(f'floor_ids: {floor_ids}')
+    if not floor_ids: #FIXME: if user has no floors
         print('home_levels is None')
-        return render_template('onboarding/parts/home/attributes/home_levels.html.jinja')
+    return render_template('onboarding/parts/home/attributes/floors/index.html.jinja')
     '''if not current_home.home_layout:
         print('home_layout is None')
         return render_template('onboarding/parts/home/attributes/layout_map.html.jinja')'''
@@ -85,4 +89,57 @@ def home_size():
         home.home_size_sqm = request.form.get('home_size_sqm')
         print(f'home_size_sqm: {home.home_size_sqm}')
         db.session.commit()
-        return render_template('onboarding/parts/home/attributes/size/home_size_text.html.jinja', home_size_sqm=home.home_size_sqm)        
+        return render_template('onboarding/parts/home/attributes/size/home_size_text.html.jinja', home_size_sqm=home.home_size_sqm)
+    
+    
+@homes.route('/home/floor/name', methods=['GET', 'PUT'])
+@login_required
+def name_floor():
+    current_home = current_user.active_home
+    if request.method == 'GET':
+        floor_ids_query = select(Floor.floor_id).where(Floor.home_id == current_home.home_id)
+        floor_ids = db.session.execute(floor_ids_query).scalars().all()
+        print(f'floor_ids: {floor_ids}')
+        if not floor_ids:
+            new_floor_name = 'default Floor'
+            new_floor_num = 1
+            floor = Floor(floor_name=new_floor_name, floor_number=new_floor_num)
+            current_user.active_home.floors.append(floor)
+            db.session.commit()
+            raise NotImplementedError('floor_num not yet finished') #return render_template('onboarding/parts/home/attributes/floors/floor_form.html.jinja', new_floor_name = new_floor_name, new_floor_num = new_floor_num)
+    if request.method == 'PUT':
+        new_floor_name = request.form.get('new_floor_name')
+        new_floor_number = request.form.get('new_floor_number')
+        print(f'new_floor_name: {new_floor_name}, new_floor_num: {new_floor_number}')
+                # Add validation to ensure values are not None
+        if not new_floor_name or not new_floor_number:
+            return "Error: 'new_floor_name' and 'new_floor_number' must be provided", 400
+        
+        floor = Floor(floor_name=new_floor_name, floor_number=new_floor_number)
+        current_user.active_home.floors.append(floor)
+        db.session.commit()
+        return render_template('onboarding/parts/home/map/room_layout.html.jinja', floors=current_user.active_home.floors)
+        
+@homes.route('/home/floor/number', methods=['GET', 'PUT'])
+@login_required
+def floor_num():
+    raise NotImplementedError('floor_num not yet finished')
+
+
+@homes.route('/home/floor/rename/<int:floor_id>', methods=['PUT'])
+@login_required
+def edit_floor(floor_id):
+    floor = db.get_or_404(Floor, floor_id)
+    if not floor or floor.home.user_id != current_user.id:
+        return jsonify({"success": False, "error": "Task not found or unauthorized"}), 404
+    
+    
+    floor.floor_name = request.form.get('floor_name')
+    db.session.commit()
+    return render_template('onboarding/parts/home/map/room_layout.html.jinja', floors=current_user.active_home.floors)
+
+@homes.route('/home/floors', methods=['GET'])
+@login_required
+def get_floors():
+    floors = current_user.active_home.floors.all()
+    return render_template('onboarding/parts/home/attributes/floors/floors_list.html.jinja', floors=floors)

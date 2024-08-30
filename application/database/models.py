@@ -76,10 +76,16 @@ class Home(db.Model):
     home_name: Mapped[str] = mapped_column(String(80), nullable=False)
     __table_args__ = (UniqueConstraint('user_id', 'home_name', name='unique_home_name'),)
     home_size_sqm: Mapped[float] = mapped_column(default=0.0)
-    num_floors: Mapped[int] = mapped_column(default=1)
     user = relationship("User", back_populates="homes", foreign_keys=[user_id])
     rooms = relationship('Room', back_populates="homes", lazy='dynamic')
+    floors = relationship('Floor', back_populates="homes", lazy='dynamic')
 
+class Floor(db.Model):
+    floor_id: Mapped[int] = mapped_column(primary_key=True)
+    home_id: Mapped[int] = mapped_column(ForeignKey('home.home_id'))
+    floor_name: Mapped[str]
+    floor_number: Mapped[int]
+    homes = relationship('Home', back_populates="floors")
 class Room(db.Model): #FIXME: ROOM LEVEL AND LOCATION ON THE MAP
     room_id: Mapped[int] = mapped_column(primary_key=True)
     home_id: Mapped[int] = mapped_column(ForeignKey('home.home_id'))

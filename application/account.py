@@ -2,7 +2,7 @@ from flask import Blueprint, flash, jsonify, render_template
 from flask_login import current_user, login_required
 from sqlalchemy import delete
 from application.extension import db
-from application.database.models import UserAbility, UserStatus, UserPreference, Home, Room, Zone, Appliance, Photo, Task, TaskAnnotation, TaskProgress, Supply
+from application.database.models import Floor, UserAbility, UserStatus, UserPreference, Home, Room, Zone, Appliance, Photo, Task, TaskAnnotation, TaskProgress, Supply
 
 
 
@@ -21,7 +21,7 @@ def reset_user_data():
         username, password_hash = current_user.username, current_user.password_hash
 
         # Delete all related data
-        models_to_delete = [UserAbility, UserStatus, UserPreference, Supply, TaskProgress, TaskAnnotation, Task, Photo, Appliance, Zone, Room, Home]
+        models_to_delete = [UserAbility, UserStatus, UserPreference, Supply, TaskProgress, TaskAnnotation, Task, Photo, Appliance, Zone, Room, Home, Floor]
         
         for model in models_to_delete:
             if hasattr(model, 'user_id'):

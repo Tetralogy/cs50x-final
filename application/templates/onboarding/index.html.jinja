@@ -4,7 +4,7 @@
 {% endblock %}
 
 {% block main %}
-
+<h1>this is onboarding/index.html.jinja</h1>
 <div
     id="onboarding"
     hx-get="/onboarding"
@@ -13,5 +13,5 @@
         <span class="visually-hidden">Loading...</span>
     </div>
 </div>
-
+<button hx-get="/onboarding" hx-target="#onboarding" class="btn btn-primary">Onboarding Next Step</button>
 {% endblock %}
