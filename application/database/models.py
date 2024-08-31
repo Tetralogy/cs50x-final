@@ -84,7 +84,7 @@ class Floor(db.Model):
     floor_id: Mapped[int] = mapped_column(primary_key=True)
     home_id: Mapped[int] = mapped_column(ForeignKey('home.home_id'))
     floor_name: Mapped[str]
-    floor_number: Mapped[int]
+    order: Mapped[int]
     homes = relationship('Home', back_populates="floors")
     
 class Room(db.Model): #FIXME: ROOM LEVEL AND LOCATION ON THE MAP

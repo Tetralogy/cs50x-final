@@ -2,7 +2,7 @@
 <form id="floor-list" class="sortable list-group form" hx-put="/save-order" hx-trigger="reorder from:body" hx-swap="none">
   <div class="htmx-indicator">Updating...</div>
 
-    {% for floor in floors | sort(attribute='floor_number') | reverse %}
+    {% for floor in floors | sort(attribute='order') %}
         
             {% include 'onboarding/parts/home/attributes/floors/row.html.jinja' %}
   
@@ -67,3 +67,31 @@ document.addEventListener('htmx:load', function() {
   }
 });
 </script>
+
+
+    <div id="list-container">
+        <ul id="sortable-list" >
+            {% for floor in floors | sort(attribute='order') %}
+                <li data-id="{{ floor.floor_id }}">{{ floor.floor_name }} {{ floor.order }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <script>
+document.addEventListener('htmx:load', function() {
+    var sortlist = document.getElementById('sortable-list');
+    var sortableInstance = new Sortable(sortlist, {
+        animation: 150,
+        ghostClass: 'blue-background-class',
+        onEnd: function() {
+            var newOrder = Array.from(sortlist.children).map(li => li.dataset.id);
+            htmx.ajax('POST', '/update-order', {
+                target: '#list-container',
+                swap: 'innerHTML',
+                values: { 'order': newOrder }
+            });
+        }
+    });
+});
+
+    </script>

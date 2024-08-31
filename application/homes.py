@@ -146,20 +146,20 @@ def get_floors():
 @homes.route('/home/floor/new', methods=['POST'])
 @login_required
 def new_floor():
-    highest_floor_number = db.session.execute(select(db.func.max(Floor.floor_number)).filter(Floor.home_id == current_user.active_home_id)).scalar()
+    highest_floor_number = db.session.execute(select(db.func.max(Floor.order)).filter(Floor.home_id == current_user.active_home_id)).scalar()
     new_floor_number = highest_floor_number + 1 if highest_floor_number else 1
     new_floor_name = f'Floor {new_floor_number}'
     print(f'new_floor_name: {new_floor_name}, new_floor_num: {new_floor_number}')
     # Add validation to ensure values are not None
     if not new_floor_name or not new_floor_number:
         return "Error: 'new_floor_name' and 'new_floor_number' must be provided", 400
-    floor = Floor(floor_name=new_floor_name, floor_number=new_floor_number)
+    floor = Floor(floor_name=new_floor_name, order=new_floor_number)
     current_user.active_home.floors.append(floor)
     db.session.commit()
     return render_template('onboarding/parts/home/attributes/floors/row.html.jinja', floor=floor)
 
 
-@homes.route('/save-order', methods=['PUT'])
+'''@homes.route('/save-order', methods=['PUT'])
 @login_required
 def save_order():
     order = request.form.get('order')
@@ -176,23 +176,36 @@ def save_order():
     if not home:
         return jsonify({"error": "Home not found"}), 404
     
-    # Create a case statement for updating floor numbers
-    case_stmt = case(
-        {floor_id: index for index, floor_id in enumerate(order, start=1) if floor_id.isdigit()},
-        value=Floor.floor_id
-    )
-    
-    # Update all floor numbers in a single query
-    db.session.execute(
-        db.update(Floor)
-        .where(Floor.home_id == home.home_id)
-        .values(floor_number=case_stmt)
-    )
-    
+        # Update the floor number of each floor to match the order
+    floors_query = select(Floor).filter(Floor.floor_id.in_(order), Floor.home_id == home.home_id)
+    floors = db.session.execute(floors_query).scalars().all()
+    for index, floor in enumerate(floors, start=0):
+        floor.floor_number = index
+    print(f'Order: {order}')
+    print(f'Floor numbers: {[floor.floor_number for floor in home.floors.all()]}')
+    db.session.commit()
+    return jsonify({"success": True}), 200
+
     try:
         db.session.commit()
         return jsonify({"message": "Floor order updated successfully"}), 200
     except Exception as e:
         db.session.rollback()
-        return jsonify({"error": str(e)}), 500
+        return jsonify({"error": str(e)}), 500'''
     #FIXME: doesn't save order correctly on reload
+    
+    
+@homes.route('/update-order', methods=['POST'])
+def update_order():
+    new_order = request.form.getlist('order')
+    print(f'new_order: {new_order}')
+    for index, floor_id in enumerate(new_order):
+        print(f'index: {index}, floor_id: {floor_id}')
+        floor = Floor.query.get(int(floor_id))
+        print(f'floor: {floor}')
+        floor.order = index
+    db.session.commit()
+    floors = current_user.active_home.floors.all()
+    print(f'floors returned: {floors}')
+    return render_template('onboarding/parts/home/attributes/floors/list.html.jinja', floors=floors)
+#FIXME: clean up and apply to formatted list in frontend

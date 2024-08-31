@@ -1,0 +1,5 @@
+<ul id="sortable-list">
+    {% for floor in floors | sort(attribute='order') %}
+        <li data-id="{{ floor.floor_id }}">{{ floor.floor_name }} {{ floor.order }}</li>
+    {% endfor %}
+</ul>
