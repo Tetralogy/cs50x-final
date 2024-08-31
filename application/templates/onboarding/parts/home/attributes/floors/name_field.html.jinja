@@ -1,0 +1,19 @@
+    <span id="floor-name-field-{{ floor.floor_id }}" class="input-group-text mb-3">
+    <input
+        autocomplete="off"
+        autofocus
+        class="form-control"
+        id="input_floor_name-{{ floor.floor_id }}"
+        name="input_floor_name-{{ floor.floor_id }}"
+        placeholder="New Floor Name"
+        hx-put="/home/floor/rename/{{ floor.floor_id }}"
+        hx-trigger="keyup[key=='Enter'], blur, keyup changed delay:5s"
+
+        hx-target="#floor-name-field-{{ floor.floor_id }}"
+        hx-swap="outerHTML"
+        value="{{ floor.floor_name }}"
+        type="text" aria-label="input_floor_name-{{ floor.floor_id }}"
+        onfocus="this.setSelectionRange(this.value.length, this.value.length);"
+    />
+
+    </span>

@@ -5,7 +5,7 @@
         id="input_floor_num"
         name="input_floor_num"
         placeholder="New Floor Number"
-        hx-put="/home/floor/name"
+        hx-put=""
         hx-trigger="keyup[key=='Enter'], blur, keyup changed delay:5s"
 
         hx-target="#home-floor"
@@ -16,3 +16,4 @@
     />
     <label for="home_name">Floor Number: {{ new_floor_num }}</label>
     <div class="htmx-indicator">Updating...</div>
+#fixme

@@ -106,7 +106,7 @@ def name_floor():
             floor = Floor(floor_name=new_floor_name, floor_number=new_floor_num)
             current_user.active_home.floors.append(floor)
             db.session.commit()
-            raise NotImplementedError('floor_num not yet finished') #return render_template('onboarding/parts/home/attributes/floors/floor_form.html.jinja', new_floor_name = new_floor_name, new_floor_num = new_floor_num)
+            return render_template('onboarding/parts/home/attributes/floors/floor_form.html.jinja', new_floor_name = new_floor_name, new_floor_num = new_floor_num)
     if request.method == 'PUT':
         new_floor_name = request.form.get('new_floor_name')
         new_floor_number = request.form.get('new_floor_number')
@@ -115,31 +115,45 @@ def name_floor():
         if not new_floor_name or not new_floor_number:
             return "Error: 'new_floor_name' and 'new_floor_number' must be provided", 400
         
-        floor = Floor(floor_name=new_floor_name, floor_number=new_floor_number)
-        current_user.active_home.floors.append(floor)
-        db.session.commit()
-        return render_template('onboarding/parts/home/map/room_layout.html.jinja', floors=current_user.active_home.floors)
-        
 @homes.route('/home/floor/number', methods=['GET', 'PUT'])
 @login_required
 def floor_num():
     raise NotImplementedError('floor_num not yet finished')
 
 
-@homes.route('/home/floor/rename/<int:floor_id>', methods=['PUT'])
+@homes.route('/home/floor/rename/<int:floor_id>', methods=['GET', 'PUT'])
 @login_required
-def edit_floor(floor_id):
+def rename_floor(floor_id):
     floor = db.get_or_404(Floor, floor_id)
-    if not floor or floor.home.user_id != current_user.id:
-        return jsonify({"success": False, "error": "Task not found or unauthorized"}), 404
+    if request.method == 'GET':
+        if not floor or floor.home_id != current_user.active_home_id:
+            return jsonify({"success": False, "error": "Task not found or unauthorized"}), 404
+        return render_template('onboarding/parts/home/attributes/floors/name_field.html.jinja', floor=floor)
+    if request.method == 'PUT':
+        new_floor_name = request.form.get(f'input_floor_name-{floor.floor_id}')
+        if not new_floor_name:
+            return "Error: 'new_floor_name' must be provided", 400
+        floor.floor_name = new_floor_name
+        return render_template('onboarding/parts/home/attributes/floors/name_text.html.jinja', floor=floor)
     
-    
-    floor.floor_name = request.form.get('floor_name')
-    db.session.commit()
-    return render_template('onboarding/parts/home/map/room_layout.html.jinja', floors=current_user.active_home.floors)
 
 @homes.route('/home/floors', methods=['GET'])
 @login_required
 def get_floors():
     floors = current_user.active_home.floors.all()
     return render_template('onboarding/parts/home/attributes/floors/floors_list.html.jinja', floors=floors)
+
+@homes.route('/home/floor/new', methods=['POST'])
+@login_required
+def new_floor():
+    highest_floor_number = db.session.execute(select(db.func.max(Floor.floor_number)).filter(Floor.home_id == current_user.active_home_id)).scalar()
+    new_floor_number = highest_floor_number + 1 if highest_floor_number else 1
+    new_floor_name = f'Floor {new_floor_number}'
+    print(f'new_floor_name: {new_floor_name}, new_floor_num: {new_floor_number}')
+    # Add validation to ensure values are not None
+    if not new_floor_name or not new_floor_number:
+        return "Error: 'new_floor_name' and 'new_floor_number' must be provided", 400
+    floor = Floor(floor_name=new_floor_name, floor_number=new_floor_number)
+    current_user.active_home.floors.append(floor)
+    db.session.commit()
+    return render_template('onboarding/parts/home/attributes/floors/row.html.jinja', floor=floor)
