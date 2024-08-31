@@ -1,6 +1,6 @@
-from flask import Blueprint, jsonify, render_template, request
+from flask import Blueprint, json, jsonify, render_template, request
 from flask_login import current_user, login_required
-from sqlalchemy import select
+from sqlalchemy import case, select
 from application.extension import db
 from application.database.models import Home, Floor
 
@@ -157,3 +157,42 @@ def new_floor():
     current_user.active_home.floors.append(floor)
     db.session.commit()
     return render_template('onboarding/parts/home/attributes/floors/row.html.jinja', floor=floor)
+
+
+@homes.route('/save-order', methods=['PUT'])
+@login_required
+def save_order():
+    order = request.form.get('order')
+    if not order:
+        return jsonify({"error": "No order provided"}), 400
+    
+    try:
+        order = json.loads(order)
+    except json.JSONDecodeError:
+        return jsonify({"error": "Invalid order format"}), 400
+    
+    # Get the current user's home
+    home = Home.query.filter_by(user_id=current_user.id).first()
+    if not home:
+        return jsonify({"error": "Home not found"}), 404
+    
+    # Create a case statement for updating floor numbers
+    case_stmt = case(
+        {floor_id: index for index, floor_id in enumerate(order, start=1) if floor_id.isdigit()},
+        value=Floor.floor_id
+    )
+    
+    # Update all floor numbers in a single query
+    db.session.execute(
+        db.update(Floor)
+        .where(Floor.home_id == home.home_id)
+        .values(floor_number=case_stmt)
+    )
+    
+    try:
+        db.session.commit()
+        return jsonify({"message": "Floor order updated successfully"}), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": str(e)}), 500
+    #FIXME: doesn't save order correctly on reload

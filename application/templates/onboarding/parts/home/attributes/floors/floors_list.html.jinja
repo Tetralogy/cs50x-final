@@ -1,11 +1,14 @@
 <h2>Floors</h2>
-<ul id="floor-list">
+<form id="floor-list" class="sortable list-group form" hx-put="/save-order" hx-trigger="reorder from:body" hx-swap="none">
+  <div class="htmx-indicator">Updating...</div>
+
     {% for floor in floors | sort(attribute='floor_number') | reverse %}
         
             {% include 'onboarding/parts/home/attributes/floors/row.html.jinja' %}
   
     {% endfor %}
-</ul>
+</form>
+
 <div class="row">
     <div class="col-12">
         <button
@@ -19,4 +22,48 @@
     </div>
 </div>
 
- #fixme: make drag sortable
+#fixme: make drag sortable
+
+
+
+        <!-- jsDelivr :: Sortable :: Latest (https://www.jsdelivr.com/package/npm/sortablejs) -->
+        <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+
+<script>
+document.addEventListener('htmx:load', function() {
+  var sortable = document.getElementById('floor-list');
+  var sortableInstance = new Sortable(sortable, {
+    animation: 150,
+    ghostClass: 'blue-background-class',
+    handle: '.handle',
+    dataIdAttr: 'data-id',
+    filter: ".htmx-indicator",
+    onMove: function (evt) {
+      return evt.related.className.indexOf('htmx-indicator') === -1;
+    },
+    
+    onEnd: function (evt) {
+      var order = this.toArray();
+      var orderInput = document.createElement('input');
+      orderInput.type = 'hidden';
+      orderInput.name = 'order';
+      orderInput.value = JSON.stringify(order);
+      sortable.appendChild(orderInput);
+      
+      // Trigger a custom 'reorder' event
+      htmx.trigger(sortable, 'reorder');
+      
+      // Update floor numbers immediately in the UI
+      updateFloorNumbers();
+    }
+  });
+
+  function updateFloorNumbers() {
+    var floors = sortable.querySelectorAll('.input-group');
+    floors.forEach(function(floor, index) {
+      var numberSpan = floor.querySelector('.floor-number');
+      numberSpan.textContent = '(' + (floors.length - index) + ')';
+    });
+  }
+});
+</script>

@@ -55,7 +55,7 @@ list of rooms entered goes here
 
 <script>
   htmx.onLoad(function(content) {
-      var sortables = content.querySelectorAll(".sortable");
+      var sortables = document.querySelectorAll(".sortable");
       for (var i = 0; i < sortables.length; i++) {
         var sortable = sortables[i];
         var sortableInstance = new Sortable(sortable, {

@@ -26,6 +26,9 @@ def reset_user_data():
         for model in models_to_delete:
             if hasattr(model, 'user_id'):
                 db.session.execute(delete(model).where(model.user_id == current_user.id))
+            if hasattr(model, 'home_id'):
+                db.session.execute(delete(model).where(model.home_id == current_user.active_home_id))
+            #TODO: ZONE_ID
         
 
         # Reset the user's data
@@ -48,11 +51,14 @@ def reset_user_data():
 def delete_user_account():
     try:
         # Delete all related data
-        models_to_delete = [UserAbility, UserStatus, UserPreference, Supply, TaskProgress, TaskAnnotation, Task, Photo, Appliance, Zone, Room, Home]
+        models_to_delete = [UserAbility, UserStatus, UserPreference, Supply, TaskProgress, TaskAnnotation, Task, Photo, Appliance, Zone, Room, Home, Floor]
         
         for model in models_to_delete:
             if hasattr(model, 'user_id'):
                 db.session.execute(delete(model).where(model.user_id == current_user.id))
+            if hasattr(model, 'home_id'):
+                db.session.execute(delete(model).where(model.home_id == current_user.active_home_id))
+            #TODO: ZONE_ID
 
         # Delete the user
         db.session.delete(current_user)
