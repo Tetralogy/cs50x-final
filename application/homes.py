@@ -143,20 +143,38 @@ def get_floors():
     floors = current_user.active_home.floors.all()
     return render_template('onboarding/parts/home/attributes/floors/floors_list.html.jinja', floors=floors)
 
-@homes.route('/home/floor/new', methods=['POST'])
+@homes.route('/home/floor/new', methods=['GET', 'POST'])
 @login_required
 def new_floor():
-    highest_floor_number = db.session.execute(select(db.func.max(Floor.order)).filter(Floor.home_id == current_user.active_home_id)).scalar()
-    new_floor_number = highest_floor_number + 1 if highest_floor_number else 1
-    new_floor_name = f'Floor {new_floor_number}'
-    print(f'new_floor_name: {new_floor_name}, new_floor_num: {new_floor_number}')
+    if request.method == 'GET':
+        if db.session.execute(select(Floor).filter(Floor.home_id == current_user.active_home_id)).first():
+            return 'Floor already exists', 204
+        return create_floor()
+    if request.method == 'POST':
+        return create_floor()
+        
+def create_floor():
+    highest_order_number = db.session.execute(select(db.func.max(Floor.order)).filter(Floor.home_id == current_user.active_home_id)).scalar()
+    lowest_order_number = db.session.execute(select(db.func.min(Floor.order)).filter(Floor.home_id == current_user.active_home_id)).scalar()
+    print(f'lowest_order_number: {lowest_order_number}')
+    if lowest_order_number is not None or lowest_order_number == 0:
+        new_order_number = lowest_order_number - 1
+    else:
+        new_order_number = 0
+        
+    new_floor_name = f'Floor {abs(highest_order_number + abs(lowest_order_number))+2}' if new_order_number != 0 else 'Ground Floor'
+    print(f'new_floor_name: {new_floor_name}, new_order_num: {new_order_number}')
     # Add validation to ensure values are not None
-    if not new_floor_name or not new_floor_number:
+    if not new_floor_name or new_order_number is None:
         return "Error: 'new_floor_name' and 'new_floor_number' must be provided", 400
-    floor = Floor(floor_name=new_floor_name, order=new_floor_number)
-    current_user.active_home.floors.append(floor)
-    db.session.commit()
-    return render_template('onboarding/parts/home/attributes/floors/row.html.jinja', floor=floor)
+    try:
+        floor = Floor(floor_name=new_floor_name, order=new_order_number)
+        current_user.active_home.floors.append(floor)
+        db.session.commit()
+    except Exception as e:
+        print(f"Error creating floor: {e}")
+        return "Error creating floor", 400
+    return render_template('onboarding/parts/home/attributes/floors/row.html.jinja', floor=floor), 201
 
 
 '''@homes.route('/save-order', methods=['PUT'])
@@ -195,7 +213,7 @@ def save_order():
     #FIXME: doesn't save order correctly on reload
     
     
-@homes.route('/update-order', methods=['POST'])
+@homes.route('/home/floor/sort', methods=['POST'])
 def update_order():
     new_order = request.form.getlist('order')
     print(f'new_order: {new_order}')

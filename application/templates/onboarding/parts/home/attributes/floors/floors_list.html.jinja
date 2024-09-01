@@ -1,13 +1,4 @@
 <h2>Floors</h2>
-<form id="floor-list" class="sortable list-group form" hx-put="/save-order" hx-trigger="reorder from:body" hx-swap="none">
-  <div class="htmx-indicator">Updating...</div>
-
-    {% for floor in floors | sort(attribute='order') %}
-        
-            {% include 'onboarding/parts/home/attributes/floors/row.html.jinja' %}
-  
-    {% endfor %}
-</form>
 
 <div class="row">
     <div class="col-12">
@@ -24,74 +15,34 @@
 
 #fixme: make drag sortable
 
+<!-- jsDelivr :: Sortable :: Latest (https://www.jsdelivr.com/package/npm/sortablejs) -->
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+<div hx-get="/home/floor/new" hx-target="#floor-list" hx-swap="afterbegin" hx-trigger="load"></div>
+<div
+    id="floor-list-container"
+>
 
-
-        <!-- jsDelivr :: Sortable :: Latest (https://www.jsdelivr.com/package/npm/sortablejs) -->
-        <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+    {% include 'onboarding/parts/home/attributes/floors/list.html.jinja' %}
+</div>
 
 <script>
-document.addEventListener('htmx:load', function() {
-  var sortable = document.getElementById('floor-list');
-  var sortableInstance = new Sortable(sortable, {
-    animation: 150,
-    ghostClass: 'blue-background-class',
-    handle: '.handle',
-    dataIdAttr: 'data-id',
-    filter: ".htmx-indicator",
-    onMove: function (evt) {
-      return evt.related.className.indexOf('htmx-indicator') === -1;
-    },
-    
-    onEnd: function (evt) {
-      var order = this.toArray();
-      var orderInput = document.createElement('input');
-      orderInput.type = 'hidden';
-      orderInput.name = 'order';
-      orderInput.value = JSON.stringify(order);
-      sortable.appendChild(orderInput);
-      
-      // Trigger a custom 'reorder' event
-      htmx.trigger(sortable, 'reorder');
-      
-      // Update floor numbers immediately in the UI
-      updateFloorNumbers();
-    }
-  });
-
-  function updateFloorNumbers() {
-    var floors = sortable.querySelectorAll('.input-group');
-    floors.forEach(function(floor, index) {
-      var numberSpan = floor.querySelector('.floor-number');
-      numberSpan.textContent = '(' + (floors.length - index) + ')';
+    document.addEventListener("htmx:load", function () {
+        var sortlist = document.getElementById("floor-list");
+        var sortableInstance = new Sortable(sortlist, {
+            animation: 150,
+            ghostClass: "blue-background-class",
+            filter: ".htmx-indicator",
+            handle: ".handle",
+            onEnd: function () {
+                var newOrder = Array.from(sortlist.children).map(
+                    (li) => li.dataset.id,
+                );
+                htmx.ajax("POST", "/home/floor/sort", {
+                    target: "#floor-list-container",
+                    swap: "innerHTML",
+                    values: { order: newOrder },
+                });
+            },
+        });
     });
-  }
-});
 </script>
-
-
-    <div id="list-container">
-        <ul id="sortable-list" >
-            {% for floor in floors | sort(attribute='order') %}
-                <li data-id="{{ floor.floor_id }}">{{ floor.floor_name }} {{ floor.order }}</li>
-            {% endfor %}
-        </ul>
-    </div>
-
-    <script>
-document.addEventListener('htmx:load', function() {
-    var sortlist = document.getElementById('sortable-list');
-    var sortableInstance = new Sortable(sortlist, {
-        animation: 150,
-        ghostClass: 'blue-background-class',
-        onEnd: function() {
-            var newOrder = Array.from(sortlist.children).map(li => li.dataset.id);
-            htmx.ajax('POST', '/update-order', {
-                target: '#list-container',
-                swap: 'innerHTML',
-                values: { 'order': newOrder }
-            });
-        }
-    });
-});
-
-    </script>
