@@ -1,4 +1,4 @@
-from flask import Blueprint, json, jsonify, render_template, request
+from flask import Blueprint, flash, json, jsonify, render_template, request
 from flask_login import current_user, login_required
 from sqlalchemy import case, select
 from application.extension import db
@@ -227,3 +227,18 @@ def update_order():
     print(f'floors returned: {floors}')
     return render_template('onboarding/parts/home/attributes/floors/list.html.jinja', floors=floors)
 #FIXME: clean up and apply to formatted list in frontend
+
+@homes.route('/home/floor/delete/<int:floor_id>', methods=['DELETE'])
+@login_required
+def delete_floor(floor_id):
+    floor = db.get_or_404(Floor, floor_id)
+    if not floor or floor.home_id != current_user.active_home_id:
+        return jsonify({"error": "Floor not found or unauthorized"}), 404
+    db.session.delete(floor)
+    try:
+        db.session.commit()
+        flash(f"floor_id: {floor_id} successfully deleted", category="success")
+        return jsonify({"message": "Floor deleted successfully"}), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": str(e)}), 500

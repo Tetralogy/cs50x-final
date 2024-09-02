@@ -1,11 +1,5 @@
 <div id="floor-list">
     {% for floor in floors | sort(attribute='order') %}
-        <div class="input-group mb-3" data-id="{{ floor.floor_id }}">
-            <span id="handle" class="handle input-group-text mb-3">↕️</span>
-            {% include 'onboarding/parts/home/attributes/floors/name_text.html.jinja' %}
-            <span class="input-group-text mb-3 floor-number"
-                >({{ floor.order }})</span
-            >
-        </div>
+        {% include 'onboarding/parts/home/attributes/floors/row.html.jinja' %}
     {% endfor %}
 </div>

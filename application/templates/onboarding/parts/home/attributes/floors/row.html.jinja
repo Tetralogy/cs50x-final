@@ -1,5 +1,16 @@
-<div class="input-group mb-3" data-id="{{ floor.floor_id }}">
-      <span id="handle" class="handle input-group-text mb-3">↕️</span>
-      {% include 'onboarding/parts/home/attributes/floors/name_text.html.jinja' %}
-      <span class="input-group-text mb-3 floor-number">({{ floor.order }})</span>
-    </div>
+        <div class="input-group mb-0" id="floor-{{ floor.floor_id }}" data-id="{{ floor.floor_id }}">
+            <span id="handle" class="handle input-group-text">↕️</span>
+            {% include 'onboarding/parts/home/attributes/floors/name_text.html.jinja' %}
+            <span class="input-group-text floor-number"
+                >({{ floor.order }})</span
+            >
+                <button
+            hx-delete="/home/floor/delete/{{ floor.floor_id }}"
+            hx-confirm="Are you sure you want to delete this floor?"
+            hx-swap="outerHTML"
+            hx-target="#floor-{{ floor.floor_id }}"
+            class="btn btn-danger" type="button"
+        >
+            Delete Floor
+        </button>
+        </div>
