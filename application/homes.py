@@ -21,9 +21,9 @@ def home_setup():
     floor_ids_query = select(Floor.floor_id).where(Floor.home_id == current_home.home_id)
     floor_ids = db.session.execute(floor_ids_query).scalars().all()
     print(f'floor_ids: {floor_ids}')
-    if not floor_ids: #FIXME: if user has no floors
+    if not floor_ids:
         print('home_levels is None')
-    return render_template('onboarding/parts/home/attributes/floors/index.html.jinja')
+        return render_template('onboarding/parts/home/attributes/floors/index.html.jinja')
     '''if not current_home.home_layout:
         print('home_layout is None')
         return render_template('onboarding/parts/home/attributes/layout_map.html.jinja')'''
@@ -177,42 +177,6 @@ def create_floor():
     return render_template('onboarding/parts/home/attributes/floors/row.html.jinja', floor=floor), 201
 
 
-'''@homes.route('/save-order', methods=['PUT'])
-@login_required
-def save_order():
-    order = request.form.get('order')
-    if not order:
-        return jsonify({"error": "No order provided"}), 400
-    
-    try:
-        order = json.loads(order)
-    except json.JSONDecodeError:
-        return jsonify({"error": "Invalid order format"}), 400
-    
-    # Get the current user's home
-    home = Home.query.filter_by(user_id=current_user.id).first()
-    if not home:
-        return jsonify({"error": "Home not found"}), 404
-    
-        # Update the floor number of each floor to match the order
-    floors_query = select(Floor).filter(Floor.floor_id.in_(order), Floor.home_id == home.home_id)
-    floors = db.session.execute(floors_query).scalars().all()
-    for index, floor in enumerate(floors, start=0):
-        floor.floor_number = index
-    print(f'Order: {order}')
-    print(f'Floor numbers: {[floor.floor_number for floor in home.floors.all()]}')
-    db.session.commit()
-    return jsonify({"success": True}), 200
-
-    try:
-        db.session.commit()
-        return jsonify({"message": "Floor order updated successfully"}), 200
-    except Exception as e:
-        db.session.rollback()
-        return jsonify({"error": str(e)}), 500'''
-    #FIXME: doesn't save order correctly on reload
-    
-    
 @homes.route('/home/floor/sort', methods=['POST'])
 def update_order():
     new_order = request.form.getlist('order')
@@ -226,7 +190,6 @@ def update_order():
     floors = current_user.active_home.floors.all()
     print(f'floors returned: {floors}')
     return render_template('onboarding/parts/home/attributes/floors/list.html.jinja', floors=floors)
-#FIXME: clean up and apply to formatted list in frontend
 
 @homes.route('/home/floor/delete/<int:floor_id>', methods=['DELETE'])
 @login_required
@@ -242,3 +205,24 @@ def delete_floor(floor_id):
     except Exception as e:
         db.session.rollback()
         return jsonify({"error": str(e)}), 500
+
+#FIXME: map layout of floors with rooms
+
+@homes.route('/home/map', methods=['GET'])
+@login_required
+def get_map():
+    floors_without_rooms = [floor for floor in current_user.active_home.floors.all() if not floor.rooms.all()]
+    if floors_without_rooms:
+        return render_template('onboarding/parts/home/map/place_rooms.html.jinja')
+    if current_user.active_home.map_layout_completed:
+        return render_template('onboarding/parts/home/map/map.html.jinja')
+    else:
+        return render_template('onboarding/parts/home/map/place_rooms.html.jinja')
+    
+@homes.route('/home/map/layout', methods=['POST', 'PUT'])
+@login_required
+def update_map_layout(): #FIXME: this triggers when rooms are dragged and dropped on the map
+    floors = current_user.active_home.floors.all()
+    floors = [floor.to_dict() for floor in floors]
+    return render_template('onboarding/parts/home/map/map.html.jinja', floors=floors) #FIXME: create drag and drop frontend map interface
+    #FIXME: automatically update map layout with filled in squares calculated by size of house and number of rooms in each floor with their approximate locations

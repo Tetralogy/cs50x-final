@@ -26,6 +26,7 @@ def inject_current_user():
 @main.route('/')
 @login_required
 def index():
+    return render_template('onboarding/parts/home/map/grid.html') #temporary
     return render_template('onboarding/index.html.jinja') #temporary
     #return render_template('dashboard/index.html.jinja', user=current_user, page=1)
     '''print('index called')
