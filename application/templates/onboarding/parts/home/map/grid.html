@@ -15,7 +15,7 @@
 />
 </head>
 <body>
-    <div class="container-fluid">
+    <div class="container-fluid bg-primary-subtle border border-primary border-5 rounded-top-5">
     <div id="image-grid1"class="row g-0 row-cols-4">
     <div class="col"><img src="https://picsum.photos/1920/1080?random=1" alt="Image 1" class="img-fluid"></div>
     <div class="col"><img src="https://picsum.photos/1920/1080?random=2" alt="Image 2" class="img-fluid"></div>
@@ -37,8 +37,49 @@
 </div>
 
 
-<div class="container-fluid">
-    <div id="image-grid2"class="row g-0 row-cols-4">
+<div class="container-fluid bg-success-subtle border border-success border-5 rounded-bottom-5">
+    <div id="map"class="row g-0 row-cols-4">
+        <div>content to be replaced 1</div>
+        <div>content to be replaced 2</div>
+        <div>content to be replaced 3</div>
+        <div>content to be replaced 4</div>
+        <div>content to be replaced 5</div>
+        <div>content to be replaced 6</div>
+        <div>content to be replaced 7</div>
+        <div>content to be replaced 8</div>
+        <div>content to be replaced 9</div>
+        <div>content to be replaced 10</div>
+        
+</div>
+</div>
+<script>
+const grid1 = document.getElementById('image-grid1');
+const map = document.getElementById('map');
+
+new Sortable(grid1, {
+    group: {
+        name: 'shared',
+        pull: 'clone',
+        put: false // Do not allow items to be put into this list
+    },
+    animation: 150,
+    sort: false,
+    cursor: 'move',
+});
+
+new Sortable(map, {
+    group: {
+        name: 'shared',
+        pull: false // Prevent pulling from this list
+    },
+    animation: 150,
+});
+</script>
+
+
+
+<div class="container-fluid bg-success-subtle border border-success border-5 rounded-bottom-5">
+    <div class="row g-0 row-cols-4">
         <div>#fixme add blank spaces that can be filled/replaced by dragdrop</div>
         <div>#fixme cursor change to grab indicator</div>
         <div>#fixme dragging placeholder</div>
@@ -50,30 +91,8 @@
         <div>#fixme add save button</div>
         <div>#fixme load from database</div>
         <div>#fixme nesting of items</div>
+        
 </div>
 </div>
-<script>
-
-new Sortable(document.getElementById('image-grid1'), {
-    group: {
-        name: 'shared',
-        pull: 'clone',
-        put: false // Do not allow items to be put into this list
-    },
-    animation: 150,
-    sort: true, // To disable sorting: set sort to false
-    cursor: 'move' // Change the cursor to a grab hand
-});
-
-new Sortable(document.getElementById('image-grid2'), {
-    group: {
-        name: 'shared',
-        pull: 'clone'
-    },
-    animation: 150
-});
-
-
-</script>
 </body>
 </html>

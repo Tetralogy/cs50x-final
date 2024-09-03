@@ -2,7 +2,7 @@ from flask import Blueprint, flash, json, jsonify, render_template, request
 from flask_login import current_user, login_required
 from sqlalchemy import case, select
 from application.extension import db
-from application.database.models import Home, Floor
+from application.database.models import Home, Floor, Room
 
 
 homes = Blueprint('homes', __name__)
@@ -24,9 +24,11 @@ def home_setup():
     if not floor_ids:
         print('home_levels is None')
         return render_template('onboarding/parts/home/attributes/floors/index.html.jinja')
-    '''if not current_home.home_layout:
+    room_ids_query = select(Room.room_id).where(Room.home_id == current_home.home_id)
+    room_ids = db.session.execute(room_ids_query).scalars().all()
+    if not room_ids:
         print('home_layout is None')
-        return render_template('onboarding/parts/home/attributes/layout_map.html.jinja')'''
+        return render_template('onboarding/parts/home/map/index.html.jinja')
     raise NotImplementedError('home_setup not yet finished')
 
 @homes.route('/home/name', methods=['GET', 'POST', 'PUT'])
@@ -141,7 +143,7 @@ def rename_floor(floor_id):
 @login_required
 def get_floors():
     floors = current_user.active_home.floors.all()
-    return render_template('onboarding/parts/home/attributes/floors/floors_list.html.jinja', floors=floors)
+    return render_template('onboarding/parts/home/attributes/floors/edit.html.jinja', floors=floors)
 
 @homes.route('/home/floor/new', methods=['GET', 'POST'])
 @login_required
@@ -205,24 +207,53 @@ def delete_floor(floor_id):
     except Exception as e:
         db.session.rollback()
         return jsonify({"error": str(e)}), 500
+    
+@homes.route('/home/floor/edit/<int:floor_id>', methods=['GET'])
+@login_required
+def edit_floor_rooms(floor_id):
+    floor = db.get_or_404(Floor, floor_id)
+    if not floor or floor.home_id != current_user.active_home_id:
+        return jsonify({"error": "Floor not found or unauthorized"}), 404
+    return render_template('onboarding/parts/home/map/add_rooms.html.jinja', floor=floor)
 
 #FIXME: map layout of floors with rooms
 
 @homes.route('/home/map', methods=['GET'])
 @login_required
 def get_map():
-    floors_without_rooms = [floor for floor in current_user.active_home.floors.all() if not floor.rooms.all()]
+    floors_without_rooms = db.session.execute(select(Floor).where(Floor.home_id == current_user.active_home_id).where(~Floor.rooms.any())).scalars().all()
+    
     if floors_without_rooms:
-        return render_template('onboarding/parts/home/map/place_rooms.html.jinja')
+        floor_to_edit = floors_without_rooms[0]
+        return render_template('onboarding/parts/home/map/add_rooms.html.jinja', floor=floor_to_edit)
     if current_user.active_home.map_layout_completed:
         return render_template('onboarding/parts/home/map/map.html.jinja')
     else:
         return render_template('onboarding/parts/home/map/place_rooms.html.jinja')
     
-@homes.route('/home/map/layout', methods=['POST', 'PUT'])
+@homes.route('/home/map/rooms', methods=['POST', 'PUT'])
 @login_required
 def update_map_layout(): #FIXME: this triggers when rooms are dragged and dropped on the map
-    floors = current_user.active_home.floors.all()
+    print('update_map_layout')
+    return '', 204
+    ''' floors = current_user.active_home.floors.all()
     floors = [floor.to_dict() for floor in floors]
-    return render_template('onboarding/parts/home/map/map.html.jinja', floors=floors) #FIXME: create drag and drop frontend map interface
-    #FIXME: automatically update map layout with filled in squares calculated by size of house and number of rooms in each floor with their approximate locations
+    return render_template('onboarding/parts/home/map/map.html.jinja', floors=floors) #FIXME: create drag and drop frontend map interface'''
+
+@main.route('/add-item', methods=['POST'])#FIXME: this triggers when rooms are dragged and dropped on the map
+@login_required
+def add_item():
+    item_data = request.form.get('item_data')
+    
+    # Add the new item to the database
+    new_item = tools_supplies(room_id=None, item_name=item_data, item_type='custom', is_on_hand=True)
+    db.session.add(new_item)
+    db.session.commit()
+
+    # Return the new item's data
+    return jsonify({
+        'id': new_item.item_id,
+        'name': new_item.item_name,
+        'data_custom': 'customValue',
+        'class_name': 'new-class'
+    })

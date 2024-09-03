@@ -86,10 +86,12 @@ class Floor(db.Model):
     floor_name: Mapped[str]
     order: Mapped[int]
     homes = relationship('Home', back_populates="floors")
+    rooms = relationship('Room', back_populates="floors")
     
 class Room(db.Model): #FIXME: ROOM LEVEL AND LOCATION ON THE MAP
     room_id: Mapped[int] = mapped_column(primary_key=True)
     home_id: Mapped[int] = mapped_column(ForeignKey('home.home_id'))
+    floor_id: Mapped[int] = mapped_column(ForeignKey('floor.floor_id'))
     room_name: Mapped[str]
     room_type: Mapped[str] = mapped_column(default='')
     room_size: Mapped[float] = mapped_column(default=0.0)
@@ -102,6 +104,7 @@ class Room(db.Model): #FIXME: ROOM LEVEL AND LOCATION ON THE MAP
     room_tools_supplies_on_hand: Mapped[str] = mapped_column(default='')
     room_tools_supplies_required: Mapped[str] = mapped_column(default='')
     homes = relationship("Home", back_populates="rooms")
+    floors = relationship("Floor", back_populates="rooms")
     zones = relationship('Zone', back_populates="rooms", lazy='dynamic')
     supply = relationship('Supply', back_populates="rooms", lazy='dynamic')
     tasks = relationship('Task', back_populates="rooms", lazy='dynamic')
