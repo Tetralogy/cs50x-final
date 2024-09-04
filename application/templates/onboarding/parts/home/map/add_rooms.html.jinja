@@ -18,10 +18,10 @@
 </h1>
 
 <div
-    class="container-fluid bg-success-subtle border border-success border-5 rounded-bottom-5"
+    class="container-fluid bg-dark border border-success border-5 rounded-bottom-5"
 >
     <div id="types" class="row g-0 row-cols-4">
-        <div>Living Room</div>
+        <div>Living Room {{ floor.floor_id }} {{ floor.floor_name }} {{ floor.order }}</div>
         <div>Kitchen</div>
         <div>Dining Room</div>
         <div>Bedroom</div>
@@ -32,7 +32,7 @@
 </div>
 <div
     id="room-list-container"
-    class="container-fluid bg-primary-subtle border border-primary border-5 rounded-top-5"
+    class="container-fluid bg-dark border border-primary border-5 rounded-top-5"
 >
     <div id="map" class="row g-0 row-cols-4">
         {% for room in floor.rooms | sort(attribute='order') %}
@@ -99,18 +99,18 @@
             },
             onAdd: function (/**Event*/ evt) {
                 var itemEl = evt.item; // dragged HTMLElement
-                var itemData = itemEl.textContent;
+                var itemData = itemEl.innerHTML;
 
                 // Make an htmx AJAX request to the server
-                htmx.ajax('POST', '/home/map/room/add', {
+                htmx.ajax("POST", "/home/map/room/add", {
                     values: { item_data: itemData },
                     target: itemEl,
-                    swap: 'outerHTML'
+                    swap: "outerHTML",
                 });
 
                 // Handle the response from the server
-                htmx.on('htmx:afterRequest', function (evt) {
-                    if (evt.detail.path === '/home/map/room/add') {
+                htmx.on("htmx:afterRequest", function (evt) {
+                    if (evt.detail.path === "/home/map/room/add") {
                         var responseData = evt.detail.xhr.response;
 
                         // Parse the response JSON
@@ -119,11 +119,14 @@
                         // Update the item element with the new data
                         itemEl.textContent = "Modified " + newItemData.name;
                         itemEl.setAttribute("id", newItemData.id);
-                        itemEl.setAttribute("data-custom", newItemData.data_custom);
+                        itemEl.setAttribute(
+                            "data-custom",
+                            newItemData.data_custom,
+                        );
                         itemEl.className = newItemData.class_name;
                     }
                 });
-            }
+            },
             onEnd: function () {
                 var newOrder = Array.from(sortmap.children).map(
                     (li) => li.dataset.id,

@@ -240,20 +240,22 @@ def update_map_layout(): #FIXME: this triggers when rooms are dragged and droppe
     floors = [floor.to_dict() for floor in floors]
     return render_template('onboarding/parts/home/map/map.html.jinja', floors=floors) #FIXME: create drag and drop frontend map interface'''
 
-@main.route('/add-item', methods=['POST'])#FIXME: this triggers when rooms are dragged and dropped on the map
+@homes.route('/home/map/room/add', methods=['POST'])#FIXME: this triggers when rooms are dragged and dropped on the map
 @login_required
-def add_item():
+def add_room():
     item_data = request.form.get('item_data')
-    
+    print(f'item_data: {item_data}')
     # Add the new item to the database
-    new_item = tools_supplies(room_id=None, item_name=item_data, item_type='custom', is_on_hand=True)
-    db.session.add(new_item)
-    db.session.commit()
+    new_room = Room(room_name=item_data, room_type=item_data)
+    print(f'new_room: {new_room}')
+    '''db.session.add(new_room)
+    db.session.commit()'''
+    #current_user.active_home.rooms.append(new_room)
 
     # Return the new item's data
     return jsonify({
-        'id': new_item.item_id,
-        'name': new_item.item_name,
+        'id': new_room.room_id,
+        'name': new_room.room_name,
         'data_custom': 'customValue',
         'class_name': 'new-class'
     })
