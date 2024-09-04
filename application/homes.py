@@ -29,7 +29,7 @@ def home_setup():
     room_ids = db.session.execute(room_ids_query).scalars().all()
     if not room_ids:
         print('home_layout is None')
-        return render_template('onboarding/parts/home/map/index.html.jinja')
+    return render_template('onboarding/parts/home/map/index.html.jinja')#FIXME: ADD CONDITIONS FOR WHEN HOME HAS FLOORS AND WHEN HOME HAS ROOMS
     raise NotImplementedError('home_setup not yet finished')
 
 @homes.route('/home/name', methods=['GET', 'POST', 'PUT'])
@@ -215,7 +215,7 @@ def edit_floor_rooms(floor_id):
     floor = db.get_or_404(Floor, floor_id)
     if not floor or floor.home_id != current_user.active_home_id:
         return jsonify({"error": "Floor not found or unauthorized"}), 404
-    return render_template('onboarding/parts/home/map/add_rooms.html.jinja', floor=floor)
+    return render_template('onboarding/parts/home/map/add_rooms.html.jinja', floor=floor)#FIXME:
 
 #FIXME: map layout of floors with rooms
 
@@ -231,7 +231,7 @@ def get_map():
         print(f'default_data[types]: {type(room_types)}')
         print(f'room_types after extension: {room_types}')
         return render_template('onboarding/parts/home/map/add_rooms.html.jinja', room_types=room_types, floor=floor_to_edit)
-    if current_user.active_home.map_layout_completed:
+    if current_user.active_home.map_layout_completed: #FIXME: untangle this logic and link correctly
         return render_template('onboarding/parts/home/map/map.html.jinja')
     else:
         return render_template('onboarding/parts/home/map/place_rooms.html.jinja')
@@ -252,23 +252,35 @@ def add_room(floor_id):
     floor = db.get_or_404(Floor, floor_id)
     if not floor or floor.home_id != current_user.active_home_id:
         return jsonify({"error": "Floor not found or unauthorized"}), 404
-    item_data = request.form.get('item_data')
-    print(f'item_data: {item_data}')
+    added_room_type = request.form.get('added_room_type')
+    
+    print(f'added_room_type: {added_room_type}')
+    
+    if not added_room_type:
+        return jsonify({"error": "added_room_type is empty"}), 400
+    new_order = request.form.get('order')
+    print(f'new_order: {new_order}')
+    if not new_order:
+        return jsonify({"error": "new_order is empty"}), 400
+    # Check if the item already exists
+    rooms_matching_type = db.session.execute(select(Room).where(Room.home_id == current_user.active_home_id).where(Room.room_type == added_room_type)).scalars().all()
+    print(f'rooms_matching_type: {rooms_matching_type}')
+    new_room_name = f'{added_room_type} {len(rooms_matching_type) + 1}'
     # Add the new item to the database
-    new_room = Room(room_name=item_data, room_type=item_data, floor_id=floor_id)
+    new_room = Room(room_name=new_room_name, room_type=added_room_type, order=new_order, floor_id=floor_id)
     print(f'new_room: {new_room}')
-    '''db.session.add(new_room)
-    db.session.commit()'''
-    #current_user.active_home.rooms.append(new_room)
+    
+    current_user.active_home.rooms.append(new_room)
+    db.session.commit()
 
     # Return the new item's data
-    return '#FIXME: return the new items data' 
-    return jsonify({
-        'id': new_room.room_id,
-        'name': new_room.room_name,
-        'floor': floor_id,
-        'order': new_room.order
-    })
+    return new_room_name, 201 
+    return jsonify(
+        id= new_room.room_id,
+        name= new_room.room_name,
+        floor= floor_id,
+        order = new_room.order
+    )
     
 @homes.route('/home/map/room/add/type', methods=['POST'])
 @login_required

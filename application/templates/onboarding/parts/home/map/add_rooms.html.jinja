@@ -113,30 +113,15 @@
             },
             onAdd: function (/**Event*/ evt) {
                 var itemEl = evt.item; // dragged HTMLElement
-                var itemData = itemEl.textContent;
+                var addedRoomType = itemEl.textContent;
+                var newIndex = evt.newIndex;
+
 
                 // Make an htmx AJAX request to the server
                 htmx.ajax("POST", "/home/map/room/add/{{ floor.floor_id }}", {
-                    values: { item_data: itemData },
+                    values: { added_room_type: addedRoomType,  order: newIndex},
                     target: itemEl,
-                    swap: "innerHTML",
-                });
-
-                // Handle the response from the server
-                htmx.on("htmx:afterRequest", function (evt) {
-                    if (
-                        evt.detail.path ===
-                        "/home/map/room/add/{{ floor.floor_id }}"
-                    ) {
-                        var responseData = evt.detail.xhr.response;
-                                console.log(newItemData); // Debugging: Check the parsed data
-
-
-                        // Parse the response JSON
-                        var newItemData = JSON.parse(responseData);
-
-            // Update the item element with the plain string from the server
-            itemEl.textContent = responseText;          }
+                    swap: "innerHTML", // returns the new content
                 });
             },
             onEnd: function () {
