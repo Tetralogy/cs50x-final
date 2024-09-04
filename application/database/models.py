@@ -45,6 +45,7 @@ class User(db.Model, UserMixin):
     status = relationship('UserStatus', back_populates="user", lazy='dynamic')
     active_home_id: Mapped[int] = mapped_column(ForeignKey('home.home_id'), nullable=True)
     active_home = relationship("Home", foreign_keys=[active_home_id])
+    custom = relationship('Custom', back_populates="user", lazy='dynamic')
 
 class UserAbility(db.Model): # User's ability to do something, disabilities to account for
     ability_id: Mapped[int] = mapped_column(primary_key=True)
@@ -92,6 +93,7 @@ class Room(db.Model): #FIXME: ROOM LEVEL AND LOCATION ON THE MAP
     room_id: Mapped[int] = mapped_column(primary_key=True)
     home_id: Mapped[int] = mapped_column(ForeignKey('home.home_id'))
     floor_id: Mapped[int] = mapped_column(ForeignKey('floor.floor_id'))
+    order: Mapped[int]
     room_name: Mapped[str]
     room_type: Mapped[str] = mapped_column(default='')
     room_size: Mapped[float] = mapped_column(default=0.0)
@@ -108,6 +110,14 @@ class Room(db.Model): #FIXME: ROOM LEVEL AND LOCATION ON THE MAP
     zones = relationship('Zone', back_populates="rooms", lazy='dynamic')
     supply = relationship('Supply', back_populates="rooms", lazy='dynamic')
     tasks = relationship('Task', back_populates="rooms", lazy='dynamic')
+    
+class Custom(db.Model):
+    custom_id: Mapped[int] = mapped_column(primary_key=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey('user.id'))
+    type: Mapped[str]
+    name: Mapped[str]
+    user = relationship("User", back_populates="custom")
+    
     
 
 class Zone(db.Model):

@@ -1,8 +1,9 @@
+import os
 from flask import Blueprint, flash, json, jsonify, render_template, request
 from flask_login import current_user, login_required
 from sqlalchemy import case, select
 from application.extension import db
-from application.database.models import Home, Floor, Room
+from application.database.models import Custom, Home, Floor, Room
 
 
 homes = Blueprint('homes', __name__)
@@ -225,12 +226,17 @@ def get_map():
     
     if floors_without_rooms:
         floor_to_edit = floors_without_rooms[0]
-        return render_template('onboarding/parts/home/map/add_rooms.html.jinja', floor=floor_to_edit)
+
+        room_types = get_room_types()
+        print(f'default_data[types]: {type(room_types)}')
+        print(f'room_types after extension: {room_types}')
+        return render_template('onboarding/parts/home/map/add_rooms.html.jinja', room_types=room_types, floor=floor_to_edit)
     if current_user.active_home.map_layout_completed:
         return render_template('onboarding/parts/home/map/map.html.jinja')
     else:
         return render_template('onboarding/parts/home/map/place_rooms.html.jinja')
     
+
 @homes.route('/home/map/rooms', methods=['POST', 'PUT'])
 @login_required
 def update_map_layout(): #FIXME: this triggers when rooms are dragged and dropped on the map
@@ -240,22 +246,68 @@ def update_map_layout(): #FIXME: this triggers when rooms are dragged and droppe
     floors = [floor.to_dict() for floor in floors]
     return render_template('onboarding/parts/home/map/map.html.jinja', floors=floors) #FIXME: create drag and drop frontend map interface'''
 
-@homes.route('/home/map/room/add', methods=['POST'])#FIXME: this triggers when rooms are dragged and dropped on the map
+@homes.route('/home/map/room/add/<int:floor_id>', methods=['POST'])#FIXME: stopps working after first room added
 @login_required
-def add_room():
+def add_room(floor_id):
+    floor = db.get_or_404(Floor, floor_id)
+    if not floor or floor.home_id != current_user.active_home_id:
+        return jsonify({"error": "Floor not found or unauthorized"}), 404
     item_data = request.form.get('item_data')
     print(f'item_data: {item_data}')
     # Add the new item to the database
-    new_room = Room(room_name=item_data, room_type=item_data)
+    new_room = Room(room_name=item_data, room_type=item_data, floor_id=floor_id)
     print(f'new_room: {new_room}')
     '''db.session.add(new_room)
     db.session.commit()'''
     #current_user.active_home.rooms.append(new_room)
 
     # Return the new item's data
+    return '#FIXME: return the new items data' 
     return jsonify({
         'id': new_room.room_id,
         'name': new_room.room_name,
-        'data_custom': 'customValue',
-        'class_name': 'new-class'
+        'floor': floor_id,
+        'order': new_room.order
     })
+    
+@homes.route('/home/map/room/add/type', methods=['POST'])
+@login_required
+def add_room_type():
+    custom_type = request.form.get('custom_type')
+    print(f'custom_type: {custom_type}')
+    if not custom_type:
+        return jsonify({'error': 'custom_type is empty'}), 400
+    custom_type = custom_type.strip()
+    if not custom_type:
+        return jsonify({'error': 'custom_type is empty'}), 400
+    data_type = 'room'
+    default_room_types = load_default(data_type)
+    if custom_type in default_room_types:
+        return jsonify({'error': 'custom_type already exists'}), 400
+    print(f'load_user_custom: {load_user_custom(data_type)}')
+    if custom_type in load_user_custom(data_type):
+        return jsonify({'error': 'custom_type already exists'}), 400
+    new_custom_type = Custom(name=custom_type, type='room', user_id=current_user.id)
+    db.session.add(new_custom_type)
+    db.session.commit()
+    return render_template('onboarding/parts/home/map/room_types_list.html.jinja', room_types=get_room_types())
+    
+def load_default(types):
+    with open(os.path.join(os.path.dirname(__file__), 'static', 'default.json')) as f:
+        default_data = json.load(f)
+        
+        return default_data[types]
+    
+def load_user_custom(data_type):
+    return db.session.execute(select(Custom.name).where(Custom.user_id == current_user.id).where(Custom.type == data_type)).scalars().all()
+
+def get_room_types():
+        data_type = 'room'
+        default_room_types = load_default(data_type)
+        
+        print(f'default_room_types: {default_room_types}')
+        
+        user_custom_room_types = load_user_custom(data_type)
+        print(f'user_custom_room_types: {user_custom_room_types}')
+        room_types = default_room_types + ([(custom) for custom in user_custom_room_types])
+        return room_types
