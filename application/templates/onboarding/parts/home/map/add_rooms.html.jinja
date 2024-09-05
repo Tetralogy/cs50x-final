@@ -5,10 +5,9 @@
                 class="nav-link {% if navfloor.floor_id == floor.floor_id %}active{% endif %}"
                 hx-get="/home/floor/edit/{{ navfloor.floor_id }}"
                 hx-target="#onboarding-map"
-                
             >
-                {{ navfloor.floor_name }}</a #FIXME
-            >
+                {{ navfloor.floor_name }}</a
+            >#FIXME: sort stops working after refresh and link click
         </li>
     {% endfor %}
 </ul>
@@ -54,7 +53,6 @@
 
 <script>
     const types = document.getElementById("types");
-    
 
     new Sortable(types, {
         group: {
@@ -69,7 +67,8 @@
 
     document.addEventListener("htmx:load", function () {
         const sortmap = document.getElementById("map");
-        new Sortable(sortmap, {
+        console.log('sortmap: ' + sortmap);
+        new Sortable(sortmap, { 
             group: {
                 name: "shared",
                 pull: true, // Prevent pulling from this list
@@ -88,19 +87,23 @@
                 var itemEl = evt.item; // dragged HTMLElement
                 var addedRoomType = itemEl.textContent;
                 var newIndex = evt.newIndex;
+                console.log('addedRoomType: ' + addedRoomType + 'new index: ' + newIndex);
+
+
 
                 // Make an htmx AJAX request to the server
                 htmx.ajax("POST", "/home/map/room/add/{{ floor.floor_id }}", {
                     values: { added_room_type: addedRoomType, order: newIndex },
                     target: itemEl,
-                    swap: "innerHTML", // returns the new content
+                    swap: "outerHTML", // returns the new content
                 });
             },
             onEnd: function () {
                 console.log("onEnd event triggered");
                 var newOrder = Array.from(sortmap.children).map(
                     (li) => li.dataset.id,
-                );
+                ); 
+                console.log('newOrder: ' + newOrder);
                 htmx.ajax("PUT", "/home/map/sort/{{ floor.floor_id }}", {
                     target: "#room-list-container",
                     swap: "innerHTML",
