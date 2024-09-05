@@ -188,7 +188,7 @@ def rename_floor(floor_id):
 
 @homes.route('/home/floors', methods=['GET'])
 @login_required
-def get_floors():
+def edit_floors_order():
     floors = current_user.active_home.floors.all()
     return render_template('onboarding/parts/home/attributes/floors/edit.html.jinja', floors=floors)
 
@@ -257,7 +257,7 @@ def delete_floor(floor_id):
     
 @homes.route('/home/floor/edit/<int:floor_id>', methods=['GET'])
 @login_required
-def edit_floor_rooms(floor_id):
+def edit_floor_layout(floor_id):
     print(f'edit_floor_rooms called with floor_id: {floor_id}')
     floor = db.get_or_404(Floor, floor_id)
     if not floor or floor.home_id != current_user.active_home_id:
@@ -269,14 +269,30 @@ def edit_floor_rooms(floor_id):
     set_active_floor(floor_id)
     return render_template('onboarding/parts/home/map/add_rooms.html.jinja', room_types=room_types, floor=floor) #FIXME: hx-push-url breaks the page
 
-#FIXME: map layout of floors with rooms
+@homes.route('/home/floor/edit/next', methods=['GET'])
+@login_required
+def edit_floor_layout_next():
+    current_floor = current_user.active_home.active_floor
+    if not current_floor:
+        print('No floor selected')
+        return jsonify({"error": "No floor selected"}), 404
+    next_floor_order = current_floor.order -1
+    next_floor = db.session.execute(select(Floor).where(Floor.home_id == current_user.active_home_id).where(Floor.order == next_floor_order)).first()
+    print(f'next_floor: {next_floor}')
+    if not next_floor:
+        print('No next floor')
+        return jsonify({"error": "No next floor"}), 404
+    floor_id = next_floor[0].floor_id
+    
+    return edit_floor_layout(floor_id)
+
 
 @homes.route('/home/map', methods=['GET'])
 @login_required
 def get_map():
     floors_without_rooms = db.session.execute(select(Floor).where(Floor.home_id == current_user.active_home_id).where(~Floor.rooms.any())).scalars().all()
     if floors_without_rooms:
-        edit_floor_rooms(floors_without_rooms[0].floor_id)
+        edit_floor_layout(floors_without_rooms[0].floor_id)
     return render_template('map/index.html.jinja', floors=current_user.active_home.floors.all())
 
 

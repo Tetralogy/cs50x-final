@@ -1,5 +1,5 @@
 <ul class="nav nav-tabs">
-    {% for navfloor in current_user.active_home.floors %}
+    {% for navfloor in current_user.active_home.floors | sort(attribute='order') | reverse %}
         <li class="nav-item">
             <a
                 class="nav-link {% if navfloor.floor_id == floor.floor_id %}active{% endif %}"
@@ -10,6 +10,9 @@
             >
         </li>
     {% endfor %}
+    <a hx-get="/home/floors">
+        edit floor order
+    </a>
 </ul>
 
 <h1>
@@ -113,3 +116,5 @@
         });
     });
 </script>
+        <button                 hx-get="/home/floor/edit/next"
+                hx-target="#onboarding-map">Save layout and go to next floor</button>
