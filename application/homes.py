@@ -212,10 +212,15 @@ def delete_floor(floor_id):
 @homes.route('/home/floor/edit/<int:floor_id>', methods=['GET'])
 @login_required
 def edit_floor_rooms(floor_id):
+    print(f'edit_floor_rooms called with floor_id: {floor_id}')
     floor = db.get_or_404(Floor, floor_id)
     if not floor or floor.home_id != current_user.active_home_id:
         return jsonify({"error": "Floor not found or unauthorized"}), 404
-    return render_template('onboarding/parts/home/map/add_rooms.html.jinja', floor=floor)#FIXME:
+
+    room_types = get_room_types()
+    print(f'default_data[types]: {type(room_types)}')
+    print(f'room_types after extension: {room_types}')
+    return render_template('onboarding/parts/home/map/add_rooms.html.jinja', room_types=room_types, floor=floor) #FIXME: hx-push-url
 
 #FIXME: map layout of floors with rooms
 
@@ -223,30 +228,26 @@ def edit_floor_rooms(floor_id):
 @login_required
 def get_map():
     floors_without_rooms = db.session.execute(select(Floor).where(Floor.home_id == current_user.active_home_id).where(~Floor.rooms.any())).scalars().all()
-    
     if floors_without_rooms:
-        floor_to_edit = floors_without_rooms[0]
+        edit_floor_rooms(floors_without_rooms[0].floor_id)
+    return render_template('map/index.html.jinja', floors=current_user.active_home.floors.all())
 
-        room_types = get_room_types()
-        print(f'default_data[types]: {type(room_types)}')
-        print(f'room_types after extension: {room_types}')
-        return render_template('onboarding/parts/home/map/add_rooms.html.jinja', room_types=room_types, floor=floor_to_edit)
-    if current_user.active_home.map_layout_completed: #FIXME: untangle this logic and link correctly
-        return render_template('onboarding/parts/home/map/map.html.jinja')
-    else:
-        return render_template('onboarding/parts/home/map/place_rooms.html.jinja')
-    
 
-@homes.route('/home/map/rooms', methods=['POST', 'PUT'])
+@homes.route('/home/map/sort/<int:floor_id>', methods=['PUT'])
 @login_required
-def update_map_layout(): #FIXME: this triggers when rooms are dragged and dropped on the map
-    print('update_map_layout')
-    return '', 204
-    ''' floors = current_user.active_home.floors.all()
-    floors = [floor.to_dict() for floor in floors]
-    return render_template('onboarding/parts/home/map/map.html.jinja', floors=floors) #FIXME: create drag and drop frontend map interface'''
+def update_map_layout(floor_id): 
+    list_order = request.form.getlist('list_order')
+    print(f'list_order: {list_order}')
+    for index, room_id in enumerate(list_order):
+        print(f'index: {index}, room_id: {room_id}')
+        room = db.get_or_404(Room, room_id)
+        print(f'room: {room}')
+        room.order = index
+    db.session.commit()
+    floor = db.get_or_404(Floor, floor_id)
+    return render_template('onboarding/parts/home/map/list.html.jinja', floor=floor)
 
-@homes.route('/home/map/room/add/<int:floor_id>', methods=['POST'])#FIXME: stopps working after first room added
+@homes.route('/home/map/room/add/<int:floor_id>', methods=['POST'])
 @login_required
 def add_room(floor_id):
     floor = db.get_or_404(Floor, floor_id)
@@ -274,7 +275,8 @@ def add_room(floor_id):
     db.session.commit()
 
     # Return the new item's data
-    return new_room_name, 201 
+    return render_template('onboarding/parts/home/map/room_icon.html.jinja', floor=floor, room=new_room)
+    return new_room_name, 201 #FIXME: create appropriate icon and labels in html
     return jsonify(
         id= new_room.room_id,
         name= new_room.room_name,
@@ -282,6 +284,7 @@ def add_room(floor_id):
         order = new_room.order
     )
     
+#fixme: create route to edit room names
 @homes.route('/home/map/room/add/type', methods=['POST'])
 @login_required
 def add_room_type():

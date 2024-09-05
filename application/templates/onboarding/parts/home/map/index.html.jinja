@@ -1,4 +1,4 @@
 <h1>
     this is onboarding/parts/home/attributes/map/index.html.jinja
 </h1>
-<div hx-get="/home/map" hx-trigger="load" id="onboarding-map"></div>
+<div hx-get="/home/floor/edit/{{ current_user.active_home.floors[0].floor_id }}" hx-trigger="load"  id="onboarding-map"></div>
