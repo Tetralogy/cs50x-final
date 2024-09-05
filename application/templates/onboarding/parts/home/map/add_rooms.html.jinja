@@ -7,7 +7,7 @@
                 hx-target="#onboarding-map"
             >
                 {{ navfloor.floor_name }}</a
-            >#FIXME: sort stops working after refresh and link click
+            >
         </li>
     {% endfor %}
 </ul>
@@ -52,6 +52,7 @@
 </div>
 
 <script>
+    document.addEventListener("htmx:load", function () {
     const types = document.getElementById("types");
 
     new Sortable(types, {
@@ -65,8 +66,7 @@
         cursor: "move",
     });
 
-    document.addEventListener("htmx:load", function () {
-        const sortmap = document.getElementById("map");
+        const sortmap = document.getElementById("map-{{  current_user.active_home.active_floor.floor_id  }}");
         console.log('sortmap: ' + sortmap);
         new Sortable(sortmap, { 
             group: {
@@ -92,7 +92,7 @@
 
 
                 // Make an htmx AJAX request to the server
-                htmx.ajax("POST", "/home/map/room/add/{{ floor.floor_id }}", {
+                htmx.ajax("POST", "/home/map/room/add/{{ current_user.active_home.active_floor.floor_id }}", {
                     values: { added_room_type: addedRoomType, order: newIndex },
                     target: itemEl,
                     swap: "outerHTML", // returns the new content
@@ -104,7 +104,7 @@
                     (li) => li.dataset.id,
                 ); 
                 console.log('newOrder: ' + newOrder);
-                htmx.ajax("PUT", "/home/map/sort/{{ floor.floor_id }}", {
+                htmx.ajax("PUT", "/home/map/sort/{{ current_user.active_home.active_floor.floor_id }}", {
                     target: "#room-list-container",
                     swap: "innerHTML",
                     values: { list_order: newOrder },

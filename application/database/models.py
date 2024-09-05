@@ -78,15 +78,19 @@ class Home(db.Model):
     __table_args__ = (UniqueConstraint('user_id', 'home_name', name='unique_home_name'),)
     home_size_sqm: Mapped[float] = mapped_column(default=0.0)
     user = relationship("User", back_populates="homes", foreign_keys=[user_id])
-    rooms = relationship('Room', back_populates="homes", lazy='dynamic')
-    floors = relationship('Floor', back_populates="homes", lazy='dynamic')
+    rooms = relationship('Room', back_populates="homes", lazy='dynamic', foreign_keys="[Room.home_id]")
+    floors = relationship('Floor', back_populates="homes", lazy='dynamic', foreign_keys='Floor.home_id')
+    active_floor_id: Mapped[int] = mapped_column(ForeignKey('floor.floor_id'), nullable=True)
+    active_floor = relationship("Floor", foreign_keys=[active_floor_id])
+    active_room_id: Mapped[int] = mapped_column(ForeignKey('room.room_id'), nullable=True)
+    active_room = relationship("Room", foreign_keys=[active_room_id])
 
 class Floor(db.Model):
     floor_id: Mapped[int] = mapped_column(primary_key=True)
     home_id: Mapped[int] = mapped_column(ForeignKey('home.home_id'))
     floor_name: Mapped[str]
     order: Mapped[int]
-    homes = relationship('Home', back_populates="floors")
+    homes = relationship('Home', back_populates="floors", foreign_keys=[home_id])
     rooms = relationship('Room', back_populates="floors")
     
 class Room(db.Model): #FIXME: ROOM LEVEL AND LOCATION ON THE MAP
@@ -105,8 +109,8 @@ class Room(db.Model): #FIXME: ROOM LEVEL AND LOCATION ON THE MAP
     room_dirtiness_level: Mapped[float] = mapped_column(default=0.0)
     room_tools_supplies_on_hand: Mapped[str] = mapped_column(default='')
     room_tools_supplies_required: Mapped[str] = mapped_column(default='')
-    homes = relationship("Home", back_populates="rooms")
-    floors = relationship("Floor", back_populates="rooms")
+    homes = relationship("Home", back_populates="rooms", foreign_keys=[home_id])
+    floors = relationship("Floor", back_populates="rooms", foreign_keys=[floor_id])
     zones = relationship('Zone', back_populates="rooms", lazy='dynamic')
     supply = relationship('Supply', back_populates="rooms", lazy='dynamic')
     tasks = relationship('Task', back_populates="rooms", lazy='dynamic')

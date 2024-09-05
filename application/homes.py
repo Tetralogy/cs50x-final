@@ -29,7 +29,29 @@ def home_setup():
     room_ids = db.session.execute(room_ids_query).scalars().all()
     if not room_ids:
         print('home_layout is None')
-    return render_template('onboarding/parts/home/map/index.html.jinja')#FIXME: ADD CONDITIONS FOR WHEN HOME HAS FLOORS AND WHEN HOME HAS ROOMS
+        first_floor_id = db.session.execute(
+            select(Floor.floor_id).where(Floor.home_id == current_home.home_id).order_by(Floor.order)
+        ).scalar()
+        if first_floor_id is None:
+            raise ValueError('No floors in home')
+        set_active_floor(first_floor_id)
+        return render_template('onboarding/parts/home/map/index.html.jinja', floor=current_home.active_floor)#FIXME: ADD CONDITIONS FOR WHEN HOME HAS FLOORS AND WHEN HOME HAS ROOMS
+    floors_without_rooms = db.session.execute(
+        select(Floor.floor_id).where(Floor.home_id == current_home.home_id)
+            .where(Floor.floor_id.not_in(select(Room.floor_id).where(Room.home_id == current_home.home_id)))
+    ).scalars().all()
+    print(f'floors_without_rooms: {floors_without_rooms}')
+    if floors_without_rooms:
+        first_floor_without_rooms = db.session.execute(
+            select(Floor.floor_id).where(Floor.home_id == current_home.home_id)
+                .where(Floor.floor_id.notin_(select(Room.floor_id).where(Room.home_id == current_home.home_id)))
+                .order_by(Floor.order)
+        ).scalar()
+        if first_floor_without_rooms is None:
+            raise ValueError('No floors without rooms')
+        set_active_floor(first_floor_without_rooms)
+        return render_template('onboarding/parts/home/map/index.html.jinja', floor=current_home.active_floor)
+    return render_template('onboarding/parts/home/map/index.html.jinja', floor=current_home.active_floor)#temporary, 
     raise NotImplementedError('home_setup not yet finished')
 
 @homes.route('/home/name', methods=['GET', 'POST', 'PUT'])
@@ -57,7 +79,7 @@ def name_home():
             
             new_active_home = new_home.home_id
             
-            return render_template('onboarding/parts/home/attributes/name/home_name_text.html.jinja', home_name=active_home(new_active_home)) 
+            return render_template('onboarding/parts/home/attributes/name/home_name_text.html.jinja', home_name=set_active_home(new_active_home)) 
         else:
             home_query = select(Home).where(Home.home_id == current_user.active_home_id)
             home = db.session.execute(home_query).scalar_one_or_none()
@@ -68,15 +90,39 @@ def name_home():
 
 @homes.route('/home/active', methods=['PUT'])
 @login_required
-def active_home(home_id):
+def set_active_home(home_id):
     current_user.active_home_id = home_id
     home_query = select(Home).where(Home.home_id == home_id)
     home = db.session.execute(home_query).scalar_one_or_none()
     if home.user_id == current_user.id:
         current_user.active_home = home
         db.session.commit()
+        print(f'current_user.active_home: {current_user.active_home}')
         return home.home_name #the name of the current active home
     
+@homes.route('/home/floor/active', methods=['PUT'])
+@login_required
+def set_active_floor(floor_id):
+    current_user.active_home.active_floor_id = floor_id
+    floor_query = select(Floor).where(Floor.floor_id == floor_id)
+    floor = db.session.execute(floor_query).scalar_one_or_none()
+    if floor.home_id == current_user.active_home_id:
+        current_user.active_home.active_floor = floor
+        db.session.commit()
+        print(f'current_user.active_home.active_floor: {current_user.active_home.active_floor}')
+        return floor.floor_name #the name of the current active floor
+    
+@homes.route('/home/room/active', methods=['PUT'])
+@login_required
+def set_active_room(room_id):
+    current_user.active_home.active_room_id = room_id
+    room_query = select(Room).where(Room.room_id == room_id)
+    room = db.session.execute(room_query).scalar_one_or_none()
+    if room.home_id == current_user.active_home_id:
+        current_user.active_home.active_room = room
+        db.session.commit()
+        print(f'current_user.active_home.active_room: {current_user.active_home.active_room}')
+        return room.room_name #the name of the current active room
 
 @homes.route('/home/size', methods=['GET', 'PUT'])
 @login_required
@@ -218,9 +264,10 @@ def edit_floor_rooms(floor_id):
         return jsonify({"error": "Floor not found or unauthorized"}), 404
 
     room_types = get_room_types()
-    print(f'default_data[types]: {type(room_types)}')
-    print(f'room_types after extension: {room_types}')
-    return render_template('onboarding/parts/home/map/add_rooms.html.jinja', room_types=room_types, floor=floor) #FIXME: hx-push-url
+    #print(f'default_data[types]: {type(room_types)}')
+    #print(f'room_types after extension: {room_types}')
+    set_active_floor(floor_id)
+    return render_template('onboarding/parts/home/map/add_rooms.html.jinja', room_types=room_types, floor=floor) #FIXME: hx-push-url breaks the page
 
 #FIXME: map layout of floors with rooms
 
@@ -334,9 +381,9 @@ def get_room_types():
         data_type = 'room'
         default_room_types = load_default(data_type)
         
-        print(f'default_room_types: {default_room_types}')
+        #print(f'default_room_types: {default_room_types}')
         
         user_custom_room_types = load_user_custom(data_type)
-        print(f'user_custom_room_types: {user_custom_room_types}')
+        #print(f'user_custom_room_types: {user_custom_room_types}')
         room_types = default_room_types + ([(custom) for custom in user_custom_room_types])
         return room_types
