@@ -131,7 +131,7 @@ def rename_floor(floor_id):
     if request.method == 'GET':
         if not floor or floor.home_id != current_user.active_home_id:
             return jsonify({"success": False, "error": "Task not found or unauthorized"}), 404
-        return render_template('onboarding/parts/home/attributes/floors/name_field.html.jinja', floor=floor)
+        return render_template('onboarding/parts/home/attributes/floors/rename_field.html.jinja', floor=floor)
     if request.method == 'PUT':
         new_floor_name = request.form.get(f'input_floor_name-{floor.floor_id}')
         if not new_floor_name:
@@ -284,7 +284,21 @@ def add_room(floor_id):
         order = new_room.order
     )
     
-#fixme: create route to edit room names
+@homes.route('/home/room/rename/<int:room_id>', methods=['GET', 'PUT'])
+@login_required
+def rename_room(room_id):
+    room = db.get_or_404(Room, room_id)
+    if request.method == 'GET':
+        if not room or room.home_id != current_user.active_home_id:
+            return jsonify({"success": False, "error": "Room not found or unauthorized"}), 404
+        return render_template('onboarding/parts/home/map/room_rename_field.html.jinja', room=room)
+    if request.method == 'PUT':
+        new_room_name = request.form.get(f'input_room_name-{room.room_id}')
+        if not new_room_name:
+            return "Error: 'new_room_name' must be provided", 400
+        room.room_name = new_room_name
+        return render_template('onboarding/parts/home/map/room_name_text.html.jinja', room=room)
+    
 @homes.route('/home/map/room/add/type', methods=['POST'])
 @login_required
 def add_room_type():

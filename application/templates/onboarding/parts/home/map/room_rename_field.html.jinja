@@ -1,0 +1,19 @@
+    <span id="room-name-field-{{ room.room_id }}" class="input-group-text">
+    <input
+        autocomplete="off"
+        autofocus
+        class="form-control"
+        id="input_room_name-{{ room.room_id }}"
+        name="input_room_name-{{ room.room_id }}"
+        placeholder="New Room Name"
+        hx-put="/home/room/rename/{{ room.room_id }}"
+        hx-trigger="keyup[key=='Enter'], blur, keyup changed delay:5s"
+
+        hx-target="#room-name-field-{{ room.room_id }}"
+        hx-swap="outerHTML"
+        value="{{ room.room_name }}"
+        type="text" aria-label="input_room_name-{{ room.room_id }}"
+        onfocus="this.setSelectionRange(this.value.length, this.value.length);"
+    />
+
+    </span>

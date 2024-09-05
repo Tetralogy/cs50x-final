@@ -1,0 +1,10 @@
+<span
+    class="input-group-text"
+    id="room-{{ room.room_id }}"
+    hx-get="/home/room/rename/{{ room.room_id }}"
+    hx-target="this"
+    hx-swap="outerHTML"
+    hx-trigger="click"
+>
+    {{ room.room_name }}
+</span>
