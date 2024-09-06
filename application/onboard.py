@@ -16,8 +16,13 @@ def onboarding():
     if not home_ids:
         print('homes is empty')
         return render_template('onboarding/parts/home/index.html.jinja')
-
-    return render_template('onboarding/parts/home/index.html.jinja') #temporary
+    print(f'current_user.active_home: {current_user.active_home}')
+    print(f'current_user.active_home.active_floor: {current_user.active_home.active_floor}')
+    print(f'current_user.active_home.rooms: {all([floor.rooms for floor in current_user.active_home.floors])}')
+    if current_user.active_home and current_user.active_home.active_floor and all([floor.rooms for floor in current_user.active_home.floors]):
+        print('all home, floor, and room are set')
+        return render_template('onboarding/parts/home/walkthrough/index.html.jinja') #go to walkthrough
+    return render_template('onboarding/parts/home/index.html.jinja') #temporary, go to home setup
     
     '''get the current home id when it is created
     room_ids = [room.room_id for room in current_user.room_ids]

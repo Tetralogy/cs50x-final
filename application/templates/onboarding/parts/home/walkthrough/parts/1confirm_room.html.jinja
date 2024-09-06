@@ -1,0 +1,24 @@
+<div>
+    <p>
+        Please walk into to the
+        {{ current_user.active_home.active_room.room_name }} room and confirm
+        that the name and type of room are correct.
+    </p>
+    <input
+        type="text"
+        id="room-name-{{ current_user.active_home.active_room.room_id }}"
+        class="form-control"
+        value="{{ current_user.active_home.active_room.room_name }}"
+        hx-post="/home/room/rename/{{ current_user.active_home.active_room.room_id }}"
+        hx-target="#room-{{ current_user.active_home.active_room.room_id }}"
+        hx-swap="outerHTML"
+        hx-trigger="keyup[key=='Enter'], blur, keyup changed delay:5s"
+    />
+
+    <select name="room_type" class="form-select" aria-label="Room type">
+        <option value="" selected disabled>Choose room type</option>
+        {% for room_type in room_types %}
+            <option value="{{ room_type }}">{{ room_type }}</option>
+        {% endfor %}
+    </select>
+</div>

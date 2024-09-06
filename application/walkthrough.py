@@ -6,7 +6,7 @@ from application.database.models import Room
 #FIXME: INIT
 walkthrough = Blueprint('walkthrough', __name__)
 
-@walkthrough.route('/walkthrough/start', methods=['GET'])
+@walkthrough.route('/walkthrough', methods=['GET'])
 @login_required
 def walk_start():
     if not current_user.active_home.active_room:

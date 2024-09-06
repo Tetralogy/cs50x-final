@@ -133,12 +133,12 @@ class Zone(db.Model):
     rooms = relationship('Room', back_populates="zones")
     appliances = relationship('Appliance', back_populates="zones", lazy='dynamic')
     
-'''class Appliance(db.Model):
+class Appliance(db.Model):
     appliance_id: Mapped[int] = mapped_column(primary_key=True)
     zone_id: Mapped[int] = mapped_column(ForeignKey('zone.zone_id'))
     appliance: Mapped[str]
     zones = relationship('Zone', back_populates="appliances")
-    '''
+    
 class Photo(db.Model):
     photo_id: Mapped[int] = mapped_column(primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey('user.id'))
