@@ -100,15 +100,13 @@ class Room(db.Model): #FIXME: ROOM LEVEL AND LOCATION ON THE MAP
     order: Mapped[int]
     room_name: Mapped[str]
     room_type: Mapped[str] = mapped_column(default='')
-    room_size: Mapped[float] = mapped_column(default=0.0)
-    room_flooring_type: Mapped[str] = mapped_column(default='')
-    room_windows: Mapped[int] = mapped_column(default=0)
-    room_function: Mapped[str] = mapped_column(default='')
-    room_frequency_of_use: Mapped[str] = mapped_column(default='')
-    room_importance: Mapped[str] = mapped_column(default='')
-    room_dirtiness_level: Mapped[float] = mapped_column(default=0.0)
-    room_tools_supplies_on_hand: Mapped[str] = mapped_column(default='')
-    room_tools_supplies_required: Mapped[str] = mapped_column(default='')
+    #room_size: Mapped[float] = mapped_column(default=0.0)
+    #room_function: Mapped[str] = mapped_column(default='')
+    #room_frequency_of_use: Mapped[str] = mapped_column(default='')
+    #room_importance: Mapped[str] = mapped_column(default='')
+    #room_dirtiness_level: Mapped[float] = mapped_column(default=0.0)
+    #room_tools_supplies_on_hand: Mapped[str] = mapped_column(default='')
+    #room_tools_supplies_required: Mapped[str] = mapped_column(default='')
     homes = relationship("Home", back_populates="rooms", foreign_keys=[home_id])
     floors = relationship("Floor", back_populates="rooms", foreign_keys=[floor_id])
     zones = relationship('Zone', back_populates="rooms", lazy='dynamic')
@@ -135,12 +133,12 @@ class Zone(db.Model):
     rooms = relationship('Room', back_populates="zones")
     appliances = relationship('Appliance', back_populates="zones", lazy='dynamic')
     
-class Appliance(db.Model):
+'''class Appliance(db.Model):
     appliance_id: Mapped[int] = mapped_column(primary_key=True)
     zone_id: Mapped[int] = mapped_column(ForeignKey('zone.zone_id'))
     appliance: Mapped[str]
     zones = relationship('Zone', back_populates="appliances")
-    
+    '''
 class Photo(db.Model):
     photo_id: Mapped[int] = mapped_column(primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey('user.id'))
@@ -226,7 +224,7 @@ class TaskProgress(db.Model):
 
 class Supply(db.Model):
     item_id: Mapped[int] = mapped_column(primary_key=True)
-    room_id: Mapped[int] = mapped_column(ForeignKey('room.room_id'))
+    room_id: Mapped[int] = mapped_column(ForeignKey('room.room_id')) #room where the item is stored
     user_id: Mapped[int] = mapped_column(ForeignKey('user.id'))
     item_name: Mapped[str]
     item_type: Mapped[str]
