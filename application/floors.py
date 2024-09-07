@@ -146,7 +146,7 @@ def edit_floor_layout(floor_id):
     #print(f'default_data[types]: {type(room_types)}')
     #print(f'room_types after extension: {room_types}')
     set_active_floor(floor_id)
-    return render_template('onboarding/parts/home/map/add_rooms.html.jinja', room_types=room_types, floor=floor) #FIXME: hx-push-url breaks the page
+    return render_template('onboarding/parts/home/map/add_rooms.html.jinja', room_types=room_types, floor=floor) #todo: hx-push-url breaks the page
 
 @floors.route('/home/floor/edit/next', methods=['GET'])
 @login_required
