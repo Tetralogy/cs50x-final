@@ -73,6 +73,7 @@ def create_app(config_filename=None):
     from .homes import homes
     from .floors import floors
     from .rooms import rooms
+    from .walkthrough import walkthrough
 
     login_manager.init_app(app)  # Initialize login_manager with the app
 
@@ -97,6 +98,7 @@ def create_app(config_filename=None):
     app.register_blueprint(homes)
     app.register_blueprint(floors)
     app.register_blueprint(rooms)
+    app.register_blueprint(walkthrough)
     
     migrate = Migrate(app, db)
 
