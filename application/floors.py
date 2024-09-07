@@ -1,7 +1,12 @@
+from flask import Blueprint
+
+
 fixme: init
 fixme: imports
 
-@homes.route('/home/floor/active', methods=['PUT'])
+floors = Blueprint('floors', __name__)
+
+@floors.route('/home/floor/active', methods=['PUT'])
 @login_required
 def set_active_floor(floor_id):
     current_user.active_home.active_floor_id = floor_id
@@ -14,7 +19,7 @@ def set_active_floor(floor_id):
         return floor.floor_name #the name of the current active floor
     
     
-@homes.route('/home/floor/name', methods=['GET', 'PUT'])
+@floors.route('/home/floor/name', methods=['GET', 'PUT'])
 @login_required
 def name_floor():
     current_home = current_user.active_home
@@ -37,13 +42,13 @@ def name_floor():
         if not new_floor_name or not new_floor_number:
             return "Error: 'new_floor_name' and 'new_floor_number' must be provided", 400
         
-@homes.route('/home/floor/number', methods=['GET', 'PUT'])
+@floors.route('/home/floor/number', methods=['GET', 'PUT'])
 @login_required
 def floor_num():
     raise NotImplementedError('floor_num not yet finished')
 
 
-@homes.route('/home/floor/rename/<int:floor_id>', methods=['GET', 'PUT'])
+@floors.route('/home/floor/rename/<int:floor_id>', methods=['GET', 'PUT'])
 @login_required
 def rename_floor(floor_id):
     floor = db.get_or_404(Floor, floor_id)
@@ -59,13 +64,13 @@ def rename_floor(floor_id):
         return render_template('onboarding/parts/home/attributes/floors/name_text.html.jinja', floor=floor)
     
 
-@homes.route('/home/floors', methods=['GET'])
+@floors.route('/home/floors', methods=['GET'])
 @login_required
 def edit_floors_order():
     floors = current_user.active_home.floors.all()
     return render_template('onboarding/parts/home/attributes/floors/edit.html.jinja', floors=floors)
 
-@homes.route('/home/floor/new', methods=['GET', 'POST'])
+@floors.route('/home/floor/new', methods=['GET', 'POST'])
 @login_required
 def new_floor():
     if request.method == 'GET':
@@ -99,7 +104,7 @@ def create_floor():
     return render_template('onboarding/parts/home/attributes/floors/row.html.jinja', floor=floor), 201
 
 
-@homes.route('/home/floor/sort', methods=['POST'])
+@floors.route('/home/floor/sort', methods=['POST'])
 def update_order():
     new_order = request.form.getlist('order')
     print(f'new_order: {new_order}')
@@ -113,7 +118,7 @@ def update_order():
     print(f'floors returned: {floors}')
     return render_template('onboarding/parts/home/attributes/floors/list.html.jinja', floors=floors)
 
-@homes.route('/home/floor/delete/<int:floor_id>', methods=['DELETE'])
+@floors.route('/home/floor/delete/<int:floor_id>', methods=['DELETE'])
 @login_required
 def delete_floor(floor_id):
     floor = db.get_or_404(Floor, floor_id)
@@ -128,7 +133,7 @@ def delete_floor(floor_id):
         db.session.rollback()
         return jsonify({"error": str(e)}), 500
     
-@homes.route('/home/floor/edit/<int:floor_id>', methods=['GET'])
+@floors.route('/home/floor/edit/<int:floor_id>', methods=['GET'])
 @login_required
 def edit_floor_layout(floor_id):
     print(f'edit_floor_rooms called with floor_id: {floor_id}')
@@ -142,7 +147,7 @@ def edit_floor_layout(floor_id):
     set_active_floor(floor_id)
     return render_template('onboarding/parts/home/map/add_rooms.html.jinja', room_types=room_types, floor=floor) #FIXME: hx-push-url breaks the page
 
-@homes.route('/home/floor/edit/next', methods=['GET'])
+@floors.route('/home/floor/edit/next', methods=['GET'])
 @login_required
 def edit_floor_layout_next():
     current_floor = current_user.active_home.active_floor

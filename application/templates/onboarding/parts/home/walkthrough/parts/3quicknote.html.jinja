@@ -1,0 +1,28 @@
+<p>
+    Please quickly add task drafts for this room. You can add things that need
+    to be cleaned or organized or maintained or upgraded.
+</p>
+<form
+    hx-post="/home/room/{{ current_user.active_home.active_room.room_id }}/add-task-draft"
+    hx-target="#room-{{ current_user.active_home.active_room.room_id }}"
+>
+    <input type="text" name="task_title" placeholder="Task title" />
+    <button type="submit" class="btn btn-primary">Add task draft</button>
+</form>
+
+5. FIXME: take and upload task photos
+<p>
+    Take pictures of areas in the room that contain tasks you need to do. This
+    will help you to remember what needs to be done and make it easier to create
+    tasks later.
+</p>
+<form
+    hx-post="/home/room/photo/upload/{{ current_user.active_home.active_room.room_id }}"
+    hx-trigger="change"
+    hx-swap="outerHTML"
+    hx-target="#room-{{ current_user.active_home.active_room.room_id }}"
+    class="mt-3"
+>
+    <input type="file" name="photo" accept="image/*" />
+    <button class="btn btn-primary" type="submit">Upload</button>
+</form>

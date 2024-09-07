@@ -1,6 +1,13 @@
+from flask import Blueprint
+
+
 fixme: init
 fixme: imports
-@homes.route('/home/room/active', methods=['PUT'])
+
+rooms = Blueprint('rooms', __name__)
+
+
+@rooms.route('/home/room/active', methods=['PUT'])
 @login_required
 def set_active_room(room_id):
     current_user.active_home.active_room_id = room_id
@@ -12,7 +19,7 @@ def set_active_room(room_id):
         print(f'current_user.active_home.active_room: {current_user.active_home.active_room}')
         return room.room_name #the name of the current active room
     
-@homes.route('/home/map/sort/<int:floor_id>', methods=['PUT'])
+@rooms.route('/home/map/sort/<int:floor_id>', methods=['PUT'])
 @login_required
 def update_map_layout(floor_id): 
     list_order = request.form.getlist('list_order')
@@ -26,7 +33,7 @@ def update_map_layout(floor_id):
     floor = db.get_or_404(Floor, floor_id)
     return render_template('onboarding/parts/home/map/list.html.jinja', floor=floor)
 
-@homes.route('/home/map/room/add/<int:floor_id>', methods=['POST'])
+@rooms.route('/home/map/room/add/<int:floor_id>', methods=['POST'])
 @login_required
 def add_room(floor_id):
     floor = db.get_or_404(Floor, floor_id)
@@ -63,7 +70,7 @@ def add_room(floor_id):
         order = new_room.order
     )
     
-@homes.route('/home/room/rename/<int:room_id>', methods=['GET', 'PUT'])
+@rooms.route('/home/room/rename/<int:room_id>', methods=['GET', 'PUT'])
 @login_required
 def rename_room(room_id):
     room = db.get_or_404(Room, room_id)
@@ -78,7 +85,7 @@ def rename_room(room_id):
         room.room_name = new_room_name
         return render_template('onboarding/parts/home/map/room_name_text.html.jinja', room=room)
     
-@homes.route('/home/map/room/add/type', methods=['POST'])
+@rooms.route('/home/map/room/add/type', methods=['POST'])
 @login_required
 def add_room_type():
     custom_type = request.form.get('custom_type')

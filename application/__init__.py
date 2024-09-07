@@ -71,6 +71,8 @@ def create_app(config_filename=None):
     from .onboard import onboard
     from .account import account
     from .homes import homes
+    from .floors import floors
+    from .rooms import rooms
 
     login_manager.init_app(app)  # Initialize login_manager with the app
 
@@ -93,6 +95,8 @@ def create_app(config_filename=None):
     app.register_blueprint(onboard)
     app.register_blueprint(account)
     app.register_blueprint(homes)
+    app.register_blueprint(floors)
+    app.register_blueprint(rooms)
     
     migrate = Migrate(app, db)
 

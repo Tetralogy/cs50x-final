@@ -14,122 +14,17 @@ application/templates/onboarding/parts/home/walkthrough/parts/1confirm_room.html
 
 3. FIXME: take and upload room panorama picture, stand in center of room, take 1
 wide angle from corner or 2 from middle of room
-<p>
-    Please take a panorama picture of the room. Stand in the center of the room
-    and take either 1 wide angle picture from a corner or 2 pictures from the
-    middle of the room.
-</p>
-<form
-    hx-post="/home/room/{{ current_user.active_home.active_room.room_id }}/add-photo"
-    hx-target="#room-{{ current_user.active_home.active_room.room_id }}"
->
-    <input type="file" name="photo" accept="image/*" />
-    <button type="submit" class="btn btn-primary">Upload photo</button>
-</form>
+application/templates/onboarding/parts/home/walkthrough/parts/2photo.html.jinja
 
 4. FIXME: quick add task drafts, no details, just task title
-<p>
-    Please quickly add task drafts for this room. You can add things that need
-    to be cleaned or organized or maintained or upgraded.
-</p>
-<form
-    hx-post="/home/room/{{ current_user.active_home.active_room.room_id }}/add-task-draft"
-    hx-target="#room-{{ current_user.active_home.active_room.room_id }}"
->
-    <input type="text" name="task_title" placeholder="Task title" />
-    <button type="submit" class="btn btn-primary">Add task draft</button>
-</form>
+application/templates/onboarding/parts/home/walkthrough/parts/3quicknote.html.jinja
 
 5. FIXME: take and upload task photos
-<p>
-    Take pictures of areas in the room that contain tasks you need to do. This
-    will help you to remember what needs to be done and make it easier to create
-    tasks later.
-</p>
-<form
-    hx-post="/home/room/photo/upload/{{ current_user.active_home.active_room.room_id }}"
-    hx-trigger="change"
-    hx-swap="outerHTML"
-    hx-target="#room-{{ current_user.active_home.active_room.room_id }}"
-    class="mt-3"
->
-    <input type="file" name="photo" accept="image/*" />
-    <button class="btn btn-primary" type="submit">Upload</button>
-</form>
+
 
 6. FIXME: move to next room
-<p class="mt-3">
-    When you're done adding tasks and photos for this room, drag the room to the
-    next position in the grid to move on to the next room.
-</p>
+application/templates/onboarding/parts/home/walkthrough/parts/4next.html.jinja
 
-7. FIXME: edit the room zones, add the photos to the correct rooms and zones
-<p>
-    Select the important areas of the room that have tasks. These areas will be
-    used to generate tasks for you.
-</p>
-<canvas id="annotate-canvas" width="600" height="400"></canvas>
-
-<script>
-    const canvas = document.getElementById("annotate-canvas");
-    const ctx = canvas.getContext("2d");
-
-    let isDrawing = false;
-    let lastX, lastY;
-
-    canvas.addEventListener("mousedown", (e) => {
-        isDrawing = true;
-        lastX = e.offsetX;
-        lastY = e.offsetY;
-    });
-
-    canvas.addEventListener("mousemove", (e) => {
-        if (isDrawing) {
-            ctx.beginPath();
-            ctx.moveTo(lastX, lastY);
-            ctx.lineTo(e.offsetX, e.offsetY);
-            ctx.stroke();
-            lastX = e.offsetX;
-            lastY = e.offsetY;
-        }
-    });
-
-    canvas.addEventListener("mouseup", () => {
-        isDrawing = false;
-    });
-
-    canvas.addEventListener("mouseout", () => {
-        isDrawing = false;
-    });
-</script>
-
-8. FIXME: attach tasks to zones with annotations
-<p>
-    Now that you have created zones, you can start adding tasks to each zone. To
-    do this, click on a zone and then click on the "Add task" button. Enter the
-    task title and description, and then click "Add task" to add it to the zone.
-</p>
-
-9. FIXME: cleanup the list of tasks, prioritize tasks
-<p>
-    To cleanup your task lists, prioritize tasks, and schedule tasks, follow
-    these steps:
-</p>
-<ol>
-    <li>
-        Click on a task to edit it. You can change the title, description, due
-        date, priority, and status.
-    </li>
-    <li>
-        Click on the "Prioritize" button to prioritize tasks. You can drag and
-        drop tasks to reorder them.
-    </li>
-    <li>
-        Click on the "Schedule" button to schedule tasks. You can choose a due
-        date and time, and set reminders.
-    </li>
-    <li>Click on the "Delete" button to delete a task.</li>
-</ol>
 
 <button
     hx-post="/walkthrough/{{ current_user.active_home.active_room.room_id }}"

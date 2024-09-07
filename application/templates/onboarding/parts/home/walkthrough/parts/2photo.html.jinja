@@ -1,0 +1,12 @@
+<p>
+    Please take a panorama picture of the room. Stand in the center of the room
+    and take either 1 wide angle picture from a corner or 2 pictures from the
+    middle of the room.
+</p>
+<form
+    hx-post="/home/room/{{ current_user.active_home.active_room.room_id }}/add-photo"
+    hx-target="#room-{{ current_user.active_home.active_room.room_id }}"
+>
+    <input type="file" name="photo" accept="image/*" />
+    <button type="submit" class="btn btn-primary">Upload photo</button>
+</form>
