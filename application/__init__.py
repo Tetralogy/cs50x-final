@@ -1,3 +1,4 @@
+import functools
 import os
 from dotenv import load_dotenv
 from flask import Flask, render_template
@@ -5,7 +6,7 @@ from flask_login import LoginManager
 from flask_migrate import Migrate
 from flask_session import Session
 
-from application.utils import apply_recursive_detection, detect_recursive_route, detect_recursive_rendering
+#from application.utils import setup_recursive_detection
 from .extension import db
 
 
@@ -63,6 +64,7 @@ def create_app(config_filename=None):
     db.init_app(app)
     session.init_app(app)
     
+    
     from .main import main
     from .auth import auth
     from .database.models import Base, models, User
@@ -105,12 +107,6 @@ def create_app(config_filename=None):
     app.register_blueprint(walkthrough)
     
     migrate = Migrate(app, db) # Fixme: Migrate should be initialized after all blueprints are registered
-    
-    # Apply the decorator to the render_template function
-    app.jinja_env.globals['render_template'] = detect_recursive_rendering(render_template)
-
-    # Call this function after all routes have been defined
-    apply_recursive_detection(app) #fixme: apply to all routes without needing to put the decorator
 
     with app.app_context():
         db.create_all()
