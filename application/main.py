@@ -39,11 +39,6 @@ def index():
 
 
 
-@main.route('/walkthrough', methods=['GET', 'POST'])
-@login_required
-def walkthrough():
-    raise NotImplementedError("walkthrough not yet implemented")
-
 
 
 @main.route('/map', methods=['GET', 'POST'])
