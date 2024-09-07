@@ -116,3 +116,13 @@ def create_new_list_view():
     list_name = request.form.get('list_name')
     new_list = create_new_list(list_name)
     return jsonify({'status': 'success', 'message': 'New list created successfully'})'''
+    
+@main.route('/sitemap', methods=['GET'])
+@login_required
+def sitemap():
+    links = []
+    for rule in current_app.url_map.iter_rules():
+        if "GET" in rule.methods and len(rule.arguments) == 0:
+            url = url_for(rule.endpoint, _external=True)
+            links.append(url)
+    return render_template('base/parts/sitemap.html', links=links)
