@@ -3,7 +3,6 @@ from flask_login import current_user, login_required
 from application.extension import db
 from application.database.models import Room
 
-#FIXME: INIT
 walkthrough = Blueprint('walkthrough', __name__)
 
 @walkthrough.route('/walkthrough', methods=['GET'])
