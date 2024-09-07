@@ -4,6 +4,7 @@ from flask_login import current_user, login_required
 from sqlalchemy import case, select
 from application.extension import db
 from application.database.models import Custom, Home, Floor, Room
+from application.floors import set_active_floor
 
 
 homes = Blueprint('homes', __name__)
