@@ -14,4 +14,4 @@ def walk_start():
         '''current_user.active_home.active_room = first_room
         db.session.commit()'''
     
-    return render_template('onboarding/parts/home/walkthrough/index.html.jinja') #fixme: stop recursive load
+    return render_template('onboarding/parts/home/walkthrough/parts/1confirm_room.html.jinja')
