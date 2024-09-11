@@ -53,7 +53,7 @@ def create_app(config_filename=None):
     
     # Configure upload folder
     app.config['UPLOAD_FOLDER'] = os.path.join(os.path.dirname(app.root_path), 'media/uploads') # Place media folder outside application folder
-    app.config['ALLOWED_EXTENSIONS'] = {'png', 'jpg', 'jpeg', 'gif', 'heic', 'svg'} #FIXME: heic doesn't show up on the page after upload
+    app.config['ALLOWED_EXTENSIONS'] = {'png', 'jpg', 'jpeg', 'gif', 'heic', 'svg'} #todo: heic doesn't show up on the page after upload
     # Ensure the upload folder exists
     upload_folder = app.config['UPLOAD_FOLDER']
     os.makedirs(upload_folder, exist_ok=True)
@@ -106,7 +106,7 @@ def create_app(config_filename=None):
     app.register_blueprint(rooms)
     app.register_blueprint(walkthrough)
     
-    migrate = Migrate(app, db) # Fixme: Migrate should be initialized after all blueprints are registered
+    migrate = Migrate(app, db) # todo: Migrate should be initialized after all blueprints are registered
 
     with app.app_context():
         db.create_all()

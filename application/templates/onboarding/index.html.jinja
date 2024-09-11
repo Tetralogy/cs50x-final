@@ -14,4 +14,8 @@
     </div>
 </div>
 <button hx-get="/onboarding" hx-target="#onboarding" class="btn btn-primary">Onboarding Next Step</button>
+
+<div class="progress" hx-get="/onboarding/progress" hx-trigger="load, change" hx-swap="innerHTML">
+</div>
+
 {% endblock %}

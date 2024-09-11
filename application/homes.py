@@ -25,6 +25,17 @@ def set_active_home(home_id):
 @homes.route('/home/setup', methods=['GET'])
 @login_required
 def home_setup():
+    """
+    This function renders the home setup page based on the completeness of the
+    user's home profile. If the user has not entered their home's name, it will
+    render the name entry page. If the user has not entered their home's size,
+    it will render the size entry page. If the user has not set up any floors,
+    it will render the floor setup page. If the user has not set up any rooms, it
+    will render the room setup page.
+
+    Returns:
+        The rendered template for the home setup page.
+    """
     if not current_user.active_home:
         return render_template('onboarding/parts/home/attributes/name/index.html.jinja')
     current_home = current_user.active_home

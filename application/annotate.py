@@ -27,4 +27,4 @@ def annotate_image():
 def get_annotations(annotations):
     return render_template('tasklists/annotation_list.html.jinja', annotations=annotations)
 
-#FIXME: make annotations link to tasks
+#todo: make annotations link to tasks

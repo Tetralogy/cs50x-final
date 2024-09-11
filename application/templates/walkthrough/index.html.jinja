@@ -1,0 +1,22 @@
+<h1>This is onboarding/home/walkthrough/index.html.jinja</h1>
+<h1>onboarding Walkthrough</h1>
+
+<div id="walkthrough" hx-get="/walkthrough/start" hx-trigger="load once">
+    <div class="htmx-indicator spinner-border" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+    >
+</div>
+
+
+
+
+<button
+    hx-post="/walkthrough/{{ current_user.active_home.active_room.room_id }}"
+    class="btn btn-primary"
+>
+    Room details Next step
+</button>
+<button hx-post="/walkthrough/next" class="btn btn-primary">
+    Walkthrough Next room
+</button>
