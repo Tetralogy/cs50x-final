@@ -27,7 +27,7 @@ def inject_current_user():
 @login_required
 def index():
     
-    return render_template('onboarding/index.html.jinja') #temporary
+    return render_template('homes/create_home.html.jinja') #temporary
     #return render_template('dashboard/index.html.jinja', user=current_user, page=1)
     '''print('index called')
     home_query = select(Home).where(Home.user_id == current_user.id)

@@ -1,15 +1,17 @@
+# Basic User flow for MVP of CS50x final project: Untitled House Cleaning Task Tracker App
+
 1. ## User makes an account username and password ✅
     1. ### /register ✅
-        1. Sign-up form ✅
+        1. [Sign-up form](application/templates/auth/register.html) ✅
             1. UserName ✅
             2. Password ✅
     2. ### /login ✅
-        1. login form ✅
+        1. [login form](application/templates/auth/login.html) ✅
             1. UserName ✅
             2. Password ✅
-2. ## User creates a home profile to describe their environment to track
-    1. ### /home/new
-        1. New home form
+2. ## User creates a home profile to describe their environment to track ✴
+    1. ### /home/new  ✴️ ⬅️
+        1. [New home form](  ✴️
             1. Home name: name
             2. Type of home: select [apartment, condominium, house, trailer, van, tent, cardboard box, other(input custom type)]
     2. ### /home/setup

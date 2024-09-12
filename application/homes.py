@@ -22,6 +22,20 @@ def set_active_home(home_id):
         return home.home_name #the name of the current active home
     
 
+@homes.route('/home/new', methods=['POST'])
+@login_required
+def create_home():
+    new_home = Home(
+        user_id=current_user.id,
+        home_name=request.form.get('home_name'),
+        home_type=request.form.get('home_type')
+    )
+    db.session.add(new_home)
+    db.session.commit()
+    return render_template('homes/create_home.html.jinja')
+
+
+#________________________________________________________________________________#
 @homes.route('/home/setup', methods=['GET'])
 @login_required
 def home_setup():

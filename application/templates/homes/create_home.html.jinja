@@ -1,0 +1,30 @@
+{% extends "base/layout.html" %}
+{% block title %}
+    Create New Home Form
+{% endblock %}
+
+{% block main %}
+<h1>Create New Home</h1>
+<form action="/home/new" method="post">
+    <div class="form-floating mb-3">
+        <input type="text" class="form-control" id="floatingHomeName" placeholder="Home Name" name="home_name" required>
+        <label for="floatingHomeName">Home Name</label>
+    </div>
+    <div class="form-floating mb-3">
+        <select class="form-select" id="floatingHomeType" aria-label="Type of home" name="home_type" required>
+            <option value="" selected disabled>Type of home</option>
+            <option value="apartment">Apartment</option>
+            <option value="condominium">Condominium</option>
+            <option value="house">House</option>
+            <option value="trailer">Trailer</option>
+            <option value="van">Van</option>
+            <option value="tent">Tent</option>
+            <option value="cardboard box">Cardboard box</option>
+            <option value="boat">Boat</option>
+            <option value="other">Other</option>
+        </select>
+        <label for="floatingHomeType">Type of home</label>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+{% endblock %}
