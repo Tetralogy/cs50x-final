@@ -30,30 +30,23 @@ def create_home():
         home_name=request.form.get('home_name'),
         home_type=request.form.get('home_type')
     )
+    current_user.active_home = new_home
     db.session.add(new_home)
     db.session.commit()
-    return render_template('homes/create_home.html.jinja')
+    return home_setup()
 
 
 #________________________________________________________________________________#
 @homes.route('/home/setup', methods=['GET'])
 @login_required
 def home_setup():
-    """
-    This function renders the home setup page based on the completeness of the
-    user's home profile. If the user has not entered their home's name, it will
-    render the name entry page. If the user has not entered their home's size,
-    it will render the size entry page. If the user has not set up any floors,
-    it will render the floor setup page. If the user has not set up any rooms, it
-    will render the room setup page.
-
-    Returns:
-        The rendered template for the home setup page.
-    """
     if not current_user.active_home:
-        return render_template('onboarding/parts/home/attributes/name/index.html.jinja')
+        return render_template('homes/create_home.html.jinja')
     current_home = current_user.active_home
     print(f'current_home: {current_home} name: {current_home.home_name}')
+    
+    
+    
     if not current_home.home_size_sqm:
         print('home_size_sqm is None')
         return render_template('onboarding/parts/home/attributes/size/index.html.jinja')

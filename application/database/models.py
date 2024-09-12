@@ -48,14 +48,14 @@ class User(db.Model, UserMixin):
     custom = relationship('Custom', back_populates="user", lazy='dynamic')
 
 class UserAbility(db.Model): # User's ability to do something, disabilities to account for
-    ability_id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[int] = mapped_column(primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey('user.id'))
     ability_type: Mapped[str]
     description: Mapped[str]
     user = relationship("User", back_populates="abilities")
     
 class UserStatus(db.Model):
-    status_id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[int] = mapped_column(primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey('user.id'))
     current_room_id: Mapped[int] = mapped_column(ForeignKey('room.room_id'))
     focus: Mapped[str]
@@ -65,14 +65,14 @@ class UserStatus(db.Model):
     user = relationship("User", back_populates="status")
     
 class UserPreference(db.Model):
-    user_id: Mapped[int] = mapped_column(ForeignKey('user.id'), primary_key=True)
+    id: Mapped[int] = mapped_column(ForeignKey('user.id'), primary_key=True)
     measurement_unit: Mapped[str] = mapped_column(default='metric')
     notification_frequency: Mapped[str] = mapped_column(default='daily')
     theme: Mapped[str] = mapped_column(default='light')
     user = relationship("User", back_populates="preferences")
 
 class Home(db.Model):
-    home_id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[int] = mapped_column(primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey('user.id'))
     home_name: Mapped[str] = mapped_column(String(80), nullable=False)
     home_type: Mapped[str] = mapped_column(String(80), default='House')
@@ -86,9 +86,14 @@ class Home(db.Model):
     active_floor = relationship("Floor", foreign_keys=[active_floor_id])
     active_room_id: Mapped[int] = mapped_column(ForeignKey('room.room_id'), nullable=True)
     active_room = relationship("Room", foreign_keys=[active_room_id])
+    
+    def get_floor_count(self):
+        return self.floors.count()
+    def get_room_count(self):
+        return self.rooms.count()
 
 class Floor(db.Model):
-    floor_id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[int] = mapped_column(primary_key=True)
     home_id: Mapped[int] = mapped_column(ForeignKey('home.home_id'))
     floor_name: Mapped[str]
     order: Mapped[int]
@@ -96,7 +101,7 @@ class Floor(db.Model):
     rooms = relationship('Room', back_populates="floors")
     
 class Room(db.Model): #FIXME: ROOM LEVEL AND LOCATION ON THE MAP
-    room_id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[int] = mapped_column(primary_key=True)
     home_id: Mapped[int] = mapped_column(ForeignKey('home.home_id'))
     floor_id: Mapped[int] = mapped_column(ForeignKey('floor.floor_id'))
     order: Mapped[int]
@@ -116,10 +121,10 @@ class Room(db.Model): #FIXME: ROOM LEVEL AND LOCATION ON THE MAP
     tasks = relationship('Task', back_populates="rooms", lazy='dynamic')
     
 class Custom(db.Model):
-    custom_id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[int] = mapped_column(primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey('user.id'))
-    type: Mapped[str]
-    name: Mapped[str]
+    category: Mapped[str]
+    title: Mapped[str]
     user = relationship("User", back_populates="custom")
     
     
