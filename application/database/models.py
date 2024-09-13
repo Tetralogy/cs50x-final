@@ -38,7 +38,7 @@ class User(db.Model, UserMixin):
     # Define relationships
     abilities = relationship('UserAbility', back_populates="user", lazy='dynamic')
     preferences = relationship('UserPreference', back_populates="user", lazy='dynamic')
-    homes = relationship('Home', back_populates="user", lazy='dynamic', foreign_keys='Home.id')
+    homes = relationship('Home', back_populates="user", lazy='dynamic', foreign_keys='Home.user_id')
     photos = relationship('Photo', back_populates="user", lazy='dynamic')
     tasks = relationship('Task', back_populates="user", lazy='dynamic')
     supply = relationship('Supply', back_populates="user", lazy='dynamic')
