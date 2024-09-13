@@ -1,5 +1,5 @@
 import os
-from flask import Blueprint, flash, json, jsonify, render_template, request
+from flask import Blueprint, flash, json, jsonify, redirect, render_template, request, url_for
 from flask_login import current_user, login_required
 from sqlalchemy import case, select
 from application.extension import db
@@ -33,10 +33,9 @@ def create_home():
     current_user.active_home = new_home
     db.session.add(new_home)
     db.session.commit()
-    return home_setup()
+    return redirect(url_for('homes.home_setup'))
 
 
-#________________________________________________________________________________#
 @homes.route('/home/setup', methods=['GET'])
 @login_required
 def home_setup():
@@ -44,8 +43,15 @@ def home_setup():
         return render_template('homes/create_home.html.jinja')
     current_home = current_user.active_home
     print(f'current_home: {current_home} name: {current_home.home_name}')
+    print(f'current_home.floors.count(): {current_home.floors.count()}')
+    if not current_home.floors.count():
+        return render_template('onboarding/parts/home/attributes/floors/index.html.jinja') #BUG: re-create the form and link it
+    print(f'current_home.active_floor: {current_home.active_floor}')
+    if not current_home.active_floor:
+        return render_template('floor select form here.html.jinja') #BUG: re-create the form and link it
+        
     
-    
+#________________________________________________________________________________#
     
     if not current_home.home_size_sqm:
         print('home_size_sqm is None')
