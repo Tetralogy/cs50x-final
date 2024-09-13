@@ -19,6 +19,15 @@ def set_active_floor(floor_id):
         print(f'current_user.active_home.active_floor: {current_user.active_home.active_floor}')
         return floor.floor_name #the name of the current active floor
     
+@floors.route('/home/floor/new', methods=['GET', 'POST'])
+@login_required
+def new_floor():
+    if request.method == 'GET':
+        if db.session.execute(select(Floor).filter(Floor.home_id == current_user.active_home_id)).first():
+            return 'Floor already exists', 204
+        return create_floor()
+    if request.method == 'POST':
+        return create_floor()
     
 @floors.route('/home/floor/name', methods=['GET', 'PUT'])
 @login_required
@@ -71,15 +80,7 @@ def edit_floors_order():
     floors = current_user.active_home.floors.all()
     return render_template('onboarding/parts/home/attributes/floors/edit.html.jinja', floors=floors)
 
-@floors.route('/home/floor/new', methods=['GET', 'POST'])
-@login_required
-def new_floor():
-    if request.method == 'GET':
-        if db.session.execute(select(Floor).filter(Floor.home_id == current_user.active_home_id)).first():
-            return 'Floor already exists', 204
-        return create_floor()
-    if request.method == 'POST':
-        return create_floor()
+
         
 def create_floor():
     highest_order_number = db.session.execute(select(db.func.max(Floor.order)).filter(Floor.home_id == current_user.active_home_id)).scalar()
@@ -111,7 +112,7 @@ def update_order():
     print(f'new_order: {new_order}')
     for index, floor_id in enumerate(new_order):
         print(f'index: {index}, floor_id: {floor_id}')
-        floor = Floor.query.get(int(floor_id))
+        floor = Floor.query.get(int(floor_id)) #FIXME
         print(f'floor: {floor}')
         floor.order = index
     db.session.commit()

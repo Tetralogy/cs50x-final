@@ -45,10 +45,11 @@ def home_setup():
     print(f'current_home: {current_home} name: {current_home.home_name}')
     print(f'current_home.floors.count(): {current_home.floors.count()}')
     if not current_home.floors.count():
-        return render_template('onboarding/parts/home/attributes/floors/index.html.jinja') #BUG: re-create the form and link it
+        return render_template('homes/create_floors.html.jinja') #BUG: re-create the form and link it
     print(f'current_home.active_floor: {current_home.active_floor}')
     if not current_home.active_floor:
-        return render_template('floor select form here.html.jinja') #BUG: re-create the form and link it
+        flash('You must select a main floor to move to the next step', 'danger')
+        return render_template('homes/create_floors.html.jinja') #BUG: not loading current floors
         
     
 #________________________________________________________________________________#
