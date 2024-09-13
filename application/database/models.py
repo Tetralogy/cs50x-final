@@ -38,12 +38,12 @@ class User(db.Model, UserMixin):
     # Define relationships
     abilities = relationship('UserAbility', back_populates="user", lazy='dynamic')
     preferences = relationship('UserPreference', back_populates="user", lazy='dynamic')
-    homes = relationship('Home', back_populates="user", lazy='dynamic', foreign_keys='Home.user_id')
+    homes = relationship('Home', back_populates="user", lazy='dynamic', foreign_keys='Home.id')
     photos = relationship('Photo', back_populates="user", lazy='dynamic')
     tasks = relationship('Task', back_populates="user", lazy='dynamic')
     supply = relationship('Supply', back_populates="user", lazy='dynamic')
     status = relationship('UserStatus', back_populates="user", lazy='dynamic')
-    active_home_id: Mapped[int] = mapped_column(ForeignKey('home.home_id'), nullable=True)
+    active_home_id: Mapped[int] = mapped_column(ForeignKey('home.id'), nullable=True)
     active_home = relationship("Home", foreign_keys=[active_home_id])
     custom = relationship('Custom', back_populates="user", lazy='dynamic')
 
@@ -57,7 +57,7 @@ class UserAbility(db.Model): # User's ability to do something, disabilities to a
 class UserStatus(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey('user.id'))
-    current_room_id: Mapped[int] = mapped_column(ForeignKey('room.room_id'))
+    current_room_id: Mapped[int] = mapped_column(ForeignKey('room.id'))
     focus: Mapped[str]
     mood: Mapped[str]
     energy_level: Mapped[int]
@@ -82,9 +82,9 @@ class Home(db.Model):
     rooms = relationship('Room', back_populates="homes", lazy='dynamic', foreign_keys="[Room.home_id]")
     floors = relationship('Floor', back_populates="homes", lazy='dynamic', foreign_keys='Floor.home_id')
     last_full_walkthrough: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=True)
-    active_floor_id: Mapped[int] = mapped_column(ForeignKey('floor.floor_id'), nullable=True)
+    active_floor_id: Mapped[int] = mapped_column(ForeignKey('floor.id'), nullable=True)
     active_floor = relationship("Floor", foreign_keys=[active_floor_id])
-    active_room_id: Mapped[int] = mapped_column(ForeignKey('room.room_id'), nullable=True)
+    active_room_id: Mapped[int] = mapped_column(ForeignKey('room.id'), nullable=True)
     active_room = relationship("Room", foreign_keys=[active_room_id])
     
     def get_floor_count(self):
@@ -94,7 +94,7 @@ class Home(db.Model):
 
 class Floor(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
-    home_id: Mapped[int] = mapped_column(ForeignKey('home.home_id'))
+    home_id: Mapped[int] = mapped_column(ForeignKey('home.id'))
     floor_name: Mapped[str]
     order: Mapped[int]
     homes = relationship('Home', back_populates="floors", foreign_keys=[home_id])
@@ -102,8 +102,8 @@ class Floor(db.Model):
     
 class Room(db.Model): #FIXME: ROOM LEVEL AND LOCATION ON THE MAP
     id: Mapped[int] = mapped_column(primary_key=True)
-    home_id: Mapped[int] = mapped_column(ForeignKey('home.home_id'))
-    floor_id: Mapped[int] = mapped_column(ForeignKey('floor.floor_id'))
+    home_id: Mapped[int] = mapped_column(ForeignKey('home.id'))
+    floor_id: Mapped[int] = mapped_column(ForeignKey('floor.id'))
     order: Mapped[int]
     room_name: Mapped[str]
     room_type: Mapped[str] = mapped_column(default='')
@@ -130,8 +130,8 @@ class Custom(db.Model):
     
 
 class Zone(db.Model):
-    zone_id: Mapped[int] = mapped_column(primary_key=True)
-    room_id: Mapped[int] = mapped_column(ForeignKey('room.room_id'))
+    id: Mapped[int] = mapped_column(primary_key=True)
+    room_id: Mapped[int] = mapped_column(ForeignKey('room.id'))
     surface_type: Mapped[str]
     usage_frequency: Mapped[str]
     importance: Mapped[int]
@@ -141,15 +141,15 @@ class Zone(db.Model):
     appliances = relationship('Appliance', back_populates="zones", lazy='dynamic')
     
 class Appliance(db.Model):
-    appliance_id: Mapped[int] = mapped_column(primary_key=True)
-    zone_id: Mapped[int] = mapped_column(ForeignKey('zone.zone_id'))
+    id: Mapped[int] = mapped_column(primary_key=True)
+    zone_id: Mapped[int] = mapped_column(ForeignKey('zone.id'))
     appliance: Mapped[str]
     zones = relationship('Zone', back_populates="appliances")
     
 class Photo(db.Model):
-    photo_id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[int] = mapped_column(primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey('user.id'))
-    room_id: Mapped[int] = mapped_column(ForeignKey('room.room_id'))
+    room_id: Mapped[int] = mapped_column(ForeignKey('room.id'))
     photo_url: Mapped[str]
     is_before_photo: Mapped[bool]
     photo_timestamp: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=func.now())
@@ -157,9 +157,9 @@ class Photo(db.Model):
     annotations = relationship('TaskAnnotation', back_populates="photos", lazy='dynamic')
 
 class Task(db.Model):
-    task_id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[int] = mapped_column(primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey('user.id'))
-    room_id: Mapped[int] = mapped_column(ForeignKey('room.room_id'))
+    room_id: Mapped[int] = mapped_column(ForeignKey('room.id'))
     task_title: Mapped[str] = mapped_column(default=text("'Task #' || (last_insert_rowid() + 1)"))
     task_description: Mapped[str] = mapped_column(nullable=True)
     task_created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=func.now())
@@ -188,9 +188,9 @@ def receive_before_update(mapper, connection, target):
     target.task_updated_at = func.now()
 
 class TaskAnnotation(db.Model):
-    annotation_id: Mapped[int] = mapped_column(primary_key=True)
-    task_id: Mapped[int] = mapped_column(ForeignKey('task.task_id'))
-    photo_id: Mapped[int] = mapped_column(ForeignKey('photo.photo_id'))
+    id: Mapped[int] = mapped_column(primary_key=True)
+    task_id: Mapped[int] = mapped_column(ForeignKey('task.id'))
+    photo_id: Mapped[int] = mapped_column(ForeignKey('photo.id'))
     x_coordinate: Mapped[float]
     y_coordinate: Mapped[float]
     annotation_text: Mapped[str]
@@ -198,8 +198,8 @@ class TaskAnnotation(db.Model):
     tasks = relationship('Task', back_populates="annotations")
 
 class TaskProgress(db.Model):
-    progress_id: Mapped[int] = mapped_column(primary_key=True)
-    task_id: Mapped[int] = mapped_column(ForeignKey('task.task_id'))
+    id: Mapped[int] = mapped_column(primary_key=True)
+    task_id: Mapped[int] = mapped_column(ForeignKey('task.id'))
     progress_photo_url: Mapped[str]
     progress_timestamp: Mapped[datetime]
     progress_description: Mapped[str]
@@ -230,8 +230,8 @@ class TaskProgress(db.Model):
     reminder_time: Mapped[datetime]'''
 
 class Supply(db.Model):
-    item_id: Mapped[int] = mapped_column(primary_key=True)
-    room_id: Mapped[int] = mapped_column(ForeignKey('room.room_id')) #room where the item is stored
+    id: Mapped[int] = mapped_column(primary_key=True)
+    room_id: Mapped[int] = mapped_column(ForeignKey('room.id')) #room where the item is stored
     user_id: Mapped[int] = mapped_column(ForeignKey('user.id'))
     item_name: Mapped[str]
     item_type: Mapped[str]
