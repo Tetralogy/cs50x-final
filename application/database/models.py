@@ -46,6 +46,36 @@ class User(db.Model, UserMixin):
     active_home_id: Mapped[int] = mapped_column(ForeignKey('home.id'), nullable=True)
     active_home = relationship("Home", foreign_keys=[active_home_id])
     custom = relationship('Custom', back_populates="user", lazy='dynamic')
+    lists = relationship("UserList", back_populates="user", lazy='dynamic')
+
+
+
+class UserList(db.Model):
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey('user.id'))
+    list_name: Mapped[str] = mapped_column(String(80), nullable=False)
+    list_type: Mapped[str] = mapped_column(String(50), nullable=False) # floors, rooms, tasks
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=func.now())
+
+    user = relationship("User", back_populates="lists")
+    items = relationship("UserListItem", back_populates="user_list", lazy='dynamic', cascade="all, delete-orphan")
+
+class UserListItem(db.Model):
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    user_list_id: Mapped[int] = mapped_column(ForeignKey('user_list.id'))
+    item_model: Mapped[str] = mapped_column(String, nullable=False)  # Store the model name as a string
+    item_id: Mapped[int] = mapped_column(Integer, nullable=False)
+    order: Mapped[int] = mapped_column(Integer, nullable=False)
+
+    user_list = relationship("UserList", back_populates="items")
+
+    __table_args__ = (
+        UniqueConstraint('user_list_id', 'item_model', 'item_id', name='uq_user_list_item'),
+    )
+    def get_item(self):
+        # Dynamically import the model
+        model_class = globals()[self.item_model]
+        return model_class.query.get(self.item_id)
 
 class UserAbility(db.Model): # User's ability to do something, disabilities to account for
     id: Mapped[int] = mapped_column(primary_key=True)
@@ -95,18 +125,25 @@ class Home(db.Model):
 class Floor(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     home_id: Mapped[int] = mapped_column(ForeignKey('home.id'))
-    floor_name: Mapped[str]
-    order: Mapped[int]
+    floor_name: Mapped[str] = mapped_column(default='Main Floor')
+
     homes = relationship('Home', back_populates="floors", foreign_keys=[home_id])
     rooms = relationship('Room', back_populates="floors")
+    @property
+    def as_list_item(self):
+        return {
+            'id': self.id,
+            'type': 'floor',
+            'name': self.floor_name,
+            'additional_info': f"Home: {self.home.home_name}"
+        }
     
-class Room(db.Model): #FIXME: ROOM LEVEL AND LOCATION ON THE MAP
+class Room(db.Model): #todo: ROOM LEVEL AND LOCATION ON THE MAP
     id: Mapped[int] = mapped_column(primary_key=True)
     home_id: Mapped[int] = mapped_column(ForeignKey('home.id'))
     floor_id: Mapped[int] = mapped_column(ForeignKey('floor.id'))
-    order: Mapped[int]
-    room_name: Mapped[str]
     room_type: Mapped[str] = mapped_column(default='')
+    room_name: Mapped[str] = mapped_column(default=text("f'{room_type}' || (last_insert_rowid() + 1)"))#FIXME
     #room_size: Mapped[float] = mapped_column(default=0.0)
     #room_function: Mapped[str] = mapped_column(default='')
     #room_frequency_of_use: Mapped[str] = mapped_column(default='')
@@ -119,6 +156,14 @@ class Room(db.Model): #FIXME: ROOM LEVEL AND LOCATION ON THE MAP
     zones = relationship('Zone', back_populates="rooms", lazy='dynamic')
     supply = relationship('Supply', back_populates="rooms", lazy='dynamic')
     tasks = relationship('Task', back_populates="rooms", lazy='dynamic')
+    @property
+    def as_list_item(self):
+        return {
+            'id': self.id,
+            'type': 'room',
+            'name': self.room_name,
+            'additional_info': f"Floor: {self.floors.floor_name}"
+        }
     
 class Custom(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
@@ -159,7 +204,6 @@ class Photo(db.Model):
 class Task(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey('user.id'))
-    room_id: Mapped[int] = mapped_column(ForeignKey('room.id'))
     task_title: Mapped[str] = mapped_column(default=text("'Task #' || (last_insert_rowid() + 1)"))
     task_description: Mapped[str] = mapped_column(nullable=True)
     task_created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=func.now())
@@ -171,9 +215,16 @@ class Task(db.Model):
     task_scheduled_time: Mapped[datetime] = mapped_column(nullable=True)
     completed_at: Mapped[Optional[datetime]] = mapped_column(nullable=True)
     user = relationship("User", back_populates="tasks")
-    rooms = relationship("Room", back_populates="tasks")
     progress = relationship('TaskProgress', back_populates="tasks")
     annotations = relationship("TaskAnnotation", back_populates="tasks")
+    @property
+    def as_list_item(self):
+        return {
+            'id': self.id,
+            'type': 'task',
+            'name': self.task_title,
+            'additional_info': f"Due: {self.task_due_date.strftime('%Y-%m-%d') if self.task_due_date else 'Not set'}"
+        }
     
     @hybrid_property
     def task_updated_at(self):
@@ -238,6 +289,14 @@ class Supply(db.Model):
     quantity: Mapped[int]
     rooms = relationship('Room', back_populates="supply")
     user = relationship("User", back_populates="supply")
+    @property
+    def as_list_item(self):
+        return {
+            'id': self.id,
+            'type': 'supply',
+            'name': self.item_name,
+            'additional_info': f"Quantity: {self.quantity}"
+        }
 
 '''class UserSchedule(db.Model):
     schedule_id: Mapped[int] = mapped_column(primary_key=True)

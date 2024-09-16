@@ -3,6 +3,7 @@ from flask_login import current_user, login_required
 from sqlalchemy import select
 from application.extension import db
 from application.database.models import Floor
+from application.lists import add_item_to_list, create_user_list
 from application.rooms import get_room_types
 
 floors = Blueprint('floors', __name__)
@@ -19,13 +20,40 @@ def set_active_floor(floor_id):
         print(f'current_user.active_home.active_floor: {current_user.active_home.active_floor}')
         return floor.floor_name #the name of the current active floor
     
+    
+    
+    
+@floors.route('/home/<int:home_id>/floors/setup', methods=['GET'])
+@login_required
+def set_active_floor(home_id):
+    # sends user to page to create a list of floors for the home
+    if not db.session.execute(select(Floor).filter(Floor.home_id == home_id)).first(): # if home_id has no floors, 
+        new_list = create_user_list(current_user.id, 'Floors', 'floors') # create floors list 
+        default_floor = Floor(floor_name='Ground Floor', order=0) # create default floor: ground floor
+        add_item_to_list(new_list.id: int, 'Floor': str, item_id: int, order: int)
+        floor_list.append(default_floor)
+        db.session.add(default_floor) # add default floor to floors list
+        db.session.commit()
+        current_user.active_home.active_floor_id = default_floor.floor_id # set default floor as active
+        db.session.commit()
+        return render_template('homes/create_floors.html.jinja', home_id=home_id, floor_list=floor_list)
+        # if home_id has floors
+    return render_template('homes/create_floors.html.jinja', home_id=home_id)
+        # user adds floors to the home
+            # user names each floor uniquely to better identify them
+            # user corrects the order of the floors as they are in the house
+    # main floor/ground floor is set as the active floor by default
+        # user can change the active floor by clicking on it
+    # user confirms the home's list of floors/ continue to next step button
+    # user is taken to the home map of the active floor
+#____________________________________________________________________________________________________________________#
 @floors.route('/home/floor/new', methods=['GET', 'POST'])
 @login_required
 def new_floor():
     if request.method == 'GET':
-        if db.session.execute(select(Floor).filter(Floor.home_id == current_user.active_home_id)).first():
+        if db.session.execute(select(Floor).filter(Floor.home_id == current_user.active_home_id)).first(): #check if there is already a floor
             return 'Floor already exists', 204
-        return create_floor()
+        return create_floor() # create default ground floor #FIXME: CREATE FLOOR LIST OF TYPE FLOOR
     if request.method == 'POST':
         return create_floor()
     
@@ -82,7 +110,7 @@ def edit_floors_order():
 
 
         
-def create_floor():
+def create_floor(): #FIXME: CREATE FLOOR LIST OF TYPE FLOOR IF NO LIST EXISTS
     highest_order_number = db.session.execute(select(db.func.max(Floor.order)).filter(Floor.home_id == current_user.active_home_id)).scalar()
     lowest_order_number = db.session.execute(select(db.func.min(Floor.order)).filter(Floor.home_id == current_user.active_home_id)).scalar()
     print(f'lowest_order_number: {lowest_order_number}')
@@ -106,19 +134,28 @@ def create_floor():
     return render_template('onboarding/parts/home/attributes/floors/row.html.jinja', floor=floor), 201
 
 
-@floors.route('/home/floor/sort', methods=['POST'])
-def update_order():
+@floors.route('/home/floor/sort', methods=['PUT']) #TODO: make generic for any sortable table
+@login_required
+def update_floor_order():
     new_order = request.form.getlist('order')
     print(f'new_order: {new_order}')
+    if not new_order or not all(new_order):
+        print("Invalid new order data")
+        return jsonify({"error": "Invalid new order data"}), 400
+    
     for index, floor_id in enumerate(new_order):
-        print(f'index: {index}, floor_id: {floor_id}')
-        floor = Floor.query.get(int(floor_id)) #FIXME
-        print(f'floor: {floor}')
-        floor.order = index
+        if floor_id:  # Check if floor_id is not empty
+            print(f'index: {index}, floor_id: {floor_id}')
+            floor = Floor.query.get(int(floor_id)) 
+            print(f'floor: {floor}')
+            if floor:
+                floor.order = index
+            else:
+                print(f"Floor not found for id {floor_id}")
     db.session.commit()
-    floors = current_user.active_home.floors.all()
+
     print(f'floors returned: {floors}')
-    return render_template('onboarding/parts/home/attributes/floors/list.html.jinja', floors=floors)
+    return render_template('homes/list_floors.html.jinja')
 
 @floors.route('/home/floor/delete/<int:floor_id>', methods=['DELETE'])
 @login_required

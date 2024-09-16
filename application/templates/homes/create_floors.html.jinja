@@ -4,201 +4,59 @@
 {% endblock %}
 
 {% block main %}
-<h2>Floors</h2>
+    <h2>Floors</h2>
+    <h3>Add New Floors and name them</h3>
+    <h4>current list #{{ list_id }}</h4>
 
-<div class="row">
-    <div class="col-12">
-        <button
-            hx-post="/home/floor/new"
-            hx-target="#floor-list"
-            hx-swap="afterbegin"
-            class="btn btn-primary"
-        >
-            Add Floor
-        </button>
-    </div>
-</div>
-
-
-
-<div hx-get="/home/floor/new" hx-target="#floor-list" hx-swap="afterbegin" hx-trigger="load"></div>
-<div
-    id="floor-list-container"
->
-
-<div id="floor-list">
-    {% for floor in current_user.active_home.floors | sort(attribute='order') %}
-        <div class="input-group mb-0" id="floor-{{ floor.id }}" data-id="{{ floor.id }}">
-            <span id="handle" class="handle input-group-text">↕️</span>
-            <span class="input-group-text"
-                id="floor-{{ floor.id }}"
-                hx-get="/home/floor/rename/{{ floor.id }}"
-                hx-target="this"
-                hx-swap="outerHTML"
-                hx-trigger="click"
+    <div class="row">
+        <div class="col-12">
+            <button
+                hx-post="/home/floor/new"
+                hx-target="#floor-list"
+                hx-swap="afterbegin"
+                class="btn btn-primary"
             >
-                {{ floor.floor_name }}
-            </span>
-
-            <span class="input-group-text floor-number"
-                >({{ floor.order }})</span
-            >
-                <button
-            hx-delete="/home/floor/delete/{{ floor.id }}"
-            hx-confirm="Are you sure you want to delete this floor?"
-            hx-swap="outerHTML"
-            hx-target="#floor-{{ floor.id }}"
-            class="btn btn-danger" type="button"
-        >
-            Delete Floor
-        </button>
+                Add Floor
+            </button>
         </div>
-    {% endfor %}
-</div>
-
-</div>
-
-<script>
-    document.addEventListener("htmx:load", function () {
-        var sortlist = document.getElementById("floor-list");
-        var sortableInstance = new Sortable(sortlist, {
-            animation: 150,
-            ghostClass: "blue-background-class",
-            filter: ".htmx-indicator",
-            handle: ".handle",
-            onEnd: function () {
-                var newOrder = Array.from(sortlist.children).map(
-                    (li) => li.dataset.id,
-                );
-                htmx.ajax("POST", "/home/floor/sort", {
-                    target: "#floor-list-container",
-                    swap: "innerHTML",
-                    values: { order: newOrder },
-                });
-            },
-        });
-    });
-</script>
-
-<p>-----------------------------------------------------------------------</p>
-
-<ul class="nav nav-tabs"></ul>
-    {% for navfloor in current_user.active_home.floors | sort(attribute='order') | reverse %}
-        <li class="nav-item">
-            <a
-                class="nav-link {% if navfloor.id == current_user.active_home.floors.id %}active{% endif %}"
-                hx-get="/home/floor/edit/{{ navfloor.id }}"
-                hx-target="#onboarding-map"
-            >
-                {{ navfloor.floor_name }}</a
-            >
-        </li>
-    {% endfor %}
-    <a hx-get="/home/floors">
-        edit floor order
-    </a>
-</ul>
-
-<h1>
-    now editing {{ current_user.active_home.home_type }} name: {{ current_user.active_home.home_name }} floor id: {{ current_user.active_home.id }} floor order:
-    {{ current_user.active_home.floors.order }}
-</h1>
-
-<form
-    hx-post="/home/map/room/add/type"
-    hx-target="#types"
-    class="input-group mb-3"
->
-    <input
-        type="text"
-        class="form-control"
-        placeholder="New Room Type"
-        aria-label="New Room Type"
-        aria-describedby="basic-addon2"
-        name="custom_type"
-        id="custom_type"
-        hx-trigger="keyup[key=='Enter']"
-    />
-    <button class="btn btn-secondary" type="submit" id="button-addon2">
-        Add Custom Room Type
-    </button>
-</form>
-<div
-    class="container-fluid bg-dark border border-success border-5 rounded-bottom-5"
->
-    <div id="types" class="row g-0 row-cols-4">
-        {% for room_type in room_types %}
-            <div class="col">{{ room_type }}</div>
-        {% endfor %}
     </div>
-</div>
-<div
-    id="room-list-container"
-    class="container-fluid bg-dark border border-primary border-5 rounded-top-5"
->
-    {% include 'onboarding/parts/home/map/list.html.jinja' %}
-</div>
 
-<script>
-    document.addEventListener("htmx:load", function () {
-    const types = document.getElementById("types");
+    <div id="ground-floor-check"
+        hx-get="/home/floor/new"
+        hx-target="#floor-list"
+        hx-swap="afterbegin"
+        hx-trigger="load"
+    ></div>
+    <div id="floor-list-container">
+        {% include 'homes/list_floors.html.jinja' %}
+    </div>
 
-    new Sortable(types, {
-        group: {
-            name: "shared",
-            pull: "clone",
-            put: false, // Do not allow items to be put into this list
-        },
-        animation: 150,
-        sort: false,
-        cursor: "move",
-    });
+    <script>
+        document.addEventListener("htmx:load", function () {
+            const sortlist = document.getElementById("floor-list");
+            const sortableInstance = new Sortable(sortlist, {
+                animation: 150,
+                ghostClass: "blue-background-class",
+                filter: ".htmx-indicator",
+                handle: ".handle",
 
-        const sortmap = document.getElementById("map-{{  current_user.active_home.active_floor.floor_id  }}");
-        console.log('sortmap: ' + sortmap);
-        new Sortable(sortmap, { 
-            group: {
-                name: "shared",
-                pull: true, // Prevent pulling from this list
-            },
-            animation: 150,
-            ghostClass: "blue-background-class",
-            filter: ".htmx-indicator",
-            removeOnSpill: true, // Enable plugin
-            // Called when item is spilled
-            onSpill: function (/**Event*/ evt) {
-                evt.item; // The spilled item
-                //FIXME: delete item from db
-            },
-            onAdd: function (/**Event*/ evt) {
-                console.log("onAdd event triggered");
-                var itemEl = evt.item; // dragged HTMLElement
-                var addedRoomType = itemEl.textContent;
-                var newIndex = evt.newIndex;
-                console.log('addedRoomType: ' + addedRoomType + 'new index: ' + newIndex);
-
-
-
-                // Make an htmx AJAX request to the server
-                htmx.ajax("POST", "/home/map/room/add/{{ current_user.active_home.active_floor.floor_id }}", {
-                    values: { added_room_type: addedRoomType, order: newIndex },
-                    target: itemEl,
-                    swap: "outerHTML", // returns the new content
-                });
-            },
-            onEnd: function () {
-                console.log("onEnd event triggered");
-                var newOrder = Array.from(sortmap.children).map(
-                    (li) => li.dataset.id,
-                ); 
-                console.log('newOrder: ' + newOrder);
-                htmx.ajax("PUT", "/home/map/sort/{{ current_user.active_home.active_floor.floor_id }}", {
-                    target: "#room-list-container",
-                    swap: "innerHTML",
-                    values: { list_order: newOrder },
-                });
-            },
+                onEnd: function (evt) {
+                    const newIndex = evt.newIndex;
+                    const newOrder = Array.from(sortlist.children).map(
+                        (li) => li.dataset.id,
+                    );
+                    console.log("newOrder: " + newOrder);
+                    htmx.ajax("PUT", "/update_list_order/{{ list_id }}", {
+                        target: "#floor-list-container",
+                        swap: "innerHTML",
+                        values: { order: newOrder },
+                    });
+                },
+            });
         });
-    });
-</script>
+    </script>
+
+    <p>
+        -----------------------------------------------------------------------
+    </p>
 {% endblock %}

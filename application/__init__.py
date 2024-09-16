@@ -78,6 +78,7 @@ def create_app(config_filename=None):
     from .floors import floors
     from .rooms import rooms
     from .walkthrough import walkthrough
+    from .lists import lists
 
     login_manager.init_app(app)  # Initialize login_manager with the app
 
@@ -105,6 +106,7 @@ def create_app(config_filename=None):
     app.register_blueprint(floors)
     app.register_blueprint(rooms)
     app.register_blueprint(walkthrough)
+    app.register_blueprint(lists)
     
     migrate = Migrate(app, db) # todo: Migrate should be initialized after all blueprints are registered
 

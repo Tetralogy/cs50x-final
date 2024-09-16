@@ -51,11 +51,11 @@ def add_room(floor_id):
     print(f'new_order: {new_order}')
     if not new_order:
         return jsonify({"error": "new_order is empty"}), 400
-    # Check if the item already exists
+    # Check if the type of room already exists and increment for the new default name
     rooms_matching_type = db.session.execute(select(Room).where(Room.home_id == current_user.active_home_id).where(Room.room_type == added_room_type)).scalars().all()
     print(f'rooms_matching_type: {rooms_matching_type}')
     new_room_name = f'{added_room_type} {len(rooms_matching_type) + 1}'
-    # Add the new item to the database
+    # Add the new room to the database
     new_room = Room(room_name=new_room_name, room_type=added_room_type, order=new_order, floor_id=floor_id)
     print(f'new_room: {new_room}')
     
