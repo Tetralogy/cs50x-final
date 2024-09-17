@@ -29,7 +29,7 @@ def create_new_default(item_model: str) -> UserListItem:
         new_item = Room(home_id=current_user.active_home.id, floor_id=current_user.active_home.active_floor.id)
         db.session.add(new_item)
         db.session.commit()
-        return UserListItem(user_list_id=current_user.active_list_id, item_model=item_model, item_id=new_item.id, order=0)
+        return UserListItem(item_model=item_model, item_id=new_item.id)
     else:
         raise ValueError(f'Unknown item type {item_model}')
 def add_item_to_list(user_list_id: int, item_model: str, item_id: int, order: int) -> UserListItem:
