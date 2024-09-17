@@ -26,26 +26,15 @@ def create_new_default(item_model: str) -> UserListItem:
         db.session.commit()
         return UserListItem(item_model=item_model, item_id=new_item.id)
     if item_model == 'Room':
-        new_item = Room(home_id=current_user.active_home.id, floor_id=current_user.active_home.active_floor.id, order=0, room_name=item_model, room_type='')
+        new_item = Room(home_id=current_user.active_home.id, floor_id=current_user.active_home.active_floor.id)
         db.session.add(new_item)
         db.session.commit()
         return UserListItem(user_list_id=current_user.active_list_id, item_model=item_model, item_id=new_item.id, order=0)
     else:
         raise ValueError(f'Unknown item type {item_model}')
-    return new_item
 def add_item_to_list(user_list_id: int, item_model: str, item_id: int, order: int) -> UserListItem:
-    item_id: Optional[int] = None, order: Optional[int] = None
     if item_id is None:
         new_item = create_new_default(item_model)
-        new_item = item_model(name=f'{item_model} ', home_id=current_user.active_home.id)
-        '''if item_model == 'room':
-            item = Room(name=item_model, home_id=current_user.active_home.id)
-        elif item_model == 'task':
-            item = Task(name=item_model, room_id=current_user.active_home.active_room.id)
-        elif item_model == 'supply':
-            item = Supply(name=item_model, room_id=current_user.active_home.active_room.id)
-        else:
-            raise ValueError(f'Unknown item type {item_model}')'''
         db.session.add(item)
         db.session.commit()
         item_id = item.id

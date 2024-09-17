@@ -1,7 +1,7 @@
 from flask import Blueprint
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy import String, Integer, DateTime, UniqueConstraint, func, ForeignKey, text, event
+from sqlalchemy import String, Integer, DateTime, UniqueConstraint, func, ForeignKey, select, text, event, column_property
 from sqlalchemy.ext.hybrid import hybrid_property
 from datetime import datetime, timezone
 from typing import Optional, List
@@ -122,11 +122,25 @@ class Home(db.Model):
     def get_room_count(self):
         return self.rooms.count()
 
+def get_default_floor_name(home_id):
+    if home_id:
+        floor_count = db.session.execute(select(db.func.count()).select_from(Floor).where(Floor.home_id == home_id)).scalar()
+        if floor_count == 0:
+            return "Main Floor"
+        if floor_count == 1:
+            suffix = "nd"
+        elif floor_count == 2:
+            suffix = "rd"
+        else:
+            suffix = "th"
+        return f"{floor_count + 1}{suffix} Floor"
+    else:
+        return "Main Floor"
+
 class Floor(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     home_id: Mapped[int] = mapped_column(ForeignKey('home.id'))
-    floor_name: Mapped[str] = mapped_column(default='Main Floor')
-
+    floor_name: Mapped[str] = mapped_column(default=get_default_floor_name(home_id)) #todo: test if default works
     homes = relationship('Home', back_populates="floors", foreign_keys=[home_id])
     rooms = relationship('Room', back_populates="floors")
     @property
@@ -142,8 +156,20 @@ class Room(db.Model): #todo: ROOM LEVEL AND LOCATION ON THE MAP
     id: Mapped[int] = mapped_column(primary_key=True)
     home_id: Mapped[int] = mapped_column(ForeignKey('home.id'))
     floor_id: Mapped[int] = mapped_column(ForeignKey('floor.id'))
-    room_type: Mapped[str] = mapped_column(default='')
-    room_name: Mapped[str] = mapped_column(default=text("f'{room_type}' || (last_insert_rowid() + 1)"))#FIXME
+    room_type: Mapped[str] = mapped_column(default='Room')
+    same_type_rooms = relationship(
+        "Room",
+        primaryjoin="and_(Room.home_id==home_id, Room.room_type==room_type)",
+        viewonly=True
+    )
+    same_type_rooms_count = column_property(
+        select([func.count()])
+        .select_from(same_type_rooms)
+        .scalar_subquery()
+    )
+    room_name: Mapped[str] = mapped_column(
+        default=text("f'{room_type}' || ({same_type_rooms_count} + 1)")
+    ) # find room types and add 1 to the count and use that as the default room name
     #room_size: Mapped[float] = mapped_column(default=0.0)
     #room_function: Mapped[str] = mapped_column(default='')
     #room_frequency_of_use: Mapped[str] = mapped_column(default='')
