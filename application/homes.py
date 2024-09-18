@@ -4,7 +4,7 @@ from flask_login import current_user, login_required
 from sqlalchemy import case, select
 from application.extension import db
 from application.database.models import Custom, Home, Floor, Room
-from application.floors import edit_floor_layout, set_active_floor
+from application.floors import define_floors, edit_floor_layout, set_active_floor
 
 
 homes = Blueprint('homes', __name__)
@@ -13,7 +13,7 @@ homes = Blueprint('homes', __name__)
 @login_required
 def set_active_home(home_id):
     current_user.active_home_id = home_id
-    home_query = select(Home).where(Home.home_id == home_id)
+    home_query = select(Home).where(Home.id == home_id)
     home = db.session.execute(home_query).scalar_one_or_none()
     if home.user_id == current_user.id:
         current_user.active_home = home
@@ -44,12 +44,9 @@ def home_setup():
     current_home = current_user.active_home
     print(f'current_home: {current_home} name: {current_home.home_name}')
     print(f'current_home.floors.count(): {current_home.floors.count()}')
-    if not current_home.floors.count():
-        return render_template('homes/create_floors.html.jinja') #BUG: re-create the form and link it
-    print(f'current_home.active_floor: {current_home.active_floor}')
     if not current_home.active_floor:
-        flash('You must select a main floor to move to the next step', 'danger')
-        return render_template('homes/create_floors.html.jinja') #BUG: not loading current floors
+        return define_floors(current_home.id)
+    print(f'current_home.active_floor: {current_home.active_floor}')
         
     
 #________________________________________________________________________________#

@@ -1,7 +1,7 @@
 from flask import Blueprint
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy import String, Integer, DateTime, UniqueConstraint, func, ForeignKey, select, text, event, column_property
+from sqlalchemy.orm import Mapped, mapped_column, relationship, column_property
+from sqlalchemy import String, Integer, DateTime, UniqueConstraint, and_, func, ForeignKey, select, text, event
 from sqlalchemy.ext.hybrid import hybrid_property
 from datetime import datetime, timezone
 from typing import Optional, List
@@ -53,8 +53,9 @@ class User(db.Model, UserMixin):
 class UserList(db.Model):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey('user.id'))
+    list_type: Mapped[str] = mapped_column(String(50), nullable=False) # match model name
     list_name: Mapped[str] = mapped_column(String(80), nullable=False)
-    list_type: Mapped[str] = mapped_column(String(50), nullable=False) # floors, rooms, tasks
+    __table_args__ = (UniqueConstraint('user_id', 'list_name', name='unique_list_name'),)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=func.now())
 
     user = relationship("User", back_populates="lists")
@@ -122,27 +123,15 @@ class Home(db.Model):
     def get_room_count(self):
         return self.rooms.count()
 
-def get_default_floor_name(home_id):
-    if home_id:
-        floor_count = db.session.execute(select(db.func.count()).select_from(Floor).where(Floor.home_id == home_id)).scalar()
-        if floor_count == 0:
-            return "Main Floor"
-        if floor_count == 1:
-            suffix = "nd"
-        elif floor_count == 2:
-            suffix = "rd"
-        else:
-            suffix = "th"
-        return f"{floor_count + 1}{suffix} Floor"
-    else:
-        return "Main Floor"
+
 
 class Floor(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     home_id: Mapped[int] = mapped_column(ForeignKey('home.id'))
-    floor_name: Mapped[str] = mapped_column(default=get_default_floor_name(home_id)) #todo: test if default works
+    floor_name: Mapped[str] = mapped_column(String(80), nullable=False)
     homes = relationship('Home', back_populates="floors", foreign_keys=[home_id])
     rooms = relationship('Room', back_populates="floors")
+
     @property
     def as_list_item(self):
         return {
@@ -152,21 +141,20 @@ class Floor(db.Model):
             'additional_info': f"Home: {self.home.home_name}"
         }
     
+
 class Room(db.Model): #todo: ROOM LEVEL AND LOCATION ON THE MAP
     id: Mapped[int] = mapped_column(primary_key=True)
     home_id: Mapped[int] = mapped_column(ForeignKey('home.id'))
     floor_id: Mapped[int] = mapped_column(ForeignKey('floor.id'))
     room_type: Mapped[str] = mapped_column(default='Room')
-    same_type_rooms = relationship(
-        "Room",
-        primaryjoin="and_(Room.home_id==home_id, Room.room_type==room_type)",
-        viewonly=True
-    )
-    same_type_rooms_count = column_property(
-        select([func.count()])
-        .select_from(same_type_rooms)
-        .scalar_subquery()
-    )
+    @property
+    def same_type_rooms_count(self):
+        return db.session.execute(
+            select(db.func.count())
+            .select_from(Room.__table__)
+            .where(and_(Room.home_id == self.home_id, Room.room_type == self.room_type))
+        ).scalar()
+    
     room_name: Mapped[str] = mapped_column(
         default=text("f'{room_type}' || ({same_type_rooms_count} + 1)")
     ) # find room types and add 1 to the count and use that as the default room name
@@ -181,7 +169,6 @@ class Room(db.Model): #todo: ROOM LEVEL AND LOCATION ON THE MAP
     floors = relationship("Floor", back_populates="rooms", foreign_keys=[floor_id])
     zones = relationship('Zone', back_populates="rooms", lazy='dynamic')
     supply = relationship('Supply', back_populates="rooms", lazy='dynamic')
-    tasks = relationship('Task', back_populates="rooms", lazy='dynamic')
     @property
     def as_list_item(self):
         return {

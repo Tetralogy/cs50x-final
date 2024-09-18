@@ -1,0 +1,4 @@
+
+    {% for item in list_obj | sort(attribute='order') %}
+        {% include 'lists/model/{{ item.item_model }}.html.jinja' %}
+    {% endfor %}

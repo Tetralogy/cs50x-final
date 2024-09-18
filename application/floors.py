@@ -3,42 +3,37 @@ from flask_login import current_user, login_required
 from sqlalchemy import select
 from application.extension import db
 from application.database.models import Floor
-from application.lists import add_item_to_list, create_user_list
+from application.lists import add_item_to_list, create_user_list, get_list_id
 from application.rooms import get_room_types
 
 floors = Blueprint('floors', __name__)
 
-@floors.route('/home/floor/active', methods=['PUT'])
+@floors.route('/home/<int:home_id>/floors/setup', methods=['GET'])    # sends user to page to create a list of floors for the home
+@login_required
+def define_floors(home_id):
+    if not current_user.active_home.floors.count(): # if home has no floors, 
+        new_list = create_user_list('Floor', f'{current_user.active_home.home_name} Floors') # create floors list
+        new_floor = add_item_to_list(new_list.id, 'Floor') # add default floor
+        print(f'new_floor: {new_floor}')
+        set_active_floor(new_floor.item_id) # set default floor as active
+        return render_template('homes/create_floors.html.jinja', home_id=home_id, floor_list_id=new_list.id)
+
+    floor_list_id = get_list_id('Floor') # if home_id has floors, get list of floors from userlists
+    return render_template('homes/create_floors.html.jinja', home_id=home_id, floor_list_id=floor_list_id)
+
+
+    
+@floors.route('/home/floor/<int:floor_id>/active', methods=['PUT'])
 @login_required
 def set_active_floor(floor_id):
     current_user.active_home.active_floor_id = floor_id
-    floor_query = select(Floor).where(Floor.floor_id == floor_id)
+    floor_query = select(Floor).where(Floor.id == floor_id)
     floor = db.session.execute(floor_query).scalar_one_or_none()
     if floor.home_id == current_user.active_home_id:
         current_user.active_home.active_floor = floor
         db.session.commit()
         print(f'current_user.active_home.active_floor: {current_user.active_home.active_floor}')
         return floor.floor_name #the name of the current active floor
-    
-    
-    
-    
-@floors.route('/home/<int:home_id>/floors/setup', methods=['GET'])
-@login_required
-def set_active_floor(home_id):
-    # sends user to page to create a list of floors for the home
-    if not db.session.execute(select(Floor).filter(Floor.home_id == home_id)).first(): # if home_id has no floors, 
-        new_list = create_user_list(current_user.id, 'Floors', 'floors') # create floors list 
-        default_floor = Floor(floor_name='Ground Floor', order=0) # create default floor: ground floor
-        add_item_to_list(new_list.id: int, 'Floor': str, item_id: int, order: int)
-        floor_list.append(default_floor)
-        db.session.add(default_floor) # add default floor to floors list
-        db.session.commit()
-        current_user.active_home.active_floor_id = default_floor.floor_id # set default floor as active
-        db.session.commit()
-        return render_template('homes/create_floors.html.jinja', home_id=home_id, floor_list=floor_list)
-        # if home_id has floors
-    return render_template('homes/create_floors.html.jinja', home_id=home_id)
         # user adds floors to the home
             # user names each floor uniquely to better identify them
             # user corrects the order of the floors as they are in the house
@@ -47,6 +42,7 @@ def set_active_floor(home_id):
     # user confirms the home's list of floors/ continue to next step button
     # user is taken to the home map of the active floor
 #____________________________________________________________________________________________________________________#
+
 @floors.route('/home/floor/new', methods=['GET', 'POST'])
 @login_required
 def new_floor():

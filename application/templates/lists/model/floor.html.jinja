@@ -1,0 +1,19 @@
+<div
+    class="input-group mb-0"
+    id="{{item.item_model}}list-{{ item.id }}"
+    data-id="{{ item.id }}"
+>
+    <span id="handle" class="handle input-group-text">↕️</span>
+    <span
+        class="input-group-text"
+        id="floor-{{ floor.id }}"
+        hx-get="/home/floor/rename/{{ floor.id }}"
+        hx-target="this"
+        hx-swap="outerHTML"
+        hx-trigger="click"
+    >
+    {{ item.get_item().floor_name }}
+    </span>
+
+    <span class="input-group-text">({{ item.order }})</span>
+</div>

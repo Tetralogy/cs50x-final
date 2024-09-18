@@ -1,6 +1,0 @@
-<div hx-get="/get_list/{{ list_id }}">
-    {% for item in items | sort(attribute='order') %}
-        {% include 'lists/{{ item.item_type }}/{{ item.item_id }}.html' %}
-    {% endfor %}
-
-</div>
