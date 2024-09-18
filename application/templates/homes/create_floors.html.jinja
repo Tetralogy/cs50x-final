@@ -8,9 +8,17 @@
     <h3>Add New Floors and name them</h3>
     <h4>active floor #{{ current_user.active_home.active_floor_id }}</h4>
     <h4>current floor_list_id #{{ floor_list_id }}</h4>
+    <h4>current ground floor #{{ current_user.active_home.ground_floor_id }}</h4>
 
-    <div hx-get="/show_list/{{ list_id }}" hx-trigger="load">
+    <div id="floor-types-container" hx-get="/show_list/{{ list_id }}" hx-trigger="load"></div>
     </div>
+
+
+
+    <div id="floor-list-container" hx-get="/show_list/{{ list_id }}" hx-trigger="load">
+    </div>
+
+    <div id="basement-list-container" hx-get="/show_list/{{ basement_list_id }}" hx-trigger="load">
 
     <div class="row">
         <div class="col-12">
@@ -25,15 +33,9 @@
         </div>
     </div>
 
-    <div id="ground-floor-check"
-        hx-get=""
-        hx-target="#floor-list"
-        hx-swap="afterbegin"
-        hx-trigger=""
-    ></div>
-    <div id="floor-list-container">
-        {% include 'homes/list_floors.html.jinja' %}
-    </div>
+    
+    <div id="sortable-floors" data-list-id="{{ list_id }}" data-user-id="{{ user_id }}"></div>
+<script src="{{ url_for('static', filename='js/sortable-floors.js') }}"></script>
 
     <script>
         document.addEventListener("htmx:load", function () {

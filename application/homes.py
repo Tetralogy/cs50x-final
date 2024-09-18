@@ -44,7 +44,7 @@ def home_setup():
     current_home = current_user.active_home
     print(f'current_home: {current_home} name: {current_home.home_name}')
     print(f'current_home.floors.count(): {current_home.floors.count()}')
-    if not current_home.active_floor:
+    if not current_home.active_floor or not current_home.ground_floor:
         return define_floors(current_home.id)
     print(f'current_home.active_floor: {current_home.active_floor}')
         

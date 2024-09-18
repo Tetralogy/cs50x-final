@@ -115,6 +115,8 @@ class Home(db.Model):
     last_full_walkthrough: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=True)
     active_floor_id: Mapped[int] = mapped_column(ForeignKey('floor.id'), nullable=True)
     active_floor = relationship("Floor", foreign_keys=[active_floor_id])
+    ground_floor_id: Mapped[int] = mapped_column(ForeignKey('floor.id'), nullable=True)
+    ground_floor = relationship("Floor", foreign_keys=[ground_floor_id])
     active_room_id: Mapped[int] = mapped_column(ForeignKey('room.id'), nullable=True)
     active_room = relationship("Room", foreign_keys=[active_room_id])
     

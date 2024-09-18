@@ -1,4 +1,4 @@
-from flask import Blueprint, flash, jsonify, render_template, request
+from flask import Blueprint, flash, jsonify, redirect, render_template, request, url_for
 from flask_login import current_user, login_required
 from sqlalchemy import select
 from application.extension import db
@@ -16,17 +16,18 @@ def define_floors(home_id):
         new_floor = add_item_to_list(new_list.id, 'Floor') # add default floor
         print(f'new_floor: {new_floor}')
         set_active_floor(new_floor.item_id) # set default floor as active
-        return render_template('homes/create_floors.html.jinja', home_id=home_id, floor_list_id=new_list.id)
+        if current_user.active_home.home_type != 'house':
+            print(f'home_type: {current_user.active_home.home_type}')
+            set_ground_floor(new_floor.item_id)
+            return redirect(url_for('homes.home_setup'))
+        return render_template('homes/create_floors.html.jinja', floor_list_id=new_list.id)
 
     floor_list_id = get_list_id('Floor') # if home_id has floors, get list of floors from userlists
     return render_template('homes/create_floors.html.jinja', home_id=home_id, floor_list_id=floor_list_id)
 
-
-    
 @floors.route('/home/floor/<int:floor_id>/active', methods=['PUT'])
 @login_required
 def set_active_floor(floor_id):
-    current_user.active_home.active_floor_id = floor_id
     floor_query = select(Floor).where(Floor.id == floor_id)
     floor = db.session.execute(floor_query).scalar_one_or_none()
     if floor.home_id == current_user.active_home_id:
@@ -41,6 +42,17 @@ def set_active_floor(floor_id):
         # user can change the active floor by clicking on it
     # user confirms the home's list of floors/ continue to next step button
     # user is taken to the home map of the active floor
+    
+@floors.route('/home/floor/<int:floor_id>/ground', methods=['PUT'])
+@login_required
+def set_ground_floor(floor_id):
+    floor_query = select(Floor).where(Floor.id == floor_id)
+    floor = db.session.execute(floor_query).scalar_one_or_none()
+    if floor.home_id == current_user.active_home_id:
+        current_user.active_home.ground_floor = floor
+        db.session.commit()
+        print(f'current_user.active_home.ground_floor: {current_user.active_home.ground_floor}')
+        return floor.floor_name #the name of the current ground floor
 #____________________________________________________________________________________________________________________#
 
 @floors.route('/home/floor/new', methods=['GET', 'POST'])

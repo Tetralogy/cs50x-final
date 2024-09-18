@@ -1,62 +1,5 @@
-<ul class="nav nav-tabs">
-    {% for navfloor in current_user.active_home.floors | sort(attribute='order') | reverse %}
-        <li class="nav-item">
-            <a
-                class="nav-link {% if navfloor.floor_id == floor.floor_id %}active{% endif %}"
-                hx-get="/home/floor/edit/{{ navfloor.floor_id }}"
-                hx-target="#onboarding-map"
-            >
-                {{ navfloor.floor_name }}</a
-            >
-        </li>
-    {% endfor %}
-    <a hx-get="/home/floors">
-        edit floor order
-    </a>
-</ul>
-
-<h1>
-    now editing: {{ floor.floor_name }} floor id: {{ floor.floor_id }} order:
-    {{ floor.order }}
-</h1>
-<form
-    hx-post="/home/map/room/add/type"
-    hx-target="#types"
-    class="input-group mb-3"
->
-    <input
-        type="text"
-        class="form-control"
-        placeholder="New Room Type"
-        aria-label="New Room Type"
-        aria-describedby="basic-addon2"
-        name="custom_type"
-        id="custom_type"
-        hx-trigger="keyup[key=='Enter']"
-    />
-    <button class="btn btn-secondary" type="submit" id="button-addon2">
-        Add Custom Room Type
-    </button>
-</form>
-<div
-    class="container-fluid bg-dark border border-success border-5 rounded-bottom-5"
->
-    <div id="types" class="row g-0 row-cols-4">
-        {% for room_type in room_types %}
-            <div class="col">{{ room_type }}</div>
-        {% endfor %}
-    </div>
-</div>
-<div
-    id="room-list-container"
-    class="container-fluid bg-dark border border-primary border-5 rounded-top-5"
->
-    {% include 'onboarding/parts/home/map/list.html.jinja' %}
-</div>
-
-<script>
-    document.addEventListener("htmx:load", function () {
-    const types = document.getElementById("types");
+document.addEventListener("htmx:load", function () {
+    const types = document.getElementById("floor-types-container");
 
     new Sortable(types, {
         group: {
@@ -113,7 +56,3 @@
             },
         });
     });
-</script>
-        <button                 hx-get="/home/floor/edit/next"
-                hx-target="#onboarding-map">Save layout and go to next floor</button>
-                #FIXME: link to start walkthrough
