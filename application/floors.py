@@ -23,7 +23,7 @@ def define_floors(home_id):
         return render_template('homes/create_floors.html.jinja', floor_list_id=new_list.id)
 
     floor_list_id = get_list_id('Floor') # if home_id has floors, get list of floors from userlists
-    return render_template('homes/create_floors.html.jinja', home_id=home_id, floor_list_id=floor_list_id)
+    return render_template('homes/create_floors.html.jinja', home_id=home_id, floor_list_id=floor_list_id) 
 
 @floors.route('/home/floor/<int:floor_id>/active', methods=['PUT'])
 @login_required

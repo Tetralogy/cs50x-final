@@ -179,7 +179,8 @@ def add_to_list(list_id):
 @lists.route('/show_list/<int:list_id>', methods=['GET'])
 @login_required
 def show_list(list_id):
-    return render_template('lists/list.html.jinja', list_obj=db.get_or_404(UserList, list_id)) #bug: fix template
+    print(f'showing list list_id: {list_id}')
+    return render_template('lists/list.html.jinja', list_obj=db.get_or_404(UserList, list_id))
 
 @lists.route('/update_list_order/<int:list_id>', methods=['PUT'])
 @login_required

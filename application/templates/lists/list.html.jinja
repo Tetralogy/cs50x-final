@@ -1,4 +1,3 @@
-
-    {% for item in list_obj | sort(attribute='order') %}
-        {% include 'lists/model/{{ item.item_model }}.html.jinja' %}
-    {% endfor %}
+{% for item in list_obj.items | sort(attribute='order') %}
+    {% include 'lists/model/' + item.item_model.lower() + '.html.jinja' %}
+{% endfor %}

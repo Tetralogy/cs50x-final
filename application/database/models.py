@@ -76,7 +76,8 @@ class UserListItem(db.Model):
     def get_item(self):
         # Dynamically import the model
         model_class = globals()[self.item_model]
-        return model_class.query.get(self.item_id)
+        return model_class.query.get(self.item_id) 
+    #if model_class is Floor and you want the name of the floor: {{ item.get_item().floor_name }} 
 
 class UserAbility(db.Model): # User's ability to do something, disabilities to account for
     id: Mapped[int] = mapped_column(primary_key=True)
