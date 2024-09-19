@@ -107,7 +107,7 @@ class Home(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey('user.id'))
     home_name: Mapped[str] = mapped_column(String(80), nullable=False)
-    home_type: Mapped[str] = mapped_column(String(80), default='House')
+    home_type: Mapped[str] = mapped_column(String(80), default='house')
     __table_args__ = (UniqueConstraint('user_id', 'home_name', name='unique_home_name'),)
     home_size_sqm: Mapped[float] = mapped_column(default=0.0)
     user = relationship("User", back_populates="homes", foreign_keys=[user_id])
