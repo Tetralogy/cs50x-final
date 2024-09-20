@@ -99,7 +99,7 @@ def set_profile_icon():
 
 @upload.route('/get_default_avatar')#doesn't work
 def get_default_avatar():
-    #TODO: make this a config option
+    #[ ]: make this a config option
     default_avatar_url = url_for('upload.get_icon_file', filename='person-circle.svg')
     print(f'default_avatar_url: {default_avatar_url}')
     return default_avatar_url

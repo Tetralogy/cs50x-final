@@ -28,7 +28,7 @@ def reset_user_data():
                 db.session.execute(delete(model).where(model.user_id == current_user.id))
             if hasattr(model, 'home_id'):
                 db.session.execute(delete(model).where(model.home_id == current_user.active_home_id))
-            #TODO: ZONE_ID
+            #[ ]: clear ZONE_ID
         
 
         # Reset the user's data
@@ -58,7 +58,7 @@ def delete_user_account():
                 db.session.execute(delete(model).where(model.user_id == current_user.id))
             if hasattr(model, 'home_id'):
                 db.session.execute(delete(model).where(model.home_id == current_user.active_home_id))
-            #TODO: ZONE_ID
+            #[ ]: clear ZONE_ID
 
         # Delete the user
         db.session.delete(current_user)

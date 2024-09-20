@@ -11,19 +11,20 @@ floors = Blueprint('floors', __name__)
 @floors.route('/home/<int:home_id>/floors/setup', methods=['GET'])    # sends user to page to create a list of floors for the home
 @login_required
 def define_floors(home_id):
+    multifloor = request.args.get('multifloor', '').lower() == 'true'
     if not current_user.active_home.floors.count(): # if home has no floors, 
         new_list = create_user_list('Floor', f'{current_user.active_home.home_name} Floors') # create floors list
-        new_floor = add_item_to_list(new_list.id, 'Floor') # add default floor
+        new_floor = add_item_to_list(new_list.id, 'Floor') # create default floor and add to Floor userlist
         print(f'new_floor: {new_floor}')
         set_active_floor(new_floor.item_id) # set default floor as active
-        if current_user.active_home.home_type != 'house':
-            print(f'home_type: {current_user.active_home.home_type}')
-            set_ground_floor(new_floor.item_id)
+        set_ground_floor(new_floor.item_id)
+        if not multifloor: # check if there should be multiple floors
+            print(f'multifloor not: {multifloor}')
             return redirect(url_for('homes.home_setup'))
         return render_template('homes/create_floors.html.jinja', floor_list_id=new_list.id)
 
     floor_list_id = get_list_id('Floor') # if home_id has floors, get list of floors from userlists
-    return render_template('homes/create_floors.html.jinja', home_id=home_id, floor_list_id=floor_list_id)
+    return render_template('homes/create_floors.html.jinja', floor_list_id=floor_list_id) 
 
 @floors.route('/home/floor/<int:floor_id>/active', methods=['PUT'])
 @login_required
@@ -61,7 +62,7 @@ def new_floor():
     if request.method == 'GET':
         if db.session.execute(select(Floor).filter(Floor.home_id == current_user.active_home_id)).first(): #check if there is already a floor
             return 'Floor already exists', 204
-        return create_floor() # create default ground floor #FIXME: CREATE FLOOR LIST OF TYPE FLOOR
+        return create_floor() # create default ground floor
     if request.method == 'POST':
         return create_floor()
     
@@ -118,7 +119,7 @@ def edit_floors_order():
 
 
         
-def create_floor(): #FIXME: CREATE FLOOR LIST OF TYPE FLOOR IF NO LIST EXISTS
+def create_floor():
     highest_order_number = db.session.execute(select(db.func.max(Floor.order)).filter(Floor.home_id == current_user.active_home_id)).scalar()
     lowest_order_number = db.session.execute(select(db.func.min(Floor.order)).filter(Floor.home_id == current_user.active_home_id)).scalar()
     print(f'lowest_order_number: {lowest_order_number}')
@@ -142,7 +143,7 @@ def create_floor(): #FIXME: CREATE FLOOR LIST OF TYPE FLOOR IF NO LIST EXISTS
     return render_template('onboarding/parts/home/attributes/floors/row.html.jinja', floor=floor), 201
 
 
-@floors.route('/home/floor/sort', methods=['PUT']) #TODO: make generic for any sortable table
+@floors.route('/home/floor/sort', methods=['PUT']) 
 @login_required
 def update_floor_order():
     new_order = request.form.getlist('order')
@@ -192,7 +193,7 @@ def edit_floor_layout(floor_id):
     #print(f'default_data[types]: {type(room_types)}')
     #print(f'room_types after extension: {room_types}')
     set_active_floor(floor_id)
-    return render_template('onboarding/parts/home/map/add_rooms.html.jinja', room_types=room_types, floor=floor) #todo: hx-push-url breaks the page
+    return render_template('onboarding/parts/home/map/add_rooms.html.jinja', room_types=room_types, floor=floor) #: hx-push-url breaks the page
 
 @floors.route('/home/floor/edit/next', methods=['GET'])
 @login_required
@@ -210,3 +211,4 @@ def edit_floor_layout_next():
     floor_id = next_floor[0].floor_id
     
     return edit_floor_layout(floor_id)
+#[ ]: cleanup unused code after floor and room setup is complete

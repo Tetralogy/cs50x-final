@@ -33,9 +33,9 @@ def index():
     home_query = select(Home).where(Home.user_id == current_user.id)
     home_id = db.session.execute(home_query).scalars().first()
     if home_id is not None:
-        return render_template('dashboard/index.html.jinja', user=current_user, page=1) #TODO: create user home page/dashboard
+        return render_template('dashboard/index.html.jinja', user=current_user, page=1) #[ ]: create user home page/dashboard
     
-    return render_template('onboarding/index.html.jinja', user=current_user, onboarded=False)#TODO: complete onboarding loop'''
+    return render_template('onboarding/index.html.jinja', user=current_user, onboarded=False)#[ ]: complete onboarding loop'''
 
 
 

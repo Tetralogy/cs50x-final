@@ -25,14 +25,19 @@ def set_active_home(home_id):
 @homes.route('/home/new', methods=['POST'])
 @login_required
 def create_home():
+    multifloor=request.form.get('multifloor') == 'on'
+    print(f'multifloor: {multifloor}')
     new_home = Home(
         user_id=current_user.id,
         home_name=request.form.get('home_name'),
-        home_type=request.form.get('home_type')
+        home_type=request.form.get('home_type'),
     )
     current_user.active_home = new_home
     db.session.add(new_home)
     db.session.commit()
+    if multifloor:
+        print(f'multifloor check: {multifloor}')
+        return redirect(url_for('floors.define_floors', home_id=new_home.id, multifloor=multifloor))
     return redirect(url_for('homes.home_setup'))
 
 
@@ -71,7 +76,7 @@ def home_setup():
         if first_floor_id is None:
             raise ValueError('No floors in home')
         set_active_floor(first_floor_id)
-        return render_template('onboarding/parts/home/map/index.html.jinja', floor=current_home.active_floor)#FIXME: ADD CONDITIONS FOR WHEN HOME HAS FLOORS AND WHEN HOME HAS ROOMS
+        return render_template('onboarding/parts/home/map/index.html.jinja', floor=current_home.active_floor)
     floors_without_rooms = db.session.execute(
         select(Floor.floor_id).where(Floor.home_id == current_home.home_id)
             .where(Floor.floor_id.not_in(select(Room.floor_id).where(Room.home_id == current_home.home_id)))

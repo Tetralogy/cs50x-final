@@ -10,12 +10,12 @@
     <h4>current floor_list_id #{{ floor_list_id }}</h4>
     <h4>current ground floor #{{ current_user.active_home.ground_floor_id }}</h4>
 
-    <div id="floor-types-container" hx-get="/show_list/{{ list_id }}" hx-trigger="load"></div>
+    <div id="floor-types-container" hx-get="/show_list/{{ floor_list_id }}" hx-trigger="load"></div>
     </div>
 
 
 
-    <div id="floor-list-container" hx-get="/show_list/{{ list_id }}" hx-trigger="load">
+    <div id="floor-list-container" hx-get="/show_list/{{ floor_list_id }}" hx-trigger="load">
     </div>
 
     <div id="basement-list-container" hx-get="/show_list/{{ basement_list_id }}" hx-trigger="load">

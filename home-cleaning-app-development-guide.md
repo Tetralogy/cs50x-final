@@ -24,7 +24,7 @@
 
 ## 2. Onboarding and Home Profile Creation (2-3 weeks)
 
-5. TODO: Develop the onboarding process:
+5. [ ]: Develop the onboarding process:
 
 - [ ] Create multi-step forms for collecting home environment details
     - [ ] User can input home details (size, levels, layout)

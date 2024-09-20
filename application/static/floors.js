@@ -26,7 +26,7 @@ document.addEventListener("htmx:load", function () {
             // Called when item is spilled
             onSpill: function (/**Event*/ evt) {
                 evt.item; // The spilled item
-                //FIXME: delete item from db
+                //[ ]: delete item from db on dragout
             },
             onAdd: function (/**Event*/ evt) {
                 console.log("onAdd event triggered");

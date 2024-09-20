@@ -83,7 +83,7 @@
             // Called when item is spilled
             onSpill: function (/**Event*/ evt) {
                 evt.item; // The spilled item
-                //FIXME: delete item from db
+                //[ ]: delete item from db on dragout
             },
             onAdd: function (/**Event*/ evt) {
                 console.log("onAdd event triggered");
@@ -116,4 +116,4 @@
 </script>
         <button                 hx-get="/home/floor/edit/next"
                 hx-target="#onboarding-map">Save layout and go to next floor</button>
-                #FIXME: link to start walkthrough
+                [ ] link to start walkthrough

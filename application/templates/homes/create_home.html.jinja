@@ -4,27 +4,54 @@
 {% endblock %}
 
 {% block main %}
-<h1>Create New Home</h1>
-<form action="/home/new" method="post">
-    <div class="form-floating mb-3">
-        <input type="text" class="form-control" id="floatingHomeName" placeholder="Home Name" name="home_name" required>
-        <label for="floatingHomeName">Home Name</label>
-    </div>
-    <div class="form-floating mb-3">
-        <select class="form-select" id="floatingHomeType" aria-label="Type of home" name="home_type" required>
-            <option value="" selected disabled>Type of home</option>
-            <option value="apartment">Apartment</option>
-            <option value="condominium">Condominium</option>
-            <option value="house">House</option>
-            <option value="trailer">Trailer</option>
-            <option value="van">Van</option>
-            <option value="tent">Tent</option>
-            <option value="cardboard box">Cardboard box</option>
-            <option value="boat">Boat</option>
-            <option value="other">Other #TODO: User input custom type</option>
-        </select>
-        <label for="floatingHomeType">Type of home</label>
-    </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
-</form>
+    <h1>Create New Home</h1>
+    <form action="/home/new" method="post">
+        <div class="form-floating mb-3">
+            <input
+                type="text"
+                class="form-control"
+                id="floatingHomeName"
+                placeholder="Home Name"
+                name="home_name"
+                required
+            />
+            <label for="floatingHomeName">Home Name</label>
+        </div>
+        <div class="form-floating mb-3">
+            <select
+                class="form-select"
+                id="floatingHomeType"
+                aria-label="Type of home"
+                name="home_type"
+                required
+            >
+                <option value="" selected disabled>Type of home</option>
+                <option value="house">House</option>
+                <option value="apartment">Apartment</option>
+                <option value="condominium">Condominium</option>
+                <option value="trailer">Trailer</option>
+                <option value="van">Van</option>
+                <option value="tent">Tent</option>
+                <option value="cardboard box">Cardboard box</option>
+                <option value="boat">Boat</option>
+                <option value="other" disabled>
+                    Other #[ ]: User input custom type
+                </option>
+            </select>
+            <label for="floatingHomeType">Type of home</label>
+        </div>
+        <div class="hstack gap-1">
+            Single-Story
+            <div class="form-switch form-check-inline mx-0">
+                <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="multifloor_check"
+                    name="multifloor"
+                />
+                Multi-Story
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
 {% endblock %}

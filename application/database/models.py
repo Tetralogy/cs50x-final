@@ -76,7 +76,8 @@ class UserListItem(db.Model):
     def get_item(self):
         # Dynamically import the model
         model_class = globals()[self.item_model]
-        return model_class.query.get(self.item_id)
+        return model_class.query.get(self.item_id) 
+    #if model_class is Floor and you want the name of the floor: {{ item.get_item().floor_name }} 
 
 class UserAbility(db.Model): # User's ability to do something, disabilities to account for
     id: Mapped[int] = mapped_column(primary_key=True)
@@ -106,7 +107,7 @@ class Home(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey('user.id'))
     home_name: Mapped[str] = mapped_column(String(80), nullable=False)
-    home_type: Mapped[str] = mapped_column(String(80), default='House')
+    home_type: Mapped[str] = mapped_column(String(80), default='house')
     __table_args__ = (UniqueConstraint('user_id', 'home_name', name='unique_home_name'),)
     home_size_sqm: Mapped[float] = mapped_column(default=0.0)
     user = relationship("User", back_populates="homes", foreign_keys=[user_id])
@@ -144,7 +145,7 @@ class Floor(db.Model):
         }
     
 
-class Room(db.Model): #todo: ROOM LEVEL AND LOCATION ON THE MAP
+class Room(db.Model): #[ ]: ROOM LEVEL AND LOCATION ON THE MAP
     id: Mapped[int] = mapped_column(primary_key=True)
     home_id: Mapped[int] = mapped_column(ForeignKey('home.id'))
     floor_id: Mapped[int] = mapped_column(ForeignKey('floor.id'))

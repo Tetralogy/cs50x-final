@@ -36,7 +36,7 @@ def add_item_to_list(user_list_id: int, item_model: str, item_id: int = None, or
     if not model_class or not issubclass(model_class, db.Model):
         raise ValueError(f'Unknown item type {item_model}')
     if item_id is None:
-        new_item = create_new_default(item_model) #FIXME: TEST THIS WITH CREATE NEW FLOOR
+        new_item = create_new_default(item_model) 
         item_id = new_item.item_id
     if order is None:
         order = db.session.scalars(db.select(db.func.count()).select_from(UserListItem).where(UserListItem.user_list_id == user_list_id)).one()
@@ -49,8 +49,7 @@ def create_new_default(item_model: str) -> UserListItem:
     if item_model == 'Floor':
         current_home = current_user.active_home
         floor_name = set_default_floor_name()
-        new_item = Floor(home_id=current_home.id, floor_name=floor_name) #creates default floor #FIXME: TEST THIS WITH CREATE NEW FLOOR
-        db.session.add(new_item)
+        new_item = Floor(home_id=current_home.id, floor_name=floor_name) #creates default floor
         db.session.commit()
         return UserListItem(item_model=item_model, item_id=new_item.id)
     if item_model == 'Task':
@@ -179,7 +178,8 @@ def add_to_list(list_id):
 @lists.route('/show_list/<int:list_id>', methods=['GET'])
 @login_required
 def show_list(list_id):
-    return render_template('lists/list.html.jinja', list_obj=db.get_or_404(UserList, list_id)) #bug: fix template
+    print(f'showing list list_id: {list_id}')
+    return render_template('lists/list.html.jinja', list_obj=db.get_or_404(UserList, list_id))
 
 @lists.route('/update_list_order/<int:list_id>', methods=['PUT'])
 @login_required

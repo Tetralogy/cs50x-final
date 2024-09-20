@@ -64,7 +64,7 @@ def add_room(floor_id):
 
     # Return the new item's data
     return render_template('onboarding/parts/home/map/room_icon.html.jinja', floor=floor, room=new_room)
-    return new_room_name, 201 #FIXME: create appropriate icon and labels in html
+    return new_room_name, 201 #[ ]: create appropriate icon and labels in html
     return jsonify(
         id= new_room.room_id,
         name= new_room.room_name,
