@@ -16,7 +16,7 @@
             2. Type of home: select [apartment, condominium, house, trailer, van, tent, cardboard box, other()] ✅
                 1. in future references during home setup, the chosen specific home type word is used as the nound instead of "home" ✴️ (house, apartment, condo) 
     2. ### /home/setup ✴️ 
-        1. #FIXME floor selection form ✴️ ⬅️ 
+        1. #TODO floor selection form ✴️ ⬅️ 
         2. new floor button (stacked reorderable list)✴️
             1. Automatically prompts for rename field of new levels
             2. "Ground floor" is the default name for the first floor

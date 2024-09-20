@@ -50,6 +50,7 @@ def create_new_default(item_model: str) -> UserListItem:
         current_home = current_user.active_home
         floor_name = set_default_floor_name()
         new_item = Floor(home_id=current_home.id, floor_name=floor_name) #creates default floor
+        db.session.add(new_item)
         db.session.commit()
         return UserListItem(item_model=item_model, item_id=new_item.id)
     if item_model == 'Task':
