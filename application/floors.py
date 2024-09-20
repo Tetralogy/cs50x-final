@@ -8,17 +8,17 @@ from application.rooms import get_room_types
 
 floors = Blueprint('floors', __name__)
 
-@floors.route('/home/<int:home_id>/floors/setup', methods=['GET'])    # sends user to page to create a list of floors for the home
+@floors.route('/home/floors/setup', methods=['GET'])    # sends user to page to create a list of floors for the home
 @login_required
-def define_floors(home_id):
+def define_floors():
     multifloor = request.args.get('multifloor', '').lower() == 'true'
     if not current_user.active_home.floors.count(): # if home has no floors, 
         new_list = create_user_list('Floor', f'{current_user.active_home.home_name} Floors') # create floors list
         new_floor = add_item_to_list(new_list.id, 'Floor') # create default floor and add to Floor userlist
         print(f'new_floor: {new_floor}')
         set_active_floor(new_floor.item_id) # set default floor as active
-        set_ground_floor(new_floor.item_id)
         if not multifloor: # check if there should be multiple floors
+            set_ground_floor(new_floor.item_id)
             print(f'multifloor not: {multifloor}')
             return redirect(url_for('homes.home_setup'))
         return render_template('homes/create_floors.html.jinja', floor_list_id=new_list.id)
@@ -54,6 +54,12 @@ def set_ground_floor(floor_id):
         db.session.commit()
         print(f'current_user.active_home.ground_floor: {current_user.active_home.ground_floor}')
         return floor.floor_name #the name of the current ground floor
+    
+    
+    
+    
+    
+    
 #____________________________________________________________________________________________________________________#
 
 @floors.route('/home/floor/new', methods=['GET', 'POST'])

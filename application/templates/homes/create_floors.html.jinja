@@ -10,30 +10,63 @@
     <h4>current floor_list_id #{{ floor_list_id }}</h4>
     <h4>current ground floor #{{ current_user.active_home.ground_floor_id }}</h4>
 
-    <div id="floor-types-container" hx-get="/show_list/{{ floor_list_id }}" hx-trigger="load"></div>
-    </div>
-
-
-
-    <div id="floor-list-container" hx-get="/show_list/{{ floor_list_id }}" hx-trigger="load">
-    </div>
-
-    <div id="basement-list-container" hx-get="/show_list/{{ basement_list_id }}" hx-trigger="load">
-
     <div class="row">
         <div class="col-12">
             <button
-                hx-post="/home/floor/new"
-                hx-target="#floor-list"
+                hx-post="/create/floor"
+                hx-target="#floor-list-container"
                 hx-swap="afterbegin"
                 class="btn btn-primary"
             >
-                Add Floor
+                Add Upper Floor #fixme: create a floor
+            </button>
+        </div>
+    </div>
+
+
+    <div id="floor-list-container" hx-get="/show_list/{{ floor_list_id }}" hx-trigger="load">
+        #list shows only floors with positive order int
+    </div>
+
+        <div id="basement-list-container" hx-get="/show_list/{{ floor_list_id }}" hx-trigger="load">
+        #list shows only floors with negative order int
+    </div>
+
+
+    <div class="row">
+        <div class="col-12">
+            <button 
+                hx-post="/create/floor/basement"
+                hx-target="#floor-list-container"
+                hx-swap="afterbegin"
+                class="btn btn-primary"
+            >
+                Add Basement #fixme: create a floor and set the order int to be negative in order on floor list = basement
             </button>
         </div>
     </div>
 
     
+
+
+    <div class="row">
+        <div class="col-12">
+            <button
+                hx-post="/home/floor/{{ selected_ground_floor }}/ground"
+                hx-target="#floor-list-container"
+                hx-swap="afterbegin"
+                class="btn btn-primary"
+            >
+                Confirm Floors and go to next step
+                #fixme: save order to database in one list
+                #fixme: save ground floor id to database
+                #todo: link to next step in home setup
+            </button>
+        </div>
+    </div>
+
+
+
     <div id="sortable-floors" data-list-id="{{ list_id }}" data-user-id="{{ user_id }}"></div>
 <script src="{{ url_for('static', filename='js/sortable-floors.js') }}"></script>
 
