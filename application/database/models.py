@@ -145,7 +145,7 @@ class Floor(db.Model):
         }
     
 
-class Room(db.Model): #todo: ROOM LEVEL AND LOCATION ON THE MAP
+class Room(db.Model): #[ ]: ROOM LEVEL AND LOCATION ON THE MAP
     id: Mapped[int] = mapped_column(primary_key=True)
     home_id: Mapped[int] = mapped_column(ForeignKey('home.id'))
     floor_id: Mapped[int] = mapped_column(ForeignKey('floor.id'))

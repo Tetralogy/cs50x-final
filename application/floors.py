@@ -62,7 +62,7 @@ def new_floor():
     if request.method == 'GET':
         if db.session.execute(select(Floor).filter(Floor.home_id == current_user.active_home_id)).first(): #check if there is already a floor
             return 'Floor already exists', 204
-        return create_floor() # create default ground floor #FIXME: CREATE FLOOR LIST OF TYPE FLOOR
+        return create_floor() # create default ground floor
     if request.method == 'POST':
         return create_floor()
     
@@ -119,7 +119,7 @@ def edit_floors_order():
 
 
         
-def create_floor(): #FIXME: CREATE FLOOR LIST OF TYPE FLOOR IF NO LIST EXISTS
+def create_floor():
     highest_order_number = db.session.execute(select(db.func.max(Floor.order)).filter(Floor.home_id == current_user.active_home_id)).scalar()
     lowest_order_number = db.session.execute(select(db.func.min(Floor.order)).filter(Floor.home_id == current_user.active_home_id)).scalar()
     print(f'lowest_order_number: {lowest_order_number}')
@@ -143,7 +143,7 @@ def create_floor(): #FIXME: CREATE FLOOR LIST OF TYPE FLOOR IF NO LIST EXISTS
     return render_template('onboarding/parts/home/attributes/floors/row.html.jinja', floor=floor), 201
 
 
-@floors.route('/home/floor/sort', methods=['PUT']) #TODO: make generic for any sortable table
+@floors.route('/home/floor/sort', methods=['PUT']) 
 @login_required
 def update_floor_order():
     new_order = request.form.getlist('order')
@@ -193,7 +193,7 @@ def edit_floor_layout(floor_id):
     #print(f'default_data[types]: {type(room_types)}')
     #print(f'room_types after extension: {room_types}')
     set_active_floor(floor_id)
-    return render_template('onboarding/parts/home/map/add_rooms.html.jinja', room_types=room_types, floor=floor) #todo: hx-push-url breaks the page
+    return render_template('onboarding/parts/home/map/add_rooms.html.jinja', room_types=room_types, floor=floor) #: hx-push-url breaks the page
 
 @floors.route('/home/floor/edit/next', methods=['GET'])
 @login_required
@@ -211,3 +211,4 @@ def edit_floor_layout_next():
     floor_id = next_floor[0].floor_id
     
     return edit_floor_layout(floor_id)
+#[ ]: cleanup unused code after floor and room setup is complete

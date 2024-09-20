@@ -76,7 +76,7 @@ def home_setup():
         if first_floor_id is None:
             raise ValueError('No floors in home')
         set_active_floor(first_floor_id)
-        return render_template('onboarding/parts/home/map/index.html.jinja', floor=current_home.active_floor)#FIXME: ADD CONDITIONS FOR WHEN HOME HAS FLOORS AND WHEN HOME HAS ROOMS
+        return render_template('onboarding/parts/home/map/index.html.jinja', floor=current_home.active_floor)
     floors_without_rooms = db.session.execute(
         select(Floor.floor_id).where(Floor.home_id == current_home.home_id)
             .where(Floor.floor_id.not_in(select(Room.floor_id).where(Room.home_id == current_home.home_id)))
