@@ -26,7 +26,7 @@ def create_user_list(list_type: str, list_name: str) -> UserList:
     db.session.commit()
     return new_list
 
-def add_item_to_list(user_list_id: int, item_model: str, item_id: int = None, order: int = None) -> UserListEntry:
+def add_item_to_list(user_list_id: int, item_model: str, item_id: int = None, order: int = None, name: str = None) -> UserListEntry:
     list_obj = db.get_or_404(UserList, user_list_id)
     if not list_obj:
         raise ValueError(f'Unknown list id {user_list_id}')
@@ -36,7 +36,7 @@ def add_item_to_list(user_list_id: int, item_model: str, item_id: int = None, or
     if not model_class or not issubclass(model_class, db.Model):
         raise ValueError(f'Unknown item type {item_model}')
     if item_id is None:
-        new_item = create_new_default(item_model) 
+        new_item = create_new_default(item_model, name) 
         item_id = new_item.item_id
     if order is None:
         order = db.session.scalars(db.select(db.func.count()).select_from(UserListEntry).where(UserListEntry.user_list_id == user_list_id)).one()
@@ -51,10 +51,20 @@ def add_item_to_list(user_list_id: int, item_model: str, item_id: int = None, or
     db.session.commit()
     return new_list_item
 
-def create_new_default(item_model: str) -> UserListEntry:
+def create_new_default(item_model: str, name: str = None) -> UserListEntry:
     if item_model == 'Floor':
+        print(f'name (create_new_default):  {name}')
         current_home = current_user.active_home
-        floor_name = set_default_floor_name()
+        if name is None:
+            floor_name = set_default_floor_name()
+        else:
+            count = 0
+            existing_floors = db.session.scalars(db.select(Floor.floor_name).filter(Floor.home_id == current_home.id)).all()
+            for floor_name in existing_floors:
+                if name in floor_name:
+                    count += 1
+                floor_name = f'{name} {count + 1}'
+                print(f'floor_name (create_new_default): {floor_name}')
         new_item = Floor(home_id=current_home.id, floor_name=floor_name) #creates default floor
         db.session.add(new_item)
         db.session.commit()
@@ -189,12 +199,13 @@ def add_to_list(list_id):
 @login_required
 def create_add_to_list(item_model, list_id, item_id=None):
     order = request.args.get('order')
-    
     if order is None or order == '':
         order = None
     else:
         order = int(order)
-    new_item = add_item_to_list(list_id, item_model, item_id, order)
+    name = request.args.get('name')
+    print(f'item_model: {item_model}, list_id: {list_id}, item_id: {item_id}, order: {order}, name: {name}')
+    new_item = add_item_to_list(list_id, item_model, item_id, order, name)
     
     flash(f'Item added to list: {new_item.item_model} {new_item.item_id}')
     return redirect(url_for('lists.show_list', list_id=list_id))
