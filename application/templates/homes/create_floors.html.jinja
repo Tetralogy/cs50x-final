@@ -15,7 +15,7 @@
             <button
                 hx-post="/create/Floor/{{ floor_list.id }}?order=0"
                 hx-target="#floor-list-container"
-                hx-swap="afterbegin"
+                hx-swap="innerhtml"
                 class="btn btn-primary"
             >
                 Add Upper Floor
@@ -34,12 +34,8 @@
 </div>
 
     <div id="floor-list-container" hx-get="/show_list/{{ floor_list.id }}" hx-trigger="load">
-        #list shows only floors with positive order int
     </div>
 
-        <div id="basement-list-container" hx-get="/show_list/{{ floor_list.id }}" hx-trigger="load">
-        #list shows only floors with negative order int
-    </div>
 
 
     <div class="row">
@@ -47,10 +43,10 @@
             <button 
                 hx-post="/create/Floor/{{ floor_list.id }}?order="
                 hx-target="#floor-list-container"
-                hx-swap="afterbegin"
+                hx-swap="innerhtml"
                 class="btn btn-primary"
             >
-                Add Basement #fixme: create a floor and set the order int to be negative in order on floor list = basement
+                Add Basement
             </button>
         </div>
     </div>
