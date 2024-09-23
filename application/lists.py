@@ -147,7 +147,7 @@ def add_custom_item_to_list(user_list_id: int, name: str, order: int, custom_dat
     db.session.commit()
     return new_item
 
-def set_default_floor_name(): #bug: floor num off by 1
+def set_default_floor_name():
     floor_count = current_user.active_home.floors.count()
     print(f'floor_count: {floor_count}')
     if floor_count == 0:
@@ -158,7 +158,7 @@ def set_default_floor_name(): #bug: floor num off by 1
         suffix = "rd"
     else:
         suffix = "th"
-    return f"{floor_count}{suffix} Floor"
+    return f"{floor_count + 1}{suffix} Floor"
 
 
 # Example usage in a Flask route
