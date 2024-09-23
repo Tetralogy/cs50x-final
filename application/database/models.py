@@ -59,9 +59,9 @@ class UserList(db.Model):
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=func.now())
 
     user = relationship("User", back_populates="lists")
-    items = relationship("UserListItem", back_populates="user_list", lazy='dynamic', cascade="all, delete-orphan")
+    items = relationship("UserListEntry", back_populates="user_list", lazy='dynamic', cascade="all, delete-orphan")
 
-class UserListItem(db.Model):
+class UserListEntry(db.Model):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     user_list_id: Mapped[int] = mapped_column(ForeignKey('user_list.id'))
     item_model: Mapped[str] = mapped_column(String, nullable=False)  # Store the model name as a string

@@ -3,7 +3,7 @@ from typing import List, Optional
 from flask import Blueprint, flash, redirect, render_template, request, url_for
 from flask_login import current_user, login_required
 from sqlalchemy import select
-from application.database.models import Floor, Room, Supply, Task, UserList, UserListItem
+from application.database.models import Floor, Room, Supply, Task, UserList, UserListEntry
 from application.extension import db
 
     
@@ -26,7 +26,7 @@ def create_user_list(list_type: str, list_name: str) -> UserList:
     db.session.commit()
     return new_list
 
-def add_item_to_list(user_list_id: int, item_model: str, item_id: int = None, order: int = None) -> UserListItem:
+def add_item_to_list(user_list_id: int, item_model: str, item_id: int = None, order: int = None) -> UserListEntry:
     list_obj = db.get_or_404(UserList, user_list_id)
     if not list_obj:
         raise ValueError(f'Unknown list id {user_list_id}')
@@ -39,30 +39,36 @@ def add_item_to_list(user_list_id: int, item_model: str, item_id: int = None, or
         new_item = create_new_default(item_model) 
         item_id = new_item.item_id
     if order is None:
-        order = db.session.scalars(db.select(db.func.count()).select_from(UserListItem).where(UserListItem.user_list_id == user_list_id)).one()
-    new_list_item = UserListItem(user_list_id=user_list_id, item_model=item_model, item_id=item_id, order=order)
+        order = db.session.scalars(db.select(db.func.count()).select_from(UserListEntry).where(UserListEntry.user_list_id == user_list_id)).one()
+    elif order < 1:
+        all_items = db.session.scalars(db.select(UserListEntry).filter_by(user_list_id=user_list_id).order_by(UserListEntry.order)).all()
+        for item in all_items:            
+            item.order += 1
+        db.session.commit()
+        order = 0
+    new_list_item = UserListEntry(user_list_id=user_list_id, item_model=item_model, item_id=item_id, order=order)
     db.session.add(new_list_item)
     db.session.commit()
     return new_list_item
 
-def create_new_default(item_model: str) -> UserListItem:
+def create_new_default(item_model: str) -> UserListEntry:
     if item_model == 'Floor':
         current_home = current_user.active_home
         floor_name = set_default_floor_name()
         new_item = Floor(home_id=current_home.id, floor_name=floor_name) #creates default floor
         db.session.add(new_item)
         db.session.commit()
-        return UserListItem(item_model=item_model, item_id=new_item.id)
+        return UserListEntry(item_model=item_model, item_id=new_item.id)
     if item_model == 'Task':
         new_item = Task(user_id=current_user.id)
         db.session.add(new_item)
         db.session.commit()
-        return UserListItem(item_model=item_model, item_id=new_item.id)
+        return UserListEntry(item_model=item_model, item_id=new_item.id)
     if item_model == 'Room':
         new_item = Room(home_id=current_user.active_home.id, floor_id=current_user.active_home.active_floor.id)
         db.session.add(new_item)
         db.session.commit()
-        return UserListItem(item_model=item_model, item_id=new_item.id)
+        return UserListEntry(item_model=item_model, item_id=new_item.id)
     else:
         raise ValueError(f'Unknown item type {item_model}')
 '''
@@ -86,12 +92,12 @@ def get_user_list_items(user_list_id: int) -> List[dict]:
         result.listsend(list_item)
     return result
 '''
-def get_list_id(item_model: str):
+def get_userlist(item_model: str): #gets the primary list of a main model
     list_type = item_model
     lists = current_user.lists.filter_by(list_type=list_type).all()
     if len(lists) == 0:
         raise ValueError(f'No lists of type {list_type} found for user {current_user.id}')
-    if len(lists) > 1:
+    if len(lists) > 1: #[ ] add ability to select which list when more than one + test this
         print('More than one list matches the string. Please select one:')
         for i, lst in enumerate(lists):
             print(f'{i+1}. {lst.list_name}')
@@ -113,31 +119,35 @@ def get_list_id(item_model: str):
                 list_id = lists[selected_list_index-1].id
             else:
                 list_id = lists[0].id
-    return list_id
+    userlist =  db.get_or_404(UserList, list_id)
+    return userlist
 
-def update_item_order(user_list_item_id: int, new_order: int) -> Optional[UserListItem]:
-    item = UserListItem.query.get(user_list_item_id)
+def update_item_order(user_list_item_id: int, new_order: int) -> Optional[UserListEntry]:
+    item = UserListEntry.query.get(user_list_item_id)
     if item:
         item.order = new_order
         db.session.commit()
         return item
     return None
 
-def delete_item_from_list(user_list_item_id: int) -> bool:
-    item = db.get_or_404(UserListItem, user_list_item_id)
-    if item:
+def delete_entry_and_item(user_list_entry_id: int) -> bool: #bug
+    userlist_item = db.get_or_404(UserListEntry, user_list_entry_id)
+    
+    if userlist_item:
+        item = db.get_or_404(userlist_item.item_model, userlist_item.item_id)
         db.session.delete(item)
+        db.session.delete(userlist_item)
         db.session.commit()
         return True
     return False
 
-def add_custom_item_to_list(user_list_id: int, name: str, order: int, custom_data: str = None) -> UserListItem:
-    new_item = UserListItem(user_list_id=user_list_id, item_type='custom', item_id=0, order=order, custom_data=custom_data)
+def add_custom_item_to_list(user_list_id: int, name: str, order: int, custom_data: str = None) -> UserListEntry:
+    new_item = UserListEntry(user_list_id=user_list_id, item_type='custom', item_id=0, order=order, custom_data=custom_data)
     db.session.add(new_item)
     db.session.commit()
     return new_item
 
-def set_default_floor_name():
+def set_default_floor_name(): #bug: floor num off by 1
     floor_count = current_user.active_home.floors.count()
     print(f'floor_count: {floor_count}')
     if floor_count == 0:
@@ -161,7 +171,7 @@ def create_list():
     flash(f'List created: {new_list.list_name}')
     return redirect(url_for('lists.get_list', list_id=new_list.id))
 
-@lists.route('/add_to_list/<int:list_id>', methods=['POST'])
+'''@lists.route('/add_to_list/<int:list_id>', methods=['POST'])
 @login_required
 def add_to_list(list_id):
     item_model = request.form.get('item_model')
@@ -174,7 +184,20 @@ def add_to_list(list_id):
         new_item = add_item_to_list(list_id, item_model, item_id, order)
     
     flash(f'Item added to list: {new_item.item_model} {new_item.item_id}')
-    return redirect(url_for('lists.get_list', list_id=list_id))
+    return redirect(url_for('lists.get_list', list_id=list_id))'''
+@lists.route('/create/<string:item_model>/<int:list_id>', methods=['POST'])
+@login_required
+def create_add_to_list(item_model, list_id, item_id=None):
+    order = request.args.get('order')
+    
+    if order is None or order == '':
+        order = None
+    else:
+        order = int(order)
+    new_item = add_item_to_list(list_id, item_model, item_id, order)
+    
+    flash(f'Item added to list: {new_item.item_model} {new_item.item_id}')
+    return redirect(url_for('lists.show_list', list_id=list_id))
 
 @lists.route('/show_list/<int:list_id>', methods=['GET'])
 @login_required
@@ -191,4 +214,11 @@ def update_list_order(list_id):
     flash('List order updated')
     return redirect(url_for('lists.get_list', list_id=list_id))
 
-
+@lists.route('/delete/<int:user_list_entry_id>', methods=['DELETE']) #bug test
+@login_required
+def delete(user_list_entry_id):
+    if delete_entry_and_item(user_list_entry_id):
+        flash('Item deleted')
+    else:
+        flash('Item not found', 'error')
+    return '', 204

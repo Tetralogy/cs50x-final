@@ -3,7 +3,7 @@ from flask_login import current_user, login_required
 from sqlalchemy import select
 from application.extension import db
 from application.database.models import Floor
-from application.lists import add_item_to_list, create_user_list, get_list_id
+from application.lists import add_item_to_list, create_user_list, get_userlist
 from application.rooms import get_room_types
 
 floors = Blueprint('floors', __name__)
@@ -14,6 +14,7 @@ def define_floors():
     multifloor = request.args.get('multifloor', '').lower() == 'true'
     if not current_user.active_home.floors.count(): # if home has no floors, 
         new_list = create_user_list('Floor', f'{current_user.active_home.home_name} Floors') # create floors list
+        print(f'new_list: {new_list} (type: {type(new_list)})')
         new_floor = add_item_to_list(new_list.id, 'Floor') # create default floor and add to Floor userlist
         print(f'new_floor: {new_floor}')
         set_active_floor(new_floor.item_id) # set default floor as active
@@ -21,10 +22,10 @@ def define_floors():
             set_ground_floor(new_floor.item_id)
             print(f'multifloor not: {multifloor}')
             return redirect(url_for('homes.home_setup'))
-        return render_template('homes/create_floors.html.jinja', floor_list_id=new_list.id)
+        return render_template('homes/create_floors.html.jinja', floor_list=new_list)
 
-    floor_list_id = get_list_id('Floor') # if home_id has floors, get list of floors from userlists
-    return render_template('homes/create_floors.html.jinja', floor_list_id=floor_list_id) 
+    floor_list = get_userlist('Floor') # if home_id has floors, get list of floors from userlists
+    return render_template('homes/create_floors.html.jinja', floor_list=floor_list)
 
 @floors.route('/home/floor/<int:floor_id>/active', methods=['PUT'])
 @login_required
@@ -36,13 +37,13 @@ def set_active_floor(floor_id):
         db.session.commit()
         print(f'current_user.active_home.active_floor: {current_user.active_home.active_floor}')
         return floor.floor_name #the name of the current active floor
-        # user adds floors to the home
-            # user names each floor uniquely to better identify them
-            # user corrects the order of the floors as they are in the house
-    # main floor/ground floor is set as the active floor by default
-        # user can change the active floor by clicking on it
-    # user confirms the home's list of floors/ continue to next step button
-    # user is taken to the home map of the active floor
+        #[ ] user adds floors to the home
+            #[ ] user names each floor uniquely to better identify them
+            #[ ] user corrects the order of the floors as they are in the house
+    #[ ] main floor/ground floor is set as the active floor by default
+        #[ ] user can change the active floor by clicking on it
+    #[ ] user confirms the home's list of floors/ continue to next step button
+    #[ ] user is taken to the home map of the active floor
     
 @floors.route('/home/floor/<int:floor_id>/ground', methods=['PUT'])
 @login_required
@@ -56,15 +57,16 @@ def set_ground_floor(floor_id):
         return floor.floor_name #the name of the current ground floor
     
     
-    
+
+@floors.route('/floor/create/upper', methods=['POST'])
+@login_required
+def new_floor_upper():
+    list_id = get_userlist('Floor')
+    return add_item_to_list(list_id, 'Floor')    #create floor + add floor to floor list
     
     
     
 #____________________________________________________________________________________________________________________#
-
-@floors.route('/home/floor/new', methods=['GET', 'POST'])
-@login_required
-def new_floor():
     if request.method == 'GET':
         if db.session.execute(select(Floor).filter(Floor.home_id == current_user.active_home_id)).first(): #check if there is already a floor
             return 'Floor already exists', 204
