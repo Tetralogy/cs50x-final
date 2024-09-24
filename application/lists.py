@@ -247,3 +247,22 @@ def update_list_order(list_id):
 def show_list(list_id):
     print(f'showing list list_id: {list_id}')
     return render_template('lists/list.html.jinja', list_obj=db.get_or_404(UserList, list_id))
+
+
+@lists.route('/rename/<string:item_model>/<int:item_id>', methods=['PUT'])
+@login_required
+def rename_item(item_model, item_id):
+    new_name = request.form.get('input_name')
+    print(f'renaming item_model: {item_model}, item_id: {item_id} to {new_name}')
+    print(request.form)
+    if item_model == 'room':
+        room = db.get_or_404(Room, item_id)
+        room.floor_name = new_name
+    elif item_model == 'task':
+        task = db.get_or_404(Task, item_id)
+        task.name = new_name
+    elif item_model == 'supply':
+        supply = db.get_or_404(Supply, item_id)
+        supply.name = new_name
+    db.session.commit()
+    return '', 204

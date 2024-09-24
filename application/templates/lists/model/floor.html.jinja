@@ -7,14 +7,21 @@
     <span
         class="input-group-text"
         id="floor-{{ entry.item_id }}"
-        hx-get="/home/floor/rename/{{ entry.item_id }}"
+        hx-put="/rename/{{ entry.item_model }}/{{ entry.item_id }}"
         hx-target="this"
-        hx-swap="outerHTML"
-        hx-trigger="click"
+        hx-trigger="change"
+        hx-include="#input_{{entry.item_model}}_name-{{ entry.id }}"
+
     >
+        <input type="text" id="input_{{entry.item_model}}_name-{{ entry.id }}" name="input_name" placeholder="{{ entry.get_item().floor_name }}" style="margin-top: 10px; padding: 10px; width: 200px;"/>
     {{ entry.get_item().floor_name }}
     </span>
-
+    <span class="form-check">
+        <input class="form-check-input" type="radio" name="ground_floor" id="task-status-{{ entry.id }}" value="{{ entry.id }}">
+        <label class="form-check-label" for="task-status-{{ entry.id }}">
+            set as ground floor
+        </label>
+    </span>
     <span class="input-group-text">({{ entry.order }})</span>
     <button class="btn btn-danger"
     
