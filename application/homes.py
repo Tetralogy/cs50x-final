@@ -41,6 +41,21 @@ def create_home():
     return redirect(url_for('homes.home_setup'))
 
 
+@homes.route('/home/size', methods=['GET','POST'])
+@login_required
+def home_size():
+    if request.method == 'GET':
+        return render_template('homes/size_home.html.jinja')
+    if request.method == 'POST':
+        #500sqft - 3000sqft+
+        size_sqft = request.form.get('size') #[ ] change to metric or imperial by user preferences
+        print(f'size_sqft: {size_sqft}')
+        size_sqm = int(size_sqft) * 0.092903
+        print(f'size_sqm: {size_sqm}')
+        current_user.active_home.home_size_sqm = size_sqm
+        db.session.commit()
+        return redirect(url_for('homes.home_setup'))
+
 @homes.route('/home/setup', methods=['GET'])
 @login_required
 def home_setup():
@@ -52,13 +67,14 @@ def home_setup():
     if not current_home.active_floor or not current_home.ground_floor:
         return define_floors()
     print(f'current_home.active_floor: {current_home.active_floor}')
+    if not current_home.home_size_sqm:
+        print('home_size_sqm is None')
+        return redirect(url_for('homes.home_size'))
+    return redirect(url_for('homes.home_size'))
         
     
 #________________________________________________________________________________#
     
-    if not current_home.home_size_sqm:
-        print('home_size_sqm is None')
-        return render_template('homes/size_home.html.jinja')
     
     floor_ids_query = select(Floor.floor_id).where(Floor.home_id == current_home.home_id)
     floor_ids = db.session.execute(floor_ids_query).scalars().all()
@@ -129,7 +145,7 @@ def name_home():
                 db.session.commit()
                 return render_template('onboarding/parts/home/attributes/name/home_name_text.html.jinja', home_name=home.home_name)
 
-@homes.route('/home/size', methods=['GET', 'PUT'])
+'''@homes.route('/home/size', methods=['GET', 'PUT'])
 @login_required
 def home_size():
     if request.method == 'GET':
@@ -144,7 +160,7 @@ def home_size():
         print(f'home_size_sqm: {home.home_size_sqm}')
         db.session.commit()
         return render_template('onboarding/parts/home/attributes/size/home_size_text.html.jinja', home_size_sqm=home.home_size_sqm)
-
+'''
 @homes.route('/home/map', methods=['GET'])
 @login_required
 def get_map():
