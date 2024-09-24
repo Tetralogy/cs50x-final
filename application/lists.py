@@ -140,7 +140,7 @@ def update_item_order(user_list_entry_id: int, new_order: int) -> Optional[UserL
         return item
     return None
 
-def delete_entry_and_item(user_list_entry_id: int) -> bool: #bug
+def delete_entry_and_item(user_list_entry_id: int) -> bool:
     userlist_entry = db.get_or_404(UserListEntry, user_list_entry_id)
     
     if userlist_entry:
@@ -213,7 +213,7 @@ def create_add_to_list(item_model, list_id, item_id=None):
     flash(f'Item added to list: {new_item.item_model} {new_item.item_id}')
     return redirect(url_for('lists.update_list_order', list_id=list_id))
 
-@lists.route('/delete/<int:list_id>/<int:user_list_entry_id>', methods=['DELETE']) #bug test
+@lists.route('/delete/<int:list_id>/<int:user_list_entry_id>', methods=['DELETE'])
 @login_required
 def delete(list_id, user_list_entry_id):
     if delete_entry_and_item(user_list_entry_id):

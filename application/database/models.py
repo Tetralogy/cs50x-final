@@ -24,7 +24,7 @@ class ReprMixin:                        # Mixin class to add a generic __repr__ 
         cls = self.__class__                                                             # Get the class of the current instance
         attrs = inspect.getmembers(cls, lambda a: not(inspect.isroutine(a)))             # Get all attributes of the class that are not methods
         fields = {a[0]: getattr(self, a[0]) for a in attrs if not(a[0].startswith('_'))} # Create a dictionary of attribute names and their values, excluding private attributes
-        fields_str = ', '.join(f"{k}={v!r}" for k, v in fields.items())                  # Create a string representation of all the attributes
+        fields_str = ', '.join(f"{k}={v!r}" for k, v in fields.entries())                  # Create a string representation of all the attributes
         return f"{cls.__name__}({fields_str})"                                           # Return a string formatted with the class name and the attributes
     
 class User(db.Model, UserMixin):
@@ -59,7 +59,7 @@ class UserList(db.Model):
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=func.now())
 
     user = relationship("User", back_populates="lists")
-    items = relationship("UserListEntry", back_populates="user_list", lazy='joined', cascade="all, delete-orphan") #bug test this
+    entries = relationship("UserListEntry", back_populates="user_list", lazy='joined', cascade="all, delete-orphan") 
 
 
 class UserListEntry(db.Model):
@@ -69,7 +69,7 @@ class UserListEntry(db.Model):
     item_id: Mapped[int] = mapped_column(Integer, nullable=False)
     order: Mapped[int] = mapped_column(Integer, nullable=False)
 
-    user_list = relationship("UserList", back_populates="items")
+    user_list = relationship("UserList", back_populates="entries")
 
     __table_args__ = (
         UniqueConstraint('user_list_id', 'item_model', 'item_id', name='uq_user_list_item'),

@@ -22,18 +22,6 @@
             </button>
         </div>
     </div>
-<div> <p>{{ floor_list.items[0].order }}</p>
-{% set lowest_order_item = floor_list.items | min(attribute='order') %}
-ID of the floor list item with the lowest order number: {{ lowest_order_item.id }}
-        <button
-            hx-delete="/delete/{{ floor_list.id }}/{{ lowest_order_item.id }}"
-            hx-confirm="Are you sure you want to delete this floor? {{ floor_list.id }}/{{ lowest_order_item.id }}"
-            hx-target="#floor-list-container"
-            class="btn btn-danger"
-        >
-            Delete Floor
-        </button>
-</div>
 
     <div id="floor-list-container" hx-get="/show_list/{{ floor_list.id }}" hx-trigger="load">
     </div>
