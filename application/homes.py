@@ -70,7 +70,7 @@ def home_setup():
     if not current_home.home_size_sqm:
         print('home_size_sqm is None')
         return redirect(url_for('homes.home_size'))
-    return redirect(url_for('homes.home_size'))
+    return redirect(url_for('floors.define_floors'))
         
     
 #________________________________________________________________________________#

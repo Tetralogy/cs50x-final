@@ -50,6 +50,7 @@
                 hx-post="/home/floors/setup"
                 hx-include="[name='ground_floor']"
                 class="btn btn-primary"
+                hx-swap="none"
             >
                 Confirm Floors and go to next step
             </button>
@@ -59,14 +60,14 @@
 
     <p>
         -----------------------------------------------------------------------
+        #bug: sortability not working
     </p>
 
     <div id="sortable-floors" data-list-id="{{ list_id }}" data-user-id="{{ user_id }}"></div>
-<script src="{{ url_for('static', filename='js/sortable-floors.js') }}"></script>
 
     <script>
         document.addEventListener("htmx:load", function () {
-            const sortlist = document.getElementById("floor-list");
+            const sortlist = document.getElementById("floor-list-container");
             const sortableInstance = new Sortable(sortlist, {
                 animation: 150,
                 ghostClass: "blue-background-class",
@@ -79,7 +80,7 @@
                         (li) => li.dataset.id,
                     );
                     console.log("newOrder: " + newOrder);
-                    htmx.ajax("PUT", "/update_list_order/{{ list_id }}", {
+                    htmx.ajax("PUT", "/update_list_order/{{ floor_list.id }}", {
                         target: "#floor-list-container",
                         swap: "innerHTML",
                         values: { order: newOrder },

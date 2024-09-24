@@ -43,7 +43,7 @@ def set_active_floor(floor_id):
         db.session.commit()
         print(f'current_user.active_home.active_floor: {current_user.active_home.active_floor}')
         return floor #the object of the current active floor
-        #[ ] user adds floors to the home
+        #[x] user adds floors to the home
             #[ ] user names each floor uniquely to better identify them
             #[ ] user corrects the order of the floors as they are in the house
     #[ ] main floor/ground floor is set as the active floor by default

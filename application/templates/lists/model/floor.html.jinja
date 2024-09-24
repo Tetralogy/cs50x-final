@@ -18,7 +18,9 @@
     </span>
     <span class="form-check">
         <input class="form-check-input" type="radio" name="ground_floor" id="radio-{{ entry.id }}" value="{{ entry.item_id }}"
-            {% if entry.id == 1 %}
+            {% if entry.id == 1 and current_user.active_home.ground_floor_id == None %}
+                checked
+            {% elif current_user.active_home.ground_floor_id == entry.item_id %}
                 checked
             {% endif %}>
         <label class="form-check-label" for="radio-{{ entry.id }}">
