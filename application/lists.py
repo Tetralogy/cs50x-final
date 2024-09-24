@@ -132,8 +132,8 @@ def get_userlist(item_model: str): #gets the primary list of a main model
     userlist =  db.get_or_404(UserList, list_id)
     return userlist
 
-def update_item_order(user_list_item_id: int, new_order: int) -> Optional[UserListEntry]:
-    item = UserListEntry.query.get(user_list_item_id)
+def update_item_order(user_list_entry_id: int, new_order: int) -> Optional[UserListEntry]:
+    item = db.session.scalars(db.select(UserListEntry).filter_by(id=user_list_entry_id)).one_or_none()
     if item:
         item.order = new_order
         db.session.commit()
@@ -141,12 +141,15 @@ def update_item_order(user_list_item_id: int, new_order: int) -> Optional[UserLi
     return None
 
 def delete_entry_and_item(user_list_entry_id: int) -> bool: #bug
-    userlist_item = db.get_or_404(UserListEntry, user_list_entry_id)
+    userlist_entry = db.get_or_404(UserListEntry, user_list_entry_id)
     
-    if userlist_item:
-        item = db.get_or_404(userlist_item.item_model, userlist_item.item_id)
+    if userlist_entry:
+        item = userlist_entry.get_item()  # Use the get_item method to fetch the item
+        if item is None:
+            print('Item to delete not found')
+            return False, 404
         db.session.delete(item)
-        db.session.delete(userlist_item)
+        db.session.delete(userlist_entry)
         db.session.commit()
         return True
     return False
@@ -208,28 +211,39 @@ def create_add_to_list(item_model, list_id, item_id=None):
     new_item = add_item_to_list(list_id, item_model, item_id, order, name)
     
     flash(f'Item added to list: {new_item.item_model} {new_item.item_id}')
+    return redirect(url_for('lists.update_list_order', list_id=list_id))
+
+@lists.route('/delete/<int:list_id>/<int:user_list_entry_id>', methods=['DELETE']) #bug test
+@login_required
+def delete(list_id, user_list_entry_id):
+    if delete_entry_and_item(user_list_entry_id):
+        flash(f'list_id: {list_id} user_list_entry_id: {user_list_entry_id} Item deleted')
+    else:
+        flash('Item not found', 'error')
+    return redirect(url_for('lists.update_list_order', list_id=list_id))
+
+@lists.route('/update_list_order/<int:list_id>', methods=['PUT', 'POST', 'DELETE', 'GET'])
+@login_required
+def update_list_order(list_id):
+    order = request.form.getlist('order')
+    print(f'list_id: {list_id}, order1: {order}')
+    if order is None or len(order) == 0:
+        userlist = db.get_or_404(UserList, list_id)
+        order = db.session.scalars(select(UserListEntry).filter_by(user_list_id=userlist.id).order_by(UserListEntry.order)).all()
+        print(f'UserList {userlist.list_name} order2: {order}')
+
+    # Extract the IDs if they are UserListEntry objects
+    if hasattr(order[0], 'id'):
+        order = [entry.id for entry in order]
+            
+    for index, item_id in enumerate(order):
+        print(f'Updating item_id: {item_id} with new order: {index}')
+        update_item_order(item_id, index)
+    flash('List order updated')
     return redirect(url_for('lists.show_list', list_id=list_id))
 
-@lists.route('/show_list/<int:list_id>', methods=['GET'])
+@lists.route('/show_list/<int:list_id>', methods=['GET', 'POST', 'PUT', 'DELETE'])
 @login_required
 def show_list(list_id):
     print(f'showing list list_id: {list_id}')
     return render_template('lists/list.html.jinja', list_obj=db.get_or_404(UserList, list_id))
-
-@lists.route('/update_list_order/<int:list_id>', methods=['PUT'])
-@login_required
-def update_list_order(list_id):
-    order = request.form.getlist('order')
-    for index, item_id in enumerate(order):
-        update_item_order(item_id, index)
-    flash('List order updated')
-    return redirect(url_for('lists.get_list', list_id=list_id))
-
-@lists.route('/delete/<int:user_list_entry_id>', methods=['DELETE']) #bug test
-@login_required
-def delete(user_list_entry_id):
-    if delete_entry_and_item(user_list_entry_id):
-        flash('Item deleted')
-    else:
-        flash('Item not found', 'error')
-    return '', 204

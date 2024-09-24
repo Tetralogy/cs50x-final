@@ -59,7 +59,8 @@ class UserList(db.Model):
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=func.now())
 
     user = relationship("User", back_populates="lists")
-    items = relationship("UserListEntry", back_populates="user_list", lazy='dynamic', cascade="all, delete-orphan")
+    items = relationship("UserListEntry", back_populates="user_list", lazy='joined', cascade="all, delete-orphan") #bug test this
+
 
 class UserListEntry(db.Model):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
