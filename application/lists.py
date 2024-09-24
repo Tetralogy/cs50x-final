@@ -63,13 +63,13 @@ def create_new_default(item_model: str, name: str = None) -> UserListEntry:
                 floor_name = set_default_floor_name()
             else:
                 count = 0
-                existing_floors = db.session.scalars(db.select(Floor.floor_name).filter(Floor.home_id == current_home.id)).all()
+                existing_floors = db.session.scalars(db.select(Floor.name).filter(Floor.home_id == current_home.id)).all()
                 for floor_name in existing_floors:
                     if name in floor_name:
                         count += 1
                     floor_name = f'{name} {count + 1}'
                     print(f'floor_name (create_new_default): {floor_name}')
-        new_item = Floor(home_id=current_home.id, floor_name=floor_name) #creates default floor
+        new_item = Floor(home_id=current_home.id, name=floor_name) #creates default floor
         db.session.add(new_item)
         db.session.commit()
         return UserListEntry(item_model=item_model, item_id=new_item.id)
@@ -262,6 +262,10 @@ def rename_item(item_model, item_id):
     new_name = request.form.get('input_name')
     print(f'renaming item_model: {item_model}, item_id: {item_id} to {new_name}')
     print(request.form)
+    item = db.get_or_404(item_model, item_id)
+    if item:
+        item.name = new_name
+    
     if item_model == 'room':
         room = db.get_or_404(Room, item_id)
         room.floor_name = new_name

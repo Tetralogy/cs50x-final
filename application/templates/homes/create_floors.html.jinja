@@ -9,7 +9,7 @@
     <h4>active floor #{{ current_user.active_home.active_floor_id }}</h4>
     <h4>current floor_list_id #{{ floor_list.id }} {{ floor_list.name }}</h4>
     <h4>current ground floor #{{ current_user.active_home.ground_floor_id }}</h4>
-
+<form action="/home/floors/setup" method="POST">
     <div class="row">
         <div class="col-12">
             <button
@@ -47,21 +47,13 @@
     <div class="row">
         <div class="col-12">
             <button
-                hx-post="/home/floors/setup"
-                hx-include="[name='ground_floor']"
-                class="btn btn-primary"
-                hx-swap="none"
-            >
+
+                class="btn btn-primary" type="submit"          >
                 Confirm Floors and go to next step
             </button>
         </div>
     </div>
-
-
-    <p>
-        -----------------------------------------------------------------------
-        #bug: sortability not working
-    </p>
+</form>
 
     <div id="sortable-floors" data-list-id="{{ list_id }}" data-user-id="{{ user_id }}"></div>
 

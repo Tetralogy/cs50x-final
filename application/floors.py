@@ -14,7 +14,7 @@ def define_floors():
     if request.method == 'GET':
         multifloor = request.args.get('multifloor', '').lower() == 'true'
         if not current_user.active_home.floors.count(): # if home has no floors, 
-            new_list = create_user_list('Floor', f'{current_user.active_home.home_name} Floors') # create floors list
+            new_list = create_user_list('Floor', f'{current_user.active_home.name} Floors') # create floors list
             print(f'new_list: {new_list} (type: {type(new_list)})')
             new_floor = add_item_to_list(new_list.id, 'Floor') # create default floor and add to Floor userlist
             print(f'new_floor: {new_floor}')

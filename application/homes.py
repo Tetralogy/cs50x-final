@@ -19,7 +19,7 @@ def set_active_home(home_id):
         current_user.active_home = home
         db.session.commit()
         print(f'current_user.active_home: {current_user.active_home}')
-        return home.home_name #the name of the current active home
+        return home #the object of the current active home
     
 
 @homes.route('/home/new', methods=['POST'])
@@ -29,7 +29,7 @@ def create_home():
     print(f'multifloor: {multifloor}')
     new_home = Home(
         user_id=current_user.id,
-        home_name=request.form.get('home_name'),
+        name=request.form.get('home_name'),
         home_type=request.form.get('home_type'),
     )
     current_user.active_home = new_home
@@ -62,7 +62,7 @@ def home_setup():
     if not current_user.active_home:
         return render_template('homes/create_home.html.jinja')
     current_home = current_user.active_home
-    print(f'current_home: {current_home} name: {current_home.home_name}')
+    print(f'current_home: {current_home} name: {current_home.name}')
     print(f'current_home.floors.count(): {current_home.floors.count()}')
     if not current_home.active_floor or not current_home.ground_floor:
         return define_floors()
@@ -118,7 +118,7 @@ def name_home():
     if request.method == 'GET':
         if not current_user.active_home:
             return render_template('onboarding/parts/home/attributes/name/new_home_button.html.jinja')
-        new_home_name = current_user.active_home.home_name
+        new_home_name = current_user.active_home.name
         return render_template('onboarding/parts/home/attributes/name/home_rename_field.html.jinja', new_home_name = new_home_name)
     if request.method == 'POST':
         #request from the new home button

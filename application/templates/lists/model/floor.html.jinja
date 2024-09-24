@@ -13,8 +13,8 @@
         hx-include="#input_{{entry.item_model}}_name-{{ entry.id }}"
 
     >
-        <input type="text" id="input_{{entry.item_model}}_name-{{ entry.id }}" name="input_name" placeholder="{{ entry.get_item().floor_name }}" style="margin-top: 10px; padding: 10px; width: 200px;"/>
-    {{ entry.get_item().floor_name }}
+        <input type="text" id="input_{{entry.item_model}}_name-{{ entry.id }}" name="input_name" placeholder="{{ entry.get_item().name }}" style="margin-top: 10px; padding: 10px; width: 200px;"/>
+    {{ entry.get_item().name }}
     </span>
     <span class="form-check">
         <input class="form-check-input" type="radio" name="ground_floor" id="radio-{{ entry.id }}" value="{{ entry.item_id }}"

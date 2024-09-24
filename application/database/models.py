@@ -107,9 +107,9 @@ class UserPreference(db.Model):
 class Home(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey('user.id'))
-    home_name: Mapped[str] = mapped_column(String(80), nullable=False)
+    name: Mapped[str] = mapped_column(String(80), nullable=False)
     home_type: Mapped[str] = mapped_column(String(80), default='house')
-    __table_args__ = (UniqueConstraint('user_id', 'home_name', name='unique_home_name'),)
+    __table_args__ = (UniqueConstraint('user_id', 'name', name='unique_name'),)
     home_size_sqm: Mapped[float] = mapped_column(default=0.0)
     user = relationship("User", back_populates="homes", foreign_keys=[user_id])
     rooms = relationship('Room', back_populates="homes", lazy='dynamic', foreign_keys="[Room.home_id]")
@@ -132,17 +132,18 @@ class Home(db.Model):
 class Floor(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     home_id: Mapped[int] = mapped_column(ForeignKey('home.id'))
-    floor_name: Mapped[str] = mapped_column(String(80), nullable=False)
+    name: Mapped[str] = mapped_column(String(80), nullable=False)
     homes = relationship('Home', back_populates="floors", foreign_keys=[home_id])
     rooms = relationship('Room', back_populates="floors")
 
     @property
     def as_list_item(self):
+
         return {
             'id': self.id,
             'type': 'floor',
-            'name': self.floor_name,
-            'additional_info': f"Home: {self.home.home_name}"
+            'name': self.name,
+            'additional_info': f"Home: {self.home.name}"
         }
     
 
@@ -159,7 +160,7 @@ class Room(db.Model): #[ ]: ROOM LEVEL AND LOCATION ON THE MAP
             .where(and_(Room.home_id == self.home_id, Room.room_type == self.room_type))
         ).scalar()
     
-    room_name: Mapped[str] = mapped_column(
+    name: Mapped[str] = mapped_column(
         default=text("f'{room_type}' || ({same_type_rooms_count} + 1)")
     ) # find room types and add 1 to the count and use that as the default room name
     #room_size: Mapped[float] = mapped_column(default=0.0)
@@ -221,7 +222,7 @@ class Photo(db.Model):
 class Task(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey('user.id'))
-    task_title: Mapped[str] = mapped_column(default=text("'Task #' || (last_insert_rowid() + 1)"))
+    name: Mapped[str] = mapped_column(default=text("'Task #' || (last_insert_rowid() + 1)"))
     task_description: Mapped[str] = mapped_column(nullable=True)
     task_created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=func.now())
     task_updated_at: Mapped[datetime] = mapped_column('task_updated_at', DateTime(timezone=True), default=func.now())
@@ -301,7 +302,7 @@ class Supply(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     room_id: Mapped[int] = mapped_column(ForeignKey('room.id')) #room where the item is stored
     user_id: Mapped[int] = mapped_column(ForeignKey('user.id'))
-    item_name: Mapped[str]
+    name: Mapped[str]
     item_type: Mapped[str]
     quantity: Mapped[int]
     rooms = relationship('Room', back_populates="supply")
