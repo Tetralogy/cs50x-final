@@ -259,21 +259,18 @@ def show_list(list_id):
 @lists.route('/rename/<string:item_model>/<int:item_id>', methods=['PUT'])
 @login_required
 def rename_item(item_model, item_id):
-    new_name = request.form.get('input_name')
-    print(f'renaming item_model: {item_model}, item_id: {item_id} to {new_name}')
     print(request.form)
-    item = db.get_or_404(item_model, item_id)
+    new_name = request.form.get(f'input_{item_model}_name-{item_id}')
+    if not new_name:
+        raise ValueError('new_name cannot be None')
+    print(f'renaming item_model: {item_model}, item_id: {item_id} to {new_name}')
+    model_class = globals().get(item_model)
+    if not model_class or not issubclass(model_class, db.Model):
+        raise ValueError(f'Unknown item type {item_model}')
+    item = db.get_or_404(model_class, item_id)
     if item:
+        print(f'Found item: {item.name} to rename to: {new_name}')
         item.name = new_name
     
-    if item_model == 'room':
-        room = db.get_or_404(Room, item_id)
-        room.floor_name = new_name
-    elif item_model == 'task':
-        task = db.get_or_404(Task, item_id)
-        task.name = new_name
-    elif item_model == 'supply':
-        supply = db.get_or_404(Supply, item_id)
-        supply.name = new_name
     db.session.commit()
-    return '', 204
+    return item.name, 200

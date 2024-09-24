@@ -8,54 +8,60 @@
     <h3>Add New Floors and name them</h3>
     <h4>active floor #{{ current_user.active_home.active_floor_id }}</h4>
     <h4>current floor_list_id #{{ floor_list.id }} {{ floor_list.name }}</h4>
-    <h4>current ground floor #{{ current_user.active_home.ground_floor_id }}</h4>
-<form action="/home/floors/setup" method="POST">
-    <div class="row">
-        <div class="col-12">
-            <button
-                hx-post="/create/Floor/{{ floor_list.id }}?order=0"
-                hx-target="#floor-list-container"
-                hx-swap="innerhtml"
-                class="btn btn-primary"
-            >
-                Add Upper Floor
-            </button>
+    <h4>
+        current ground floor #{{ current_user.active_home.ground_floor_id }}
+        {{ current_user.active_home.ground_floor.name }}
+    </h4>
+    <form action="/home/floors/setup" method="POST">
+        <div class="row">
+            <div class="col-12">
+                <button
+                    data-bs-toggle="tooltip"
+                    data-bs-html="true"
+                    data-bs-title="<em>Tooltip</em> <u>with</u> <b>HTML</b>"
+                    hx-post="/create/Floor/{{ floor_list.id }}?order=0"
+                    hx-target="#floor-list-container"
+                    hx-swap="innerhtml"
+                    class="btn btn-primary"
+                >
+                    Add Upper Floor
+                </button>
+            </div>
         </div>
-    </div>
 
-    <div id="floor-list-container" hx-get="/show_list/{{ floor_list.id }}" hx-trigger="load">
-    </div>
+        <div
+            id="floor-list-container"
+            hx-get="/show_list/{{ floor_list.id }}"
+            hx-trigger="load"
+        ></div>
 
-
-
-    <div class="row">
-        <div class="col-12">
-            <button 
-                hx-post="/create/Floor/{{ floor_list.id }}?name=Basement"
-                hx-target="#floor-list-container"
-                hx-swap="innerhtml"
-                class="btn btn-primary"
-            >
-                Add Basement
-            </button>
+        <div class="row">
+            <div class="col-12">
+                <button
+                    hx-post="/create/Floor/{{ floor_list.id }}?name=Basement"
+                    hx-target="#floor-list-container"
+                    hx-swap="innerhtml"
+                    class="btn btn-primary"
+                >
+                    Add Basement
+                </button>
+            </div>
         </div>
-    </div>
 
-    
-
-
-    <div class="row">
-        <div class="col-12">
-            <button
-
-                class="btn btn-primary" type="submit"          >
-                Confirm Floors and go to next step
-            </button>
+        <div class="row">
+            <div class="col-12">
+                <button class="btn btn-primary" type="submit">
+                    Confirm Floors and go to next step
+                </button>
+            </div>
         </div>
-    </div>
-</form>
+    </form>
 
-    <div id="sortable-floors" data-list-id="{{ list_id }}" data-user-id="{{ user_id }}"></div>
+    <div
+        id="sortable-floors"
+        data-list-id="{{ list_id }}"
+        data-user-id="{{ user_id }}"
+    ></div>
 
     <script>
         document.addEventListener("htmx:load", function () {
@@ -64,7 +70,19 @@
                 animation: 150,
                 ghostClass: "blue-background-class",
                 filter: ".htmx-indicator",
-                handle: ".handle",
+                handle: "#handle",
+                onStart: function () {
+                    const tooltipTriggerList = [].slice.call(
+                        document.querySelectorAll('[data-bs-toggle="tooltip"]'),
+                    );
+                    tooltipTriggerList.map(function (tooltipTriggerEl) {
+                        const tooltip =
+                            bootstrap.Tooltip.getInstance(tooltipTriggerEl);
+                        if (tooltip) {
+                            tooltip.dispose();
+                        }
+                    });
+                },
 
                 onEnd: function (evt) {
                     const newIndex = evt.newIndex;
@@ -80,6 +98,6 @@
                 },
             });
         });
+        
     </script>
-
 {% endblock %}

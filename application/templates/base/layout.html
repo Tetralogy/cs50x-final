@@ -17,8 +17,13 @@
             integrity="sha384-QWGpdj554B4ETpJJC9z+ZHJcA/i59TyjxEPXiiUgN2WmTyV5OEZWCD6gQhgkdpB/"
             crossorigin="anonymous"
         ></script>
+        <script
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+            crossorigin="anonymous"
+        ></script>
         <!-- jsDelivr :: Sortable :: Latest (https://www.jsdelivr.com/package/npm/sortablejs) -->
-<script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
     </head>
     <body hx-boost="true">
         <div class="container-fluid">
@@ -32,11 +37,7 @@
                 </div>
             </div>
         </div>
-        <script 
-            src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-            crossorigin="anonymous"
-        ></script>
+
         <script>
             document.addEventListener("DOMContentLoaded", (event) => {
                 setTimeout(() => {
@@ -48,11 +49,34 @@
                 }, 5000); // 5 seconds delay
             });
         </script>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                initializeTooltips();
+                initializeSortable();
+            });
 
+            function initializeTooltips() {
+                const tooltipTriggerList = [].slice.call(
+                    document.querySelectorAll('[data-bs-toggle="tooltip"]'),
+                );
+                tooltipTriggerList.map(function (tooltipTriggerEl) {
+                    return new bootstrap.Tooltip(tooltipTriggerEl);
+                });
+            }
 
+            function initializeSortable() {
+                const sortableElements = document.querySelectorAll(".sortable");
+                sortableElements.forEach(function (sortableElement) {
+                    new Sortable(sortableElement);
+                });
+            }
 
-
-
+            // Re-initialize tooltips and sortable after content update
+            document.addEventListener("htmx:afterSwap", function () {
+                initializeTooltips();
+                initializeSortable();
+            });
+        </script>
         <footer>{% include 'base/parts/nav_bottom.html.jinja' %}</footer>
     </body>
 </html>

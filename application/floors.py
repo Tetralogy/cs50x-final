@@ -54,8 +54,7 @@ def set_active_floor(floor_id):
 #@floors.route('/home/floor/ground', methods=['PUT'])
 #@login_required
 def set_ground_floor(floor_id):
-    floor_query = select(Floor).where(Floor.id == floor_id)
-    floor = db.session.execute(floor_query).scalar_one_or_none()
+    floor = db.get_or_404(Floor, floor_id)
     if floor.home_id == current_user.active_home_id:
         current_user.active_home.ground_floor = floor
         db.session.commit()
