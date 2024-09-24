@@ -1,6 +1,6 @@
 {% extends "base/layout.html" %}
 {% block title %}
-    Create New Home Form
+    Create New Home Form: floors
 {% endblock %}
 
 {% block main %}
@@ -47,20 +47,19 @@
     <div class="row">
         <div class="col-12">
             <button
-                hx-post="/home/floor/{{ selected_ground_floor }}/ground"
-                hx-target="#floor-list-container"
-                hx-swap="afterbegin"
+                hx-post="/home/floors/setup"
+                hx-include="[name='ground_floor']"
                 class="btn btn-primary"
             >
                 Confirm Floors and go to next step
-                #fixme: save order to database in one list
-                #fixme: save ground floor id to database
-                #todo: link to next step in home setup
             </button>
         </div>
     </div>
 
 
+    <p>
+        -----------------------------------------------------------------------
+    </p>
 
     <div id="sortable-floors" data-list-id="{{ list_id }}" data-user-id="{{ user_id }}"></div>
 <script src="{{ url_for('static', filename='js/sortable-floors.js') }}"></script>
@@ -90,7 +89,4 @@
         });
     </script>
 
-    <p>
-        -----------------------------------------------------------------------
-    </p>
 {% endblock %}

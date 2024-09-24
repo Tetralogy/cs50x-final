@@ -58,13 +58,17 @@ def create_new_default(item_model: str, name: str = None) -> UserListEntry:
         if name is None:
             floor_name = set_default_floor_name()
         else:
-            count = 0
-            existing_floors = db.session.scalars(db.select(Floor.floor_name).filter(Floor.home_id == current_home.id)).all()
-            for floor_name in existing_floors:
-                if name in floor_name:
-                    count += 1
-                floor_name = f'{name} {count + 1}'
-                print(f'floor_name (create_new_default): {floor_name}')
+            floor_count = current_user.active_home.floors.count()
+            if floor_count == 0:
+                floor_name = set_default_floor_name()
+            else:
+                count = 0
+                existing_floors = db.session.scalars(db.select(Floor.floor_name).filter(Floor.home_id == current_home.id)).all()
+                for floor_name in existing_floors:
+                    if name in floor_name:
+                        count += 1
+                    floor_name = f'{name} {count + 1}'
+                    print(f'floor_name (create_new_default): {floor_name}')
         new_item = Floor(home_id=current_home.id, floor_name=floor_name) #creates default floor
         db.session.add(new_item)
         db.session.commit()
@@ -231,6 +235,9 @@ def update_list_order(list_id):
         userlist = db.get_or_404(UserList, list_id)
         order = db.session.scalars(select(UserListEntry).filter_by(user_list_id=userlist.id).order_by(UserListEntry.order)).all()
         print(f'UserList {userlist.list_name} order2: {order}')
+        if order is None or len(order) == 0:
+            flash(f'No items in list {userlist.list_name}')
+            return redirect(url_for('lists.show_list', list_id=list_id))
 
     # Extract the IDs if they are UserListEntry objects
     if hasattr(order[0], 'id'):

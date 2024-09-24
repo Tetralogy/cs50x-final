@@ -58,7 +58,7 @@ def home_setup():
     
     if not current_home.home_size_sqm:
         print('home_size_sqm is None')
-        return render_template('onboarding/parts/home/attributes/size/index.html.jinja')
+        return render_template('homes/size_home.html.jinja')
     
     floor_ids_query = select(Floor.floor_id).where(Floor.home_id == current_home.home_id)
     floor_ids = db.session.execute(floor_ids_query).scalars().all()
