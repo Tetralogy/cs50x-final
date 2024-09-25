@@ -71,6 +71,17 @@
                 ghostClass: "blue-background-class",
                 filter: ".htmx-indicator",
                 handle: "#handle",
+                removeOnSpill: true, // Enable plugin
+            // Called when item is spilled
+            onSpill: function (/**Event*/ evt) {
+                evt.item; // The spilled item
+                console.log("spill");
+                console.log("delete evt.item.dataset.id: " + evt.item.dataset.id);
+                htmx.ajax("DELETE", "/delete/" + {{floor_list.id}} + "/" + evt.item.dataset.id, {
+                    target: "#floor-list-container",
+                    swap: "innerHTML",
+                    });
+                },
                 onStart: function () {
                     const tooltipTriggerList = [].slice.call(
                         document.querySelectorAll('[data-bs-toggle="tooltip"]'),
@@ -100,4 +111,5 @@
         });
         
     </script>
+    //[ ]: delete item from db on dragout
 {% endblock %}

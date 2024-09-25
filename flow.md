@@ -18,7 +18,7 @@
     2. ### /home/setup ✴️ 
         1. #TODO floor selection form ✴️ ⬅️ 
         2. new floor button (stacked reorderable list)✴️
-            1. #fixme Automatically prompts for rename field of new levels 
+            1. Automatically prompts for rename field of new levels (added tooltip)  ✅
             2. "Main Floor" is the default name for the first floor ✅
             3. drag and drop floor names above and below eachother to establish number and order of house levels ✅
             4. #fixme drag and drop a floor name outside of house outline area to delete a level
