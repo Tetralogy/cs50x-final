@@ -16,20 +16,20 @@
             2. Type of home: select [apartment, condominium, house, trailer, van, tent, cardboard box, other()] ✅
                 1. in future references during home setup, the chosen specific home type word is used as the nound instead of "home" ✴️ (house, apartment, condo) 
     2. ### /home/setup ✴️ 
-        1. #TODO floor selection form ✴️ ⬅️ 
-        2. new floor button (stacked reorderable list)✴️
+        1. floor selection form ✅
+        2. new floor button (stacked reorderable list) ✅
             1. Automatically prompts for rename field of new levels (added tooltip)  ✅
             2. "Main Floor" is the default name for the first floor ✅
             3. drag and drop floor names above and below eachother to establish number and order of house levels ✅
-            4. #fixme drag and drop a floor name outside of house outline area to delete a level
+            4. drag and drop a floor name outside of house outline area to delete a level ✅
             5. set ground floor and move to next step ✅
         3. home size form ✅
             1. select approx home size ✅
-        4. add rooms form
-            1. list of room types as blocks with appropriate icons
+        4. add rooms form ✴️ ⬅️ 
+            1. #todo list of room types as blocks with appropriate icons
                 1. Default room types (default.json [list of room types])
                 2. optional custom user created types
-            2. edit floor layout form, tab denoting what floor is selected and currently editing
+            2. #todo edit floor layout form, tab denoting what floor is selected and currently editing
                 1. can select other floor to edit with tabs to switch to editing that floor
                 2. drop zone for new rooms
                     1. Drag and drop a room type block into the area
