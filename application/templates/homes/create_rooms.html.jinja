@@ -5,16 +5,15 @@
 
 {% block main %}
 <h1>create Rooms</h1>
-#bug: edit this to work with new routes
+#bug: nav tabs not working
 <ul class="nav nav-tabs">
-    {% for navfloor in floor_list | sort(attribute='order') %}
+    {% for navfloor in floor_list| sort(attribute='order') %}
         <li class="nav-item">
             <a
                 class="nav-link {% if navfloor.item_id == current_user.active_home.active_floor_id %}active{% endif %}"
-                hx-get="/floorplan/{{ navfloor.item_id }}"
-                hx-target="#room-list-container"
+                href="/floorplan/{{ navfloor.item_id }}"
             >
-                {{ navfloor.name }}</a
+                {{ navfloor.get_item().name }}</a
             >
         </li>
     {% endfor %}

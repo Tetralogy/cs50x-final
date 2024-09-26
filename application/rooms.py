@@ -25,6 +25,7 @@ def define_rooms():
                 room_list = create_user_list('Room', f'{current_user.active_home.name} {floor_entry.get_item().name} Rooms', floor_entry.id) # create rooms list
                 print(f'room_list: {room_list} (type: {type(room_list)}) parent: {room_list.parent.get_item().name}')
             room_list = get_userlist('Room', current_user.active_home.active_floor_id)
+        print(f'floor_list: {floor_list} (type: {type(floor_list)})')
         return render_template('homes/create_rooms.html.jinja', floor_list=floor_list, room_list=room_list)
     return 'define rooms', 200
 
