@@ -65,7 +65,7 @@ def home_setup():
     print(f'current_home: {current_home} name: {current_home.name}')
     print(f'current_home.floors.count(): {current_home.floors.count()}')
     if not current_home.active_floor or not current_home.ground_floor:
-        return define_floors()
+        return redirect(url_for('floors.define_floors'))
     print(f'current_home.active_floor: {current_home.active_floor}')
     if not current_home.home_size_sqm:
         print('home_size_sqm is None')

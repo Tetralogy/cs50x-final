@@ -10,7 +10,7 @@ from application.extension import db
 lists = Blueprint('lists', __name__)
 
 # Helper functions for CRUD operations
-def create_user_list(list_type: str, list_name: str, parent_entry_id: int = None) -> UserList:
+def create_user_list(list_type: str, list_name: str, parent_entry_item_id: int = None) -> UserList:
     if not list_type or not list_name:
         raise ValueError('All arguments are required')
     model_class = globals().get(list_type)
@@ -21,7 +21,7 @@ def create_user_list(list_type: str, list_name: str, parent_entry_id: int = None
     ).scalar()
     if existing_list:
         return existing_list
-    new_list = UserList(user_id=current_user.id, list_name=list_name, list_type=list_type, parent_entry_id=parent_entry_id)
+    new_list = UserList(user_id=current_user.id, list_name=list_name, list_type=list_type, parent_entry_item_id=parent_entry_item_id)
     db.session.add(new_list)
     db.session.commit()
     return new_list
@@ -106,9 +106,9 @@ def get_user_list_items(user_list_id: int) -> List[dict]:
         result.listsend(list_item)
     return result
 '''
-def get_userlist(item_model: str): #gets the primary list of a main model
+def get_userlist(item_model: str, parent_entry_item_id: int = None): #gets the primary list of a main model
     list_type = item_model
-    lists = current_user.lists.filter_by(list_type=list_type).all()
+    lists = current_user.lists.filter_by(list_type=list_type, parent_entry_item_id=parent_entry_item_id).all()
     if len(lists) == 0:
         raise ValueError(f'No lists of type {list_type} found for user {current_user.id}')
     if len(lists) > 1: #[ ] add ability to select which list when more than one + test this
@@ -117,9 +117,11 @@ def get_userlist(item_model: str): #gets the primary list of a main model
             print(f'{i+1}. {lst.list_name}')
         selected_list_index = int(input('Enter the number of the list: '))
         list_id = lists[selected_list_index-1].id
+        raise ValueError(f'multiple lists of type {list_type} with parent {parent_entry_item_id} found for user {current_user.id}')
     else:
         list_id = lists[0].id
     if not isinstance(list_id, int):
+        raise ValueError(f'No lists of type {list_type} found for user {current_user.id}')
         if isinstance(list_id, str):
             list_type = list_id
             lists = current_user.lists.filter_by(list_type=list_type).all()

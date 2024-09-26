@@ -12,7 +12,7 @@
         current ground floor #{{ current_user.active_home.ground_floor_id }}
         {{ current_user.active_home.ground_floor.name }}
     </h4>
-    <form hx-post="/home/floors/setup" method="POST" hx-trigger="click from:#submitButton">
+    <form action="/home/floors/setup" method="POST" hx-trigger="click from:#submitButton">
         <div class="row">
             <div class="col-12">
                 <button
@@ -34,6 +34,7 @@
             id="floor-list-container"
             hx-get="/show_list/{{ floor_list.id }}"
             hx-trigger="load"
+            hx-target="this"
         ></div>
 
         <div class="row">

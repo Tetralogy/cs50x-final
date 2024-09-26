@@ -77,7 +77,7 @@ def floorplan(floor_id):
     if floor.home_id != current_user.active_home_id:
         raise Exception('Floor not associated with user home or unauthorized')
     floor_list = get_userlist('Floor')
-    return render_template('lists/list.html.jinja', list_obj=room_list)
+    return render_template('lists/list.html.jinja', list_obj=floor_list)
 '''#____________________________________________________________________________________________________________________#
     if request.method == 'GET':
         if db.session.execute(select(Floor).filter(Floor.home_id == current_user.active_home_id)).first(): #check if there is already a floor

@@ -13,19 +13,19 @@ rooms = Blueprint('rooms', __name__)
 @login_required
 def define_rooms():
     if request.method == 'GET':
+        floor_list = get_userlist('Floor').entries # if home_id has floors, get list of floors from userlists
         if current_user.active_home.floors.count() == 1: # if home has one floor, 
-            room_list = create_user_list('Room', f'{current_user.active_home.name} Rooms') # create rooms list
+            room_list = create_user_list('Room', f'{current_user.active_home.name} Rooms', current_user.active_home.active_floor_id) # create rooms list
             print(f'room_list: {room_list} (type: {type(room_list)})')
-            return render_template('homes/create_rooms.html.jinja', room_list=room_list)
+            #return render_template('homes/create_rooms.html.jinja', floor_list=floor_list, room_list=room_list)
         if current_user.active_home.floors.count() > 1:
-            floor_list = get_userlist('Floor').entries # if home_id has floors, get list of floors from userlists
             for floor_entry in floor_list:
                 print(f'floor list get floor_entry.id: {floor_entry.id}')
                 print(f'floor list get floor_entry.get_item().name: {floor_entry.get_item().name}')
                 room_list = create_user_list('Room', f'{current_user.active_home.name} {floor_entry.get_item().name} Rooms', floor_entry.id) # create rooms list
                 print(f'room_list: {room_list} (type: {type(room_list)}) parent: {room_list.parent.get_item().name}')
-            
-            return render_template('homes/create_rooms.html.jinja', floor_list=floor_list)
+            room_list = get_userlist('Room', current_user.active_home.active_floor_id)
+        return render_template('homes/create_rooms.html.jinja', floor_list=floor_list, room_list=room_list)
     return 'define rooms', 200
 
 
