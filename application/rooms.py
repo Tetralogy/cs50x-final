@@ -5,11 +5,39 @@ from sqlalchemy import select
 from application.extension import db
 
 from application.database.models import Custom, Floor, Room
+from application.lists import create_user_list, get_userlist
 
 rooms = Blueprint('rooms', __name__)
 
+@rooms.route('/home/rooms/setup', methods=['GET', 'POST'])    # sends user to page to create a list of rooms for the home
+@login_required
+def define_rooms():
+    if request.method == 'GET':
+        if current_user.active_home.floors.count() == 1: # if home has one floor, 
+            room_list = create_user_list('Room', f'{current_user.active_home.name} Rooms') # create rooms list
+            print(f'room_list: {room_list} (type: {type(room_list)})')
+            return render_template('homes/create_rooms.html.jinja', room_list=room_list)
+        if current_user.active_home.floors.count() > 1:
+            floor_list = get_userlist('Floor').entries # if home_id has floors, get list of floors from userlists
+            for floor_entry in floor_list:
+                print(f'floor list get floor_entry.id: {floor_entry.id}')
+                print(f'floor list get floor_entry.get_item().name: {floor_entry.get_item().name}')
+                room_list = create_user_list('Room', f'{current_user.active_home.name} {floor_entry.get_item().name} Rooms') # create rooms list
+                print(f'room_list: {room_list} (type: {type(room_list)})')
+            
+            return render_template('homes/create_rooms.html.jinja', floor_list=floor_list)
+    return 'define rooms', 200
 
-@rooms.route('/home/room/active', methods=['PUT'])
+
+    '''floor_list = get_userlist('Floor') # if home_id has floors, get list of floors from userlists
+        return render_template('homes/create_floors.html.jinja', floor_list=floor_list)
+    if request.method == 'POST':
+        ground_floor = request.form.get('ground_floor')
+        set_ground_floor(ground_floor)
+        set_active_floor(ground_floor)
+        return redirect(url_for('homes.home_setup'))'''
+
+@rooms.route('/home/room/<int:room_id>/active', methods=['PUT'])
 @login_required
 def set_active_room(room_id):
     current_user.active_home.active_room_id = room_id
@@ -19,8 +47,13 @@ def set_active_room(room_id):
         current_user.active_home.active_room = room
         db.session.commit()
         print(f'current_user.active_home.active_room: {current_user.active_home.active_room}')
-        return room.room_name #the name of the current active room
+        return room #the object of the current active room
     
+#____________________________________________________________________________________________________________________#
+
+
+
+
 @rooms.route('/home/map/sort/<int:floor_id>', methods=['PUT'])
 @login_required
 def update_map_layout(floor_id): 
@@ -33,6 +66,7 @@ def update_map_layout(floor_id):
         room.order = index
     db.session.commit()
     floor = db.get_or_404(Floor, floor_id)
+    raise NotImplementedError("update_map_layout not yet implemented")
     return render_template('onboarding/parts/home/map/list.html.jinja', floor=floor)
 
 @rooms.route('/home/map/room/add/<int:floor_id>', methods=['POST'])

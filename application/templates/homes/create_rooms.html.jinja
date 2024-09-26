@@ -1,0 +1,241 @@
+{% extends "base/layout.html" %}
+{% block title %}
+    #fixme Create New Home Form: rooms
+{% endblock %}
+
+{% block main %}
+<h1>create Rooms</h1>
+#bug: edit this to work with new routes
+<ul class="nav nav-tabs">
+    {% for navfloor in floor_list | sort(attribute='order') %}
+        <li class="nav-item">
+            <a
+                class="nav-link {% if navfloor.item_id == current_user.active_home.active_floor_id %}active{% endif %}"
+                hx-get="/edit/floor/{{ navfloor.item_id }}"
+                hx-target="#onboarding-map"
+            >
+                {{ navfloor.name }}</a
+            >
+        </li>
+    {% endfor %}
+    <a hx-get="/home/floors">
+        edit floor order
+    </a>
+</ul>
+
+<h1>
+    now editing: {{ floor.floor_name }} floor id: {{ floor.floor_id }} order:
+    {{ floor.order }}
+</h1>
+<form
+    hx-post="/home/map/room/add/type"
+    hx-target="#types"
+    class="input-group mb-3"
+>
+    <input
+        type="text"
+        class="form-control"
+        placeholder="New Room Type"
+        aria-label="New Room Type"
+        aria-describedby="basic-addon2"
+        name="custom_type"
+        id="custom_type"
+        hx-trigger="keyup[key=='Enter']"
+    />
+    <button class="btn btn-secondary" type="submit" id="button-addon2">
+        Add Custom Room Type
+    </button>
+</form>
+<div
+    class="container-fluid bg-dark border border-success border-5 rounded-bottom-5"
+>
+    <div id="types" class="row g-0 row-cols-4">
+        {% for room_type in room_types %}
+            <div class="col">{{ room_type }}</div>
+        {% endfor %}
+    </div>
+</div>
+<div
+    id="room-list-container"
+    class="container-fluid bg-dark border border-primary border-5 rounded-top-5"
+>
+    {% include 'onboarding/parts/home/map/list.html.jinja' %}
+</div>
+
+<script>
+    document.addEventListener("htmx:load", function () {
+    const types = document.getElementById("types");
+
+    new Sortable(types, {
+        group: {
+            name: "shared",
+            pull: "clone",
+            put: false, // Do not allow items to be put into this list
+        },
+        animation: 150,
+        sort: false,
+        cursor: "move",
+    });
+
+        const sortmap = document.getElementById("map-{{  current_user.active_home.active_floor.floor_id  }}");
+        console.log('sortmap: ' + sortmap);
+        new Sortable(sortmap, { 
+            group: {
+                name: "shared",
+                pull: true, // Prevent pulling from this list
+            },
+            animation: 150,
+            ghostClass: "blue-background-class",
+            filter: ".htmx-indicator",
+            removeOnSpill: true, // Enable plugin
+            // Called when item is spilled
+            onSpill: function (/**Event*/ evt) {
+                evt.item; // The spilled item
+                //[ ]: delete item from db on dragout
+            },
+            onAdd: function (/**Event*/ evt) {
+                console.log("onAdd event triggered");
+                var itemEl = evt.item; // dragged HTMLElement
+                var addedRoomType = itemEl.textContent;
+                var newIndex = evt.newIndex;
+                console.log('addedRoomType: ' + addedRoomType + 'new index: ' + newIndex);
+
+                // Make an htmx AJAX request to the server
+                htmx.ajax("POST", "/home/map/room/add/{{ current_user.active_home.active_floor.floor_id }}", {
+                    values: { added_room_type: addedRoomType, order: newIndex },
+                    target: itemEl,
+                    swap: "outerHTML", // returns the new content
+                });
+            },
+            onEnd: function () {
+                console.log("onEnd event triggered");
+                var newOrder = Array.from(sortmap.children).map(
+                    (li) => li.dataset.id,
+                ); 
+                console.log('newOrder: ' + newOrder);
+                htmx.ajax("PUT", "/home/map/sort/{{ current_user.active_home.active_floor.floor_id }}", {
+                    target: "#room-list-container",
+                    swap: "innerHTML",
+                    values: { list_order: newOrder },
+                });
+            },
+        });
+    });
+</script>
+        <button                 hx-get="/home/floor/edit/next"
+                hx-target="#onboarding-map">Save layout and go to next floor</button>
+                [ ] link to start walkthrough
+
+
+
+
+<p>----------------------------------------------------------------------------</p>
+    <h2>Floors</h2>
+    <h3>Add New Floors and name them</h3>
+    <h4>active floor #{{ current_user.active_home.active_floor_id }}</h4>
+    <h4>current floor_list_id #{{ floor_list.id }} {{ floor_list.name }}</h4>
+    <h4>
+        current ground floor #{{ current_user.active_home.ground_floor_id }}
+        {{ current_user.active_home.ground_floor.name }}
+    </h4>
+    <form action="/home/floors/setup" method="POST">
+        <div class="row">
+            <div class="col-12">
+                <button
+                    data-bs-toggle="tooltip"
+                    data-bs-html="true"
+                    data-bs-title="<em>Tooltip</em> <u>with</u> <b>HTML</b>"
+                    hx-post="/create/Floor/{{ floor_list.id }}?order=0"
+                    hx-target="#floor-list-container"
+                    hx-swap="innerhtml"
+                    class="btn btn-primary"
+                >
+                    Add Upper Floor
+                </button>
+            </div>
+        </div>
+
+        <div
+            id="floor-list-container"
+            hx-get="/show_list/{{ floor_list.id }}"
+            hx-trigger="load"
+        ></div>
+
+        <div class="row">
+            <div class="col-12">
+                <button
+                    hx-post="/create/Floor/{{ floor_list.id }}?name=Basement"
+                    hx-target="#floor-list-container"
+                    hx-swap="innerhtml"
+                    class="btn btn-primary"
+                >
+                    Add Basement
+                </button>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <button class="btn btn-primary" type="submit">
+                    Confirm Floors and go to next step
+                </button>
+            </div>
+        </div>
+    </form>
+
+    <div
+        id="sortable-floors"
+        data-list-id="{{ list_id }}"
+        data-user-id="{{ user_id }}"
+    ></div>
+
+    <script>
+        document.addEventListener("htmx:load", function () {
+            const sortlist = document.getElementById("floor-list-container");
+            const sortableInstance = new Sortable(sortlist, {
+                animation: 150,
+                ghostClass: "blue-background-class",
+                filter: ".htmx-indicator",
+                handle: "#handle",
+                removeOnSpill: true, // Enable plugin
+            // Called when item is spilled
+            onSpill: function (/**Event*/ evt) {
+                evt.item; // The spilled item
+                console.log("spill");
+                console.log("delete evt.item.dataset.id: " + evt.item.dataset.id);
+                htmx.ajax("DELETE", "/delete/" + {{floor_list.id}} + "/" + evt.item.dataset.id, {
+                    target: "#floor-list-container",
+                    swap: "innerHTML",
+                    });
+                },
+                onStart: function () {
+                    const tooltipTriggerList = [].slice.call(
+                        document.querySelectorAll('[data-bs-toggle="tooltip"]'),
+                    );
+                    tooltipTriggerList.map(function (tooltipTriggerEl) {
+                        const tooltip =
+                            bootstrap.Tooltip.getInstance(tooltipTriggerEl);
+                        if (tooltip) {
+                            tooltip.dispose();
+                        }
+                    });
+                },
+
+                onEnd: function (evt) {
+                    const newIndex = evt.newIndex;
+                    const newOrder = Array.from(sortlist.children).map(
+                        (li) => li.dataset.id,
+                    );
+                    console.log("newOrder: " + newOrder);
+                    htmx.ajax("PUT", "/update_list_order/{{ floor_list.id }}", {
+                        target: "#floor-list-container",
+                        swap: "innerHTML",
+                        values: { order: newOrder },
+                    });
+                },
+            });
+        });
+        
+    </script>
+    //[ ]: delete item from db on dragout
+{% endblock %}

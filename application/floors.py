@@ -44,11 +44,11 @@ def set_active_floor(floor_id):
         print(f'current_user.active_home.active_floor: {current_user.active_home.active_floor}')
         return floor #the object of the current active floor
         #[x] user adds floors to the home
-            #[ ] user names each floor uniquely to better identify them
-            #[ ] user corrects the order of the floors as they are in the house
-    #[ ] main floor/ground floor is set as the active floor by default
-        #[ ] user can change the active floor by clicking on it
-    #[ ] user confirms the home's list of floors/ continue to next step button
+            #[x] user names each floor uniquely to better identify them
+            #[x] user corrects the order of the floors as they are in the house
+    #[x] main floor/ground floor is set as the active floor by default
+        #[x] user can change the active floor by clicking on it
+    #[x] user confirms the home's list of floors/ continue to next step button
     #[ ] user is taken to the home map of the active floor
     
 #@floors.route('/home/floor/ground', methods=['PUT'])
@@ -71,7 +71,7 @@ def new_floor_upper():
     
     
     
-#____________________________________________________________________________________________________________________#
+'''#____________________________________________________________________________________________________________________#
     if request.method == 'GET':
         if db.session.execute(select(Floor).filter(Floor.home_id == current_user.active_home_id)).first(): #check if there is already a floor
             return 'Floor already exists', 204
@@ -224,4 +224,5 @@ def edit_floor_layout_next():
     floor_id = next_floor[0].floor_id
     
     return edit_floor_layout(floor_id)
+'''
 #[ ]: cleanup unused code after floor and room setup is complete

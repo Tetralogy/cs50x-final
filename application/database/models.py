@@ -136,7 +136,7 @@ class Floor(db.Model):
     homes = relationship('Home', back_populates="floors", foreign_keys=[home_id])
     rooms = relationship('Room', back_populates="floors")
 
-    @property
+    '''@property
     def as_list_item(self):
 
         return {
@@ -144,7 +144,7 @@ class Floor(db.Model):
             'type': 'floor',
             'name': self.name,
             'additional_info': f"Home: {self.home.name}"
-        }
+        }'''
     
 
 class Room(db.Model): #[ ]: ROOM LEVEL AND LOCATION ON THE MAP
@@ -174,14 +174,14 @@ class Room(db.Model): #[ ]: ROOM LEVEL AND LOCATION ON THE MAP
     floors = relationship("Floor", back_populates="rooms", foreign_keys=[floor_id])
     zones = relationship('Zone', back_populates="rooms", lazy='dynamic')
     supply = relationship('Supply', back_populates="rooms", lazy='dynamic')
-    @property
+    '''@property
     def as_list_item(self):
         return {
             'id': self.id,
             'type': 'room',
             'name': self.room_name,
             'additional_info': f"Floor: {self.floors.floor_name}"
-        }
+        }'''
     
 class Custom(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
@@ -235,14 +235,14 @@ class Task(db.Model):
     user = relationship("User", back_populates="tasks")
     progress = relationship('TaskProgress', back_populates="tasks")
     annotations = relationship("TaskAnnotation", back_populates="tasks")
-    @property
+    '''@property
     def as_list_item(self):
         return {
             'id': self.id,
             'type': 'task',
             'name': self.task_title,
             'additional_info': f"Due: {self.task_due_date.strftime('%Y-%m-%d') if self.task_due_date else 'Not set'}"
-        }
+        }'''
     
     @hybrid_property
     def task_updated_at(self):

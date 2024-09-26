@@ -4,7 +4,7 @@ from flask_login import current_user, login_required
 from sqlalchemy import case, select
 from application.extension import db
 from application.database.models import Custom, Home, Floor, Room
-from application.floors import define_floors, edit_floor_layout, set_active_floor
+from application.floors import define_floors, set_active_floor
 
 
 homes = Blueprint('homes', __name__)
@@ -70,7 +70,7 @@ def home_setup():
     if not current_home.home_size_sqm:
         print('home_size_sqm is None')
         return redirect(url_for('homes.home_size'))
-    return redirect(url_for('floors.define_floors'))
+    return redirect(url_for('rooms.define_rooms'))
         
     
 #________________________________________________________________________________#
@@ -111,7 +111,7 @@ def home_setup():
     return render_template('onboarding/parts/home/map/index.html.jinja', floor=current_home.active_floor)#temporary, 
     raise NotImplementedError('home_setup not yet finished')
 
-@homes.route('/home/name', methods=['GET', 'POST', 'PUT'])
+'''@homes.route('/home/name', methods=['GET', 'POST', 'PUT'])
 @login_required
 def name_home():
     print(f'current_user.active_home_id: {current_user.active_home_id}')
@@ -145,7 +145,7 @@ def name_home():
                 db.session.commit()
                 return render_template('onboarding/parts/home/attributes/name/home_name_text.html.jinja', home_name=home.home_name)
 
-'''@homes.route('/home/size', methods=['GET', 'PUT'])
+@homes.route('/home/size', methods=['GET', 'PUT'])
 @login_required
 def home_size():
     if request.method == 'GET':
@@ -161,7 +161,7 @@ def home_size():
         db.session.commit()
         return render_template('onboarding/parts/home/attributes/size/home_size_text.html.jinja', home_size_sqm=home.home_size_sqm)
 '''
-@homes.route('/home/map', methods=['GET'])
+'''@homes.route('/home/map', methods=['GET'])
 @login_required
 def get_map():
     floors_without_rooms = db.session.execute(select(Floor).where(Floor.home_id == current_user.active_home_id).where(~Floor.rooms.any())).scalars().all()
@@ -170,3 +170,4 @@ def get_map():
     return render_template('map/index.html.jinja', floors=current_user.active_home.floors.all())
 
 
+'''
