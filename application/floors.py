@@ -69,8 +69,15 @@ def new_floor_upper():
     list_id = get_userlist('Floor')
     return add_item_to_list(list_id, 'Floor')    #create floor + add floor to floor list
     
-    
-    
+@floors.route('/floorplan/<int:floor_id>', methods=['GET'])
+@login_required
+def floorplan(floor_id):
+    print(f'edit_floor_rooms called with floor_id: {floor_id}')
+    floor = db.get_or_404(Floor, floor_id)
+    if floor.home_id != current_user.active_home_id:
+        raise Exception('Floor not associated with user home or unauthorized')
+    floor_list = get_userlist('Floor')
+    return render_template('lists/list.html.jinja', list_obj=room_list)
 '''#____________________________________________________________________________________________________________________#
     if request.method == 'GET':
         if db.session.execute(select(Floor).filter(Floor.home_id == current_user.active_home_id)).first(): #check if there is already a floor

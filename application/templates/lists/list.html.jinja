@@ -1,3 +1,4 @@
+<p>temptext: list name: {{ list_obj.name }}</p>
 {% for entry in list_obj.entries | sort(attribute='order') %}
     {% include 'lists/model/' + entry.item_model.lower() + '.html.jinja' %}
 {% endfor %}

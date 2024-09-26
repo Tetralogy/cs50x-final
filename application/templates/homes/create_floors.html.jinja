@@ -12,7 +12,7 @@
         current ground floor #{{ current_user.active_home.ground_floor_id }}
         {{ current_user.active_home.ground_floor.name }}
     </h4>
-    <form action="/home/floors/setup" method="POST">
+    <form hx-post="/home/floors/setup" method="POST" hx-trigger="click from:#submitButton">
         <div class="row">
             <div class="col-12">
                 <button
@@ -23,6 +23,7 @@
                     hx-target="#floor-list-container"
                     hx-swap="innerhtml"
                     class="btn btn-primary"
+                    type="button"
                 >
                     Add Upper Floor
                 </button>
@@ -42,6 +43,7 @@
                     hx-target="#floor-list-container"
                     hx-swap="innerhtml"
                     class="btn btn-primary"
+                    type="button"
                 >
                     Add Basement
                 </button>
@@ -50,7 +52,7 @@
 
         <div class="row">
             <div class="col-12">
-                <button class="btn btn-primary" type="submit">
+                <button class="btn btn-primary" id="submitButton" type="button">
                     Confirm Floors and go to create rooms
                 </button>
             </div>

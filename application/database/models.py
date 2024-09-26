@@ -55,11 +55,13 @@ class UserList(db.Model):
     user_id: Mapped[int] = mapped_column(ForeignKey('user.id'))
     list_type: Mapped[str] = mapped_column(String(50), nullable=False) # match model name
     list_name: Mapped[str] = mapped_column(String(80), nullable=False)
+    parent_entry_id: Mapped[int] = mapped_column(ForeignKey('user_list_entry.id'), nullable=True)
     __table_args__ = (UniqueConstraint('user_id', 'list_name', name='unique_list_name'),)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=func.now())
 
     user = relationship("User", back_populates="lists")
-    entries = relationship("UserListEntry", back_populates="user_list", lazy='joined', cascade="all, delete-orphan") 
+    entries = relationship("UserListEntry", back_populates="user_list", lazy='joined', cascade="all, delete-orphan", foreign_keys="[UserListEntry.user_list_id]")
+    parent = relationship("UserListEntry", foreign_keys=[parent_entry_id])
 
 
 class UserListEntry(db.Model):
@@ -69,7 +71,7 @@ class UserListEntry(db.Model):
     item_id: Mapped[int] = mapped_column(Integer, nullable=False)
     order: Mapped[int] = mapped_column(Integer, nullable=False)
 
-    user_list = relationship("UserList", back_populates="entries")
+    user_list = relationship("UserList", back_populates="entries", foreign_keys=[user_list_id])
 
     __table_args__ = (
         UniqueConstraint('user_list_id', 'item_model', 'item_id', name='uq_user_list_item'),

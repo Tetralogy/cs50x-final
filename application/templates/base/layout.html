@@ -76,6 +76,32 @@
                 initializeTooltips();
                 initializeSortable();
             });
+
+            // Define the function to clear all tooltips
+function clearTooltips() {
+    const tooltipTriggerList = [].slice.call(
+        document.querySelectorAll('[data-bs-toggle="tooltip"]')
+    );
+    tooltipTriggerList.map(function (tooltipTriggerEl) {
+        const tooltip = bootstrap.Tooltip.getInstance(tooltipTriggerEl);
+        if (tooltip) {
+            tooltip.dispose();
+        }
+    });
+    document.querySelectorAll('div[role="tooltip"]').forEach(function(tooltipDiv) {
+    tooltipDiv.remove();
+});
+}
+
+// Add event listeners to elements that should trigger the tooltip clearing
+document.querySelectorAll('input, select, textarea, span, div').forEach(element => {
+    
+
+    element.addEventListener('click', function() {
+    clearTooltips();
+    initializeTooltips();
+});
+});
         </script>
         <footer>{% include 'base/parts/nav_bottom.html.jinja' %}</footer>
     </body>

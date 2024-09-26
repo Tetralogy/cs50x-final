@@ -10,7 +10,7 @@ from application.extension import db
 lists = Blueprint('lists', __name__)
 
 # Helper functions for CRUD operations
-def create_user_list(list_type: str, list_name: str) -> UserList:
+def create_user_list(list_type: str, list_name: str, parent_entry_id: int = None) -> UserList:
     if not list_type or not list_name:
         raise ValueError('All arguments are required')
     model_class = globals().get(list_type)
@@ -21,7 +21,7 @@ def create_user_list(list_type: str, list_name: str) -> UserList:
     ).scalar()
     if existing_list:
         return existing_list
-    new_list = UserList(user_id=current_user.id, list_name=list_name, list_type=list_type)
+    new_list = UserList(user_id=current_user.id, list_name=list_name, list_type=list_type, parent_entry_id=parent_entry_id)
     db.session.add(new_list)
     db.session.commit()
     return new_list
@@ -259,18 +259,19 @@ def show_list(list_id):
 @lists.route('/rename/<string:item_model>/<int:item_id>', methods=['PUT'])
 @login_required
 def rename_item(item_model, item_id):
-    print(request.form)
-    new_name = request.form.get(f'input_{item_model}_name-{item_id}')
-    if not new_name:
-        raise ValueError('new_name cannot be None')
-    print(f'renaming item_model: {item_model}, item_id: {item_id} to {new_name}')
+    prev_name = request.args.get('placeholder')
     model_class = globals().get(item_model)
     if not model_class or not issubclass(model_class, db.Model):
         raise ValueError(f'Unknown item type {item_model}')
     item = db.get_or_404(model_class, item_id)
+    print(request.form)
+    new_name = request.form.get(f'input_{item_model}_name-{item_id}')
+    if not new_name or new_name == '':
+        print(f'prev_name: {prev_name}')
+        return prev_name, 200
     if item:
         print(f'Found item: {item.name} to rename to: {new_name}')
         item.name = new_name
-    
-    db.session.commit()
-    return item.name, 200
+        print(f'renaming item_model: {item_model}, item_id: {item_id} to {new_name}')
+        db.session.commit()
+        return item.name, 200
