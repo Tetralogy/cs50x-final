@@ -4,7 +4,7 @@ from sqlalchemy import select
 from application.extension import db
 from application.database.models import Floor
 from application.lists import add_item_to_list, create_user_list, get_userlist
-from application.rooms import get_room_types
+
 
 floors = Blueprint('floors', __name__)
 
@@ -33,7 +33,7 @@ def define_floors():
         set_active_floor(ground_floor)
         return redirect(url_for('homes.home_setup'))
 
-@floors.route('/home/floor/<int:floor_id>/active', methods=['PUT'])
+@floors.route('/home/floor/<int:floor_id>/active', methods=['PUT', 'GET'])
 @login_required
 def set_active_floor(floor_id):
     floor_query = select(Floor).where(Floor.id == floor_id)

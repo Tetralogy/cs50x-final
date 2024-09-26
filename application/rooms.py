@@ -1,18 +1,22 @@
 import os
-from flask import Blueprint, json, jsonify, render_template, request
+from flask import Blueprint, json, jsonify, redirect, render_template, request, url_for
 from flask_login import current_user, login_required
 from sqlalchemy import select
 from application.extension import db
 
 from application.database.models import Custom, Floor, Room
+from application.floors import set_active_floor
 from application.lists import create_user_list, get_userlist
 
 rooms = Blueprint('rooms', __name__)
 
-@rooms.route('/home/rooms/setup', methods=['GET', 'POST'])    # sends user to page to create a list of rooms for the home
+@rooms.route('/home/rooms/setup/<int:floor_id>', methods=['GET', 'POST'])    # sends user to page to create a list of rooms for the home
 @login_required
-def define_rooms():
+def define_rooms(floor_id: int=None):
     if request.method == 'GET':
+        if floor_id is None:
+            floor_id = current_user.active_home.active_floor_id
+        floor = set_active_floor(floor_id)
         floor_list = get_userlist('Floor').entries # if home_id has floors, get list of floors from userlists
         if current_user.active_home.floors.count() == 1: # if home has one floor, 
             room_list = create_user_list('Room', f'{current_user.active_home.name} Rooms', current_user.active_home.active_floor_id) # create rooms list

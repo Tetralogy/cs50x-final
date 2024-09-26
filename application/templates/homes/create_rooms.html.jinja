@@ -5,26 +5,22 @@
 
 {% block main %}
 <h1>create Rooms</h1>
-#bug: nav tabs not working
 <ul class="nav nav-tabs">
     {% for navfloor in floor_list| sort(attribute='order') %}
         <li class="nav-item">
             <a
                 class="nav-link {% if navfloor.item_id == current_user.active_home.active_floor_id %}active{% endif %}"
-                href="/floorplan/{{ navfloor.item_id }}"
+                href="/home/rooms/setup/{{ navfloor.item_id }}"
             >
                 {{ navfloor.get_item().name }}</a
             >
         </li>
     {% endfor %}
-    <a hx-get="/home/floors">
-        edit floor order
-    </a>
 </ul>
 
 <h1> #bug: fix the variables
-    now editing:  floor.floor_name }} floor id:  floor.floor_id }} order:
-     floor.order }}
+    now editing: {{ room_list.list_name }} floor {{ room_list.parent.get_item().name }} floor id:  {{ room_list.parent.get_item().id }} order:
+    {{ room_list.parent.order }}
 </h1>
 <form
     hx-post="/home/map/room/add/type"
@@ -140,64 +136,7 @@
 
 
 <p>----------------------------------------------------------------------------</p>
-    <h2>Floors</h2>
-    <h3>Add New Floors and name them</h3>
-    <h4>active floor #{{ current_user.active_home.active_floor_id }}</h4>
-    <h4>current floor_list_id #{{ floor_list.id }} {{ floor_list.name }}</h4>
-    <h4>
-        current ground floor #{{ current_user.active_home.ground_floor_id }}
-        {{ current_user.active_home.ground_floor.name }}
-    </h4>
-    <form action="/home/floors/setup" method="POST">
-        <div class="row">
-            <div class="col-12">
-                <button
-                    data-bs-toggle="tooltip"
-                    data-bs-html="true"
-                    data-bs-title="<em>Tooltip</em> <u>with</u> <b>HTML</b>"
-                    hx-post="/create/Floor/{{ floor_list.id }}?order=0"
-                    hx-target="#floor-list-container"
-                    hx-swap="innerhtml"
-                    class="btn btn-primary"
-                >
-                    Add Upper Floor
-                </button>
-            </div>
-        </div>
 
-        <div
-            id="floor-list-container"
-            hx-get="/show_list/{{ floor_list.id }}"
-            hx-trigger="load"
-        ></div>
-
-        <div class="row">
-            <div class="col-12">
-                <button
-                    hx-post="/create/Floor/{{ floor_list.id }}?name=Basement"
-                    hx-target="#floor-list-container"
-                    hx-swap="innerhtml"
-                    class="btn btn-primary"
-                >
-                    Add Basement
-                </button>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-12">
-                <button class="btn btn-primary" type="submit">
-                    Confirm Floors and go to next step
-                </button>
-            </div>
-        </div>
-    </form>
-
-    <div
-        id="sortable-floors"
-        data-list-id="{{ list_id }}"
-        data-user-id="{{ user_id }}"
-    ></div>
 
     <script>
         document.addEventListener("htmx:load", function () {
