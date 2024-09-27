@@ -45,7 +45,7 @@ class User(db.Model, UserMixin):
     status = relationship('UserStatus', back_populates="user", lazy='dynamic')
     active_home_id: Mapped[int] = mapped_column(ForeignKey('home.id'), nullable=True)
     active_home = relationship("Home", foreign_keys=[active_home_id])
-    custom = relationship('Custom', back_populates="user", lazy='dynamic')
+    room_defaults = relationship('RoomDefault', back_populates="user", lazy='dynamic')
     lists = relationship("UserList", back_populates="user", lazy='dynamic')
 
 
@@ -185,12 +185,11 @@ class Room(db.Model): #[ ]: ROOM LEVEL AND LOCATION ON THE MAP
             'additional_info': f"Floor: {self.floors.floor_name}"
         }'''
     
-class Custom(db.Model):
+class RoomDefault(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey('user.id'))
-    category: Mapped[str]
-    title: Mapped[str]
-    user = relationship("User", back_populates="custom")
+    name: Mapped[str] = mapped_column(String(80), nullable=False, unique=True)
+    user = relationship("User", back_populates="room_defaults")
     
     
 

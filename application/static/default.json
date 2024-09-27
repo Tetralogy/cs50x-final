@@ -1,20 +1,18 @@
-{
-    "room": [
-        "Living Room",
-        "Bedroom",
-        "Kitchen",
-        "Bathroom",
-        "Dining Room",
-        "Office",
-        "Laundry Room",
-        "Gym",
-        "Hallway",
-        "Stairway",
-        "Attic",
-        "Basement",
-        "Garage",
-        "Patio",
-        "Balcony",
-        "Outdoor Space"
-    ]
-}
+[
+    "Living Room",
+    "Bedroom",
+    "Kitchen",
+    "Bathroom",
+    "Dining Room",
+    "Office",
+    "Laundry Room",
+    "Gym",
+    "Hallway",
+    "Stairway",
+    "Attic",
+    "Basement",
+    "Garage",
+    "Patio",
+    "Balcony",
+    "Outdoor Space"
+]

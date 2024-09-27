@@ -4,9 +4,9 @@ from flask_login import current_user, login_required
 from sqlalchemy import select
 from application.extension import db
 
-from application.database.models import Custom, Floor, Room
+from application.database.models import Floor, Room
 from application.floors import set_active_floor
-from application.lists import create_user_list, get_userlist
+from application.lists import add_item_to_list, create_user_list, get_userlist
 
 rooms = Blueprint('rooms', __name__)
 
@@ -30,6 +30,7 @@ def define_rooms(floor_id: int=None):
                 print(f'room_list: {room_list} (type: {type(room_list)}) parent: {room_list.parent.get_item().name}')
             room_list = get_userlist('Room', current_user.active_home.active_floor_id)
         print(f'floor_list: {floor_list} (type: {type(floor_list)})')
+        #create default room types list from default.json if it doesn't exist
         return render_template('homes/create_rooms.html.jinja', floor_list=floor_list, room_list=room_list)
     return 'define rooms', 200
 
@@ -41,7 +42,32 @@ def define_rooms(floor_id: int=None):
         set_ground_floor(ground_floor)
         set_active_floor(ground_floor)
         return redirect(url_for('homes.home_setup'))'''
+@rooms.route('/room/default', methods=['GET', 'POST'])
+@login_required
+def room_types():
+    if request.method == 'POST':
+        new_room_type_default()
+    if request.method == 'GET':
+        defaults_list = load_default_room_types() #fixme: render the list template
+        
+def load_default_room_types(): #fixme: load the list from json and create it in the database
+    with open(os.path.join(os.path.dirname(__file__), 'static', 'default_rooms.json')) as f:
+        default_data = json.load(f)
+        print(f'default_data: {default_data}')
+        defaults_list = create_user_list('RoomDefault', 'Room Type Defaults')
+        for default in default_data:
+            print(f'default: {default}')
+            default_list_item = add_item_to_list(defaults_list.id, 'RoomDefault', name=f'{default}')
+            print(f'default_list_item: {default_list_item}')
+        return defaults_list
+    
 
+def new_room_type_default():
+    custom_type = request.form.get('custom_type')
+    defaults_list = get_userlist('RoomDefault')
+    default_list_item = add_item_to_list(defaults_list.id, 'RoomDefault', name=f'{custom_type}')
+    return default_list_item, 201
+    
 @rooms.route('/home/room/<int:room_id>/active', methods=['PUT'])
 @login_required
 def set_active_room(room_id):
@@ -126,7 +152,7 @@ def rename_room(room_id):
         room.room_name = new_room_name
         return render_template('onboarding/parts/home/map/room_name_text.html.jinja', room=room)
     
-@rooms.route('/home/map/room/add/type', methods=['POST'])
+'''@rooms.route('/home/map/room/add/type', methods=['POST'])
 @login_required
 def add_room_type():
     custom_type = request.form.get('custom_type')
@@ -146,18 +172,14 @@ def add_room_type():
     new_custom_type = Custom(name=custom_type, type='room', user_id=current_user.id)
     db.session.add(new_custom_type)
     db.session.commit()
-    return render_template('onboarding/parts/home/map/room_types_list.html.jinja', room_types=get_room_types())
+    return render_template('onboarding/parts/home/map/room_types_list.html.jinja', room_types=get_room_types())'''
     
-def load_default(types):
-    with open(os.path.join(os.path.dirname(__file__), 'static', 'default.json')) as f:
-        default_data = json.load(f)
-        
-        return default_data[types]
-    
-def load_user_custom(data_type):
-    return db.session.execute(select(Custom.name).where(Custom.user_id == current_user.id).where(Custom.type == data_type)).scalars().all()
 
-def get_room_types():
+    
+'''def load_user_custom(data_type):
+    return db.session.execute(select(Custom.name).where(Custom.user_id == current_user.id).where(Custom.type == data_type)).scalars().all()
+'''
+'''def get_room_types():
         data_type = 'room'
         default_room_types = load_default(data_type)
         
@@ -166,4 +188,4 @@ def get_room_types():
         user_custom_room_types = load_user_custom(data_type)
         #print(f'user_custom_room_types: {user_custom_room_types}')
         room_types = default_room_types + ([(custom) for custom in user_custom_room_types])
-        return room_types
+        return room_types'''

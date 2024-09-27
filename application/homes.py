@@ -3,7 +3,7 @@ from flask import Blueprint, flash, json, jsonify, redirect, render_template, re
 from flask_login import current_user, login_required
 from sqlalchemy import case, select
 from application.extension import db
-from application.database.models import Custom, Home, Floor, Room
+from application.database.models import Home, Floor, Room
 from application.floors import define_floors, set_active_floor
 
 

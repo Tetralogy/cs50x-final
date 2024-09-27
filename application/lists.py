@@ -3,7 +3,7 @@ from typing import List, Optional
 from flask import Blueprint, flash, redirect, render_template, request, url_for
 from flask_login import current_user, login_required
 from sqlalchemy import select
-from application.database.models import Floor, Room, Supply, Task, UserList, UserListEntry
+from application.database.models import Floor, Room, RoomDefault, Supply, Task, UserList, UserListEntry
 from application.extension import db
 
     
@@ -24,7 +24,7 @@ def create_user_list(list_type: str, list_name: str, parent_entry_item_id: int =
     new_list = UserList(user_id=current_user.id, list_name=list_name, list_type=list_type, parent_entry_item_id=parent_entry_item_id)
     db.session.add(new_list)
     db.session.commit()
-    return new_list
+    return new_list, 201
 
 def add_item_to_list(user_list_id: int, item_model: str, item_id: int = None, order: int = None, name: str = None) -> UserListEntry:
     list_obj = db.get_or_404(UserList, user_list_id)
@@ -49,7 +49,7 @@ def add_item_to_list(user_list_id: int, item_model: str, item_id: int = None, or
     new_list_item = UserListEntry(user_list_id=user_list_id, item_model=item_model, item_id=item_id, order=order)
     db.session.add(new_list_item)
     db.session.commit()
-    return new_list_item
+    return new_list_item, 201
 
 def create_new_default(item_model: str, name: str = None) -> UserListEntry:
     if item_model == 'Floor':
@@ -80,6 +80,13 @@ def create_new_default(item_model: str, name: str = None) -> UserListEntry:
         return UserListEntry(item_model=item_model, item_id=new_item.id)
     if item_model == 'Room':
         new_item = Room(home_id=current_user.active_home.id, floor_id=current_user.active_home.active_floor.id)
+        db.session.add(new_item)
+        db.session.commit()
+        return UserListEntry(item_model=item_model, item_id=new_item.id)
+    if item_model == 'RoomDefault':
+        if name is None:
+            raise ValueError('name for RoomDefault cannot be None')
+        new_item = RoomDefault(name=name)
         db.session.add(new_item)
         db.session.commit()
         return UserListEntry(item_model=item_model, item_id=new_item.id)
@@ -160,11 +167,11 @@ def delete_entry_and_item(user_list_entry_id: int) -> bool:
         return True
     return False
 
-def add_custom_item_to_list(user_list_id: int, name: str, order: int, custom_data: str = None) -> UserListEntry:
+'''def add_custom_item_to_list(user_list_id: int, name: str, order: int, custom_data: str = None) -> UserListEntry:
     new_item = UserListEntry(user_list_id=user_list_id, item_type='custom', item_id=0, order=order, custom_data=custom_data)
     db.session.add(new_item)
     db.session.commit()
-    return new_item
+    return new_item'''
 
 def set_default_floor_name():
     floor_count = current_user.active_home.floors.count()
