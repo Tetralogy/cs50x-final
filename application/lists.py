@@ -86,6 +86,10 @@ def create_new_default(item_model: str, name: str = None) -> UserListEntry:
     if item_model == 'RoomDefault':
         if name is None:
             raise ValueError('name for RoomDefault cannot be None')
+        existing_item = db.session.scalars(db.select(RoomDefault.name).filter_by(name=name, user_id=current_user.id)).first()
+        if existing_item:
+            flash(f'RoomDefault: "{name}" already exists', 'error')
+            raise ValueError(f'A RoomDefault with the name "{name}" already exists.')
         new_item = RoomDefault(user_id=current_user.id, name=name)
         db.session.add(new_item)
         db.session.commit()

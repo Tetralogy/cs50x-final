@@ -49,9 +49,8 @@ def define_rooms(floor_id: int=None):
 def room_types():
     if request.method == 'POST':
         new_room_type_default()
-    if request.method == 'GET':
-        defaults_list = load_default_room_types() #fixme: render the list template
-    raise NotImplementedError("this route not yet implemented")
+    defaults_list = load_default_room_types() #fixme: render the list template
+    return redirect(url_for('lists.show_list', list_id=defaults_list.id))
         
 def load_default_room_types():
     defaults_list = get_userlist('RoomDefault')
@@ -73,7 +72,7 @@ def new_room_type_default():
     custom_type = request.form.get('custom_type')
     defaults_list = get_userlist('RoomDefault')
     default_list_item = add_item_to_list(defaults_list.id, 'RoomDefault', name=f'{custom_type}')
-    return default_list_item, 201
+    return default_list_item
     
 @rooms.route('/home/room/<int:room_id>/active', methods=['PUT'])
 @login_required
