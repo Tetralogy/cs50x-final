@@ -6,7 +6,7 @@
 {% block main %}
 <h1>create Rooms</h1>
 <ul class="nav nav-tabs">
-    {% for navfloor in floor_list| sort(attribute='order') %}
+    {% for navfloor in floor_list | sort(attribute='order') %}
         <li class="nav-item">
             <a
                 class="nav-link {% if navfloor.item_id == current_user.active_home.active_floor_id %}active{% endif %}"
@@ -21,7 +21,7 @@
 <h1>
     now editing: {{ room_list.list_name }} floor {{ room_list.parent.get_item().name }} floor id:  {{ room_list.parent.get_item().id }} order:
     {{ room_list.parent.order }}
-</h1>#bug: fix the variables
+</h1>
 <form 
     hx-post="/room/default"
     hx-target="#types"
@@ -41,25 +41,15 @@
         Add Custom Room Type
     </button>
 </form>
-<div id="default-room-types-container"
-    class="container-fluid bg-dark border border-success border-5 rounded-bottom-5"
-> #fixme: default-room-types-container
-    <div id="types" class="row g-0 row-cols-4">
-        {% for room_type in current_user.room_defaults %}
-            <div class="col">{{ room_type.name }}</div>
-        {% endfor %}
-    </div>
-</div>
-<div
-    id="room-list-container"
-    class="container-fluid bg-dark border border-primary border-5 rounded-top-5"
-> #fixme: room-list-container
-    <div id="map-{{  current_user.active_home.active_floor.floor_id  }}" class="row g-0 row-cols-4">
-        {% for room in current_user.active_home.active_floor.rooms | sort(attribute='order') %}
-            {% include 'onboarding/parts/home/map/room_icon.html.jinja' %}
-        {% endfor %}
-    </div>
-</div>
+
+
+        <div
+            id="default-room-types-container"
+            hx-get="/show_list/{{ defaults_list.id }}"
+            hx-trigger="load"
+            class="container-fluid bg-dark border border-success border-5 rounded-bottom-5"
+        >
+        </div>
         <div
             id="room-list-container"
             hx-get="/show_list/{{ room_list.id }}"

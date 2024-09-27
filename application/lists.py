@@ -24,7 +24,7 @@ def create_user_list(list_type: str, list_name: str, parent_entry_item_id: int =
     new_list = UserList(user_id=current_user.id, list_name=list_name, list_type=list_type, parent_entry_item_id=parent_entry_item_id)
     db.session.add(new_list)
     db.session.commit()
-    return new_list, 201
+    return new_list
 
 def add_item_to_list(user_list_id: int, item_model: str, item_id: int = None, order: int = None, name: str = None) -> UserListEntry:
     list_obj = db.get_or_404(UserList, user_list_id)
@@ -49,7 +49,7 @@ def add_item_to_list(user_list_id: int, item_model: str, item_id: int = None, or
     new_list_item = UserListEntry(user_list_id=user_list_id, item_model=item_model, item_id=item_id, order=order)
     db.session.add(new_list_item)
     db.session.commit()
-    return new_list_item, 201
+    return new_list_item
 
 def create_new_default(item_model: str, name: str = None) -> UserListEntry:
     if item_model == 'Floor':
@@ -86,7 +86,7 @@ def create_new_default(item_model: str, name: str = None) -> UserListEntry:
     if item_model == 'RoomDefault':
         if name is None:
             raise ValueError('name for RoomDefault cannot be None')
-        new_item = RoomDefault(name=name)
+        new_item = RoomDefault(user_id=current_user.id, name=name)
         db.session.add(new_item)
         db.session.commit()
         return UserListEntry(item_model=item_model, item_id=new_item.id)
@@ -117,6 +117,7 @@ def get_userlist(item_model: str, parent_entry_item_id: int = None): #gets the p
     list_type = item_model
     lists = current_user.lists.filter_by(list_type=list_type, parent_entry_item_id=parent_entry_item_id).all()
     if len(lists) == 0:
+        return None
         raise ValueError(f'No lists of type {list_type} found for user {current_user.id}')
     if len(lists) > 1: #[ ] add ability to select which list when more than one + test this
         print('More than one list matches the string. Please select one:')

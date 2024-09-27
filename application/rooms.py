@@ -30,8 +30,10 @@ def define_rooms(floor_id: int=None):
                 print(f'room_list: {room_list} (type: {type(room_list)}) parent: {room_list.parent.get_item().name}')
             room_list = get_userlist('Room', current_user.active_home.active_floor_id)
         print(f'floor_list: {floor_list} (type: {type(floor_list)})')
+        defaults_list = load_default_room_types()
+        print(f'defaults_list: {defaults_list} (type: {type(defaults_list)})')  
         #create default room types list from default.json if it doesn't exist
-        return render_template('homes/create_rooms.html.jinja', floor_list=floor_list, room_list=room_list)
+        return render_template('homes/create_rooms.html.jinja', floor_list=floor_list, room_list=room_list, defaults_list=defaults_list)
     return 'define rooms', 200
 
 
@@ -49,17 +51,22 @@ def room_types():
         new_room_type_default()
     if request.method == 'GET':
         defaults_list = load_default_room_types() #fixme: render the list template
+    raise NotImplementedError("this route not yet implemented")
         
-def load_default_room_types(): #fixme: load the list from json and create it in the database
-    with open(os.path.join(os.path.dirname(__file__), 'static', 'default_rooms.json')) as f:
-        default_data = json.load(f)
-        print(f'default_data: {default_data}')
+def load_default_room_types():
+    defaults_list = get_userlist('RoomDefault')
+    print(f"defaults_list: {defaults_list}")
+    if not defaults_list:
         defaults_list = create_user_list('RoomDefault', 'Room Type Defaults')
-        for default in default_data:
-            print(f'default: {default}')
-            default_list_item = add_item_to_list(defaults_list.id, 'RoomDefault', name=f'{default}')
-            print(f'default_list_item: {default_list_item}')
-        return defaults_list
+    if len(defaults_list.entries) == 0:
+        with open(os.path.join(os.path.dirname(__file__), 'static', 'default_rooms.json')) as f:
+            default_data = json.load(f)
+            print(f'default_data: {default_data}')
+            for default in default_data:
+                print(f'default: {default}')
+                default_list_item = add_item_to_list(defaults_list.id, 'RoomDefault', name=f'{default}')
+                print(f'default_list_item: {default_list_item}')
+    return defaults_list
     
 
 def new_room_type_default():
