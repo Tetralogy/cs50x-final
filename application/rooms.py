@@ -10,7 +10,7 @@ from application.lists import add_item_to_list, create_user_list, get_userlist
 
 rooms = Blueprint('rooms', __name__)
 
-@rooms.route('/home/rooms/setup/<int:floor_id>', methods=['GET', 'POST'])    # sends user to page to create a list of rooms for the home
+@rooms.route('/home/rooms/setup/<int:floor_id>', methods=['GET'])    # sends user to page to create a list of rooms for the home
 @login_required
 def define_rooms(floor_id: int=None):
     if request.method == 'GET':
@@ -36,20 +36,12 @@ def define_rooms(floor_id: int=None):
         return render_template('homes/create_rooms.html.jinja', floor_list=floor_list, room_list=room_list, defaults_list=defaults_list)
     return 'define rooms', 200
 
-
-    '''floor_list = get_userlist('Floor') # if home_id has floors, get list of floors from userlists
-        return render_template('homes/create_floors.html.jinja', floor_list=floor_list)
-    if request.method == 'POST':
-        ground_floor = request.form.get('ground_floor')
-        set_ground_floor(ground_floor)
-        set_active_floor(ground_floor)
-        return redirect(url_for('homes.home_setup'))'''
 @rooms.route('/room/default', methods=['GET', 'POST'])
 @login_required
 def room_types():
     if request.method == 'POST':
         new_room_type_default()
-    defaults_list = load_default_room_types() #fixme: render the list template
+    defaults_list = load_default_room_types()
     return redirect(url_for('lists.show_list', list_id=defaults_list.id))
         
 def load_default_room_types():

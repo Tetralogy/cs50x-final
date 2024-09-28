@@ -1,6 +1,6 @@
 {% extends "base/layout.html" %}
 {% block title %}
-    #fixme Create New Home Form: rooms
+    #todo Create New Home Form: rooms
 {% endblock %}
 
 {% block main %}
@@ -49,7 +49,7 @@
             hx-trigger="load"
             class="container-fluid bg-dark border border-success border-5 rounded-bottom-5"
         >
-        </div>
+        </div>#bug: enable drag and drop room types to create new rooms
         <div
             id="room-list-container"
             hx-get="/show_list/{{ room_list.id }}"
@@ -60,7 +60,7 @@
 
 <script>
     document.addEventListener("htmx:load", function () {
-    const types = document.getElementById("types");
+    const types = document.getElementById("default-room-types-container");
 
     new Sortable(types, {
         group: {
@@ -73,7 +73,7 @@
         cursor: "move",
     });
 
-        const sortmap = document.getElementById("map-{{  current_user.active_home.active_floor.floor_id  }}");
+        const sortmap = document.getElementById("room-list-container");
         console.log('sortmap: ' + sortmap);
         new Sortable(sortmap, { 
             group: {
@@ -97,7 +97,7 @@
                 console.log('addedRoomType: ' + addedRoomType + 'new index: ' + newIndex);
 
                 // Make an htmx AJAX request to the server
-                htmx.ajax("POST", "/home/map/room/add/{{ current_user.active_home.active_floor.floor_id }}", {
+                htmx.ajax("POST", "/home/map/room/add/{{ #fixme }}", {
                     values: { added_room_type: addedRoomType, order: newIndex },
                     target: itemEl,
                     swap: "outerHTML", // returns the new content
