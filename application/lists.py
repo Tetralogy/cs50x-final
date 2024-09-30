@@ -2,7 +2,7 @@ from typing import List, Optional
 
 from flask import Blueprint, flash, redirect, render_template, request, url_for
 from flask_login import current_user, login_required
-from sqlalchemy import select
+from sqlalchemy import and_, select
 from application.database.models import Floor, Room, RoomDefault, Supply, Task, UserList, UserListEntry
 from application.extension import db
 
@@ -28,6 +28,7 @@ def create_user_list(list_type: str, list_name: str, parent_entry_item_id: int =
 
 def add_item_to_list(user_list_id: int, item_model: str, item_id: int = None, order: int = None, name: str = None) -> UserListEntry:
     list_obj = db.get_or_404(UserList, user_list_id)
+    print(f'add_item_to_list(): user_list_id: {user_list_id}, item_model: {item_model}, item_id: {item_id}, order: {order}, name: {name}')
     if not list_obj:
         raise ValueError(f'Unknown list id {user_list_id}')
     if item_model is None:
@@ -52,6 +53,7 @@ def add_item_to_list(user_list_id: int, item_model: str, item_id: int = None, or
     return new_list_item
 
 def create_new_default(item_model: str, name: str = None) -> UserListEntry:
+    print(f'create_new_default(): item_model: {item_model}, name: {name}')
     if item_model == 'Floor':
         print(f'name (create_new_default):  {name}')
         current_home = current_user.active_home
@@ -79,8 +81,20 @@ def create_new_default(item_model: str, name: str = None) -> UserListEntry:
         db.session.commit()
         return UserListEntry(item_model=item_model, item_id=new_item.id)
     if item_model == 'Room':
-        new_item = Room(home_id=current_user.active_home.id, floor_id=current_user.active_home.active_floor.id)
-        db.session.add(new_item)
+        if name is None:
+            name = item_model
+        room_type = name
+        same_type_rooms_count = db.session.execute(
+            select(db.func.count())
+            .select_from(Room)
+            .where(and_(Room.home_id == current_user.active_home_id, Room.room_type == room_type))
+        ).scalar() 
+        print(f'same_type_rooms_count: {same_type_rooms_count}')
+        
+        newname = f'{room_type} {same_type_rooms_count + 1}'
+        print(f'room (create_new_default): {newname}')
+        new_item = Room(home_id=current_user.active_home_id, floor_id=current_user.active_home.active_floor_id, room_type=room_type, name=newname)
+        db.session.add(new_item) 
         db.session.commit()
         return UserListEntry(item_model=item_model, item_id=new_item.id)
     if item_model == 'RoomDefault':
@@ -218,13 +232,13 @@ def add_to_list(list_id):
     return redirect(url_for('lists.get_list', list_id=list_id))'''
 @lists.route('/create/<string:item_model>/<int:list_id>', methods=['POST'])
 @login_required
-def create_add_to_list(item_model, list_id, item_id=None):
-    order = request.args.get('order')
+def create_item_and_entry(item_model, list_id, item_id=None):
+    order = request.form.get('order') #bug temp switch to form instead of args
     if order is None or order == '':
         order = None
     else:
         order = int(order)
-    name = request.args.get('name')
+    name = request.form.get('name')
     print(f'item_model: {item_model}, list_id: {list_id}, item_id: {item_id}, order: {order}, name: {name}')
     new_item = add_item_to_list(list_id, item_model, item_id, order, name)
     
@@ -258,7 +272,7 @@ def update_list_order(list_id):
         order = [entry.id for entry in order]
             
     for index, item_id in enumerate(order):
-        print(f'Updating item_id: {item_id} with new order: {index}')
+        print(f'Updating item_id: {item_id} item_name: {db.get_or_404(UserListEntry, item_id).get_item().name} with new order: {index}')
         update_item_order(item_id, index)
     flash('List order updated')
     return redirect(url_for('lists.show_list', list_id=list_id))

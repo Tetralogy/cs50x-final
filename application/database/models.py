@@ -154,17 +154,16 @@ class Room(db.Model): #[ ]: ROOM LEVEL AND LOCATION ON THE MAP
     home_id: Mapped[int] = mapped_column(ForeignKey('home.id'))
     floor_id: Mapped[int] = mapped_column(ForeignKey('floor.id'))
     room_type: Mapped[str] = mapped_column(default='Room')
-    @property
+    '''@property
     def same_type_rooms_count(self):
         return db.session.execute(
             select(db.func.count())
             .select_from(Room.__table__)
             .where(and_(Room.home_id == self.home_id, Room.room_type == self.room_type))
-        ).scalar()
+        ).scalar()'''
     
-    name: Mapped[str] = mapped_column(
-        default=text("f'{room_type}' || ({same_type_rooms_count} + 1)")
-    ) # find room types and add 1 to the count and use that as the default room name
+    name: Mapped[str] = mapped_column(default='New Room')
+    # find room types and add 1 to the count and use that as the default room name
     #room_size: Mapped[float] = mapped_column(default=0.0)
     #room_function: Mapped[str] = mapped_column(default='')
     #room_frequency_of_use: Mapped[str] = mapped_column(default='')

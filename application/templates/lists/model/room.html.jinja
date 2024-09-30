@@ -2,6 +2,7 @@
     class="input-group mb-0"
     id="{{ entry.item_model }}list-{{ entry.id }}"
     data-id="{{ entry.id }}"
+    data-name="{{ entry.get_item().name }}"
 >
     <span id="handle" class="handle input-group-text">↕️</span>
 
@@ -56,4 +57,3 @@
         X
     </button>
 </div>
-#fixme: design basic room block

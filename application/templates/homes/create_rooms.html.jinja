@@ -92,13 +92,13 @@
             onAdd: function (/**Event*/ evt) {
                 console.log("onAdd event triggered");
                 var itemEl = evt.item; // dragged HTMLElement
-                var addedRoomType = itemEl.textContent;
+                var addedRoomType = itemEl.dataset.name;
                 var newIndex = evt.newIndex;
                 console.log('addedRoomType: ' + addedRoomType + 'new index: ' + newIndex);
 
                 // Make an htmx AJAX request to the server
-                htmx.ajax("POST", "/home/map/room/add/{{ #fixme }}", {
-                    values: { added_room_type: addedRoomType, order: newIndex },
+                htmx.ajax("POST", "/create/Room/{{ room_list.id }}", {
+                    values: { name: addedRoomType, order: newIndex },
                     target: itemEl,
                     swap: "outerHTML", // returns the new content
                 });
@@ -109,10 +109,10 @@
                     (li) => li.dataset.id,
                 ); 
                 console.log('newOrder: ' + newOrder);
-                htmx.ajax("PUT", "/home/map/sort/{{ current_user.active_home.active_floor.floor_id }}", {
+                htmx.ajax("PUT", "/update_list_order/{{ room_list.id }}", {
                     target: "#room-list-container",
                     swap: "innerHTML",
-                    values: { list_order: newOrder },
+                    values: { order: newOrder },
                 });
             },
         });
@@ -122,8 +122,10 @@
                 hx-target="#onboarding-map">Save layout and go to next floor</button>
                 [ ] link to start walkthrough
 
+#fixme: design basic room type default block
+#fixme: design basic room block
 
-
+#bug: duplicating list onAdd
 
 <p>----------------------------------------------------------------------------</p>
 
