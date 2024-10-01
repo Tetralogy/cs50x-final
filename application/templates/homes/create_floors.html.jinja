@@ -19,7 +19,8 @@
                     data-bs-toggle="tooltip"
                     data-bs-html="true"
                     data-bs-title="<em>Tooltip</em> <u>with</u> <b>HTML</b>"
-                    hx-post="/create/Floor/{{ floor_list.id }}?order=0"
+                    hx-post="/create/Floor/{{ floor_list.id }}"
+                    hx-vals='{"order": "0"}'
                     hx-target="#floor-list-container"
                     hx-swap="innerhtml"
                     class="btn btn-primary"
@@ -40,7 +41,8 @@
         <div class="row">
             <div class="col-12">
                 <button
-                    hx-post="/create/Floor/{{ floor_list.id }}?name=Basement"
+                    hx-post="/create/Floor/{{ floor_list.id }}"
+                    hx-vals='{"name": "Basement"}'
                     hx-target="#floor-list-container"
                     hx-swap="innerhtml"
                     class="btn btn-primary"
@@ -60,11 +62,6 @@
         </div>
     </form>
 
-    <div
-        id="sortable-floors"
-        data-list-id="{{ list_id }}"
-        data-user-id="{{ user_id }}"
-    ></div>
 
     <script>
         document.addEventListener("htmx:load", function () {

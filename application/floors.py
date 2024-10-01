@@ -63,11 +63,11 @@ def set_ground_floor(floor_id):
     
     
 
-@floors.route('/floor/create/upper', methods=['POST'])
+'''@floors.route('/floor/create/upper', methods=['POST'])
 @login_required
 def new_floor_upper():
     list_id = get_userlist('Floor')
-    return add_item_to_list(list_id, 'Floor')    #create floor + add floor to floor list
+    return add_item_to_list(list_id, 'Floor')    #create floor + add floor to floor list'''
     
 @floors.route('/floorplan/<int:floor_id>', methods=['GET'])
 @login_required

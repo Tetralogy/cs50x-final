@@ -233,7 +233,7 @@ def add_to_list(list_id):
 @lists.route('/create/<string:item_model>/<int:list_id>', methods=['POST'])
 @login_required
 def create_item_and_entry(item_model, list_id, item_id=None):
-    order = request.form.get('order') #bug temp switch to form instead of args
+    order = request.form.get('order')
     if order is None or order == '':
         order = None
     else:
