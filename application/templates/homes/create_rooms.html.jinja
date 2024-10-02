@@ -61,6 +61,20 @@
 <script>
     document.addEventListener("htmx:load", function () {
     const types = document.getElementById("default-room-types-container");
+    const sortmap = document.getElementById("room-list-container");
+
+    function handleOnEnd(evt) {
+            console.log("onEnd event triggered");
+            const newOrder = Array.from(sortmap.children).map(
+                (li) => li.dataset.id,
+            ); 
+            console.log('newOrder: ' + newOrder);
+            htmx.ajax("PUT", "/update_list_order/{{ room_list.id }}", {
+                target: "#room-list-container",
+                swap: "innerHTML",
+                values: { order: newOrder },
+            });
+        }
 
     new Sortable(types, {
         group: {
@@ -71,9 +85,10 @@
         animation: 150,
         sort: false,
         cursor: "move",
+        onEnd: handleOnEnd
     });
 
-        const sortmap = document.getElementById("room-list-container");
+        
         console.log('sortmap: ' + sortmap);
         new Sortable(sortmap, { 
             group: {
@@ -94,7 +109,6 @@
                     swap: "innerHTML",
                     });
                 },
-                //[x]: delete item from db on dragout
             onAdd: function (/**Event*/ evt) {
                 console.log("onAdd event triggered");
                 var itemEl = evt.item; // dragged HTMLElement
@@ -110,18 +124,7 @@
                 });
                 
             },
-            onEnd: function (evt) {
-                console.log("onEnd event triggered");
-                var newOrder = Array.from(sortmap.children).map(
-                    (li) => li.dataset.id,
-                ); 
-                console.log('newOrder: ' + newOrder);
-                htmx.ajax("PUT", "/update_list_order/{{ room_list.id }}", {
-                    target: "#room-list-container",
-                    swap: "innerHTML",
-                    values: { order: newOrder },
-                });
-            },
+            onEnd: handleOnEnd
         });
     });
 </script>
@@ -132,7 +135,6 @@
 #fixme: design basic room type default block
 #fixme: design basic room block
 
-#bug: duplicating list onAdd
 
 <p>
 ________________________________________________________________________________________________________
