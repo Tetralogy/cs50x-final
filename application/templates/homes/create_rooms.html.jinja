@@ -49,11 +49,11 @@
             hx-trigger="load"
             class="container-fluid bg-dark border border-success border-5 rounded-bottom-5"
         >
-        </div>#bug: enable drag and drop room types to create new rooms
+        </div>
         <div
             id="room-list-container"
             hx-get="/show_list/{{ room_list.id }}"
-            hx-trigger="load"
+            hx-trigger="load once"
             class="container-fluid bg-dark border border-primary border-5 rounded-top-5"
         >
         </div>
@@ -87,8 +87,14 @@
             // Called when item is spilled
             onSpill: function (/**Event*/ evt) {
                 evt.item; // The spilled item
-                //[ ]: delete item from db on dragout
-            },
+                console.log("spill");
+                console.log("delete evt.item.dataset.id: " + evt.item.dataset.id);
+                htmx.ajax("DELETE", "/delete/" + {{room_list.id}} + "/" + evt.item.dataset.id, {
+                    target: "#room-list-container",
+                    swap: "innerHTML",
+                    });
+                },
+                //[x]: delete item from db on dragout
             onAdd: function (/**Event*/ evt) {
                 console.log("onAdd event triggered");
                 var itemEl = evt.item; // dragged HTMLElement
@@ -102,8 +108,9 @@
                     target: itemEl,
                     swap: "outerHTML", // returns the new content
                 });
+                
             },
-            onEnd: function () {
+            onEnd: function (evt) {
                 console.log("onEnd event triggered");
                 var newOrder = Array.from(sortmap.children).map(
                     (li) => li.dataset.id,
@@ -127,9 +134,11 @@
 
 #bug: duplicating list onAdd
 
-<p>----------------------------------------------------------------------------</p>
+<p>
+________________________________________________________________________________________________________
+</p>
 
-
+<!--
     <script>
         document.addEventListener("htmx:load", function () {
             const sortlist = document.getElementById("floor-list-container");
@@ -177,6 +186,6 @@
             });
         });
         
-    </script>
+    </script> -->
     //[ ]: delete item from db on dragout
 {% endblock %}

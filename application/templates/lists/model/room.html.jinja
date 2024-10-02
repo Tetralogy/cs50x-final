@@ -49,9 +49,9 @@
     <span class="input-group-text">({{ entry.order }})</span>
     <button
         class="btn btn-danger"
-        hx-delete="/delete/{{ list_obj.id }}/{{ entry.id }}"
-        hx-confirm="Are you sure you want to delete this floor? {{ list_obj.id }}/{{ entry.id }}"
-        hx-target="#floor-list-container"
+        hx-delete="/delete/{{ entry.user_list_id }}/{{ entry.id }}"
+        hx-confirm="Are you sure you want to delete this room? {{ entry.user_list_id }}/{{ entry.id }}"
+        hx-target="#room-list-container"
         class="btn btn-danger"
     >
         X

@@ -243,7 +243,7 @@ def create_item_and_entry(item_model, list_id, item_id=None):
     new_item = add_item_to_list(list_id, item_model, item_id, order, name)
     
     flash(f'Item added to list: {new_item.item_model} {new_item.item_id}')
-    return redirect(url_for('lists.update_list_order', list_id=list_id))
+    return render_template('lists/model/' + new_item.item_model.lower() + '.html.jinja', entry=new_item) #redirect(url_for('lists.update_list_order', list_id=list_id))
 
 @lists.route('/delete/<int:list_id>/<int:user_list_entry_id>', methods=['DELETE'])
 @login_required
