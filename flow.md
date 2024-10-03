@@ -15,7 +15,7 @@
             1. Home name: name ✅
             2. Type of home: select [apartment, condominium, house, trailer, van, tent, cardboard box, other()] ✅
                 1. in future references during home setup, the chosen specific home type word is used as the nound instead of "home" ✴️ (house, apartment, condo) 
-    2. ### /home/setup ✴️ 
+    2. ### xxx /home/setup ✴️ 
         1. floor selection form ✅
         2. new floor button (stacked reorderable list) ✅
             1. Automatically prompts for rename field of new levels (added tooltip)  ✅
@@ -43,7 +43,7 @@
                 2. if a floor is not confirmed, it remains in the list of floors to edit
                 3. when the final floor is confirmed, go to the house map page
 3. ## User performs innitial task collection walkthrough process
-    1. ### /home/map/walkthrough/setup
+    1. ### xxx /home/map/walkthrough/setup
         1. list of rooms on the ground floor are presented on a layout map visually similar to the add rooms form
             1. room blocks are not movable or directly editable in task map view
             2. user is prompted to select the floor and room they are currently in
@@ -57,7 +57,7 @@
             5. once all rooms in the level are selected, the user is prompted to go to the next floor
                 1. the user can choose to omit rooms if they navigate to another floor after making their selections for the current floor and confirming their selections when prompted
             6. User confirms walkthrough order
-    2. ### /walkthrough 
+    2. ### xxx /walkthrough 
         1. User goes room by room photographing each room and each area containing tasks
             1. User is instructed to walk into the first room in the queue
             2. go to center of room
@@ -76,7 +76,7 @@
             3. User is instructed to walk to the next floor level and room in the queue
             4. repeat until all rooms in the queue on floor have notes
         4. close and mark initial walkthrough as completed by entering the timestamp in database
-    3. ### /walkthrough/edit/photos
+    3. ### xxx /walkthrough/edit/photos
         1. #### form to organize photos and associate them with room blocks
             1. unorganized photos shown in an album gallery above the home map
             2. drag and drop unorganized imported photos from the unorganized gallery section to the room block they belong to
@@ -135,13 +135,13 @@
             2. user can confirm save edits to room and close back to home map of current floor level
                 1. user continues editing rooms until all tasks are added
         3. "end home setup" button confirm saves and takes the user to their main home dashboard page
-    4. ### /home 
+    4. ### xxx /home 
         1. shows the user's house task status condition in easy to read and understandable widgets
             1. Map
                 1. shows color coded hotspots of things that need attention
             2. tasks
                 1. master task list ordered by the next thing the user should be doing
-    5. ### /map 
+    5. ### xxx /map 
         1. shows floor level view of all rooms and color coding of task distribution
-    6. ### /tasks 
+    6. ### xxx /tasks 
         1. shows main task list and other items that are relevant to task checking and organization
