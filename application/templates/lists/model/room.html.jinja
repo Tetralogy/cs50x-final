@@ -1,61 +1,44 @@
-<div #bug: cleanup block
-    class="input-group mb-0"
+<div 
+    class="col"
     id="{{ entry.item_model }}list-{{ entry.id }}"
     data-id="{{ entry.id }}"
     data-name="{{ entry.get_item().name }}"
 >
-    <span id="handle" class="handle input-group-text">↕️</span>
-
-    <span
-        data-bs-toggle="tooltip"
-        data-bs-html="true"
-        data-bs-title="<u>Click</u> to <b>rename</b> floor"
-    >
-        <input
-            required
-            class="input-group-text"
-            type="text"
-            id="input_{{ entry.item_model }}_name-{{ entry.item_id }}"
-            name="input_{{ entry.item_model }}_name-{{ entry.item_id }}"
-            placeholder="{{ entry.get_item().name }}"
-            hx-put="/rename/{{ entry.item_model }}/{{ entry.item_id }}"
-            hx-vals='{"placeholder": "{{ entry.get_item().name }}"}'
-            hx-target="this"
-            hx-trigger="change"
-            value="{{ entry.get_item().name }}"
-            onkeypress="if(event.key === 'Enter') this.blur()"
-        />
-    </span>
-
-    <span
-        class="input-group-text"
-        data-bs-toggle="tooltip"
-        data-bs-placement="right"
-        data-bs-html="true"
-        data-bs-title="<b>Set <em>{{ entry.get_item().name }}</em> as <u>Ground Floor</u></b>"
-    >
-        <input
-            required
-            class="form-check-input mt-0"
-            type="radio"
-            name="ground_floor"
-            id="radio-{{ entry.id }}"
-            value="{{ entry.item_id }}"
-            {% if entry.id == 1 and current_user.active_home.ground_floor_id == None %}
-                checked
-            {% elif current_user.active_home.ground_floor_id == entry.item_id %}
-                checked
-            {% endif %}
-        />
-    </span>
-    <span class="input-group-text">({{ entry.order }})</span>
-    <button
-        class="btn btn-danger"
-        hx-delete="/delete/{{ entry.user_list_id }}/{{ entry.id }}"
-        hx-confirm="Are you sure you want to delete this room? {{ entry.user_list_id }}/{{ entry.id }}"
-        hx-target="#room-list-container"
-        class="btn btn-danger"
-    >
-        X
-    </button>
+<div class="input-group flex-nowrap mb-0">
+    
+            <span id="handle" class="handle input-group-text">↕️</span>
+        
+            <span
+                data-bs-toggle="tooltip"
+                data-bs-html="true"
+                data-bs-title="<u>Click</u> to <b>rename</b> room"
+            >
+                <input
+                    required
+                    class="form-control"
+                    type="text"
+                    id="input_{{ entry.item_model }}_name-{{ entry.item_id }}"
+                    name="input_{{ entry.item_model }}_name-{{ entry.item_id }}"
+                    placeholder="{{ entry.get_item().name }}"
+                    hx-put="/rename/{{ entry.item_model }}/{{ entry.item_id }}"
+                    hx-vals='{"placeholder": "{{ entry.get_item().name }}"}'
+                    hx-target="this"
+                    hx-trigger="change"
+                    value="{{ entry.get_item().name }}"
+                    onkeypress="if(event.key === 'Enter') this.blur()"
+                />
+            </span>
+        
+            <span class="input-group-text">({{ entry.order }})</span>
+            <button
+                class="btn btn-danger"
+                hx-delete="/delete/{{ entry.user_list_id }}/{{ entry.id }}"
+                hx-confirm="Are you sure you want to delete this room? {{ entry.user_list_id }}/{{ entry.id }}"
+                hx-target="#room-list-container"
+                class="btn btn-danger"
+            >
+                X
+            </button>
+    
+</div>
 </div>

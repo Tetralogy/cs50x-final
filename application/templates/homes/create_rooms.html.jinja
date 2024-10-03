@@ -16,7 +16,7 @@
             >
         </li>
     {% endfor %}
-</ul> #bug: make blocks show in grid not stacked
+</ul> 
 
 <h1>
     now editing: {{ room_list.list_name }} floor {{ room_list.parent.get_item().name }} floor id:  {{ room_list.parent.get_item().id }} order:
@@ -43,20 +43,22 @@
 </form>
 
 
-        <div
+        <div class="row g-0 row-cols-4 container-fluid bg-dark border border-success border-5 rounded-bottom-5"
             id="default-room-types-container"
             hx-get="/show_list/{{ defaults_list.id }}"
             hx-trigger="load"
-            class="container-fluid bg-dark border border-success border-5 rounded-bottom-5"
+    
         >
         </div>
-        <div
-            id="room-list-container"
-            hx-get="/show_list/{{ room_list.id }}"
-            hx-trigger="load once"
-            class="container-fluid bg-dark border border-primary border-5 rounded-top-5"
-        >
-        </div>
+
+            <div class="row g-0 row-cols-4 container-fluid bg-dark border border-primary border-5 rounded-top-5"
+                id="room-list-container"
+                hx-get="/show_list/{{ room_list.id }}"
+                hx-trigger="load once"
+                
+            >
+            </div>
+
 
 <script>
     document.addEventListener("htmx:load", function () {
@@ -98,6 +100,7 @@
             animation: 150,
             ghostClass: "blue-background-class",
             filter: ".htmx-indicator",
+            handle: ".handle",
             removeOnSpill: true, // Enable plugin
             // Called when item is spilled
             onSpill: function (/**Event*/ evt) {
