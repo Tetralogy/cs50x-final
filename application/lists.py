@@ -287,7 +287,7 @@ def show_list(list_id):
 @lists.route('/rename/<string:item_model>/<int:item_id>', methods=['PUT'])
 @login_required
 def rename_item(item_model, item_id):
-    prev_name = request.args.get('placeholder')
+    prev_name = request.form.get('placeholder')
     model_class = globals().get(item_model)
     if not model_class or not issubclass(model_class, db.Model):
         raise ValueError(f'Unknown item type {item_model}')

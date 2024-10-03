@@ -1,4 +1,4 @@
-<div
+<div #bug: cleanup block
     class="input-group mb-0"
     id="{{ entry.item_model }}list-{{ entry.id }}"
     data-id="{{ entry.id }}"
@@ -19,9 +19,11 @@
             name="input_{{ entry.item_model }}_name-{{ entry.item_id }}"
             placeholder="{{ entry.get_item().name }}"
             hx-put="/rename/{{ entry.item_model }}/{{ entry.item_id }}"
+            hx-vals='{"placeholder": "{{ entry.get_item().name }}"}'
             hx-target="this"
             hx-trigger="change"
             value="{{ entry.get_item().name }}"
+            onkeypress="if(event.key === 'Enter') this.blur()"
         />
     </span>
 

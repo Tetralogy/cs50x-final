@@ -16,7 +16,7 @@
             >
         </li>
     {% endfor %}
-</ul>
+</ul> #bug: make blocks show in grid not stacked
 
 <h1>
     now editing: {{ room_list.list_name }} floor {{ room_list.parent.get_item().name }} floor id:  {{ room_list.parent.get_item().id }} order:
@@ -63,7 +63,7 @@
     const types = document.getElementById("default-room-types-container");
     const sortmap = document.getElementById("room-list-container");
 
-    function handleOnEnd(evt) {
+    function triggerUpdateOrder(evt) {
             console.log("onEnd event triggered");
             const newOrder = Array.from(sortmap.children).map(
                 (li) => li.dataset.id,
@@ -85,7 +85,7 @@
         animation: 150,
         sort: false,
         cursor: "move",
-        onEnd: handleOnEnd
+        onEnd: triggerUpdateOrder
     });
 
         
@@ -124,7 +124,7 @@
                 });
                 
             },
-            onEnd: handleOnEnd
+            onEnd: triggerUpdateOrder
         });
     });
 </script>
@@ -135,59 +135,4 @@
 #fixme: design basic room type default block
 #fixme: design basic room block
 
-
-<p>
-________________________________________________________________________________________________________
-</p>
-
-<!--
-    <script>
-        document.addEventListener("htmx:load", function () {
-            const sortlist = document.getElementById("floor-list-container");
-            const sortableInstance = new Sortable(sortlist, {
-                animation: 150,
-                ghostClass: "blue-background-class",
-                filter: ".htmx-indicator",
-                handle: "#handle",
-                removeOnSpill: true, // Enable plugin
-            // Called when item is spilled
-            onSpill: function (/**Event*/ evt) {
-                evt.item; // The spilled item
-                console.log("spill");
-                console.log("delete evt.item.dataset.id: " + evt.item.dataset.id);
-                htmx.ajax("DELETE", "/delete/" + {{floor_list.id}} + "/" + evt.item.dataset.id, {
-                    target: "#floor-list-container",
-                    swap: "innerHTML",
-                    });
-                },
-                onStart: function () {
-                    const tooltipTriggerList = [].slice.call(
-                        document.querySelectorAll('[data-bs-toggle="tooltip"]'),
-                    );
-                    tooltipTriggerList.map(function (tooltipTriggerEl) {
-                        const tooltip =
-                            bootstrap.Tooltip.getInstance(tooltipTriggerEl);
-                        if (tooltip) {
-                            tooltip.dispose();
-                        }
-                    });
-                },
-
-                onEnd: function (evt) {
-                    const newIndex = evt.newIndex;
-                    const newOrder = Array.from(sortlist.children).map(
-                        (li) => li.dataset.id,
-                    );
-                    console.log("newOrder: " + newOrder);
-                    htmx.ajax("PUT", "/update_list_order/{{ floor_list.id }}", {
-                        target: "#floor-list-container",
-                        swap: "innerHTML",
-                        values: { order: newOrder },
-                    });
-                },
-            });
-        });
-        
-    </script> -->
-    //[ ]: delete item from db on dragout
 {% endblock %}
