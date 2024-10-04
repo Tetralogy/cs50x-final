@@ -4,14 +4,16 @@
     data-id="{{ entry.id }}"
     data-name="{{ entry.get_item().name }}"
 >
-<div class="input-group flex-nowrap mb-0">
+<div class="input-group flex-nowrap mb-0"
+onmouseout="document.getElementById('delete_{{ entry.item_model }}_name-{{ entry.item_id }}').style.display='none'; document.getElementById('handle_{{ entry.item_model }}_name-{{ entry.item_id }}').style.display='none'"
+>
     
-            <span id="handle" class="handle input-group-text glyphicon-move">↕️</span>
+            <span id="handle_{{ entry.item_model }}_name-{{ entry.item_id }}" class="handle input-group-text glyphicon-move">↕️</span>
         
             <span
                 data-bs-toggle="tooltip"
                 data-bs-html="true"
-                data-bs-title="<u>Click</u> to <b>rename</b> room"
+                data-bs-title="<u>Double Click</u> to <b>rename</b> room"
             >
                 <input
                     required
@@ -25,20 +27,37 @@
                     hx-target="this"
                     hx-trigger="change"
                     value="{{ entry.get_item().name }}"
-                    onkeypress="if(event.key === 'Enter') this.blur()"
+                    onkeypress="if(event.key === 'Enter') this.blur(); this.style.display='none'; document.getElementById('text_{{ entry.item_model }}_name-{{ entry.item_id }}').style.display='flex'; document.getElementById('delete_{{ entry.item_model }}_name-{{ entry.item_id }}').style.display='none'"
                 />
+                <div id="text_{{ entry.item_model }}_name-{{ entry.item_id }}" class="handle input-group-text"
+                ondblclick="this.style.display='none'; document.getElementById('input_{{ entry.item_model }}_name-{{ entry.item_id }}').style.display='inline'; document.getElementById('input_{{ entry.item_model }}_name-{{ entry.item_id }}').focus(); document.getElementById('delete_{{ entry.item_model }}_name-{{ entry.item_id }}').style.display='inline'"
+                onmouseover="document.getElementById('delete_{{ entry.item_model }}_name-{{ entry.item_id }}').style.display='flex'; document.getElementById('handle_{{ entry.item_model }}_name-{{ entry.item_id }}').style.display='flex'">
+                {{ entry.get_item().name }}
+                </div>
             </span>
         
-            <span class="input-group-text">({{ entry.order }})</span>
-            <button
-                class="btn btn-danger"
-                hx-delete="/delete/{{ entry.user_list_id }}/{{ entry.id }}"
-                hx-confirm="Are you sure you want to delete this room? {{ entry.user_list_id }}/{{ entry.id }}"
-                hx-target="#room-list-container"
-                class="btn btn-danger"
-            >
-                X
-            </button>
+            <div id="delete_{{ entry.item_model }}_name-{{ entry.item_id }}" class="handle"> 
+                <span class="input-group-text">({{ entry.order }})</span>
+                <button
+                    class="btn btn-danger"
+                    hx-delete="/delete/{{ entry.user_list_id }}/{{ entry.id }}"
+                    hx-confirm="Are you sure you want to delete this room? {{ entry.user_list_id }}/{{ entry.id }}"
+                    hx-target="#room-list-container"
+                    class="btn btn-danger"
+                >
+                    X
+                </button>
+            </div>
     
 </div>
+
+<script>
+document.addEventListener("htmx:load", function() {
+    document.getElementById('input_{{ entry.item_model }}_name-{{ entry.item_id }}').style.display = 'none';
+    document.getElementById('handle_{{ entry.item_model }}_name-{{ entry.item_id }}').style.display = 'none';
+    document.getElementById('delete_{{ entry.item_model }}_name-{{ entry.item_id }}').style.display = 'none';
+});
+</script>
+{# #bug: make map view block
+#fixme: make edit view block togglable #}
 </div>

@@ -41,9 +41,10 @@ def index():
 
 
 
-@main.route('/map', methods=['GET', 'POST'])
+@main.route('/map', methods=['GET'])
 @login_required
 def map():
+    # goes to map view of current active floor
     raise NotImplementedError("map not yet implemented")
 
 @main.route('/tasklist', methods=['GET', 'POST'])

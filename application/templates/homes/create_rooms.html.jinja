@@ -105,7 +105,7 @@
             handle: ".handle",
             removeOnSpill: true, // Enable plugin
             // Called when item is spilled
-            onSpill: function (/**Event*/ evt) {
+            onSpill: function (/**Event*/ evt) { //[ ]: when dragging and holding over spill area, show delete x
                 evt.item; // The spilled item
                 console.log("spill");
                 console.log("delete evt.item.dataset.id: " + evt.item.dataset.id);
