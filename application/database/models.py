@@ -80,7 +80,19 @@ class UserListEntry(db.Model):
         # Dynamically import the model
         model_class = globals()[self.item_model]
         return model_class.query.get(self.item_id) 
-    #if model_class is Floor and you want the name of the floor: {{ item.get_item().floor_name }} 
+    #if model_class is Floor and you want the name of the floor: {{ item.get_item().name }} 
+    
+    @classmethod
+    def find_entries_for_item(cls, item):
+        """
+        Find all list entries associated with a given item.
+        
+        :param item: The item object to search for
+        :return: A list of UserListEntry objects associated with the item
+        """
+        item_model = item.__class__.__name__
+        item_id = item.id
+        return cls.query.filter_by(item_model=item_model, item_id=item_id).all()
 
 class UserAbility(db.Model): # User's ability to do something, disabilities to account for
     id: Mapped[int] = mapped_column(primary_key=True)

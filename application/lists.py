@@ -162,7 +162,23 @@ def get_userlist(item_model: str, parent_entry_item_id: int = None): #gets the p
             else:
                 list_id = lists[0].id
     userlist =  db.get_or_404(UserList, list_id)
+    newlist = []
+    print(f'List type: {type(userlist.entries)}')
+    for entry in userlist.entries:
+        print(f'List: {entry.user_list.list_name}, Order: {entry.order}')
+        #newlist.append(entry.get_item().as_list_item)
     return userlist
+
+def get_list_entries_for_item(item: object) -> List[UserListEntry]:
+    
+    # Find all list entries associated with this task
+    list_entries = UserListEntry.find_entries_for_item(item)
+
+    # Now you can iterate through the list entries
+    for entry in list_entries:
+        print(f"List: {entry.user_list.list_name}, Order: {entry.order}")
+
+    return list_entries
 
 def update_item_order(user_list_entry_id: int, new_order: int) -> Optional[UserListEntry]:
     item = db.session.scalars(db.select(UserListEntry).filter_by(id=user_list_entry_id)).one_or_none()

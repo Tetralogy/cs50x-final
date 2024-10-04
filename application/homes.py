@@ -70,6 +70,13 @@ def home_setup():
     if not current_home.home_size_sqm:
         print('home_size_sqm is None')
         return redirect(url_for('homes.home_size'))
+    if current_home.floors:
+        for floor in current_home.floors:
+            print(f'len(floor.rooms) {floor} = {len(floor.rooms)}')
+            if len(floor.rooms) == 0:
+                print(f'floor {floor.name} has no rooms')
+                flash(f'floor {floor.name} has no rooms' , category='danger')
+                return redirect(url_for('rooms.define_rooms', floor_id=floor.id))
     return redirect(url_for('rooms.define_rooms', floor_id=current_user.active_home.active_floor_id))
         
     

@@ -1,65 +1,67 @@
 {% extends "base/layout.html" %}
 {% block title %}
-    #todo Create New Home Form: rooms
+    Create New Home Form: rooms
 {% endblock %}
 
 {% block main %}
-<h1>create Rooms</h1>
-<ul class="nav nav-tabs">
-    {% for navfloor in floor_list | sort(attribute='order') %}
-        <li class="nav-item">
-            <a
-                class="nav-link {% if navfloor.item_id == current_user.active_home.active_floor_id %}active{% endif %}"
-                href="/home/rooms/setup/{{ navfloor.item_id }}"
-            >
-                {{ navfloor.get_item().name }}</a
-            >
-        </li>
-    {% endfor %}
-</ul> 
+    <h1>create Rooms</h1>
+    <ul class="nav nav-tabs">
+        {% for navfloor in floor_list | sort(attribute='order') | reverse %}
+            <li class="nav-item">
+                <a
+                    class="nav-link {% if navfloor.item_id == current_user.active_home.active_floor_id %}active{% endif %}"
+                    href="/home/rooms/setup/{{ navfloor.item_id }}"
+                >
+                    {{ navfloor.get_item().name }}</a
+                >
+            </li>
+        {% endfor %}
+    </ul>
 
-<h1>
-    now editing: {{ room_list.list_name }} floor {{ room_list.parent.get_item().name }} floor id:  {{ room_list.parent.get_item().id }} order:
-    {{ room_list.parent.order }}
-</h1>
-<form 
-    hx-post="/room/default"
-    hx-target="#default-room-types-container"
-    class="input-group mb-3"
->
-    <input
-        type="text"
-        class="form-control"
-        placeholder="New Room Type"
-        aria-label="New Room Type"
-        aria-describedby="basic-addon2"
-        name="custom_type"
-        id="custom_type"
-        hx-trigger="keyup[key=='Enter']"
-    />
-    <button class="btn btn-secondary" type="submit" id="button-addon2">
-        Add Custom Room Type
-    </button>
-</form>
+    <h1>
+        now editing: {{ room_list.list_name }} floor
+        {{ room_list.parent.get_item().name }} floor id:
+        {{ room_list.parent.get_item().id }} order: {{ room_list.parent.order }}
+    </h1>
+    <form
+        hx-post="/room/default"
+        hx-target="#default-room-types-container"
+        class="input-group mb-3"
+    >
+        <input
+            type="text"
+            class="form-control"
+            placeholder="New Room Type"
+            aria-label="New Room Type"
+            aria-describedby="basic-addon2"
+            name="custom_type"
+            id="custom_type"
+            hx-trigger="keyup[key=='Enter']"
+        />
+        <button class="btn btn-secondary" type="submit" id="button-addon2">
+            Add Custom Room Type
+        </button>
+    </form>
 
+    <div
+        class="row g-0 row-cols-4 container-fluid bg-dark border border-primary border-5 rounded-top-4 p-1"
+        id="default-room-types-container"
+        hx-get="/show_list/{{ defaults_list.id }}"
+        hx-trigger="load"
+    ></div>
+    <p>
+        place the room block in the square approximately where it might
+        physically be in real life as if this was a top down view
+    </p>
 
-        <div class="row g-0 row-cols-4 container-fluid bg-dark border border-success border-5 rounded-bottom-5"
-            id="default-room-types-container"
-            hx-get="/show_list/{{ defaults_list.id }}"
-            hx-trigger="load"
-    
-        >
-        </div>
+    <div
+        class="row g-0 row-cols-4 container-fluid bg-dark border border-success border-5 rounded-bottom-4 p-1"
+        id="room-list-container"
+        hx-get="/show_list/{{ room_list.id }}"
+        hx-trigger="load once"
+    ></div>
 
-            <div class="row g-0 row-cols-4 container-fluid bg-dark border border-primary border-5 rounded-top-5"
-                id="room-list-container"
-                hx-get="/show_list/{{ room_list.id }}"
-                hx-trigger="load once"
-                
-            >
-            </div>
-
-
+    <!-- prettier-ignore-start -->
 <script>
     document.addEventListener("htmx:load", function () {
     const types = document.getElementById("default-room-types-container");
@@ -131,9 +133,12 @@
         });
     });
 </script>
-        <button                 hx-get="/home/floor/edit/next"
-                hx-target="#onboarding-map">Save layout and go to next floor</button>
-                [ ] link to start walkthrough
+<!-- prettier-ignore-end -->
 
-
+<div >
+        <a class="btn btn-primary" href="/floorplan/next">
+            Save layout and edit next floor
+        </a>
+        [ ] link to start walkthrough
+</div>
 {% endblock %}

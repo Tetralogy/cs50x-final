@@ -1,5 +1,5 @@
 import os
-from flask import Blueprint, json, jsonify, redirect, render_template, request, url_for
+from flask import Blueprint, flash, json, jsonify, redirect, render_template, request, url_for
 from flask_login import current_user, login_required
 from sqlalchemy import select
 from application.extension import db
@@ -16,6 +16,9 @@ def define_rooms(floor_id: int=None):
     if request.method == 'GET':
         if floor_id is None:
             floor_id = current_user.active_home.active_floor_id
+        if floor_id is not None and floor_id not in [floor.id for floor in current_user.active_home.floors]:
+            flash(f'Invalid floor_id: {floor_id}', category='danger')
+            return redirect(url_for('floors.define_floors'))
         floor = set_active_floor(floor_id)
         floor_list = get_userlist('Floor').entries # if home_id has floors, get list of floors from userlists
         if current_user.active_home.floors.count() == 1: # if home has one floor, 

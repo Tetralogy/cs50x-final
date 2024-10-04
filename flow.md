@@ -26,19 +26,19 @@
         3. home size form ✅
             1. select approx home size ✅
         4. add rooms form ✴️ ⬅️ 
-            1. #todo list of room types as blocks with appropriate icons
-                1. Default room types (default.json [list of room types])
-                2. optional custom user created types
-            2. #todo edit floor layout form, tab denoting what floor is selected and currently editing
-                1. can select other floor to edit with tabs to switch to editing that floor
-                2. drop zone for new rooms
-                    1. Drag and drop a room type block into the area
-                        1. place the room block in the square approximately where it might physically be in real life
-                        2. Automatically +incriments the room type as a placeholder name (bedroom 1, bedroom 2, bedroom 3...)
-                        3. can activate the rename field on the room block by tapping/clicking the block once
-                        4. click and hold/move to drag and rearrange block
-                        5. Drag block out of area to delete a room
-            3. "confirm room layout/order for current floor" button
+            1. list of room types as blocks with appropriate icons
+                1. Default room types (default.json [list of room types]) ✅
+                2. optional custom user created types ✅
+            2. edit floor layout form, tab denoting what floor is selected and currently editing
+                1. can select other floor to edit with tabs to switch to editing that floor ✅
+                2. drop zone for new rooms ✅
+                    1. Drag and drop a room type block into the area ✅
+                        1. place the room block in the square approximately where it might physically be in real life ✅
+                        2. Automatically +incriments the room type as a placeholder name (bedroom 1, bedroom 2, bedroom 3...) ✅
+                        3. can activate the rename field on the room block by tapping/clicking the block once ✅
+                        4. click and hold/move to drag and rearrange block ✅
+                        5. Drag block out of area to delete a room ✅
+            3. #todo "confirm room layout/order for current floor" button ✴️ ⬅️ 
                 1. automatically opens the tab for the next floor that has no rooms confirmed
                 2. if a floor is not confirmed, it remains in the list of floors to edit
                 3. when the final floor is confirmed, go to the house map page

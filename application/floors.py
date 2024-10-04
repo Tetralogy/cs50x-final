@@ -1,9 +1,9 @@
 from flask import Blueprint, flash, jsonify, redirect, render_template, request, url_for
 from flask_login import current_user, login_required
-from sqlalchemy import select
+from sqlalchemy import asc, func, select
 from application.extension import db
-from application.database.models import Floor
-from application.lists import add_item_to_list, create_user_list, get_userlist
+from application.database.models import Floor, UserList
+from application.lists import add_item_to_list, create_user_list, get_list_entries_for_item, get_userlist
 
 
 floors = Blueprint('floors', __name__)
@@ -72,13 +72,35 @@ def new_floor_upper():
 @floors.route('/floorplan/<int:floor_id>', methods=['GET'])
 @login_required
 def floorplan(floor_id):
+
     print(f'edit_floor_rooms called with floor_id: {floor_id}')
     floor = db.get_or_404(Floor, floor_id)
     set_active_floor(floor_id)
     if floor.home_id != current_user.active_home_id:
         raise Exception('Floor not associated with user home or unauthorized')
     #floor_list = get_userlist('Floor')
-    return redirect(url_for('rooms.define_rooms'))
+    return redirect(url_for('rooms.define_rooms', floor_id=floor_id))
+
+@floors.route('/floorplan/next', methods=['GET'])
+@login_required
+def get_next_floor():
+    floor_list = get_userlist('Floor')
+    floor_list_ordered = sorted(floor_list.entries, key=lambda x: x.order)
+    #users = db.session.execute(db.select(User).order_by(User.username)).scalars()
+    print(f'floor_list_ordered: {floor_list_ordered}')
+    current_active_floor_list_entry = get_list_entries_for_item(current_user.active_home.active_floor)[0]
+    print(f'current_active_floor_list_entry.order: {current_active_floor_list_entry.order}')
+    next_floor_order = current_active_floor_list_entry.order -1
+    print(f'next_floor_order A: {next_floor_order}')
+    if next_floor_order < 0:
+        next_floor_order = len(floor_list_ordered) - 1
+    print(f'next_floor_order B: {next_floor_order}')
+        
+    next_floor_list_entry = floor_list_ordered[next_floor_order]
+    if not next_floor_list_entry:
+        raise Exception('No next floor')
+    next_floor_id = next_floor_list_entry.item_id
+    return redirect(url_for('floors.floorplan', floor_id=next_floor_id))
 '''#____________________________________________________________________________________________________________________#
     if request.method == 'GET':
         if db.session.execute(select(Floor).filter(Floor.home_id == current_user.active_home_id)).first(): #check if there is already a floor
