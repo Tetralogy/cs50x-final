@@ -9,7 +9,7 @@ from .extension import db
 
 crud = Blueprint('crud', __name__)
 
-@crud.route('/create_task', methods=['POST'])
+'''@crud.route('/create_task', methods=['POST'])
 @login_required
 def create_task():   
     if request.method == "POST":
@@ -117,11 +117,11 @@ def get_tasks():
     # Render the template with the retrieved tasks
     return render_template("tasklists/task_rows.html.jinja", tasks=tasks, page=page)
 
-'''def fetch_task_by_id(task_id):
+def fetch_task_by_id(task_id):
     task_query = select(Task).where(Task.task_id == task_id)
     task = db.session.execute(task_query).scalar_one_or_none()
     return task
-'''
+
 @crud.route('/get_task/<int:task_id>', methods=['GET'])
 @login_required
 def get_task(task_id):
@@ -188,4 +188,4 @@ def delete_task(task_id):
     flash(f"task_id: {task_id} successfully deleted", category="success")
     print(f"Flash message created: Task {task_id} deleted successfully")
 
-    return "", 200
+    return "", 200'''

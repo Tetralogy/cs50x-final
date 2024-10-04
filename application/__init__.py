@@ -1,7 +1,8 @@
 import functools
 import os
+from time import time
 from dotenv import load_dotenv
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 from flask_login import LoginManager
 from flask_migrate import Migrate
 from flask_session import Session
@@ -20,6 +21,18 @@ session = Session()
 
 def create_app(config_filename=None):
     app = Flask(__name__)
+    
+    @app.before_request
+    def before_request_time():
+        request.start_time = time()
+
+    @app.after_request
+    def after_request_time(response):
+        if hasattr(request, 'start_time'):
+            duration = time() - request.start_time
+            response.headers.add('X-Request-Duration', duration)
+            print(f"Request to {request.path} took {duration} seconds")
+        return response
 
     # Debug: Print current working directory
     #print(f"Current working directory: {os.getcwd()}")

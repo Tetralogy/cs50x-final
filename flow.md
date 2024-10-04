@@ -14,8 +14,9 @@
         1. [New home form](application/templates/homes/create_home.html.jinja)  ✅
             1. Home name: name ✅
             2. Type of home: select [apartment, condominium, house, trailer, van, tent, cardboard box, other()] ✅
-                1. in future references during home setup, the chosen specific home type word is used as the nound instead of "home" ✴️ (house, apartment, condo) 
-    2. ### xxx /home/setup ✴️ 
+
+               1.[ ] in future references during home setup, the chosen specific home type word is used as the nound instead of "home" ✴️ (house, apartment, condo) 
+    2. ### /home/setup ✅
         1. floor selection form ✅
         2. new floor button (stacked reorderable list) ✅
             1. Automatically prompts for rename field of new levels (added tooltip)  ✅
@@ -25,7 +26,7 @@
             5. set ground floor and move to next step ✅
         3. home size form ✅
             1. select approx home size ✅
-        4. add rooms form ✴️ ⬅️ 
+        4. add rooms form ✅
             1. list of room types as blocks with appropriate icons
                 1. Default room types (default.json [list of room types]) ✅
                 2. optional custom user created types ✅
@@ -38,23 +39,23 @@
                         3. can activate the rename field on the room block by tapping/clicking the block once ✅
                         4. click and hold/move to drag and rearrange block ✅
                         5. Drag block out of area to delete a room ✅
-            3. #todo "confirm room layout/order for current floor" button ✴️ ⬅️ 
-                1. automatically opens the tab for the next floor that has no rooms confirmed
-                2. if a floor is not confirmed, it remains in the list of floors to edit
-                3. when the final floor is confirmed, go to the house map page
+            3. "confirm room layout/order for current floor" button ✅
+                1. automatically opens the tab for the next floor that has no rooms confirmed ✅
+                2. if a floor is not confirmed, it remains in the list of floors to edit ✅
+                3. when the final floor is confirmed, go to the house map page ✅
 3. ## User performs innitial task collection walkthrough process
-    1. ### xxx /home/map/walkthrough/setup
-        1. list of rooms on the ground floor are presented on a layout map visually similar to the add rooms form
-            1. room blocks are not movable or directly editable in task map view
-            2. user is prompted to select the floor and room they are currently in
-            3. user is given a choice to select in order which rooms to include in a full walkthrough
-                1. user taps each room to select the order
-                    1. selected room gets block color change effect
-                    2. number of the order selected is applied to the block as a badge
-                2. selected blocks can be unselected by clicking again
-            4. they can choose not to select the room order themselves
+    1. ### xxx /home/walkthrough/setup ✴️
+        1. #todo: list of rooms on the ground floor are presented on a layout map visually similar to the add rooms form ✴️ ⬅️ 
+            1. #bug: room blocks are not movable or directly editable in task map view
+            2. #hack: user is prompted to select the floor and room they are currently in
+            3. #hack: user is given a choice to select in order which rooms to include in a full walkthrough
+                1. #hack: user taps each room to select the order
+                    1. #fixme selected room gets block color change effect
+                    2. #fixme number of the order selected is applied to the block as a badge
+                2. #fixme selected blocks can be unselected by clicking again
+            4. #todo: they can choose not to select the room order themselves
                 1. order is then determined by the layout order of the blocks
-            5. once all rooms in the level are selected, the user is prompted to go to the next floor
+            5. #todo: once all rooms in the level are selected, the user is prompted to go to the next floor
                 1. the user can choose to omit rooms if they navigate to another floor after making their selections for the current floor and confirming their selections when prompted
             6. User confirms walkthrough order
     2. ### xxx /walkthrough 

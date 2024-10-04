@@ -14,8 +14,7 @@ rooms = Blueprint('rooms', __name__)
 @login_required
 def define_rooms(floor_id: int=None):
     if request.method == 'GET':
-        if floor_id is None:
-            floor_id = current_user.active_home.active_floor_id
+        floor_id, has_rooms = floor_room_check(floor_id)
         if floor_id is not None and floor_id not in [floor.id for floor in current_user.active_home.floors]:
             flash(f'Invalid floor_id: {floor_id}', category='danger')
             return redirect(url_for('floors.define_floors'))
@@ -36,7 +35,8 @@ def define_rooms(floor_id: int=None):
         defaults_list = load_default_room_types()
         print(f'defaults_list: {defaults_list} (type: {type(defaults_list)})')  
         #create default room types list from default.json if it doesn't exist
-        return render_template('homes/create_rooms.html.jinja', floor_list=floor_list, room_list=room_list, defaults_list=defaults_list)
+        print(f'has_rooms: {has_rooms} (type: {type(has_rooms)})')
+        return render_template('homes/create_rooms.html.jinja', floor_list=floor_list, room_list=room_list, defaults_list=defaults_list, has_rooms=bool(has_rooms))
     return 'define rooms', 200
 
 @rooms.route('/room/default', methods=['GET', 'POST'])
@@ -81,12 +81,36 @@ def set_active_room(room_id):
         print(f'current_user.active_home.active_room: {current_user.active_home.active_room}')
         return room #the object of the current active room
     
+def floor_room_check(floor_id):
+    has_rooms = True
+    if floor_id is None:
+        for floor in current_user.active_home.floors: # check if all floors have rooms
+            print(f'len(floor.rooms) {floor} = {len(floor.rooms)}')
+            if len(floor.rooms) == 0:
+                print(f'floor {floor.name} has no rooms')
+                flash(f'floor {floor.name} has no rooms' , category='danger')
+                floor_id=floor.id
+                has_rooms = False
+                return floor_id, has_rooms
+            floor_id = current_user.active_home.active_floor_id
+    else:
+        floor = db.get_or_404(Floor, floor_id)
+        if len(floor.rooms) == 0:
+            print(f'floor {floor.name} has no rooms')
+            flash(f'floor {floor.name} has no rooms' , category='danger')
+            has_rooms = False
+            return floor_id, has_rooms
+        for floor in current_user.active_home.floors: # check if all floors have rooms
+            print(f'len(floor.rooms) {floor} = {len(floor.rooms)}')
+            if len(floor.rooms) == 0:
+                has_rooms = False
+    return floor_id, has_rooms
 #____________________________________________________________________________________________________________________#
 
 
 
 
-@rooms.route('/home/map/sort/<int:floor_id>', methods=['PUT'])
+'''@rooms.route('/home/map/sort/<int:floor_id>', methods=['PUT'])
 @login_required
 def update_map_layout(floor_id): 
     list_order = request.form.getlist('list_order')
@@ -130,7 +154,7 @@ def add_room(floor_id):
 
     # Return the new item's data
     return render_template('onboarding/parts/home/map/room_icon.html.jinja', floor=floor, room=new_room)
-    return new_room_name, 201 #[ ]: create appropriate icon and labels in html
+    return new_room_name, 201 
     return jsonify(
         id= new_room.room_id,
         name= new_room.room_name,
@@ -153,7 +177,7 @@ def rename_room(room_id):
         room.room_name = new_room_name
         return render_template('onboarding/parts/home/map/room_name_text.html.jinja', room=room)
     
-'''@rooms.route('/home/map/room/add/type', methods=['POST'])
+@rooms.route('/home/map/room/add/type', methods=['POST'])
 @login_required
 def add_room_type():
     custom_type = request.form.get('custom_type')
@@ -189,4 +213,5 @@ def add_room_type():
         user_custom_room_types = load_user_custom(data_type)
         #print(f'user_custom_room_types: {user_custom_room_types}')
         room_types = default_room_types + ([(custom) for custom in user_custom_room_types])
-        return room_types'''
+        return room_types
+        [ ] clean up unused routes when done and tested'''

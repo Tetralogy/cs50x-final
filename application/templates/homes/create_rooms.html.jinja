@@ -137,8 +137,13 @@
 
 <div >
         <a class="btn btn-primary" href="/floorplan/next">
-            Save layout and edit next floor
+            Edit next floor
         </a>
-        [ ] link to start walkthrough
+{% if has_rooms %}
+        <a class="btn btn-success" href="/map">
+            Map
+        </a>
+{% endif %}
+        
 </div>
 {% endblock %}

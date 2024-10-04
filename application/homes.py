@@ -71,7 +71,7 @@ def home_setup():
         print('home_size_sqm is None')
         return redirect(url_for('homes.home_size'))
     if current_home.floors:
-        for floor in current_home.floors:
+        for floor in current_home.floors: # check if all floors have rooms
             print(f'len(floor.rooms) {floor} = {len(floor.rooms)}')
             if len(floor.rooms) == 0:
                 print(f'floor {floor.name} has no rooms')
@@ -82,7 +82,7 @@ def home_setup():
     
 #________________________________________________________________________________#
     
-    
+    '''
     floor_ids_query = select(Floor.floor_id).where(Floor.home_id == current_home.home_id)
     floor_ids = db.session.execute(floor_ids_query).scalars().all()
     print(f'floor_ids: {floor_ids}')
@@ -118,7 +118,7 @@ def home_setup():
     return render_template('onboarding/parts/home/map/index.html.jinja', floor=current_home.active_floor)#temporary, 
     raise NotImplementedError('home_setup not yet finished')
 
-'''@homes.route('/home/name', methods=['GET', 'POST', 'PUT'])
+@homes.route('/home/name', methods=['GET', 'POST', 'PUT'])
 @login_required
 def name_home():
     print(f'current_user.active_home_id: {current_user.active_home_id}')
@@ -176,5 +176,5 @@ def get_map():
         edit_floor_layout(floors_without_rooms[0].floor_id)
     return render_template('map/index.html.jinja', floors=current_user.active_home.floors.all())
 
-
+[ ] cleanup unused routes when done and tested
 '''

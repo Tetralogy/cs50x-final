@@ -7,7 +7,7 @@ from application.database.models import Floor, Home, Room
 
 onboard = Blueprint('onboard', __name__)
 
-@onboard.route('/onboarding', methods=['GET'])
+'''@onboard.route('/onboarding', methods=['GET'])
 @login_required
 def onboarding():
     print('onboarding called')
@@ -27,7 +27,7 @@ def onboarding():
         return render_template('walkthrough/index.html.jinja') #go to walkthrough
     return render_template('onboarding/parts/home/index.html.jinja') #temporary, go to home setup
     
-    '''get the current home id when it is created
+    get the current home id when it is created
     room_ids = [room.room_id for room in current_user.room_ids]
     if not room_ids:
         print('rooms is empty')
@@ -35,15 +35,15 @@ def onboarding():
     
 
         
-    '''home_query = select(Home).where(Home.user_id == current_user.id)
+'''home_query = select(Home).where(Home.user_id == current_user.id)
     home_id = db.session.execute(home_query).scalars().first()
     
     if currentuser has no home id
     if current_user has no room id
     if current_user has no tasks
-    if current_user has no status'''
-    """ raise NotImplementedError("onboarding not yet implemented") """
-    #return '', 204
+    if current_user has no status
+    raise NotImplementedError("onboarding not yet implemented")
+    
     
 @onboard.route('/start', methods=['GET'])
 @login_required
@@ -91,3 +91,4 @@ def progress_update():
     
     db.session.commit()
     return '', 204
+    [ ] clean up unused routes when done and tested'''

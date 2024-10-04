@@ -126,3 +126,5 @@ def sitemap():
             url = url_for(rule.endpoint, _external=True)
             links.append(url)
     return render_template('base/parts/sitemap.html', links=links)
+
+# [ ] cleanup unused routes when done and tested

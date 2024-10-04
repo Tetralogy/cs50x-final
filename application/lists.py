@@ -319,3 +319,5 @@ def rename_item(item_model, item_id):
         print(f'renaming item_model: {item_model}, item_id: {item_id} to {new_name}')
         db.session.commit()
         return item.name, 200
+
+# [ ] Cleanup unused routes when finished and testing complete

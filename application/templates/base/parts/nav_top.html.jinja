@@ -22,7 +22,7 @@
                     <a class="nav-link" href="{{ url_for('account.profile') }}"
                         >Profile</a
                     >
-                    {% if onboarded %}
+                    
                         <li class="nav-item">
                             <a
                                 class="nav-link"
@@ -33,19 +33,19 @@
                         <li class="nav-item">
                             <a
                                 class="nav-link"
-                                href="{{ url_for('main.new_task') }}"
-                                >new_task</a
+                                href="{{ url_for('main.map') }}"
+                                >Map</a
                             >
                         </li>
-                    {% else %}
+                    
                         <li class="nav-item">
                             <a
                                 class="nav-link"
-                                href="{{ url_for('onboard.start') }}"
-                                >Get Started</a
+                                href="{{ url_for('main.tasklist') }}"
+                                >Tasks</a
                             >
                         </li>
-                    {% endif %}
+                    
                 </li>
 
                 <li>
