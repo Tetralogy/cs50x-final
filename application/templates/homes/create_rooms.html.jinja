@@ -100,11 +100,23 @@
                 pull: true, // Prevent pulling from this list
             },
             animation: 150,
-            ghostClass: "blue-background-class",
-            filter: ".htmx-indicator",
-            handle: ".handle",
+            ghostClass: "ghost",
+            
+            
             removeOnSpill: true, // Enable plugin
             // Called when item is spilled
+            onMove: function (evt) {
+                console.log("evt.relatedRect " + evt.relatedRect.id);
+                // Check if the dragged item is outside of the valid container (drop zone)
+                if (!evt.to) {
+                console.log('Dragging out of the target drop zone');
+                //evt.dragged.classList.add('out-of-zone'); // Optional: Add visual feedback
+                } else {
+                console.log('Dragging within a valid drop zone');
+                //evt.dragged.classList.remove('out-of-zone'); // Optional: Remove visual feedback
+                }
+            },
+            
             onSpill: function (/**Event*/ evt) { //[ ]: when dragging and holding over spill area, show delete x
                 evt.item; // The spilled item
                 console.log("spill");
@@ -116,9 +128,9 @@
                 },
             onAdd: function (/**Event*/ evt) {
                 console.log("onAdd event triggered");
-                var itemEl = evt.item; // dragged HTMLElement
-                var addedRoomType = itemEl.dataset.name;
-                var newIndex = evt.newIndex;
+                const itemEl = evt.item; // dragged HTMLElement
+                const addedRoomType = itemEl.dataset.name;
+                const newIndex = evt.newIndex;
                 console.log('addedRoomType: ' + addedRoomType + 'new index: ' + newIndex);
 
                 // Make an htmx AJAX request to the server

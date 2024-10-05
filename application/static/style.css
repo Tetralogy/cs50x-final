@@ -322,3 +322,9 @@ form.htmx-request {
     cursor: move;
     cursor: -webkit-grabbing;
   }
+
+/* ghostClass */
+.ghost {
+    opacity: .5;
+    background: #C8EBFB;
+  }
