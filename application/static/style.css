@@ -327,4 +327,13 @@ form.htmx-request {
 .ghost {
     opacity: .5;
     background: #C8EBFB;
-  }
+}
+
+.ghost-red {
+opacity: .5;
+background: #ff0000;
+}
+
+.room-list-form {
+    background: #31d774;
+}

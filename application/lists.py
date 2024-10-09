@@ -249,14 +249,14 @@ def add_to_list(list_id):
 @lists.route('/create/<string:item_model>/<int:list_id>', methods=['POST'])
 @login_required
 def create_item_and_entry(item_model, list_id, item_id=None):
-    order = request.form.get('order')
-    if order is None or order == '':
-        order = None
+    order_index = request.form.get('order_index')
+    if order_index is None or order_index == '':
+        order_index = None
     else:
-        order = int(order)
+        order_index = int(order_index)
     name = request.form.get('name')
-    print(f'item_model: {item_model}, list_id: {list_id}, item_id: {item_id}, order: {order}, name: {name}')
-    new_item = add_item_to_list(list_id, item_model, item_id, order, name)
+    print(f'item_model: {item_model}, list_id: {list_id}, item_id: {item_id}, order: {order_index}, name: {name}')
+    new_item = add_item_to_list(list_id, item_model, item_id, order_index, name)
     
     flash(f'Item added to list: {new_item.item_model} {new_item.item_id}')
     return render_template('lists/model/' + new_item.item_model.lower() + '.html.jinja', entry=new_item) #redirect(url_for('lists.update_list_order', list_id=list_id))
@@ -273,7 +273,7 @@ def delete(list_id, user_list_entry_id):
 @lists.route('/update_list_order/<int:list_id>', methods=['PUT', 'POST', 'DELETE', 'GET'])
 @login_required
 def update_list_order(list_id):
-    order = request.form.getlist('order')
+    order = request.form.getlist('items')
     print(f'list_id: {list_id}, order1: {order}')
     if order is None or len(order) == 0:
         userlist = db.get_or_404(UserList, list_id)
@@ -281,7 +281,7 @@ def update_list_order(list_id):
         print(f'UserList {userlist.list_name} order2: {order}')
         if order is None or len(order) == 0:
             flash(f'No items in list {userlist.list_name}')
-            return redirect(url_for('lists.show_list', list_id=list_id))
+            return ('', 204) #redirect(url_for('lists.show_list', list_id=list_id))
 
     # Extract the IDs if they are UserListEntry objects
     if hasattr(order[0], 'id'):
@@ -291,7 +291,7 @@ def update_list_order(list_id):
         print(f'Updating item_id: {item_id} item_name: {db.get_or_404(UserListEntry, item_id).get_item().name} with new order: {index}')
         update_item_order(item_id, index)
     flash('List order updated')
-    return redirect(url_for('lists.show_list', list_id=list_id))
+    return ('', 204) #redirect(url_for('lists.show_list', list_id=list_id))
 
 @lists.route('/show_list/<int:list_id>', methods=['GET', 'POST', 'PUT', 'DELETE'])
 @login_required

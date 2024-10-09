@@ -4,7 +4,7 @@
 {% endblock %}
 
 {% block main %}
-    <h1>create Rooms</h1>
+<h1>create Rooms</h1>
     <ul class="nav nav-tabs">
         {% for navfloor in floor_list | sort(attribute='order') | reverse %}
             <li class="nav-item">
@@ -42,91 +42,59 @@
             Add Custom Room Type
         </button>
     </form>
+    
+        <div
+            class="row g-0 row-cols-4 container-fluid bg-dark border border-primary border-5 rounded-top-4 p-1"
+            id="default-room-types-container"
+            hx-get="/show_list/{{ defaults_list.id }}"
+            hx-trigger="load"
+        ></div>
+        <p>
+            place the room block in the square approximately where it might
+            physically be in real life as if this was a top down view
+        </p>
+<form id="room-list-form"             class="row g-0 row-cols-4 container-fluid bg-dark border border-success border-5 rounded-bottom-4 p-1"
+hx-put="/update_list_order/{{ room_list.id }}" hx-trigger="end, htmx:afterSwap">
+<div class="htmx-indicator">Updating...</div>
+        <div
+            class="row g-0 row-cols-4 container-fluid bg-dark border border-success border-5 rounded-bottom-4 p-1"
+            id="room-list-container"
+            hx-get="/show_list/{{ room_list.id }}"
+            hx-trigger="load once"
+            hx-swap="outerHTML"
+        ></div>
+</form>
 
-    <div
-        class="row g-0 row-cols-4 container-fluid bg-dark border border-primary border-5 rounded-top-4 p-1"
-        id="default-room-types-container"
-        hx-get="/show_list/{{ defaults_list.id }}"
-        hx-trigger="load"
-    ></div>
-    <p>
-        place the room block in the square approximately where it might
-        physically be in real life as if this was a top down view
-    </p>
-
-    <div
-        class="row g-0 row-cols-4 container-fluid bg-dark border border-success border-5 rounded-bottom-4 p-1"
-        id="room-list-container"
-        hx-get="/show_list/{{ room_list.id }}"
-        hx-trigger="load once"
-    ></div>
-
-    <!-- prettier-ignore-start -->
 <script>
-    document.addEventListener("htmx:load", function () {
-    const types = document.getElementById("default-room-types-container");
-    const sortmap = document.getElementById("room-list-container");
+    console.log('htmx.onLoad triggered');
 
-    function triggerUpdateOrder(evt) {
-            console.log("onEnd event triggered");
-            const newOrder = Array.from(sortmap.children).map(
-                (li) => li.dataset.id,
-            ); 
-            console.log('newOrder: ' + newOrder);
-            htmx.ajax("PUT", "/update_list_order/{{ room_list.id }}", {
-                target: "#room-list-container",
-                swap: "innerHTML",
-                values: { order: newOrder },
-            });
-        }
+const typeslist = document.getElementById("default-room-types-container");
 
-    new Sortable(types, {
+    new Sortable(typeslist, {
         group: {
-            name: "shared",
+            name: 'typeslist',
             pull: "clone",
             put: false, // Do not allow items to be put into this list
         },
         animation: 150,
         sort: false,
         cursor: "move",
-        onEnd: triggerUpdateOrder
     });
-
-        
-        console.log('sortmap: ' + sortmap);
-        new Sortable(sortmap, { 
+    
+    const roomlist = document.getElementById('room-list-form');
+    const roomsort = new Sortable(roomlist, {
             group: {
-                name: "shared",
-                pull: true, // Prevent pulling from this list
+                name: 'roomlist',
+                pull: true,
+                put: true,
             },
-            animation: 150,
-            ghostClass: "ghost",
-            
-            
-            removeOnSpill: true, // Enable plugin
-            // Called when item is spilled
-            onMove: function (evt) {
-                console.log("evt.relatedRect " + evt.relatedRect.id);
-                // Check if the dragged item is outside of the valid container (drop zone)
-                if (!evt.to) {
-                console.log('Dragging out of the target drop zone');
-                //evt.dragged.classList.add('out-of-zone'); // Optional: Add visual feedback
-                } else {
-                console.log('Dragging within a valid drop zone');
-                //evt.dragged.classList.remove('out-of-zone'); // Optional: Remove visual feedback
-                }
+        animation: 150,
+        filter: ".htmx-indicator",
+        onMove: function (evt) {
+            console.log('Moving:', evt.related); // Log the element being moved
+            return evt.related.className.indexOf('htmx-indicator') === -1;
             },
-            
-            onSpill: function (/**Event*/ evt) { //[ ]: when dragging and holding over spill area, show delete x
-                evt.item; // The spilled item
-                console.log("spill");
-                console.log("delete evt.item.dataset.id: " + evt.item.dataset.id);
-                htmx.ajax("DELETE", "/delete/" + {{room_list.id}} + "/" + evt.item.dataset.id, {
-                    target: "#room-list-container",
-                    swap: "innerHTML",
-                    });
-                },
-            onAdd: function (/**Event*/ evt) {
+        onAdd: function (/**Event*/ evt) {
                 console.log("onAdd event triggered");
                 const itemEl = evt.item; // dragged HTMLElement
                 const addedRoomType = itemEl.dataset.name;
@@ -135,17 +103,27 @@
 
                 // Make an htmx AJAX request to the server
                 htmx.ajax("POST", "/create/Room/{{ room_list.id }}", {
-                    values: { name: addedRoomType, order: newIndex },
+                    values: { name: addedRoomType, order_index: newIndex },
                     target: itemEl,
                     swap: "outerHTML", // returns the new content
                 });
-                
             },
-            onEnd: triggerUpdateOrder
-        });
+            //Disable sorting on the `end` event
+        onEnd: function (evt) {
+            console.log('onEnd event triggered');
+            this.option("disabled", true);
+            }
+    });
+
+    // Re-enable sorting on the `htmx:afterSwap` event
+    roomlist.addEventListener("htmx:afterOnLoad", function() {
+    console.log('htmx:afterOnLoad event triggered');
+    console.log('roomsort:', roomsort);
+    roomsort.option("disabled", false);
     });
 </script>
-<!-- prettier-ignore-end -->
+
+#BUG: redo removeOnSpill
 
 <div >
         <a class="btn btn-primary" href="/floorplan/next">
