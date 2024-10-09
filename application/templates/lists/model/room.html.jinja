@@ -4,6 +4,7 @@
     data-id="{{ entry.id }}"
     data-name="{{ entry.get_item().name }}"
 >
+<div id="drag-outside-indicator" style="display: none; position: fixed; z-index: 1000;">🚫</div>
 <input type='hidden' name='items' value='{{ entry.id }}'/>
 <div class="input-group flex-nowrap mb-0">
             <span

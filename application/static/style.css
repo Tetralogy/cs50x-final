@@ -337,3 +337,8 @@ background: #ff0000;
 .room-list-form {
     background: #31d774;
 }
+
+#drag-outside-indicator {
+    font-size: 2rem;
+    color: red;
+}

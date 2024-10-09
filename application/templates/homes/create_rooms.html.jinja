@@ -4,7 +4,7 @@
 {% endblock %}
 
 {% block main %}
-<h1>create Rooms</h1>
+    <h1>create Rooms</h1>
     <ul class="nav nav-tabs">
         {% for navfloor in floor_list | sort(attribute='order') | reverse %}
             <li class="nav-item">
@@ -42,20 +42,24 @@
             Add Custom Room Type
         </button>
     </form>
-    
-        <div
-            class="row g-0 row-cols-4 container-fluid bg-dark border border-primary border-5 rounded-top-4 p-1"
-            id="default-room-types-container"
-            hx-get="/show_list/{{ defaults_list.id }}"
-            hx-trigger="load"
-        ></div>
-        <p>
-            place the room block in the square approximately where it might
-            physically be in real life as if this was a top down view
-        </p>
-<form id="room-list-form"             class="row g-0 row-cols-4 container-fluid bg-dark border border-success border-5 rounded-bottom-4 p-1"
-hx-put="/update_list_order/{{ room_list.id }}" hx-trigger="end, htmx:afterSwap">
-<div class="htmx-indicator">Updating...</div>
+
+    <div
+        class="row g-0 row-cols-4 container-fluid bg-dark border border-primary border-5 rounded-top-4 p-1"
+        id="default-room-types-container"
+        hx-get="/show_list/{{ defaults_list.id }}"
+        hx-trigger="load"
+    ></div>
+    <p>
+        place the room block in the square approximately where it might
+        physically be in real life as if this was a top down view
+    </p>
+    <form
+        id="room-list-form"
+        class="row g-0 row-cols-4 container-fluid bg-dark border border-success border-5 rounded-bottom-4 p-1"
+        hx-put="/update_list_order/{{ room_list.id }}"
+        hx-trigger="end, htmx:afterSwap"
+    >
+        <div class="htmx-indicator">Updating...</div>
         <div
             class="row g-0 row-cols-4 container-fluid bg-dark border border-success border-5 rounded-bottom-4 p-1"
             id="room-list-container"
@@ -63,45 +67,63 @@ hx-put="/update_list_order/{{ room_list.id }}" hx-trigger="end, htmx:afterSwap">
             hx-trigger="load once"
             hx-swap="outerHTML"
         ></div>
-</form>
+    </form>
 
-<script>
-    console.log('htmx.onLoad triggered');
+    <script>
+        console.log("htmx.onLoad triggered");
 
-const typeslist = document.getElementById("default-room-types-container");
+        const typeslist = document.getElementById(
+            "default-room-types-container",
+        );
 
-    new Sortable(typeslist, {
-        group: {
-            name: 'typeslist',
-            pull: "clone",
-            put: false, // Do not allow items to be put into this list
-        },
-        animation: 150,
-        sort: false,
-        cursor: "move",
-    });
-    
-    const roomlist = document.getElementById('room-list-form');
-    const roomsort = new Sortable(roomlist, {
+        new Sortable(typeslist, {
             group: {
-                name: 'roomlist',
+                name: "typeslist",
+                pull: "clone",
+                put: false, // Do not allow items to be put into this list
+            },
+            animation: 150,
+            sort: false,
+            cursor: "move",
+        });
+
+        const roomlist = document.getElementById("room-list-form");
+        const roomsort = new Sortable(roomlist, {
+            group: {
+                name: "roomlist",
                 pull: true,
                 put: true,
             },
-        animation: 150,
-        filter: ".htmx-indicator",
-        onMove: function (evt) {
-            console.log('Moving:', evt.related); // Log the element being moved
-            return evt.related.className.indexOf('htmx-indicator') === -1;
+            animation: 150,
+            filter: ".htmx-indicator",
+            removeOnSpill: true,
+            onMove: function (evt) {
+                console.log("Moving:", evt.related); // Log the element being moved
+                return evt.related.className.indexOf("htmx-indicator") === -1;
             },
-        onAdd: function (/**Event*/ evt) {
+            onSpill: function (/**Event*/ evt) {
+                evt.item; // The spilled item
+                showDragOutsideIndicator(evt.clientX, evt.clientY);
+                console.log("spill");
+                console.log(
+                    "delete evt.item.dataset.id: " + evt.item.dataset.id,
+                );
+                htmx.ajax("DELETE", "/delete/" + {{room_list.id}} + "/" + evt.item.dataset.id);
+                hideDragOutsideIndicator();
+            },
+            onAdd: function (/**Event*/ evt) {
                 console.log("onAdd event triggered");
                 const itemEl = evt.item; // dragged HTMLElement
                 const addedRoomType = itemEl.dataset.name;
                 const newIndex = evt.newIndex;
-                console.log('addedRoomType: ' + addedRoomType + 'new index: ' + newIndex);
+                console.log(
+                    "addedRoomType: " +
+                        addedRoomType +
+                        "new index: " +
+                        newIndex,
+                );
 
-                // Make an htmx AJAX request to the server
+                // Make an htmx AJAX request to the server to create a new room
                 htmx.ajax("POST", "/create/Room/{{ room_list.id }}", {
                     values: { name: addedRoomType, order_index: newIndex },
                     target: itemEl,
@@ -109,31 +131,61 @@ const typeslist = document.getElementById("default-room-types-container");
                 });
             },
             //Disable sorting on the `end` event
-        onEnd: function (evt) {
-            console.log('onEnd event triggered');
-            this.option("disabled", true);
+            onEnd: function (evt) {
+                console.log("onEnd event triggered");
+                this.option("disabled", true);
+            },
+        });
+
+        // Re-enable sorting on the `htmx:afterSwap` event
+        roomlist.addEventListener("htmx:afterOnLoad", function () {
+            console.log("htmx:afterOnLoad event triggered");
+            console.log("roomsort:", roomsort);
+            roomsort.option("disabled", false);
+        });
+
+        // Function to show the indicator
+        function showDragOutsideIndicator(x, y) {
+            const indicator = document.getElementById("drag-outside-indicator");
+            indicator.style.left = `${x}px`;
+            indicator.style.top = `${y}px`;
+            indicator.style.display = "block";
+        }
+
+        // Function to hide the indicator
+        function hideDragOutsideIndicator() {
+            const indicator = document.getElementById("drag-outside-indicator");
+            indicator.style.display = "none";
+        }
+
+        // Add event listeners to track dragging outside the area
+        document.addEventListener("dragover", function (e) {
+            const sortableArea = document.getElementById("room-list-form"); // replace with your sortable area ID
+            const rect = sortableArea.getBoundingClientRect();
+            console.log("dragover" + rect);
+            if (
+                e.clientX < rect.left ||
+                e.clientX > rect.right ||
+                e.clientY < rect.top ||
+                e.clientY > rect.bottom
+            ) {
+                showDragOutsideIndicator(e.clientX, e.clientY);
+            } else {
+                hideDragOutsideIndicator();
             }
-    });
+        });
 
-    // Re-enable sorting on the `htmx:afterSwap` event
-    roomlist.addEventListener("htmx:afterOnLoad", function() {
-    console.log('htmx:afterOnLoad event triggered');
-    console.log('roomsort:', roomsort);
-    roomsort.option("disabled", false);
-    });
-</script>
+        document.addEventListener("drop", function () {
+            hideDragOutsideIndicator();
+        });
+    </script>
 
-#BUG: redo removeOnSpill
+    #BUG: redo removeOnSpill
 
-<div >
-        <a class="btn btn-primary" href="/floorplan/next">
-            Edit next floor
-        </a>
-{% if has_rooms %}
-        <a class="btn btn-success" href="/map">
-            Map
-        </a>
-{% endif %}
-        
-</div>
+    <div>
+        <a class="btn btn-primary" href="/floorplan/next"> Edit next floor </a>
+        {% if has_rooms %}
+            <a class="btn btn-success" href="/map"> Map </a>
+        {% endif %}
+    </div>
 {% endblock %}
