@@ -1,16 +1,20 @@
 {% for category, message in messages %}
-    <div class="alert alert-{{ category }} flash-message" 
+{% if category == "message" or category == "" %}
+    {% set category = "info" %}
+{% endif %}
+    <li class="alert alert-{{ category }} alert-dismissible fade show flash-message" 
         role="alert"
         hx-get="/remove-flash"
         hx-trigger="load delay:5s"
         hx-swap="outerHTML swap:1s">
-            {{ message }}
+            message: {{ message }} , category: {{ category }}
             <button 
                     hx-get="/remove-flash"
                     hx-target="closest div"
                     hx-swap="outerHTML swap:1s"
                     aria-label="Close">
                 <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
+        </button>  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+
+    </li>
 {% endfor %}

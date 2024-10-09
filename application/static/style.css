@@ -43,6 +43,7 @@ nav {
 
 .flash-message.htmx-swapping {
     opacity: 0;
+    transition: opacity 1s ease-out;
 }
 .left-wrapper {
     float: left;

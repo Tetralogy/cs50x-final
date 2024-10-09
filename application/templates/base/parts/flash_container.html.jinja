@@ -1,8 +1,6 @@
-        <div id="flash-messages-container" class="flash-container">
-            <div id="flash-messages"
+        <ul id="flash-messages-container" class="flash-container sortable"
                 hx-get="/get-flash-messages"
-                hx-trigger="flashUpdate from:body, load"
-                hx-swap="beforeend">
+                hx-trigger="load, click from:body"
+                hx-swap="beforeend"> #TODO: Make container scrollable box
                     {% include 'base/parts/flash_messages.html.jinja' %}
-            </div>
-        </div>
+        </ul>

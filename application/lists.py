@@ -258,16 +258,16 @@ def create_item_and_entry(item_model, list_id, item_id=None):
     print(f'item_model: {item_model}, list_id: {list_id}, item_id: {item_id}, order: {order_index}, name: {name}')
     new_item = add_item_to_list(list_id, item_model, item_id, order_index, name)
     
-    flash(f'Item added to list: {new_item.item_model} {new_item.item_id}')
+    flash(f'Item added to list: {new_item.item_model} {new_item.item_id}', 'success')
     return render_template('lists/model/' + new_item.item_model.lower() + '.html.jinja', entry=new_item) #redirect(url_for('lists.update_list_order', list_id=list_id))
 
 @lists.route('/delete/<int:list_id>/<int:user_list_entry_id>', methods=['DELETE'])
 @login_required
 def delete(list_id, user_list_entry_id):
     if delete_entry_and_item(user_list_entry_id):
-        flash(f'list_id: {list_id} user_list_entry_id: {user_list_entry_id} Item deleted')
+        flash(f'list_id: {list_id} user_list_entry_id: {user_list_entry_id} Item deleted', 'danger')
     else:
-        flash('Item not found', 'error')
+        flash('Item not found', 'danger')
     return redirect(url_for('lists.update_list_order', list_id=list_id))
 
 @lists.route('/update_list_order/<int:list_id>', methods=['PUT', 'POST', 'DELETE', 'GET'])
