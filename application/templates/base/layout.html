@@ -104,9 +104,13 @@
 
             // Add event listeners to elements that should trigger the tooltip clearing
             document
-                .querySelectorAll("input, select, textarea, span, div")
+                .querySelectorAll("input, select, textarea, span, div, body")
                 .forEach((element) => {
                     element.addEventListener("click", function () {
+                        clearTooltips();
+                        initializeTooltips();
+                    });
+                    element.addEventListener("drag", function () {
                         clearTooltips();
                         initializeTooltips();
                     });

@@ -1,12 +1,12 @@
 <div 
-    class="col glyphicon-move"
+    class="col"
     id="{{ entry.item_model }}list-{{ entry.id }}"
     data-id="{{ entry.id }}"
     data-name="{{ entry.get_item().name }}"
 >
     <div class="input-group flex-nowrap mb-0"
     >
-        <span class="input-group-text"
+        <span class="input-group-text glyphicon-move"
             data-bs-toggle="tooltip"
             data-bs-html="true"
             data-bs-title="<u>Drag</u> to <b>create</b> {{ entry.get_item().name }}"
@@ -15,7 +15,7 @@
         </span>
     
     
-        <span class="input-group-text">({{ entry.order }})</span>
+        <span class="input-group-text glyphicon-move">({{ entry.order }})</span>
     
     </div>
     
