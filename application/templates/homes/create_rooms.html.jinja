@@ -4,7 +4,7 @@
 {% endblock %}
 
 {% block main %}
-#BUG: sort stops working when switching floors 
+#BUG: default room name form undefined?
 #BUG: IMPLEMENT room name renaming on double click
     <h1>create Rooms</h1>
     <ul class="nav nav-tabs">
@@ -73,6 +73,7 @@
 #BUG: add click to rename room function
 
     <script>
+    (() => { // fix for error Uncaught SyntaxError: redeclaration of const typeslist
         console.log("htmx.onLoad triggered");
 
         const typeslist = document.getElementById(
@@ -89,7 +90,6 @@
             sort: false,
             cursor: "move",
         });
-
         const roomlist = document.getElementById("room-list-form");
         const roomsort = new Sortable(roomlist, {
             group: {
@@ -150,6 +150,7 @@
         // Function to show the indicator
         function showDragOutsideIndicator(x, y) {
             const indicator = document.getElementById("drag-outside-indicator");
+            console.log("showDragOutsideIndicator", x, y);
             indicator.style.left = `${x}px`;
             indicator.style.top = `${y}px`;
             indicator.style.display = "block";
@@ -163,9 +164,10 @@
 
         // Add event listeners to track dragging outside the area
         document.addEventListener("dragover", function (e) {
-            const sortableArea = document.getElementById("room-list-form"); // replace with your sortable area ID
+            const sortableArea = document.getElementById("room-list-form");
             const rect = sortableArea.getBoundingClientRect();
-            console.log("dragover" + rect);
+
+            //console.log("dragover" + rect);
             if (
                 e.clientX < rect.left ||
                 e.clientX > rect.right ||
@@ -176,11 +178,13 @@
             } else {
                 hideDragOutsideIndicator();
             }
+            
         });
 
         document.addEventListener("drop", function () {
             hideDragOutsideIndicator();
         });
+        })();
     </script>
 
     <div>
