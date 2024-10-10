@@ -70,7 +70,6 @@
             hx-swap="outerHTML"
         ></div>
     </form>
-#BUG: add click to rename room function
 
     <script>
     (() => { // fix for error Uncaught SyntaxError: redeclaration of const typeslist
@@ -98,7 +97,7 @@
                 put: true,
             },
             animation: 150,
-            filter: ".htmx-indicator",
+            filter: ".htmx-indicator, .rename",
             removeOnSpill: true,
             onMove: function (evt) {
                 console.log("Moving:", evt.related); // Log the element being moved
@@ -145,6 +144,19 @@
             console.log("htmx:afterOnLoad event triggered");
             console.log("roomsort:", roomsort);
             roomsort.option("disabled", false);
+            // check for focus events to let the user type
+            document
+                .querySelectorAll("input")
+                .forEach((element) => {
+                    element.addEventListener("focus", function () {
+                        console.log("focus");
+                        roomsort.option("disabled", true);
+                    });
+                    element.addEventListener("blur", function () {
+                        console.log("blur");
+                        roomsort.option("disabled", false);
+                    });
+                });
         });
 
         // Function to show the indicator
@@ -185,6 +197,19 @@
             hideDragOutsideIndicator();
         });
         })();
+
+        document
+                .querySelectorAll("input")
+                .forEach((element) => {
+                    element.addEventListener("focus", function () {
+                        console.log("focus");
+                        roomsort.option("disabled", true);
+                    });
+                    element.addEventListener("blur", function () {
+                        console.log("blur");
+                        roomsort.option("disabled", false);
+                    });
+                });
     </script>
 
     <div>

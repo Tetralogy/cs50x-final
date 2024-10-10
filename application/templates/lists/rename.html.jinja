@@ -1,6 +1,6 @@
         <input
             required
-            class="input-group-text"
+            class="input-group-text rename"
             type="text"
             id="input_{{ entry.item_model }}_name-{{ entry.item_id }}"
             name="input_{{ entry.item_model }}_name-{{ entry.item_id }}"
@@ -8,7 +8,8 @@
             hx-put="/rename/{{ entry.item_model }}/{{ entry.item_id }}"
             hx-vals='{"placeholder": "{{ entry.get_item().name }}"}'
             hx-target="this"
-            hx-trigger="blur, change"
+            hx-trigger="blur, keyup changed delay:1s, drag from:window"
             hx-swap="outerHTML"
             value="{{ entry.get_item().name }}"
+            hx-on::load="this.focus();"
         />
