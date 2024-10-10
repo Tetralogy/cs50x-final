@@ -300,24 +300,36 @@ def show_list(list_id):
     return render_template('lists/list.html.jinja', list_obj=db.get_or_404(UserList, list_id))
 
 
-@lists.route('/rename/<string:item_model>/<int:item_id>', methods=['PUT'])
+@lists.route('/rename/<string:item_model>/<int:item_id>', methods=['GET', 'PUT'])
 @login_required
 def rename_item(item_model, item_id):
-    prev_name = request.form.get('placeholder')
     model_class = globals().get(item_model)
     if not model_class or not issubclass(model_class, db.Model):
         raise ValueError(f'Unknown item type {item_model}')
+    
     item = db.get_or_404(model_class, item_id)
-    print(request.form)
-    new_name = request.form.get(f'input_{item_model}_name-{item_id}')
-    if not new_name or new_name == '':
-        print(f'prev_name: {prev_name}')
-        return prev_name, 200
-    if item:
-        print(f'Found item: {item.name} to rename to: {new_name}')
-        item.name = new_name
-        print(f'renaming item_model: {item_model}, item_id: {item_id} to {new_name}')
-        db.session.commit()
-        return item.name, 200
+    
+    entry = get_list_entries_for_item(item)[0]
+    
+    if request.method == 'GET':
+        return render_template('lists/rename.html.jinja', entry=entry)
+    if request.method == 'PUT':
+        prev_name = request.form.get('placeholder')
+        model_class = globals().get(item_model)
+        if not model_class or not issubclass(model_class, db.Model):
+            raise ValueError(f'Unknown item type {item_model}')
+        item = db.get_or_404(model_class, item_id)
+        print(request.form)
+        new_name = request.form.get(f'input_{item_model}_name-{item_id}')
+        if not new_name or new_name == '':
+            print(f'prev_name: {prev_name}')
+            return render_template('lists/name.html.jinja', entry=entry)
+            #return prev_name, 200
+        if item:
+            print(f'Found item: {item.name} to rename to: {new_name}')
+            item.name = new_name
+            print(f'renaming item_model: {item_model}, item_id: {item_id} to {new_name}')
+            db.session.commit()
+            return render_template('lists/name.html.jinja', entry=entry)
 
 # [ ] Cleanup unused routes when finished and testing complete

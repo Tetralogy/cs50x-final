@@ -4,8 +4,8 @@
 {% endblock %}
 
 {% block main %}
-#BUG: default room name form undefined?
-#BUG: IMPLEMENT room name renaming on double click
+
+#BUG: page refreshes on enter rename
     <h1>create Rooms</h1>
     <ul class="nav nav-tabs">
         {% for navfloor in floor_list | sort(attribute='order') | reverse %}

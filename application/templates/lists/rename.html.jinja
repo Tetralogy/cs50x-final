@@ -1,0 +1,14 @@
+        <input
+            required
+            class="input-group-text"
+            type="text"
+            id="input_{{ entry.item_model }}_name-{{ entry.item_id }}"
+            name="input_{{ entry.item_model }}_name-{{ entry.item_id }}"
+            placeholder="{{ entry.get_item().name }}"
+            hx-put="/rename/{{ entry.item_model }}/{{ entry.item_id }}"
+            hx-vals='{"placeholder": "{{ entry.get_item().name }}"}'
+            hx-target="this"
+            hx-trigger="blur, change"
+            hx-swap="outerHTML"
+            value="{{ entry.get_item().name }}"
+        />

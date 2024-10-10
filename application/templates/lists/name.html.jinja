@@ -1,0 +1,14 @@
+<span
+hx-get="/rename/{{ entry.item_model }}/{{ entry.item_id }}"
+hx-swap="outerHTML"
+hx-trigger="dblclick"
+hx-target="this"
+                data-bs-toggle="tooltip"
+                data-bs-html="true"
+                data-bs-title="<u>Double Click</u> to <b>rename</b> entry.item_model"
+            >
+
+                <div id="text_{{ entry.item_model }}_name-{{ entry.item_id }}" class="input-group-text glyphicon-move">
+                {{ entry.get_item().name }}
+                </div>
+            </span>
