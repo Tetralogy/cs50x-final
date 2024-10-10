@@ -45,6 +45,8 @@ def room_types():
     if request.method == 'POST':
         new_room_type_default()
     defaults_list = load_default_room_types()
+    if defaults_list is None:
+        return redirect(url_for('rooms.define_rooms'))
     return redirect(url_for('lists.show_list', list_id=defaults_list.id))
         
 def load_default_room_types():
@@ -65,6 +67,8 @@ def load_default_room_types():
 
 def new_room_type_default():
     custom_type = request.form.get('custom_type')
+    if custom_type is None or custom_type == '':
+        return None
     defaults_list = get_userlist('RoomDefault')
     default_list_item = add_item_to_list(defaults_list.id, 'RoomDefault', name=f'{custom_type}')
     return default_list_item

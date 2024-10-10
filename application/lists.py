@@ -37,7 +37,9 @@ def add_item_to_list(user_list_id: int, item_model: str, item_id: int = None, or
     if not model_class or not issubclass(model_class, db.Model):
         raise ValueError(f'Unknown item type {item_model}')
     if item_id is None:
-        new_item = create_new_default(item_model, name) 
+        new_item = create_new_default(item_model, name)
+        if new_item is None:
+            return None 
         item_id = new_item.item_id
     if order is None:
         order = db.session.scalars(db.select(db.func.count()).select_from(UserListEntry).where(UserListEntry.user_list_id == user_list_id)).one()
@@ -103,6 +105,7 @@ def create_new_default(item_model: str, name: str = None) -> UserListEntry:
         existing_item = db.session.scalars(db.select(RoomDefault.name).filter_by(name=name, user_id=current_user.id)).first()
         if existing_item:
             flash(f'RoomDefault: "{name}" already exists', 'error')
+            return None 
             raise ValueError(f'A RoomDefault with the name "{name}" already exists.')
         new_item = RoomDefault(user_id=current_user.id, name=name)
         db.session.add(new_item)
