@@ -7,8 +7,7 @@
             placeholder="{{ entry.get_item().name }}"
             hx-put="/rename/{{ entry.item_model }}/{{ entry.item_id }}"
             hx-vals='{"placeholder": "{{ entry.get_item().name }}"}'
-            hx-target="this"
-            hx-trigger="blur, keyup changed delay:1s, drag from:window"
+            hx-trigger="blur, keyup[key=='Enter'] from:window, keyup changed delay:1s from:window, drag from:window"
             hx-swap="outerHTML"
             value="{{ entry.get_item().name }}"
             hx-on::load="this.focus();"
