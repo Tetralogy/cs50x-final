@@ -340,6 +340,22 @@ form.htmx-request {
     cursor: move;
     cursor: -webkit-grabbing;
   }
+  .grabbable {
+    cursor: move; /* fallback if grab cursor is unsupported */
+    cursor: grab;
+    cursor: -moz-grab;
+    cursor: -webkit-grab;
+}
+ /* (Optional) Apply a "closed-hand" cursor during drag operation. */
+ .grabbable:active {
+    cursor: grabbing;
+    cursor: -moz-grabbing;
+    cursor: -webkit-grabbing;
+}
+
+.editabletext {
+    cursor: text;
+}
 
 /* ghostClass */
 .ghost {
@@ -359,4 +375,17 @@ background: #ff0000;
 #drag-outside-indicator {
     font-size: 2rem;
     color: red;
+}
+
+/* scale titles */
+.scalename {
+    font-size: 2vw;
+    font-weight: bold;
+    text-align: center;
+    color: white !important;
+    text-shadow: 0 0 3px #000;
+  }
+
+.rename {
+    background-color:transparent !important;
 }

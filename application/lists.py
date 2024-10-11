@@ -291,6 +291,7 @@ def update_list_order(list_id):
         order = [entry.id for entry in order]
             
     for index, item_id in enumerate(order):
+        
         print(f'Updating item_id: {item_id} item_name: {db.get_or_404(UserListEntry, item_id).get_item().name} with new order: {index}')
         update_item_order(item_id, index)
     flash('List order updated')
