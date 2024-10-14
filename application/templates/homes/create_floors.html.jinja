@@ -66,8 +66,6 @@
             </div>
         </div>
     </form>
-#BUG: SAVE SORT IS FUCKING BROKEN
-#BUG: restructure the create_floors.html.jinja
 
     <!-- prettier-ignore-start -->
 <script>
@@ -80,7 +78,7 @@
         htmx.ajax("PUT", "/update_list_order/{{ floor_list.id }}", {
             target: "#floor-list-container",
             swap: "innerHTML",
-            values: { order: newOrder },
+            values: { items: newOrder },
         });
     }
     document.addEventListener("htmx:load", function () {
