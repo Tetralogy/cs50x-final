@@ -183,12 +183,12 @@ def get_list_entries_for_item(item: object) -> List[UserListEntry]:
 
     return list_entries
 
-def update_item_order(user_list_entry_id: int, new_order: int) -> Optional[UserListEntry]:
-    item = db.session.scalars(db.select(UserListEntry).filter_by(id=user_list_entry_id)).one_or_none()
-    if item:
-        item.order = new_order
+def update_entry_order(user_list_entry_id: int, new_order: int) -> Optional[UserListEntry]:
+    entry = db.session.scalars(db.select(UserListEntry).filter_by(id=user_list_entry_id)).one_or_none()
+    if entry:
+        entry.order = new_order
         db.session.commit()
-        return item
+        return entry
     return None
 
 def delete_entry_and_item(user_list_entry_id: int) -> bool:
@@ -288,12 +288,13 @@ def update_list_order(list_id):
 
     # Extract the IDs if they are UserListEntry objects
     if hasattr(order[0], 'id'):
+        print(f'UserList {userlist.list_name} order3: {order}')
         order = [entry.id for entry in order]
             
-    for index, item_id in enumerate(order):
+    for index, entry_id in enumerate(order):
         
-        print(f'Updating item_id: {item_id} item_name: {db.get_or_404(UserListEntry, item_id).get_item().name} with new order: {index}')
-        update_item_order(item_id, index)
+        print(f'Updating entry_id: {entry_id} item_name: {db.get_or_404(UserListEntry, entry_id).get_item().name} with new order: {index}')
+        update_entry_order(entry_id, index)
     flash('List order updated')
     return ('', 204) #redirect(url_for('lists.show_list', list_id=list_id))
 
