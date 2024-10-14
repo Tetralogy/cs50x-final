@@ -20,18 +20,7 @@ def define_rooms(floor_id: int=None):
             flash(f'Invalid floor_id: {floor_id}', category='danger')
             return redirect(url_for('floors.define_floors'))
         floor = set_active_floor(floor_id)
-        floor_list = get_userlist('Floor').entries # if home_id has floors, get list of floors from userlists
-        if current_user.active_home.floors.count() == 1: # if home has one floor, 
-            room_list = create_user_list('Room', f'{current_user.active_home.name} Rooms', current_user.active_home.active_floor_id) # create rooms list
-            print(f'room_list: {room_list} (type: {type(room_list)})')
-            #return render_template('homes/create_rooms.html.jinja', floor_list=floor_list, room_list=room_list)
-        if current_user.active_home.floors.count() > 1:
-            for floor_entry in floor_list:
-                print(f'floor list get floor_entry.id: {floor_entry.id}')
-                print(f'floor list get floor_entry.get_item().name: {floor_entry.get_item().name}')
-                room_list = create_user_list('Room', f'{current_user.active_home.name} {floor_entry.get_item().name} Rooms', floor_entry.id) # create rooms list
-                print(f'room_list: {room_list} (type: {type(room_list)}) parent: {room_list.parent.get_item().name}')
-            room_list = get_userlist('Room', current_user.active_home.active_floor_id)
+        floor_list, room_list = get_room_list()
         print(f'floor_list: {floor_list} (type: {type(floor_list)})')
         defaults_list = load_default_room_types()
         print(f'defaults_list: {defaults_list} (type: {type(defaults_list)})')  
@@ -39,6 +28,21 @@ def define_rooms(floor_id: int=None):
         print(f'has_rooms: {has_rooms} (type: {type(has_rooms)})')
         return render_template('homes/create_rooms.html.jinja', floor_list=floor_list, room_list=room_list, defaults_list=defaults_list, has_rooms=bool(has_rooms))
     return 'define rooms', 200
+
+def get_room_list():
+    floor_list = get_userlist('Floor').entries # if home_id has floors, get list of floors from userlists
+    if current_user.active_home.floors.count() == 1: # if home has one floor, 
+        room_list = create_user_list('Room', f'{current_user.active_home.name} Rooms', current_user.active_home.active_floor_id) # create rooms list
+        print(f'room_list: {room_list} (type: {type(room_list)})')
+            #return render_template('homes/create_rooms.html.jinja', floor_list=floor_list, room_list=room_list)
+    if current_user.active_home.floors.count() > 1:
+        for floor_entry in floor_list:
+            print(f'floor list get floor_entry.id: {floor_entry.id}')
+            print(f'floor list get floor_entry.get_item().name: {floor_entry.get_item().name}')
+            room_list = create_user_list('Room', f'{current_user.active_home.name} {floor_entry.get_item().name} Rooms', floor_entry.id) # create rooms list
+            print(f'room_list: {room_list} (type: {type(room_list)}) parent: {room_list.parent.get_item().name}')
+        room_list = get_userlist('Room', current_user.active_home.active_floor_id)
+    return floor_list,room_list
 
 @rooms.route('/room/default', methods=['GET', 'POST'])
 @login_required
@@ -110,6 +114,20 @@ def floor_room_check(floor_id):
             if len(floor.rooms) == 0:
                 has_rooms = False
     return floor_id, has_rooms
+
+
+@rooms.route('/map/<int:floor_id>', methods=['GET'])
+@login_required
+def map(floor_id: int=None):
+    print(f'map called with floor_id: {floor_id}')
+    # goes to map view of current active floor
+    floor_id, has_rooms = floor_room_check(floor_id)
+    floor = set_active_floor(floor_id)
+    if has_rooms is False:
+        return redirect(url_for('rooms.define_rooms', floor_id=floor_id))
+    floor_list, room_list = get_room_list()
+    return render_template('map/index.html.jinja', floor_list=floor_list, room_list=room_list)
+    raise NotImplementedError("map not yet implemented")
 #____________________________________________________________________________________________________________________#
 
 

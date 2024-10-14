@@ -54,7 +54,7 @@
     </p>
     
     <div
-        id="room-list-form"
+        id="room-list-updater"
         class="row g-0 row-cols-4 container-fluid bg-dark border border-success border-5 rounded-bottom-4 p-1"
         hx-put="/update_list_order/{{ room_list.id }}"
         hx-trigger="end, add, remove"
@@ -63,12 +63,13 @@
     >
         <div
             class="row g-0 row-cols-4 container-fluid bg-dark border border-success border-5 rounded-bottom-4 p-1"
-            id="room-list-container"
+            id="room-list-loader"
             hx-get="/show_list/{{ room_list.id }}"
             hx-trigger="load once"
             hx-swap="outerHTML"
             hx-indicator="#updating-indicator"
-        ><input id="dummy-placeholder" type='hidden' name='items'/></div>
+        ><input id="dummy-placeholder" type='hidden' name='items'/><div id="updating-indicator" class="htmx-indicator">Updating...</div>
+        </div>
     </div>
     <div id="updating-indicator" class="htmx-indicator">Updating...</div>
     <script>
@@ -90,7 +91,7 @@
                 sort: false,
                 cursor: "move",
             });
-            const roomlist = document.getElementById("room-list-form");
+            const roomlist = document.getElementById("room-list-updater");
             const roomsort = new Sortable(roomlist, {
                 group: {
                     name: "roomlist",
@@ -187,7 +188,7 @@
 
             // Add event listeners to track dragging outside the area
             document.addEventListener("dragover", function (e) {
-                const sortableArea = document.getElementById("room-list-form");
+                const sortableArea = document.getElementById("room-list-updater");
                 const rect = sortableArea.getBoundingClientRect();
 
                 //console.log("dragover" + rect);
@@ -223,7 +224,7 @@
     <div>
         <a class="btn btn-primary" href="/floorplan/next"> Edit next floor </a>
         {% if has_rooms %}
-            <a class="btn btn-success" href="/map"> Map </a>
+            <a class="btn btn-success" href="/map/{{current_user.active_home.active_floor_id}}"> Map </a>
         {% endif %}
     </div>
 {% endblock %}

@@ -44,7 +44,7 @@
                 2. if a floor is not confirmed, it remains in the list of floors to edit ✅
                 3. when the final floor is confirmed, go to the house map page ✅
 3. ## User performs innitial task collection walkthrough process
-    1. ### xxx /home/walkthrough/setup ✴️
+    1. ### xxx /walkthrough/setup ✴️
         1. #todo: list of rooms on the ground floor are presented on a layout map visually similar to the add rooms form ✴️ ⬅️ 
             1. #bug: room blocks are not movable or directly editable in task map view
             2. #hack: user is prompted to select the floor and room they are currently in
