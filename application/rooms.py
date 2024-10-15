@@ -92,6 +92,7 @@ def set_active_room(room_id):
     room = db.session.execute(room_query).scalar_one_or_none()
     if room.home_id == current_user.active_home_id:
         current_user.active_home.active_room = room
+        
         db.session.commit()
         print(f'current_user.active_home.active_room: {current_user.active_home.active_room}')
         return room #the object of the current active room

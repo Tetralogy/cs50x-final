@@ -50,6 +50,7 @@ class User(db.Model, UserMixin):
 
 
 
+
 class UserList(db.Model):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey('user.id'))
@@ -72,6 +73,7 @@ class UserListEntry(db.Model):
     order: Mapped[int] = mapped_column(Integer, nullable=False)
 
     user_list = relationship("UserList", back_populates="entries", foreign_keys=[user_list_id])
+    
 
     __table_args__ = (
         UniqueConstraint('user_list_id', 'item_model', 'item_id', name='uq_user_list_item'),
@@ -93,6 +95,7 @@ class UserListEntry(db.Model):
         item_model = item.__class__.__name__
         item_id = item.id
         return cls.query.filter_by(item_model=item_model, item_id=item_id).all()
+    
 
 class UserAbility(db.Model): # User's ability to do something, disabilities to account for
     id: Mapped[int] = mapped_column(primary_key=True)

@@ -37,6 +37,8 @@ def walk_start():
     active_room_id = request.form.get('active_room')
     active_room = set_active_room(active_room_id)
     print(f'active_room: {active_room}')
+    walk_step = "confirm_room"
+    session['walk_step'] = walk_step
     return render_template('walkthrough/index.html.jinja', active_room=active_room)
 
 @walkthrough.route('/walkthrough/next', methods=['GET'])
@@ -51,6 +53,18 @@ def walk_next():
         db.session.commit()
     
     return render_template('onboarding/parts/home/walkthrough/parts/1confirm_room.html.jinja')
+
+@walkthrough.route('/walkthrough/steps', methods=['GET', 'PUT'])
+@login_required
+def walk_steps():
+    if request.method == 'GET':
+        walk_step = session.get('walk_step')
+    if request.method == 'PUT':
+        walk_step = request.form.get('walk_step')
+        print(f'walk_step: {walk_step}')
+        session['walk_step'] = walk_step
+    return render_template(f'walkthrough/parts/{walk_step}.html.jinja', walk_step=walk_step)
+
 
 """
 Pseudo code for walkthrough
