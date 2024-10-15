@@ -1,14 +1,17 @@
-<h1>This is onboarding/home/walkthrough/index.html.jinja</h1>
-<h1>onboarding Walkthrough</h1>
+{% extends "base/layout.html" %}
+{% block title %}
+    House Map
+{% endblock %}
 
-<div id="walkthrough" hx-get="/walkthrough/start" hx-trigger="load once">
+{% block main %}
+<h1>This is walkthrough/index.html.jinja</h1>
+<h1>onboarding Walkthrough</h1>
+<h2>active room: {{ active_room.id }}</h2>
+<div id="walkthrough">
     <div class="htmx-indicator spinner-border" role="status">
         <span class="visually-hidden">Loading...</span>
     </div>
-    >
 </div>
-
-
 
 
 <button
@@ -20,3 +23,5 @@
 <button hx-post="/walkthrough/next" class="btn btn-primary">
     Walkthrough Next room
 </button>
+
+{% endblock %}

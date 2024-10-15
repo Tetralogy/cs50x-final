@@ -1,5 +1,5 @@
 import os
-from flask import Blueprint, flash, json, jsonify, redirect, render_template, request, url_for
+from flask import Blueprint, flash, json, jsonify, redirect, render_template, request, session, url_for
 from flask_login import current_user, login_required
 from sqlalchemy import select
 from application.extension import db
@@ -82,7 +82,7 @@ def new_room_type_default():
 @login_required
 def set_active_room(room_id):
     current_user.active_home.active_room_id = room_id
-    room_query = select(Room).where(Room.room_id == room_id)
+    room_query = select(Room).where(Room.id == room_id)
     room = db.session.execute(room_query).scalar_one_or_none()
     if room.home_id == current_user.active_home_id:
         current_user.active_home.active_room = room
@@ -115,10 +115,13 @@ def floor_room_check(floor_id):
                 has_rooms = False
     return floor_id, has_rooms
 
-
+@rooms.route('/map/', methods=['GET'])
 @rooms.route('/map/<int:floor_id>', methods=['GET'])
 @login_required
 def map(floor_id: int=None):
+    session['walk_setup'] = False
+    if floor_id is None:
+        floor_id = current_user.active_home.active_floor_id
     print(f'map called with floor_id: {floor_id}')
     # goes to map view of current active floor
     floor_id, has_rooms = floor_room_check(floor_id)
@@ -126,7 +129,7 @@ def map(floor_id: int=None):
     if has_rooms is False:
         return redirect(url_for('rooms.define_rooms', floor_id=floor_id))
     floor_list, room_list = get_room_list()
-    return render_template('map/index.html.jinja', floor_list=floor_list, room_list=room_list)
+    return render_template('map/index.html.jinja', floor_list=floor_list)
     raise NotImplementedError("map not yet implemented")
 #____________________________________________________________________________________________________________________#
 

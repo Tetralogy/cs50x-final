@@ -8,7 +8,15 @@
 
 <div id="drag-outside-indicator" style="display: none; position: fixed; z-index: 1000;">🚫</div>
 <input type='hidden' name='items' value='{{ entry.id }}'/>
-
+{% if walk_setup == True %}
+<input required
+            class="form-check-input mt-0"
+            type="radio"
+            name="active_room"
+            id="radio-{{ entry.id }}"
+            value="{{ entry.item_id }}"
+        />
+{% endif %}
 {% include 'lists/name.html.jinja' %}
     
 </div>

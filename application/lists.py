@@ -1,6 +1,6 @@
 from typing import List, Optional
 
-from flask import Blueprint, flash, redirect, render_template, request, url_for
+from flask import Blueprint, flash, redirect, render_template, request, session, url_for
 from flask_login import current_user, login_required
 from sqlalchemy import and_, select
 from application.database.models import Floor, Room, RoomDefault, Supply, Task, UserList, UserListEntry
@@ -298,9 +298,23 @@ def update_list_order(list_id):
     flash('List order updated')
     return ('', 204) #redirect(url_for('lists.show_list', list_id=list_id))
 
+@lists.route('/show_list/', methods=['GET', 'POST', 'PUT', 'DELETE'])
 @lists.route('/show_list/<int:list_id>', methods=['GET', 'POST', 'PUT', 'DELETE'])
 @login_required
-def show_list(list_id):
+def show_list(list_id: int = None):
+    print(f'list_id1: {list_id}')
+    if list_id is None or list_id == '':
+        list_model = request.args.get('list_type')
+        print(f'list_model: {list_model}')
+        if list_model is None or list_model == '':
+            raise ValueError('No list type specified')
+        elif list_model == 'Room':
+            print(f'showing room list list_id: {list_id}')
+            list_obj = get_userlist(list_model, current_user.active_home.active_floor_id)
+            print(f'list_obj: {list_obj}')
+            walk_setup = session.get('walk_setup', False)
+            print(f'walk_setup: {walk_setup}')
+            return render_template('lists/list.html.jinja', list_obj=list_obj, walk_setup=walk_setup)
     print(f'showing list list_id: {list_id}')
     return render_template('lists/list.html.jinja', list_obj=db.get_or_404(UserList, list_id))
 
