@@ -6,7 +6,8 @@
 {% block main %}
 <h1>This is walkthrough/index.html.jinja</h1>
 <h1>onboarding Walkthrough</h1>
-<h2>active room: {{ active_room.id }}</h2>
+<h2>active floor name: {{ current_user.active_home.active_floor.name }} id: {{ current_user.active_home.active_floor.id }}</h2>
+<h2>active room name: {{ active_room.name }} id: {{ active_room.id }}</h2>
 <div id="walkthrough">
     <div class="htmx-indicator spinner-border" role="status">
         <span class="visually-hidden">Loading...</span>

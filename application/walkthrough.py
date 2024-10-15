@@ -31,18 +31,13 @@ def walkthrough_setup():
     return render_template('')
 
 
-@walkthrough.route('/walkthrough/start', methods=['POST'])
+@walkthrough.route('/walkthrough/start', methods=['GET', 'POST'])
 @login_required
 def walk_start():
-    if request.method == 'POST':
-        active_room_id = request.form.get('active_room')
-        if not active_room_id:
-            first_room = current_user.active_home.active_floor.rooms.order_by(Room.id).first()
-            print(f'first_room: {first_room.id}')
-            active_room_id = first_room.id
-        active_room = set_active_room(active_room_id)
-        print(f'active_room: {active_room}')
-        return render_template('walkthrough/index.html.jinja', active_room=active_room)
+    active_room_id = request.form.get('active_room')
+    active_room = set_active_room(active_room_id)
+    print(f'active_room: {active_room}')
+    return render_template('walkthrough/index.html.jinja', active_room=active_room)
 
 @walkthrough.route('/walkthrough/next', methods=['GET'])
 @login_required
