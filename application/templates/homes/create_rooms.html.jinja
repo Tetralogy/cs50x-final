@@ -57,7 +57,7 @@
         id="room-list-updater"
         class="row g-0 row-cols-4 container-fluid bg-dark border border-success border-5 rounded-bottom-4 p-1"
         hx-put="/update_list_order/{{ room_list.id }}"
-        hx-trigger="end, add, remove"
+        hx-trigger="end, remove, add delay:1s"
         hx-include="[name='items']"
         hx-indicator="#updating-indicator"
     >
@@ -122,7 +122,7 @@
                     htmx.ajax("DELETE", "/delete/" + {{room_list.id}} + "/" + evt.item.dataset.id);
                     hideDragOutsideIndicator();
                 },
-                onAdd: function (/**Event*/ evt) { // #BUG: NEED TO SANITIZE ROOM ORDER IMMEDIATELY AFTER ADD AND MOVE
+                onAdd: function (/**Event*/ evt) {
                     console.log("onAdd event triggered");
                     const itemEl = evt.item; // dragged HTMLElement
                     const addedRoomType = itemEl.dataset.name;

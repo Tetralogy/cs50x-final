@@ -13,7 +13,7 @@ walkthrough = Blueprint('walkthrough', __name__)
 
 @walkthrough.route('/walkthrough/setup', methods=['GET'])
 @login_required
-def walkthrough_setup(): #BUG: NEED TO SANITIZE ROOM ORDER FOR EACH FLOOR BEFORE WALKTHROUGH
+def walkthrough_setup():
     walk_setup = True
     session['walk_setup'] = walk_setup
     floor_list = get_userlist('Floor').entries
@@ -64,7 +64,6 @@ def walk_steps():
         walk_step = request.form.get('walk_step')
         print(f'walk_step: {walk_step}')
         session['walk_step'] = walk_step
-        #todo: check if walk_step is valid
     print(f'walk_step?: {walk_step}')
     
     if os.path.exists(os.path.join(current_app.root_path, 'templates', f'walkthrough/parts/{walk_step}.html.jinja')):
@@ -90,7 +89,7 @@ def walk_steps():
 @walkthrough.route('/walkthrough/nextroom', methods=['GET'])
 @login_required
 def walk_next():
-    current_active_room_list_entry = get_list_entries_for_item(current_user.active_home.active_room)[0] #FIXME stopped at order 1
+    current_active_room_list_entry = get_list_entries_for_item(current_user.active_home.active_room)[0]
     if not current_user.active_home.active_room:  
         return 'No active room', 400
     parent_entry_item_id = current_user.active_home.active_floor_id
@@ -109,6 +108,8 @@ def walk_next():
             next_room = rooms_list_ordered[next_room_index]
             active_room = set_active_room(next_room.item_id)
             break
+    walk_step = 'rename'
+    session['walk_step'] = walk_step
     return redirect(url_for('walkthrough.walk_steps'))
     #return render_template('walkthrough/index.html.jinja')
     

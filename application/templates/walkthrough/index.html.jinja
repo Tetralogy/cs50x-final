@@ -65,34 +65,4 @@
     >
         Walkthrough Next room
     </a>
-{#
-    <p>
-        --------------------------------------------------------------------------
-    </p>
-
-    room list:
-    {% for list in current_user.lists %}
-            {% if list.parent_entry_item_id == current_user.active_home.active_floor_id %}#fixme
-        {% for entry in list.entries %}
-        
-                <p>
-                    model: {{ entry.item_model }} id: {{ entry.item_id }} name:
-                    {{ entry.get_item().name }} order: {{ entry.order }}
-                </p>
-        {% endfor %}
-            {% endif %}
-    {% endfor %}
-    <p>
-        --------------------------------------------------------------------------
-    </p>
-
-    {{rooms_list_ordered}}
-
-    {% for entry in rooms_list_ordered %}
-                <p>
-                    model: {{ entry.item_model }} id: {{ entry.item_id }} name:
-                    {{ entry.get_item().name }} order: {{ entry.order }}
-                </p>
-    {% endfor %}
-#}
 {% endblock %}
