@@ -87,9 +87,10 @@ def set_active_room(room_id):
             first_room = current_user.active_home.active_floor.rooms.order_by(Room.id).first()
             print(f'first_room: {first_room.id}')
             room_id = first_room.id
+    room = db.get_or_404(Room, room_id)
     current_user.active_home.active_room_id = room_id
-    room_query = select(Room).where(Room.id == room_id)
-    room = db.session.execute(room_query).scalar_one_or_none()
+    '''room_query = select(Room).where(Room.id == room_id)
+    room = db.session.execute(room_query).scalar_one_or_none()'''
     if room.home_id == current_user.active_home_id:
         current_user.active_home.active_room = room
         

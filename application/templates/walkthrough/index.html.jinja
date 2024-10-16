@@ -10,7 +10,7 @@
         active floor name: {{ current_user.active_home.active_floor.name }} id:
         {{ current_user.active_home.active_floor.id }}
     </h2>
-    <h2>active room name: {{ active_room.name }} id: {{ active_room.id }}</h2>
+    <h2>active room name: {{ current_user.active_home.active_room.name }} id: {{ current_user.active_home.active_room.id }}</h2>
     <div
         id="walkthrough-steps"
         hx-get="/walkthrough/steps"
@@ -59,13 +59,13 @@
     Room Next step
 </button>#}
     <a
-        href="/walkthrough/next"
+        href="/walkthrough/nextroom"
+        hx-boost="false"
         class="btn btn-primary"
-        target="#walkthrough-steps"
     >
         Walkthrough Next room
     </a>
-
+{#
     <p>
         --------------------------------------------------------------------------
     </p>
@@ -82,4 +82,17 @@
         {% endfor %}
             {% endif %}
     {% endfor %}
+    <p>
+        --------------------------------------------------------------------------
+    </p>
+
+    {{rooms_list_ordered}}
+
+    {% for entry in rooms_list_ordered %}
+                <p>
+                    model: {{ entry.item_model }} id: {{ entry.item_id }} name:
+                    {{ entry.get_item().name }} order: {{ entry.order }}
+                </p>
+    {% endfor %}
+#}
 {% endblock %}

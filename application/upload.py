@@ -97,9 +97,9 @@ def set_profile_icon():
         # Optionally, return some response or updated HTML
         return render_template('/profile/parts/avatar.html.jinja') #jsonify(success=True)
 
-@upload.route('/get_default_avatar')#doesn't work
+'''@upload.route('/get_default_avatar')#doesn't work
 def get_default_avatar():
     #[ ]: make this a config option
     default_avatar_url = url_for('upload.get_icon_file', filename='person-circle.svg')
     print(f'default_avatar_url: {default_avatar_url}')
-    return default_avatar_url
+    return default_avatar_url'''
