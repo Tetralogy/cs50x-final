@@ -122,7 +122,7 @@
                     htmx.ajax("DELETE", "/delete/" + {{room_list.id}} + "/" + evt.item.dataset.id);
                     hideDragOutsideIndicator();
                 },
-                onAdd: function (/**Event*/ evt) {
+                onAdd: function (/**Event*/ evt) { // #BUG: NEED TO SANITIZE ROOM ORDER IMMEDIATELY AFTER ADD AND MOVE
                     console.log("onAdd event triggered");
                     const itemEl = evt.item; // dragged HTMLElement
                     const addedRoomType = itemEl.dataset.name;

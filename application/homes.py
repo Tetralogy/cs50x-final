@@ -77,8 +77,8 @@ def home_setup():
                 print(f'floor {floor.name} has no rooms')
                 flash(f'floor {floor.name} has no rooms' , category='danger')
                 return redirect(url_for('rooms.define_rooms', floor_id=floor.id))
-    return redirect(url_for('rooms.define_rooms', floor_id=current_user.active_home.active_floor_id))
-        
+    return redirect(url_for('rooms.map'))
+    
     
 #________________________________________________________________________________#
     

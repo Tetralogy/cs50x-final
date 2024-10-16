@@ -5,7 +5,7 @@
 
 {% block main %}
     {% if walk_setup == True %}
-        <h3>Choose a room to start the walkthrough</h3>
+        <h3>Choose a room to start the walkthrough (walkthrough setup=True)</h3>
     {% endif %}
     <ul class="nav nav-tabs">
         {% for navfloor in floor_list | sort(attribute='order') | reverse %}

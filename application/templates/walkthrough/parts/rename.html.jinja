@@ -1,0 +1,31 @@
+<div>
+    <p>
+        Please walk into to the {{ current_user.active_home.active_room.name }}
+        room and confirm that the name and type of room are correct.
+    </p>
+
+    {% for list in current_user.lists %}
+        {% for entry in list.entries %}
+            {% if entry.item_model == 'Room' and entry.item_id == current_user.active_home.active_room.id %}
+                {% include 'lists/name.html.jinja' %}
+            {% endif %}
+        {% endfor %}
+    {% endfor %}
+
+    <button
+        hx-put="/walkthrough/steps"
+        hx-target="#walkthrough-steps"
+        hx-vals='{"walk_step": "photo"}'
+        class="btn btn-primary"
+    >
+        Confirm Room Name and continue
+    </button>
+    {#
+    <select name="room_type" class="form-select" aria-label="Room type">
+        <option value="" selected disabled>Choose room type</option>
+        {% for room_type in room_types %}
+            <option value="{{ room_type }}">{{ room_type }}</option>
+        {% endfor %}
+    </select>
+#}
+</div>

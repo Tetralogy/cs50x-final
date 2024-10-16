@@ -82,7 +82,7 @@ class UserListEntry(db.Model):
         # Dynamically import the model
         model_class = globals()[self.item_model]
         return model_class.query.get(self.item_id) 
-    #if model_class is Floor and you want the name of the floor: {{ item.get_item().name }} 
+    #if model_class is Floor and you want the name of the floor: {{ entry.get_item().name }} 
     
     @classmethod
     def find_entries_for_item(cls, item):
