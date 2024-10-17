@@ -1,4 +1,4 @@
-<p> #FIXME QUICKNOTE
+<p> 
     Please quickly add task drafts for this room. You can add things that need
     to be cleaned or organized or maintained or upgraded.
 </p>
@@ -7,6 +7,9 @@
 <form
     hx-post="/create/Task"
     hx-target="#task-list-container"
+    hx-swap="beforeend"
+    hx-indicator="#updating-indicator"
+    hx-on::after-request="this.reset()"
 >
     <input type="text" name="name" placeholder="Task title" />
     <input type="hidden" name="room_id" value="{{ current_user.active_home.active_room_id }}" />
@@ -25,9 +28,7 @@
                 hx-indicator="#updating-indicator"
             >
                 <input id="dummy-placeholder" type="hidden" name="items" />
-                <div id="updating-indicator" class="htmx-indicator">
-                    Updating...
-                </div>
+                
             </div>
 </div>
 
