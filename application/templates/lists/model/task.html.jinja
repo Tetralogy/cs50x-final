@@ -3,6 +3,9 @@
     id="{{ entry.item_model }}list-{{ entry.id }}"
     data-id="{{ entry.id }}"
     data-name="{{ entry.get_item().name }}"
+    data-order="{{ entry.order }}"
+    data-list_id="{{ entry.user_list_id }}"
+    data-model="{{ entry.item_model }}"
     style="min-height: 100px; min-width: 100px; background-image: url('https://picsum.photos/1920/1080?random={{ entry.id }}'); background-size: cover;"
 >  
 
@@ -22,11 +25,10 @@
 
         <button
         class="btn btn-danger"
-        hx-delete="/delete/{{ entry.user_list_id }}/{{ entry.id }}"
+        hx-delete="/delete/entry/{{ entry.id }}"
         hx-confirm="Are you sure you want to delete this task? list#{{ entry.user_list_id }}/Entry#{{ entry.id }} {{ entry.get_item().name }}"
         hx-swap="delete"
         hx-target="#{{ entry.item_model }}list-{{ entry.id }}"
-        hx-on:after-swap="htmx.trigger('#task-list-updater')"
         class="btn btn-danger"
         type="button"
     >

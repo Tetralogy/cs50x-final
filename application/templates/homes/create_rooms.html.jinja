@@ -52,14 +52,16 @@
         place the room block in the square approximately where it might
         physically be in real life as if this was a top down view
     </p>
-    
+
     <div
         id="room-list-updater"
-        class="row g-0 row-cols-4 container-fluid bg-dark border border-success border-5 rounded-bottom-4 p-1"
+        class="row g-0 row-cols-4 container-fluid bg-dark border border-success border-5 rounded-bottom-4 p-1 sortable"
         hx-put="/update_list_order/{{ room_list.id }}"
         hx-trigger="end, remove, add delay:1s"
         hx-include="[name='items']"
         hx-indicator="#updating-indicator"
+        data-model="Room"
+        data-list_id="{{ room_list.id }}"
     >
         <div
             class="row g-0 row-cols-4 container-fluid bg-dark border border-success border-5 rounded-bottom-4 p-1"
@@ -68,163 +70,194 @@
             hx-trigger="load once"
             hx-swap="outerHTML"
             hx-indicator="#updating-indicator"
-        ><input id="dummy-placeholder" type='hidden' name='items'/><div id="updating-indicator" class="htmx-indicator">Updating...</div>
+        >
+            <input id="dummy-placeholder" type="hidden" name="items" />
+            <div id="updating-indicator" class="htmx-indicator">
+                Updating...
+            </div>
         </div>
     </div>
     <div id="updating-indicator" class="htmx-indicator">Updating...</div>
     <script>
-        (() => {
-            // fix for error Uncaught SyntaxError: redeclaration of const typeslist
-            console.log("htmx.onLoad triggered");
-
-            const typeslist = document.getElementById(
-                "default-room-types-container",
-            );
-
-            new Sortable(typeslist, {
-                group: {
-                    name: "typeslist",
-                    pull: "clone",
-                    put: false, // Do not allow items to be put into this list
-                },
-                animation: 150,
-                sort: false,
-                cursor: "move",
-            });
-            const roomlist = document.getElementById("room-list-updater");
-            const roomsort = new Sortable(roomlist, {
-                group: {
-                    name: "roomlist",
-                    pull: true,
-                    put: true,
-                },
-                
-                animation: 150,
-                swapThreshold: 0.5,
-                filter: ".htmx-indicator, .rename",
-                ghostClass: "ghost",
-                dragClass: "ghost-red",
-                chosenClass: "ghost-red",
-                removeOnSpill: true,
-                onMove: function (evt) {
-                    console.log("Moving:", evt.related); // Log the element being moved
-                    return (
-                        evt.related.className.indexOf("htmx-indicator") === -1
-                    );
-                },
-                onSpill: function (/**Event*/ evt) {
-                    evt.item; // The spilled item
-                    showDragOutsideIndicator(evt.clientX, evt.clientY);
-                    console.log("spill");
-                    console.log(
-                        "delete evt.item.dataset.id: " + evt.item.dataset.id,
-                    );
-                    htmx.ajax("DELETE", "/delete/" + {{room_list.id}} + "/" + evt.item.dataset.id);
-                    hideDragOutsideIndicator();
-                },
-                onAdd: function (/**Event*/ evt) {
-                    console.log("onAdd event triggered");
-                    const itemEl = evt.item; // dragged HTMLElement
-                    const addedRoomType = itemEl.dataset.name;
-                    const newIndex = evt.newIndex;
-                    console.log(
-                        "addedRoomType: " +
-                            addedRoomType +
-                            "new index: " +
-                            newIndex,
-                    );
-
-                    // Make an htmx AJAX request to the server to create a new room
-                    htmx.ajax("POST", "/create/Room/{{ room_list.id }}", {
-                        values: { name: addedRoomType, order_index: newIndex },
-                        target: itemEl,
-                        swap: "outerHTML", // returns the new content
-                    });
-                },
-                //Disable sorting on the `end` event
-                onEnd: function (evt) {
-                    console.log("onEnd event triggered");
-                    this.option("disabled", true);
-                },
-            });
-
-
-            // Re-enable sorting on the `htmx:afterSwap` event
-            roomlist.addEventListener("htmx:afterOnLoad", function () {
-                console.log("htmx:afterOnLoad event triggered");
-                console.log("roomsort:", roomsort);
-                roomsort.option("disabled", false);
-                // check for focus events to let the user type
-                document.querySelectorAll("input").forEach((element) => {
-                    element.addEventListener("focus", function () {
-                        console.log("focus");
-                        roomsort.option("disabled", true);
-                    });
-                    element.addEventListener("blur", function () {
-                        console.log("blur");
-                        roomsort.option("disabled", false);
-                    });
-                });
-            });
-
-            // Function to show the indicator
-            function showDragOutsideIndicator(x, y) {
-                const indicator = document.getElementById(
-                    "drag-outside-indicator",
-                );
-                console.log("showDragOutsideIndicator", x, y);
-                indicator.style.left = `${x}px`;
-                indicator.style.top = `${y}px`;
-                indicator.style.display = "block";
-            }
-
-            // Function to hide the indicator
-            function hideDragOutsideIndicator() {
-                const indicator = document.getElementById(
-                    "drag-outside-indicator",
-                );
-                indicator.style.display = "none";
-            }
-
-            // Add event listeners to track dragging outside the area
-            document.addEventListener("dragover", function (e) {
-                const sortableArea = document.getElementById("room-list-updater");
-                const rect = sortableArea.getBoundingClientRect();
-
-                //console.log("dragover" + rect);
-                if (
-                    e.clientX < rect.left ||
-                    e.clientX > rect.right ||
-                    e.clientY < rect.top ||
-                    e.clientY > rect.bottom
-                ) {
-                    showDragOutsideIndicator(e.clientX, e.clientY);
-                } else {
-                    hideDragOutsideIndicator();
-                }
-            });
-
-            document.addEventListener("drop", function () {
-                hideDragOutsideIndicator();
-            });
-        })();
-
-        document.querySelectorAll("input").forEach((element) => {
-            element.addEventListener("focus", function () {
-                console.log("focus");
-                roomsort.option("disabled", true);
-            });
-            element.addEventListener("blur", function () {
-                console.log("blur");
-                roomsort.option("disabled", false);
-            });
-        });
-    </script>
+//        () => {
+//            // fix for error Uncaught SyntaxError: redeclaration of const typeslist
+//            console.log("htmx.onLoad triggered");
+//            const sortableElements = document.querySelectorAll(".sortable");
+//
+//            const typeslist = document.getElementById(
+//                "default-room-types-container",
+//            );
+//
+//            new Sortable(typeslist, {
+//                group: {
+//                    name: "typeslist",
+//                    pull: "clone",
+//                    put: false, // Do not allow items to be put into this list
+//                },
+//                animation: 150,
+//                sort: false,
+//                cursor: "move",
+//            });
+//
+//            sortableElements.forEach(function (sortableElement) {
+//                //const sortlist = new Sortable(sortableElement, {
+//                const sortlist = Sortable.create(sortableElement, {
+//                    //const roomlist = document.getElementById("");
+//                    //const roomsort = new Sortable(roomlist, {
+//                    group: {
+//                        name: "sortableElement",
+//                        pull: true,
+//                        put: true,
+//                    },
+//
+//                    animation: 150,
+//                    swapThreshold: 0.5,
+//                    filter: ".htmx-indicator, .rename",
+//                    ghostClass: "ghost",
+//                    dragClass: "ghost-red",
+//                    chosenClass: "ghost-red",
+//                    removeOnSpill: true,
+//                    onMove: function (evt) {
+//                        console.log("Moving:", evt.related); // Log the element being moved
+//                        return (
+//                            evt.related.className.indexOf("htmx-indicator") ===
+//                            -1
+//                        );
+//                    },
+//                    onSpill: function (/**Event*/ evt) {
+//                        evt.item; // The spilled item
+//                        showDragOutsideIndicator(evt.clientX, evt.clientY);
+//                        console.log("spill");
+//                        console.log(
+//                            "delete evt.item.dataset.id: " +
+//                                evt.item.dataset.id,
+//                        );
+//                        htmx.ajax(
+//                            "DELETE",
+//                            "/delete/entry" + evt.item.dataset.id,
+//                        );
+//                        hideDragOutsideIndicator();
+//                    },
+//                    onAdd: function (/**Event*/ evt) {
+//                        console.log("onAdd event triggered");
+//                        const itemEl = evt.item; // dragged HTMLElement
+//                        const addedNewEntry = itemEl.dataset.name;
+//                        const newIndex = evt.newIndex;
+//                        const model = sortableElement.dataset.model;
+//                        const list_id = sortableElement.dataset.list_id;
+//                        console.log(
+//                            "addedNewEntry: " +
+//                                addedNewEntry +
+//                                "new index: " +
+//                                newIndex,
+//                        );
+//
+//                        // Make an htmx AJAX request to the server to create a new room
+//                        htmx.ajax("POST", "/create/" + model + list_id, {
+//                            values: {
+//                                name: addedNewEntry,
+//                                order_index: newIndex,
+//                            },
+//                            target: itemEl,
+//                            swap: "outerHTML", // returns the new content
+//                        });
+//                    },
+//                    //Disable sorting on the `end` event
+//                    onEnd: function (evt) {
+//                        console.log("onEnd event triggered");
+//                        this.option("disabled", true);
+//                    },
+//                });
+//
+//                // Re-enable sorting on the `htmx:afterSwap` event
+//                sortableElement.addEventListener(
+//                    "htmx:afterOnLoad",
+//                    function () {
+//                        console.log("htmx:afterOnLoad event triggered");
+//                        console.log("sortableElement:", sortableElement);
+//                        sortlist.option("disabled", false);
+//                        // check for focus events to let the user type
+//                        document
+//                            .querySelectorAll("input")
+//                            .forEach((element) => {
+//                                element.addEventListener("focus", function () {
+//                                    console.log("focus");
+//                                    sortlist.option("disabled", true);
+//                                });
+//                                element.addEventListener("blur", function () {
+//                                    console.log("blur");
+//                                    sortlist.option("disabled", false);
+//                                });
+//                            });
+//                    },
+//                );
+//
+//                // Function to show the indicator
+//                function showDragOutsideIndicator(x, y) {
+//                    const indicator = document.getElementById(
+//                        "drag-outside-indicator",
+//                    );
+//                    console.log("showDragOutsideIndicator", x, y);
+//                    indicator.style.left = `${x}px`;
+//                    indicator.style.top = `${y}px`;
+//                    indicator.style.display = "block";
+//                }
+//
+//                // Function to hide the indicator
+//                function hideDragOutsideIndicator() {
+//                    const indicator = document.getElementById(
+//                        "drag-outside-indicator",
+//                    );
+//                    indicator.style.display = "none";
+//                }
+//
+//                // Add event listeners to track dragging outside the area
+//
+//                sortableElements.forEach(function (area) {
+//                    area.addEventListener("dragover", function (e) {
+//                        const rect = area.getBoundingClientRect();
+//
+//                        //console.log("dragover" + rect);
+//                        if (
+//                            e.clientX < rect.left ||
+//                            e.clientX > rect.right ||
+//                            e.clientY < rect.top ||
+//                            e.clientY > rect.bottom
+//                        ) {
+//                            showDragOutsideIndicator(e.clientX, e.clientY);
+//                        } else {
+//                            hideDragOutsideIndicator();
+//                        }
+//                    });
+//                });
+//
+//                document.addEventListener("drop", function () {
+//                    hideDragOutsideIndicator();
+//                });
+//            })();
+//
+//            document.querySelectorAll("input").forEach((element) => {
+//                element.addEventListener("focus", function () {
+//                    console.log("focus");
+//                    sortlist.option("disabled", true);
+//                });
+//                element.addEventListener("blur", function () {
+//                    console.log("blur");
+//                    sortlist.option("disabled", false);
+//                });
+//            });
+//        };
+//    </script>
 
     <div>
         <a class="btn btn-primary" href="/floorplan/next"> Edit next floor </a>
         {% if has_rooms %}
-            <a class="btn btn-success" href="/map/{{current_user.active_home.active_floor_id}}"> Map </a>
+            <a
+                class="btn btn-success"
+                href="/map/{{ current_user.active_home.active_floor_id }}"
+            >
+                Map
+            </a>
         {% endif %}
     </div>
 {% endblock %}

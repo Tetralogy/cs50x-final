@@ -55,6 +55,7 @@
             document.addEventListener("DOMContentLoaded", function () {
                 initializeTooltips();
                 initializeSortable();
+                console.log("DOMContentLoaded triggered");
             });
 
             function initializeTooltips() {
@@ -65,17 +66,203 @@
                     return new bootstrap.Tooltip(tooltipTriggerEl);
                 });
             }
-
+            
             function initializeSortable() {
-                const sortableElements = document.querySelectorAll(".sortable");
-                sortableElements.forEach(function (sortableElement) {
-                    Sortable.create(sortableElement, {
+                //() => {
+                    // fix for error Uncaught SyntaxError: redeclaration of const typeslist
+                    console.log("htmx.onLoad triggered");
+                    const sortableElements = document.querySelectorAll(".sortable");
+
+                    const typeslist = document.getElementById(
+                        "default-room-types-container",
+                    );
+
+                    new Sortable(typeslist, {
+                        group: {
+                            name: "typeslist",
+                            pull: "clone",
+                            put: false, // Do not allow items to be put into this list
+                        },
                         animation: 150,
-                        pull: false,
-                        put: false,
+                        sort: false,
+                        cursor: "move",
                     });
-                });
-            }
+
+                    sortableElements.forEach(function (sortableElement) {
+                        const sortlist = new Sortable(sortableElement, {
+                        //const sortlist = Sortable.create(sortableElement, {
+                            //const roomlist = document.getElementById("");
+                            //const roomsort = new Sortable(roomlist, {
+                            group: {
+                                name: "sortableElement",
+                                pull: true,
+                                put: true,
+                            },
+
+                            animation: 150,
+                            swapThreshold: 0.5,
+                            filter: ".htmx-indicator, .rename",
+                            ghostClass: "ghost",
+                            dragClass: "ghost-red",
+                            chosenClass: "ghost-red",
+                            removeOnSpill: true,
+                            onMove: function (evt) {
+                                console.log("Moving:", evt.related); // Log the element being moved
+                                return (
+                                    evt.related.className.indexOf(
+                                        "htmx-indicator",
+                                    ) === -1
+                                );
+                            },
+                            onSpill: function (/**Event*/ evt) {
+                                evt.item; // The spilled item
+                                showDragOutsideIndicator(
+                                    evt.clientX,
+                                    evt.clientY,
+                                );
+                                console.log("spill");
+                                console.log(
+                                    "delete evt.item.dataset.id: " +
+                                        evt.item.dataset.id,
+                                );
+                                htmx.ajax(
+                                    "DELETE",
+                                    "/delete/entry/" + evt.item.dataset.id,
+                                );
+                                hideDragOutsideIndicator();
+                            },
+                            onAdd: function (/**Event*/ evt) {
+                                console.log("onAdd event triggered");
+                                const itemEl = evt.item; // dragged HTMLElement
+                                const addedNewEntry = itemEl.dataset.name;
+                                const newIndex = evt.newIndex;
+                                const model = sortableElement.dataset.model;
+                                const list_id = sortableElement.dataset.list_id;
+                                console.log(
+                                    "addedNewEntry: " +
+                                        addedNewEntry +
+                                        "new index: " +
+                                        newIndex,
+                                );
+
+                                // Make an htmx AJAX request to the server to create a new room
+                                htmx.ajax( 
+                                    "POST",
+                                    "/create/" + model + "/" + list_id,
+                                    {
+                                        values: {
+                                            name: addedNewEntry,
+                                            order_index: newIndex,
+                                        },
+                                        target: itemEl,
+                                        swap: "outerHTML", // returns the new content
+                                    },
+                                );
+                            },
+                            //Disable sorting on the `end` event
+                            onEnd: function (evt) {
+                                console.log("onEnd event triggered");
+                                this.option("disabled", true);
+                            },
+                        });
+
+                        // Re-enable sorting on the `htmx:afterSwap` event
+                        sortableElement.addEventListener(
+                            "htmx:afterOnLoad",
+                            function () {
+                                console.log("htmx:afterOnLoad event triggered");
+                                console.log(
+                                    "sortableElement:",
+                                    sortableElement,
+                                );
+                                sortlist.option("disabled", false);
+                                // check for focus events to let the user type
+                                document
+                                    .querySelectorAll("input")
+                                    .forEach((element) => {
+                                        element.addEventListener(
+                                            "focus",
+                                            function () {
+                                                console.log("focus");
+                                                sortlist.option(
+                                                    "disabled",
+                                                    true,
+                                                );
+                                            },
+                                        );
+                                        element.addEventListener(
+                                            "blur",
+                                            function () {
+                                                console.log("blur");
+                                                sortlist.option(
+                                                    "disabled",
+                                                    false,
+                                                );
+                                            },
+                                        );
+                                    });
+                            },
+                        );
+
+                        // Function to show the indicator
+                        function showDragOutsideIndicator(x, y) {
+                            const indicator = document.getElementById(
+                                "drag-outside-indicator",
+                            );
+                            console.log("showDragOutsideIndicator", x, y);
+                            indicator.style.left = `${x}px`;
+                            indicator.style.top = `${y}px`;
+                            indicator.style.display = "block";
+                        }
+
+                        // Function to hide the indicator
+                        function hideDragOutsideIndicator() {
+                            const indicator = document.getElementById(
+                                "drag-outside-indicator",
+                            );
+                            indicator.style.display = "none";
+                        }
+
+                        // Add event listeners to track dragging outside the area
+
+                        sortableElements.forEach(function (area) {
+                            area.addEventListener("dragover", function (e) {
+                                const rect = area.getBoundingClientRect();
+
+                                //console.log("dragover" + rect);
+                                if (
+                                    e.clientX < rect.left ||
+                                    e.clientX > rect.right ||
+                                    e.clientY < rect.top ||
+                                    e.clientY > rect.bottom
+                                ) {
+                                    showDragOutsideIndicator(
+                                        e.clientX,
+                                        e.clientY,
+                                    );
+                                } else {
+                                    hideDragOutsideIndicator();
+                                }
+                            });
+                        });
+
+                        document.addEventListener("drop", function () {
+                            hideDragOutsideIndicator();
+                        });
+                    });
+
+                    document.querySelectorAll("input").forEach((element) => {
+                        element.addEventListener("focus", function () {
+                            console.log("focus");
+                            sortlist.option("disabled", true);
+                        });
+                        element.addEventListener("blur", function () {
+                            console.log("blur");
+                            sortlist.option("disabled", false);
+                        });
+                    });
+                };
+            //};
 
             // Re-initialize tooltips and sortable after content update
             document.addEventListener("htmx:afterSwap", function () {
@@ -116,9 +303,7 @@
                     });
                 });
         </script>
-        <div id="updating-indicator" class="htmx-indicator">
-                    Updating...
-                </div>
+        <div id="updating-indicator" class="htmx-indicator">Updating...</div>
         <footer>{% include 'base/parts/nav_bottom.html.jinja' %}</footer>
     </body>
 </html>

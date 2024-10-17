@@ -41,7 +41,9 @@ def get_room_list():
             print(f'floor list get floor_entry.get_item().name: {floor_entry.get_item().name}')
             room_list = create_user_list('Room', f'{current_user.active_home.name} {floor_entry.get_item().name} Rooms', floor_entry.id) # create rooms list
             print(f'room_list: {room_list} (type: {type(room_list)}) parent: {room_list.parent.get_item().name}')
-        room_list = get_userlist('Room', None, current_user.active_home.active_floor_id)
+        room_list = get_userlist('Room', f'{current_user.active_home.name} {current_user.active_home.active_floor.name} Rooms', current_user.active_home.active_floor_id)
+        if room_list is None:
+            raise Exception('room list is None')
     return floor_list,room_list
 
 @rooms.route('/room/default', methods=['GET', 'POST'])

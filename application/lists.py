@@ -141,7 +141,10 @@ def get_user_list_items(user_list_id: int) -> List[dict]:
 '''
 def get_userlist(item_model: str, list_name: str = None, parent_entry_item_id: int = None): #gets the primary list of a main model
     list_type = item_model
-    lists = current_user.lists.filter_by(list_type=list_type, list_name=list_name, parent_entry_item_id=parent_entry_item_id).all()
+    if list_name is None:
+        lists = current_user.lists.filter_by(list_type=list_type, parent_entry_item_id=parent_entry_item_id).all()
+    else:
+        lists = current_user.lists.filter_by(list_type=list_type, list_name=list_name, parent_entry_item_id=parent_entry_item_id).all()
     if len(lists) == 0:
         return None
         raise ValueError(f'No lists of type {list_type} found for user {current_user.id}')
@@ -287,18 +290,11 @@ def create_item_and_entry(item_model, list_id, item_id=None):
     flash(f'Item added to list: {new_item.item_model} {new_item.item_id}', 'success')#fixme edit task template to be more generic list text
     return render_template('lists/model/' + new_item.item_model.lower() + '.html.jinja', entry=new_item) #redirect(url_for('lists.update_list_order', list_id=list_id))
 
-@lists.route('/delete/<int:list_id>/<int:user_list_entry_id>', methods=['DELETE'])
-@login_required
-def delete(list_id, user_list_entry_id):
-    if delete_entry_and_item(user_list_entry_id):
-        flash(f'list_id: {list_id} user_list_entry_id: {user_list_entry_id} Item deleted', 'danger')
-    else:
-        flash('Item not found', 'danger')
-    return ('', 200)
 
+@lists.route('/update_list_order/', methods=['PUT', 'POST', 'DELETE', 'GET'])
 @lists.route('/update_list_order/<int:list_id>', methods=['PUT', 'POST', 'DELETE', 'GET'])
 @login_required
-def update_list_order(list_id):
+def update_list_order(list_id: int = None):
     hidden_list_id = request.form.get('hidden_list_id')
     if list_id is None or list_id == '':
         if hidden_list_id is not None and hidden_list_id != '':
@@ -381,4 +377,22 @@ def rename_item(item_model, item_id):
             db.session.commit()
             return render_template('lists/name.html.jinja', entry=entry)
 
+@lists.route('/delete/entry/<int:user_list_entry_id>', methods=['DELETE'])
+@login_required
+def delete(user_list_entry_id):
+    if delete_entry_and_item(user_list_entry_id):
+        flash(f'user_list_entry_id: {user_list_entry_id} Item deleted', 'danger')
+    else:
+        flash('Item not found', 'danger')
+    return ('', 204)
+
+@lists.route('/delete/list/<int:user_list_id>', methods=['DELETE'])
+@login_required
+def delete_list(user_list_id):
+    raise NotImplementedError('delete userlist not yet implemented')
+    if delete_entry_and_item(user_list_entry_id):
+        flash(f'user_list_entry_id: {user_list_entry_id} Item deleted', 'danger')
+    else:
+        flash('Item not found', 'danger')
+    return ('', 204)
 # [ ] Cleanup unused routes when finished and testing complete

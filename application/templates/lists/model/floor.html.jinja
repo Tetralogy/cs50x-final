@@ -50,7 +50,7 @@
     <span class="input-group-text">({{ entry.order }})</span>
     <button
         class="btn btn-danger"
-        hx-delete="/delete/{{ entry.user_list_id }}/{{ entry.id }}"
+        hx-delete="/delete/{{ entry.id }}"
         hx-confirm="Are you sure you want to delete this floor? {{ entry.user_list_id }}/{{ entry.id }}"
         hx-target="#floor-list-container"
         class="btn btn-danger"
