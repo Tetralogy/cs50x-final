@@ -260,7 +260,6 @@ def add_to_list(list_id):
 def create_list_and_item_and_entry(item_model):
     room_id = request.form.get('room_id')
     if not room_id:
-        raise ValueError('Invalid room_id')#xxx add input vals to form
         room_id = current_user.active_home.active_room_id
     print(f'room_id: {room_id}')
     room_name = db.get_or_404(Room, room_id).name
@@ -285,7 +284,7 @@ def create_item_and_entry(item_model, list_id, item_id=None):
     print(f'item_model: {item_model}, list_id: {list_id}, item_id: {item_id}, order: {order_index}, name: {name}')
     new_item = add_item_to_list(list_id, item_model, item_id, order_index, name)
     
-    flash(f'Item added to list: {new_item.item_model} {new_item.item_id}', 'success')#fixme edit task template 
+    flash(f'Item added to list: {new_item.item_model} {new_item.item_id}', 'success')#fixme edit task template to be more generic list text
     return render_template('lists/model/' + new_item.item_model.lower() + '.html.jinja', entry=new_item) #redirect(url_for('lists.update_list_order', list_id=list_id))
 
 @lists.route('/delete/<int:list_id>/<int:user_list_entry_id>', methods=['DELETE'])
@@ -295,11 +294,15 @@ def delete(list_id, user_list_entry_id):
         flash(f'list_id: {list_id} user_list_entry_id: {user_list_entry_id} Item deleted', 'danger')
     else:
         flash('Item not found', 'danger')
-    return redirect(url_for('lists.update_list_order', list_id=list_id))
+    return ('', 200)
 
 @lists.route('/update_list_order/<int:list_id>', methods=['PUT', 'POST', 'DELETE', 'GET'])
 @login_required
 def update_list_order(list_id):
+    hidden_list_id = request.form.get('hidden_list_id')
+    if list_id is None or list_id == '':
+        if hidden_list_id is not None and hidden_list_id != '':
+            list_id = int(hidden_list_id)
     order = request.form.getlist('items')
     print(f'list_id: {list_id}, order1: {order}')
     if order is None or len(order) == 0:
@@ -316,7 +319,6 @@ def update_list_order(list_id):
         order = [entry.id for entry in order]
             
     for index, entry_id in enumerate(order):
-        
         print(f'Updating entry_id: {entry_id} item_name: {db.get_or_404(UserListEntry, entry_id).get_item().name} with new order: {index}')
         update_entry_order(entry_id, index)
     flash('List order updated')
