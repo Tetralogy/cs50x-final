@@ -30,7 +30,7 @@ def define_rooms(floor_id: int=None):
     return 'define rooms', 200
 
 def get_room_list():
-    floor_list = get_userlist('Floor').entries # if home_id has floors, get list of floors from userlists
+    floor_list = get_userlist('Floor', f'{current_user.active_home.name} Floors').entries # if home_id has floors, get list of floors from userlists
     if current_user.active_home.floors.count() == 1: # if home has one floor, 
         room_list = create_user_list('Room', f'{current_user.active_home.name} Rooms', current_user.active_home.active_floor_id) # create rooms list
         print(f'room_list: {room_list} (type: {type(room_list)})')
@@ -41,7 +41,7 @@ def get_room_list():
             print(f'floor list get floor_entry.get_item().name: {floor_entry.get_item().name}')
             room_list = create_user_list('Room', f'{current_user.active_home.name} {floor_entry.get_item().name} Rooms', floor_entry.id) # create rooms list
             print(f'room_list: {room_list} (type: {type(room_list)}) parent: {room_list.parent.get_item().name}')
-        room_list = get_userlist('Room', current_user.active_home.active_floor_id)
+        room_list = get_userlist('Room', None, current_user.active_home.active_floor_id)
     return floor_list,room_list
 
 @rooms.route('/room/default', methods=['GET', 'POST'])

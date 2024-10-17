@@ -16,7 +16,7 @@ walkthrough = Blueprint('walkthrough', __name__)
 def walkthrough_setup():
     walk_setup = True
     session['walk_setup'] = walk_setup
-    floor_list = get_userlist('Floor').entries
+    floor_list = get_userlist('Floor', f'{current_user.active_home.name} Floors').entries
     return render_template('map/index.html.jinja', floor_list=floor_list, walk_setup=walk_setup)
 
 @walkthrough.route('/walkthrough/', methods=['GET'])
@@ -94,7 +94,7 @@ def walk_next():
         return 'No active room', 400
     parent_entry_item_id = current_user.active_home.active_floor_id
     #current_user.active_home.active_room_id
-    rooms_list = get_userlist('Room', parent_entry_item_id)
+    rooms_list = get_userlist('Room', f'{current_user.active_home.name} {current_user.active_home.active_floor.name} Rooms', parent_entry_item_id)
     print(f'rooms_list: {rooms_list} entries: {rooms_list.entries}')
     rooms_list_ordered = iter(sorted(rooms_list.entries, key=lambda x: x.order))
     print(f'rooms_list_ordered: {rooms_list_ordered}')

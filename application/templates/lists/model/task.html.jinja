@@ -1,0 +1,22 @@
+<div 
+    class="col img-thumbnail grabbable d-flex justify-content-center align-items-center"
+    id="{{ entry.item_model }}list-{{ entry.id }}"
+    data-id="{{ entry.id }}"
+    data-name="{{ entry.get_item().name }}"
+    style="min-height: 100px; min-width: 100px; background-image: url('https://picsum.photos/1920/1080?random={{ entry.id }}'); background-size: cover;"
+>  
+
+<div id="drag-outside-indicator" style="display: none; position: fixed; z-index: 1000;">🚫</div>
+<input type='hidden' name='items' value='{{ entry.id }}'/>
+{% if walk_setup == True %}
+<input required
+            class="form-check-input mt-0"
+            type="radio"
+            name="active_room"
+            id="radio-{{ entry.id }}"
+            value="{{ entry.item_id }}"
+        />
+{% endif %}
+{% include 'lists/name.html.jinja' %}
+    <p class="bg-dark">order: {{ entry.order }}</p>
+</div>

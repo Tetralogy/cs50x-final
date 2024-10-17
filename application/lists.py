@@ -37,7 +37,7 @@ def add_item_to_list(user_list_id: int, item_model: str, item_id: int = None, or
     if not model_class or not issubclass(model_class, db.Model):
         raise ValueError(f'Unknown item type {item_model}')
     if item_id is None:
-        new_item = create_new_default(item_model, name)
+        new_item = create_new_default(item_model, name, list_obj)
         if new_item is None:
             return None 
         item_id = new_item.item_id
@@ -54,7 +54,7 @@ def add_item_to_list(user_list_id: int, item_model: str, item_id: int = None, or
     db.session.commit()
     return new_list_item
 
-def create_new_default(item_model: str, name: str = None) -> UserListEntry:
+def create_new_default(item_model: str, name: str = None, list_obj: UserList = None) -> UserListEntry:
     print(f'create_new_default(): item_model: {item_model}, name: {name}')
     if item_model == 'Floor':
         print(f'name (create_new_default):  {name}')
@@ -78,7 +78,12 @@ def create_new_default(item_model: str, name: str = None) -> UserListEntry:
         db.session.commit()
         return UserListEntry(item_model=item_model, item_id=new_item.id)
     if item_model == 'Task':
-        new_item = Task(user_id=current_user.id)
+        if name is None or name == '':
+            room_task_count = int(len(list_obj.entries))
+            print(f'room_task_count: {room_task_count}')
+            name = f"{current_user.active_home.active_room.name} {item_model} {room_task_count + 1}"
+            print(f'name (create_new_default): {name}')
+        new_item = Task(user_id=current_user.id, name=name)
         db.session.add(new_item)
         db.session.commit()
         return UserListEntry(item_model=item_model, item_id=new_item.id)
@@ -134,9 +139,9 @@ def get_user_list_items(user_list_id: int) -> List[dict]:
         result.listsend(list_item)
     return result
 '''
-def get_userlist(item_model: str, parent_entry_item_id: int = None): #gets the primary list of a main model
+def get_userlist(item_model: str, list_name: str = None, parent_entry_item_id: int = None): #gets the primary list of a main model
     list_type = item_model
-    lists = current_user.lists.filter_by(list_type=list_type, parent_entry_item_id=parent_entry_item_id).all()
+    lists = current_user.lists.filter_by(list_type=list_type, list_name=list_name, parent_entry_item_id=parent_entry_item_id).all()
     if len(lists) == 0:
         return None
         raise ValueError(f'No lists of type {list_type} found for user {current_user.id}')
@@ -249,6 +254,25 @@ def add_to_list(list_id):
     
     flash(f'Item added to list: {new_item.item_model} {new_item.item_id}')
     return redirect(url_for('lists.get_list', list_id=list_id))'''
+
+@lists.route('/create/<string:item_model>', methods=['POST'])
+@login_required
+def create_list_and_item_and_entry(item_model):
+    room_id = request.form.get('room_id')
+    if not room_id:
+        raise ValueError('Invalid room_id')#xxx add input vals to form
+        room_id = current_user.active_home.active_room_id
+    print(f'room_id: {room_id}')
+    room_name = db.get_or_404(Room, room_id).name
+    list_name = f'{room_name} {item_model}s'
+    parent_entry_item_id = room_id
+        
+    userlist = get_userlist(item_model, list_name, parent_entry_item_id) 
+    if userlist is None:
+        userlist = create_user_list(item_model, list_name, parent_entry_item_id)
+    return create_item_and_entry(item_model, userlist.id)
+    #return redirect(url_for('lists.create_item_and_entry', item_model=item_model, list_id=userlist.id))
+    
 @lists.route('/create/<string:item_model>/<int:list_id>', methods=['POST'])
 @login_required
 def create_item_and_entry(item_model, list_id, item_id=None):
@@ -261,7 +285,7 @@ def create_item_and_entry(item_model, list_id, item_id=None):
     print(f'item_model: {item_model}, list_id: {list_id}, item_id: {item_id}, order: {order_index}, name: {name}')
     new_item = add_item_to_list(list_id, item_model, item_id, order_index, name)
     
-    flash(f'Item added to list: {new_item.item_model} {new_item.item_id}', 'success')
+    flash(f'Item added to list: {new_item.item_model} {new_item.item_id}', 'success')#fixme edit task template 
     return render_template('lists/model/' + new_item.item_model.lower() + '.html.jinja', entry=new_item) #redirect(url_for('lists.update_list_order', list_id=list_id))
 
 @lists.route('/delete/<int:list_id>/<int:user_list_entry_id>', methods=['DELETE'])
@@ -310,11 +334,15 @@ def show_list(list_id: int = None):
             raise ValueError('No list type specified')
         elif list_model == 'Room':
             print(f'showing room list list_id: {list_id}')
-            list_obj = get_userlist(list_model, current_user.active_home.active_floor_id)
+            list_obj = get_userlist(list_model, f'{current_user.active_home.name} {current_user.active_home.active_floor.name} {list_model}s', current_user.active_home.active_floor_id)
             print(f'list_obj: {list_obj}')
-            walk_setup = session.get('walk_setup', False)
-            print(f'walk_setup: {walk_setup}')
-            return render_template('lists/list.html.jinja', list_obj=list_obj, walk_setup=walk_setup)
+        elif list_model == 'Task':
+            print(f'showing task list list_id: {list_id}')
+            list_obj = get_userlist(list_model, f'{current_user.active_home.active_room.name} {list_model}s', current_user.active_home.active_room_id)
+            print(f'list_obj: {list_obj}')
+        walk_setup = session.get('walk_setup', False)
+        print(f'walk_setup: {walk_setup}')
+        return render_template('lists/list.html.jinja', list_obj=list_obj, walk_setup=walk_setup)
     print(f'showing list list_id: {list_id}')
     return render_template('lists/list.html.jinja', list_obj=db.get_or_404(UserList, list_id))
 
