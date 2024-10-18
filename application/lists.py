@@ -287,7 +287,7 @@ def create_item_and_entry(item_model, list_id, item_id=None):
     print(f'item_model: {item_model}, list_id: {list_id}, item_id: {item_id}, order: {order_index}, name: {name}')
     new_item = add_item_to_list(list_id, item_model, item_id, order_index, name)
     
-    flash(f'Item added to list: {new_item.item_model} {new_item.item_id}', 'success')#fixme edit task template to be more generic list text
+    flash(f'Item added to list: {new_item.item_model} {new_item.item_id}', 'success')
     return render_template('lists/model/' + new_item.item_model.lower() + '.html.jinja', entry=new_item) #redirect(url_for('lists.update_list_order', list_id=list_id))
 
 
@@ -383,15 +383,22 @@ def rename_item(item_model, item_id):
 @lists.route('/delete/entry/<int:user_list_entry_id>', methods=['DELETE'])
 @login_required
 def delete(user_list_entry_id):
+    code = request.args.get('code')
+    if not code:
+        code = 204
+    print(f'code: {code}')
     if delete_entry_and_item(user_list_entry_id):
         flash(f'user_list_entry_id: {user_list_entry_id} Item deleted', 'danger')
     else:
         flash('Item not found', 'danger')
-    return ('', 204)
+    return ('', code)
 
 @lists.route('/delete/list/<int:user_list_id>', methods=['DELETE'])
 @login_required
 def delete_list(user_list_id):
+    code = request.args.get('code')
+    if not code:
+        code = 204
     raise NotImplementedError('delete userlist not yet implemented')
     if delete_entry_and_item(user_list_entry_id):
         flash(f'user_list_entry_id: {user_list_entry_id} Item deleted', 'danger')

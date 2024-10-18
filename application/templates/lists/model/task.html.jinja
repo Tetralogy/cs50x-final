@@ -6,7 +6,12 @@
     data-order="{{ entry.order }}"
     data-list_id="{{ entry.user_list_id }}"
     data-model="{{ entry.item_model }}"
-    style="background-image: url('https://picsum.photos/1920/1080?random={{ entry.id }}'); background-size: cover;"#}
+    style="background-image: url('https://picsum.photos/1920/1080?random={{ entry.id }}'); background-size: cover;"
+
+                data-bs-toggle="tooltip"
+                data-bs-html="true"
+                data-bs-placement="left"
+                data-bs-title="<u>Drag</u> to <span class='text-nowrap'><b>reorder</b> {{entry.item_model}}</span>"
 >  
 
 <div id="drag-outside-indicator" style="display: none; position: fixed; z-index: 1000;">🚫</div>
@@ -21,6 +26,7 @@
         hx-confirm="Are you sure you want to delete this task? list#{{ entry.user_list_id }}/Entry#{{ entry.id }} {{ entry.get_item().name }}"
         hx-swap="delete"
         hx-target="#{{ entry.item_model }}list-{{ entry.id }}"
+        hx-vals='{"code": 200}'
         class="btn btn-danger float-end"
         type="button"
     >

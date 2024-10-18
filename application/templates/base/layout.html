@@ -73,9 +73,7 @@
                     console.log("htmx.onLoad triggered");
                     const sortableElements = document.querySelectorAll(".sortable");
 
-                    const typeslist = document.getElementById(
-                        "default-room-types-container",
-                    );
+                    const typeslist = document.querySelector(".typeslist");
                     if (typeslist !== null) {
                     new Sortable(typeslist, {
                         group: {
@@ -253,8 +251,7 @@
                         document.addEventListener("drop", function () {
                             hideDragOutsideIndicator();
                         });
-                    }
-                });
+                    
 
                     document.querySelectorAll("input").forEach((element) => {
                         element.addEventListener("focus", function () {
@@ -266,7 +263,9 @@
                             sortlist.option("disabled", false);
                         });
                     });
-                };
+                }
+            });
+        };
             //};
 
             // Re-initialize tooltips and sortable after content update
@@ -304,6 +303,10 @@
                     });
                     element.addEventListener("drag", function () {
                         clearTooltips();
+                        //initializeTooltips();
+                    });
+                    element.addEventListener("drop", function () {
+                        //clearTooltips();
                         initializeTooltips();
                     });
                 

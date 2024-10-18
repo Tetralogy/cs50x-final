@@ -4,6 +4,11 @@
     data-id="{{ entry.id }}"
     data-name="{{ entry.get_item().name }}"
     style="min-height: 100px; min-width: 100px; background-image: url('https://picsum.photos/1920/1080?random={{ entry.id }}'); background-size: cover;"
+
+                data-bs-toggle="tooltip"
+                data-bs-html="true"
+                data-bs-placement="top"
+                data-bs-title="<u>Drag</u> to <span class='text-nowrap'><b>reorder</b> {{entry.item_model}}</span>"
 >  
 
 <div id="drag-outside-indicator" style="display: none; position: fixed; z-index: 1000;">🚫</div>
@@ -19,5 +24,5 @@
         />
 {% endif %}
 {% include 'lists/name.html.jinja' %}
-    <p class="bg-dark">order: {{ entry.order }}</p>
+    {#<p class="bg-dark">order: {{ entry.order }}</p>#}
 </div>
