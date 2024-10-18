@@ -1,19 +1,19 @@
 <div 
-    class="col img-thumbnail grabbable d-flex justify-content-center align-items-center"
+    class="col img-thumbnail grabbable d-flex justify-content-between align-items-center"
     id="{{ entry.item_model }}list-{{ entry.id }}"
     data-id="{{ entry.id }}"
     data-name="{{ entry.get_item().name }}"
     data-order="{{ entry.order }}"
     data-list_id="{{ entry.user_list_id }}"
     data-model="{{ entry.item_model }}"
-    style="min-height: 100px; min-width: 100px; background-image: url('https://picsum.photos/1920/1080?random={{ entry.id }}'); background-size: cover;"
+    style="background-image: url('https://picsum.photos/1920/1080?random={{ entry.id }}'); background-size: cover;"#}
 >  
 
 <div id="drag-outside-indicator" style="display: none; position: fixed; z-index: 1000;">🚫</div>
 <input type='hidden' name='items' value='{{ entry.id }}'/>
 
 {% include 'lists/name.html.jinja' %}
-    <p class="bg-dark">order: {{ entry.order }}</p>
+    {#<p class="bg-dark">order: {{ entry.order }}</p>#}
 
         <button
         class="btn btn-danger"
@@ -21,7 +21,7 @@
         hx-confirm="Are you sure you want to delete this task? list#{{ entry.user_list_id }}/Entry#{{ entry.id }} {{ entry.get_item().name }}"
         hx-swap="delete"
         hx-target="#{{ entry.item_model }}list-{{ entry.id }}"
-        class="btn btn-danger"
+        class="btn btn-danger float-end"
         type="button"
     >
         X

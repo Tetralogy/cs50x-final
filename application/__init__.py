@@ -2,7 +2,7 @@ import functools
 import os
 from time import time
 from dotenv import load_dotenv
-from flask import Flask, render_template, request
+from flask import Flask, g, request, session as fsession, template_rendered
 from flask_login import LoginManager
 from flask_migrate import Migrate
 from flask_session import Session
@@ -26,12 +26,20 @@ def create_app(config_filename=None):
     def before_request_time():
         request.start_time = time()
 
+    @template_rendered.connect_via(app)
+    def track_template_rendered(sender, template, context, **extra):
+        g.template = template.name
+    
     @app.after_request
     def after_request_time(response):
         if hasattr(request, 'start_time'):
             duration = time() - request.start_time
             response.headers.add('X-Request-Duration', duration)
             print(f"Request to {request.path} took {duration} seconds")
+            view = fsession.get('view')
+            print(f'view (after_request): {view}')
+            template = getattr(g, 'template', None)
+            print(f'template (after_request): {template}')
         return response
 
     # Debug: Print current working directory
