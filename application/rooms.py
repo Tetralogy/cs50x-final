@@ -13,6 +13,8 @@ rooms = Blueprint('rooms', __name__)
 @rooms.route('/home/rooms/setup/<int:floor_id>', methods=['GET'])    # sends user to page to create a list of rooms for the home
 @login_required
 def define_rooms(floor_id: int=None):
+    view = 'rooms'
+    session['view'] = view
     print(f'define_rooms called with floor_id: {floor_id}')
     if request.method == 'GET':
         floor_id, has_rooms = floor_room_check(floor_id)
@@ -26,7 +28,7 @@ def define_rooms(floor_id: int=None):
         print(f'defaults_list: {defaults_list} (type: {type(defaults_list)})')  
         #create default room types list from default.json if it doesn't exist
         print(f'has_rooms: {has_rooms} (type: {type(has_rooms)})')
-        return render_template('homes/create_rooms.html.jinja', floor_list=floor_list, room_list=room_list, defaults_list=defaults_list, has_rooms=bool(has_rooms))
+        return render_template('homes/create_rooms.html.jinja', floor_list=floor_list, room_list=room_list, defaults_list=defaults_list, has_rooms=bool(has_rooms), view=view)
     return 'define rooms', 200
 
 def get_room_list():
@@ -145,6 +147,7 @@ def map(floor_id: int=None):
     floor_list, room_list = get_room_list()
     return render_template('map/index.html.jinja', floor_list=floor_list)
     raise NotImplementedError("map not yet implemented")
+
 #____________________________________________________________________________________________________________________#
 
 

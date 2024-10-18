@@ -21,67 +21,67 @@ def walkthrough_setup():
 
 @walkthrough.route('/walkthrough/', methods=['GET'])
 @walkthrough.route('/walkthrough/<room_name>/', methods=['GET'])
-@walkthrough.route('/walkthrough/<room_name>/<walk_step>', methods=['GET'])
+@walkthrough.route('/walkthrough/<room_name>/<view>', methods=['GET'])
 @walkthrough.route('/walkthrough/start', methods=['GET', 'POST'])
 @login_required
-def walk_start(room_name: str = None, walk_step: str = None):
+def walk_start(room_name: str = None, view: str = None):
     if request.method == 'GET':
         print(f'get room_name: {room_name}')
-        print(f'get walk_step: {walk_step}')
+        print(f'get view: {view}')
         if room_name:
             room = db.session.execute(select(Room).where(Room.home_id == current_user.active_home_id).where(Room.name == room_name)).first()
             if room:
                 print(f'room: {room} room_name: {room_name} room name name: {room[0].name}')
                 room_id = room[0].id
                 active_room = set_active_room(room_id)
-                if not walk_step:
-                    walk_step = 'rename'
+                if not view:
+                    view = 'rename'
                 
         
     if request.method == 'POST':
         print(f'post room_name: {room_name}')
-        print(f'post walk_step: {walk_step}')
+        print(f'post view: {view}')
         active_room_id = request.form.get('active_room')
         active_room = set_active_room(active_room_id)
         print(f'active_room: {active_room}')
-        walk_step = "rename"
-    session['walk_step'] = walk_step
-    print(f'walk_step: {walk_step}')
+        view = "rename"
+    session['view'] = view
+    print(f'view: {view}')
     #print(f'active_room: {active_room}')
-    return redirect(url_for('walkthrough.walk_steps', walk_step=walk_step))
+    return redirect(url_for('walkthrough.views', view=view))
     #return render_template('walkthrough/index.html.jinja', active_room=active_room)
 
 
 @walkthrough.route('/walkthrough/steps', methods=['GET', 'PUT'])
 @login_required
-def walk_steps():
+def views():
     if request.method == 'GET':
-        walk_step = request.args.get('walk_step')
-        if not walk_step:
-            walk_step = session.get('walk_step')
+        view = request.args.get('view')
+        if not view:
+            view = session.get('view')
 
     if request.method == 'PUT':
-        walk_step = request.form.get('walk_step')
-        print(f'walk_step: {walk_step}')
-        session['walk_step'] = walk_step
-    print(f'walk_step?: {walk_step}')
+        view = request.form.get('view')
+        print(f'view: {view}')
+        session['view'] = view
+    print(f'view?: {view}')
     
-    if os.path.exists(os.path.join(current_app.root_path, 'templates', f'walkthrough/parts/{walk_step}.html.jinja')):
-        print(f'File exists!: walkthrough/parts/{walk_step}.html.jinja')
+    if os.path.exists(os.path.join(current_app.root_path, 'templates', f'walkthrough/parts/{view}.html.jinja')):
+        print(f'File exists!: walkthrough/parts/{view}.html.jinja')
         
     else:
-        print(f'File not found! {walk_step}.html.jinja')
-        walk_step = 'rename'
+        print(f'File not found! {view}.html.jinja')
+        view = 'rename'
 
     if 'HX-Request' in request.headers:
-        #return render_template(f'walkthrough/parts/{walk_step}.html.jinja', walk_step=walk_step)
-        response = make_response(render_template(f'walkthrough/parts/{walk_step}.html.jinja'))
-        response.headers['HX-Push'] = f'/walkthrough/{current_user.active_home.active_room.name}/{walk_step}'
+        #return render_template(f'walkthrough/parts/{view}.html.jinja', view=view)
+        response = make_response(render_template(f'walkthrough/parts/{view}.html.jinja', view=view))
+        response.headers['HX-Push'] = f'/walkthrough/{current_user.active_home.active_room.name}/{view}'
         return response
     else:
         #return render_template('walkthrough/index.html.jinja')
-        response = make_response(render_template('walkthrough/index.html.jinja'))
-        response.headers['HX-Push'] = f'/walkthrough/{current_user.active_home.active_room.name}/{walk_step}'
+        response = make_response(render_template('walkthrough/index.html.jinja', view=view))
+        response.headers['HX-Push'] = f'/walkthrough/{current_user.active_home.active_room.name}/{view}'
         return response
     
     
@@ -108,9 +108,9 @@ def walk_next():
             next_room = rooms_list_ordered[next_room_index]
             active_room = set_active_room(next_room.item_id)
             break
-    walk_step = 'rename'
-    session['walk_step'] = walk_step
-    return redirect(url_for('walkthrough.walk_steps'))
+    view = 'rename'
+    session['view'] = view
+    return redirect(url_for('walkthrough.views'))
     #return render_template('walkthrough/index.html.jinja')
     
 

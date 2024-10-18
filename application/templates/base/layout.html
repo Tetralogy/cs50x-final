@@ -76,7 +76,7 @@
                     const typeslist = document.getElementById(
                         "default-room-types-container",
                     );
-
+                    if (typeslist !== null) {
                     new Sortable(typeslist, {
                         group: {
                             name: "typeslist",
@@ -87,13 +87,17 @@
                         sort: false,
                         cursor: "move",
                     });
+                }
 
                     sortableElements.forEach(function (sortableElement) {
+                        console.log("sortableElement: " + sortableElement);
+                        if (sortableElement !== null) {
                         const sortlist = new Sortable(sortableElement, {
                         //const sortlist = Sortable.create(sortableElement, {
                             //const roomlist = document.getElementById("");
                             //const roomsort = new Sortable(roomlist, {
                             group: {
+
                                 name: "sortableElement",
                                 pull: true,
                                 put: true,
@@ -249,7 +253,8 @@
                         document.addEventListener("drop", function () {
                             hideDragOutsideIndicator();
                         });
-                    });
+                    }
+                });
 
                     document.querySelectorAll("input").forEach((element) => {
                         element.addEventListener("focus", function () {
@@ -301,6 +306,7 @@
                         clearTooltips();
                         initializeTooltips();
                     });
+                
                 });
         </script>
         <div id="updating-indicator" class="htmx-indicator">Updating...</div>

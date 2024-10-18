@@ -324,6 +324,8 @@ def update_list_order(list_id: int = None):
 @lists.route('/show_list/<int:list_id>', methods=['GET', 'POST', 'PUT', 'DELETE'])
 @login_required
 def show_list(list_id: int = None):
+    view = session.get('view')
+    print(f'view: {view}')
     print(f'list_id1: {list_id}')
     if list_id is None or list_id == '':
         list_model = request.args.get('list_type')
@@ -340,9 +342,10 @@ def show_list(list_id: int = None):
             print(f'list_obj: {list_obj}')
         walk_setup = session.get('walk_setup', False)
         print(f'walk_setup: {walk_setup}')
-        return render_template('lists/list.html.jinja', list_obj=list_obj, walk_setup=walk_setup)
+        
+        return render_template('lists/list.html.jinja', list_obj=list_obj, walk_setup=walk_setup, view=view)
     print(f'showing list list_id: {list_id}')
-    return render_template('lists/list.html.jinja', list_obj=db.get_or_404(UserList, list_id))
+    return render_template('lists/list.html.jinja', list_obj=db.get_or_404(UserList, list_id), view=view)
 
 
 @lists.route('/rename/<string:item_model>/<int:item_id>', methods=['GET', 'PUT'])

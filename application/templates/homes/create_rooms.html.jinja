@@ -40,29 +40,22 @@
         <button class="btn btn-secondary" type="submit" id="button-addon2">
             Add Custom Room Type hx-trigger="keyup[key=='Enter']"
         </button>
-    </form>
+    </form>#fixme: 
 
     <div
         class="row g-0 row-cols-4 container-fluid bg-dark border border-primary border-5 rounded-top-4 p-1"
         id="default-room-types-container"
         hx-get="/show_list/{{ defaults_list.id }}"
         hx-trigger="load"
+        hx-swap="outerHTML"
+        hx-indicator="#updating-indicator"
     ></div>
     <p>
         place the room block in the square approximately where it might
         physically be in real life as if this was a top down view
     </p>
 
-    <div
-        id="room-list-updater"
-        class="row g-0 row-cols-4 container-fluid bg-dark border border-success border-5 rounded-bottom-4 p-1 sortable"
-        hx-put="/update_list_order/{{ room_list.id }}"
-        hx-trigger="end, remove, add delay:1s"
-        hx-include="[name='items']"
-        hx-indicator="#updating-indicator"
-        data-model="Room"
-        data-list_id="{{ room_list.id }}"
-    >
+
         <div
             class="row g-0 row-cols-4 container-fluid bg-dark border border-success border-5 rounded-bottom-4 p-1"
             id="room-list-loader"
@@ -76,7 +69,7 @@
                 Updating...
             </div>
         </div>
-    </div>
+
     <div id="updating-indicator" class="htmx-indicator">Updating...</div>
     <script>
 //        () => {
