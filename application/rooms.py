@@ -133,6 +133,8 @@ def floor_room_check(floor_id):
 @rooms.route('/map/<int:floor_id>', methods=['GET'])
 @login_required
 def map(floor_id: int=None):
+    view = 'map'
+    session['view'] = view
     session['walk_setup'] = False
     if floor_id is None:
         floor_id = current_user.active_home.active_floor_id
@@ -145,7 +147,7 @@ def map(floor_id: int=None):
     if has_rooms is False:
         return redirect(url_for('rooms.define_rooms', floor_id=floor_id))
     floor_list, room_list = get_room_list()
-    return render_template('map/index.html.jinja', floor_list=floor_list)
+    return render_template('map/index.html.jinja', floor_list=floor_list, view=view)
     raise NotImplementedError("map not yet implemented")
 
 #____________________________________________________________________________________________________________________#
