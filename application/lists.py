@@ -117,11 +117,14 @@ def create_new_default(item_model: str, name: str = None, list_obj: UserList = N
         db.session.commit()
         return UserListEntry(item_model=item_model, item_id=new_item.id)
     if item_model == 'Photo':
-        if name is None:
-            name = #fixme: set default
+        if name is None or name == '':
+            room_photo_count = int(len(list_obj.entries))
+            print(f'room_photo_count: {room_photo_count}')
+            name = f"{current_user.active_home.active_room.name} {item_model} {room_photo_count + 1}"
+            print(f'name (create_new_default): {name}')
         description = name
-        
-        photo_url: #fixme: get the url of the photo file
+        photo_url = request.args.get('url')#fixme: get the url of the photo file
+        print(f'photo_url: {photo_url}')
         raise notImplementedError('create_new_default: Photo not yet implemented')#bug impliment default photo upload
         new_item = Photo(user_id=current_user.id, room_id=current_user.active_home.active_room_id, description=description, photo_url=photo_url)
         db.session.add(new_item)
