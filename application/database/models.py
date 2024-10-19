@@ -228,8 +228,8 @@ class Photo(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey('user.id'))
     room_id: Mapped[int] = mapped_column(ForeignKey('room.id'))
+    description: Mapped[str] = mapped_column(String, nullable=False)
     photo_url: Mapped[str]
-    is_before_photo: Mapped[bool]
     photo_timestamp: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=func.now())
     user = relationship("User", back_populates="photos")
     annotations = relationship('TaskAnnotation', back_populates="photos", lazy='dynamic')

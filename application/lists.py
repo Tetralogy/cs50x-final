@@ -116,6 +116,17 @@ def create_new_default(item_model: str, name: str = None, list_obj: UserList = N
         db.session.add(new_item)
         db.session.commit()
         return UserListEntry(item_model=item_model, item_id=new_item.id)
+    if item_model == 'Photo':
+        if name is None:
+            name = #fixme: set default
+        description = name
+        
+        photo_url: #fixme: get the url of the photo file
+        raise notImplementedError('create_new_default: Photo not yet implemented')#bug impliment default photo upload
+        new_item = Photo(user_id=current_user.id, room_id=current_user.active_home.active_room_id, description=description, photo_url=photo_url)
+        db.session.add(new_item)
+        db.session.commit()
+        return UserListEntry(item_model=item_model, item_id=new_item.id)
     else:
         raise ValueError(f'Unknown item type {item_model}')
 '''

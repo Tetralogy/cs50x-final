@@ -44,7 +44,5 @@ id="list-updater-{{ list_obj.id }}"
     {% include 'lists/model/' + entry.item_model.lower() + '.html.jinja' %}
 {% endfor %}
 </div>
-{% if list_obj.list_type == "RoomDefault" %}
-<h1>list: {{ list_obj.list_name }} list type: {{ list_obj.list_type }}</h1>
-{% endif %}
+
 </div>
