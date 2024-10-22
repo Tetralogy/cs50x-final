@@ -18,7 +18,7 @@ def upload_form():
     print('upload_form called')
     return render_template('forms/upload_form.html.jinja')
 
-@upload.route('/upload', methods=['POST'])
+'''@upload.route('/upload', methods=['POST'])
 def upload_file():
     if 'file' not in request.files:
         print('No file part')
@@ -36,7 +36,7 @@ def upload_file():
         print(f'File saved: {filename}')
         flash (f'{filename} uploaded', 'success')
         return render_template('forms/uploaded.html.jinja', filename=filename)
-    return ("", 204)  # return empty response so htmx does not overwrite the progress bar value
+    return ("", 204)  # return empty response so htmx does not overwrite the progress bar value'''
 
 @upload.route('/profile/upload', methods=['POST'])
 def profile_upload():
@@ -58,12 +58,12 @@ def profile_upload():
         return render_template('profile/parts/uploaded.html.jinja', filename=filename)
     return ("", 204)  # return empty response so htmx does not overwrite the progress bar value
 
-@upload.route('/media/uploads/<filename>')
+'''@upload.route('/media/uploads/<filename>')
 def uploaded_file(filename):
     #return send_from_directory(current_app.config['UPLOAD_FOLDER'], filename)
     upload_folder = current_app.config['UPLOAD_FOLDER']
     print(f'files in {upload_folder}: {os.listdir(upload_folder)}')  # print the contents of the folder
-    return send_from_directory(upload_folder, filename)
+    return send_from_directory(upload_folder, filename)'''
 
 @upload.route('/view/<filename>')
 @login_required

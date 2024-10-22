@@ -1,9 +1,10 @@
+import os
 from typing import List, Optional
-
-from flask import Blueprint, flash, redirect, render_template, request, session, url_for
+from werkzeug.utils import secure_filename
+from flask import Blueprint, current_app, flash, redirect, render_template, request, send_from_directory, session, url_for
 from flask_login import current_user, login_required
 from sqlalchemy import and_, select
-from application.database.models import Floor, Room, RoomDefault, Supply, Task, UserList, UserListEntry
+from application.database.models import Floor, Photo, Room, RoomDefault, Supply, Task, UserList, UserListEntry
 from application.extension import db
 
     
@@ -117,15 +118,16 @@ def create_new_default(item_model: str, name: str = None, list_obj: UserList = N
         db.session.commit()
         return UserListEntry(item_model=item_model, item_id=new_item.id)
     if item_model == 'Photo':
+        #print(f'upload_photo(): {upload_photo()}')
+        filename, photo_url = upload_photo()
         if name is None or name == '':
             room_photo_count = int(len(list_obj.entries))
             print(f'room_photo_count: {room_photo_count}')
-            name = f"{current_user.active_home.active_room.name} {item_model} {room_photo_count + 1}"
+            name = f"{filename} {current_user.active_home.active_room.name} {item_model} {room_photo_count + 1}"
             print(f'name (create_new_default): {name}')
-        description = name
-        photo_url = request.args.get('url')#fixme: get the url of the photo file
+        description = name 
         print(f'photo_url: {photo_url}')
-        raise notImplementedError('create_new_default: Photo not yet implemented')#bug impliment default photo upload
+        #raise notImplementedError('create_new_default: Photo not yet implemented')#bug impliment default photo upload
         new_item = Photo(user_id=current_user.id, room_id=current_user.active_home.active_room_id, description=description, photo_url=photo_url)
         db.session.add(new_item)
         db.session.commit()
@@ -246,6 +248,53 @@ def set_default_floor_name():
         suffix = "th"
     return f"{floor_count + 1}{suffix} Floor"
 
+#@upload.route('/upload', methods=['POST'])
+def upload_photo():
+    if 'room_photo' not in request.files:
+        print('No file part')
+        return 'No file part'
+    photo = request.files['room_photo']
+    if photo.filename == '':
+        print('No selected file')
+        return 'No selected file'
+    if photo and not allowed_file(photo.filename):
+        print(f'Unexpected file type: {photo.filename}')
+        return 'Unexpected file type', 415
+    if photo and allowed_file(photo.filename):
+        filename = secure_filename(photo.filename)
+        file_path = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
+        # Check for duplicate filename and generate a unique one if needed
+        base, extension = os.path.splitext(filename)
+        counter = 1
+        while os.path.exists(file_path):
+            new_filename = f"{base}_{counter}{extension}"
+            file_path = os.path.join(current_app.config['UPLOAD_FOLDER'], new_filename)
+            counter += 1
+        filename = os.path.basename(file_path)
+        print(f'File size before saving: {len(photo.read())} bytes')  # Check file size
+        photo.seek(0)  # Reset file pointer to the beginning
+        try:
+            photo.save(file_path)
+        except Exception as e:
+            print(f"Error saving file: {e}")
+            return 'Error saving file', 500
+        print(f'File saved: {filename}')
+        photo_url = url_for('lists.uploaded_file', filename=filename)
+        print(f'Photo URL: {photo_url}')
+        flash (f'{filename} uploaded', 'success')
+        return filename, photo_url #render_template('.html.jinja', filename=filename)
+    return ("", 204)  # return empty response so htmx does not overwrite the progress bar value
+
+def allowed_file(filename):
+    return '.' in filename and \
+        filename.rsplit('.', 1)[1].lower() in current_app.config['ALLOWED_EXTENSIONS']
+        
+@lists.route('/media/uploads/<filename>')
+def uploaded_file(filename):
+    #return send_from_directory(current_app.config['UPLOAD_FOLDER'], filename)
+    upload_folder = current_app.config['UPLOAD_FOLDER']
+    print(f'files in {upload_folder}: {os.listdir(upload_folder)}')  # print the contents of the folder
+    return send_from_directory(upload_folder, filename)
 
 # Example usage in a Flask route
 @lists.route('/create_list', methods=['POST'])
@@ -354,6 +403,10 @@ def show_list(list_id: int = None):
             print(f'showing task list list_id: {list_id}')
             list_obj = get_userlist(list_model, f'{current_user.active_home.active_room.name} {list_model}s', current_user.active_home.active_room_id)
             print(f'list_obj: {list_obj}')
+        elif list_model == 'Photo':
+            print(f'showing photo list list_id: {list_id}')
+            list_obj = get_userlist(list_model, f'{current_user.active_home.active_room.name} {list_model}s', current_user.active_home.active_room_id)
+            print(f'list_obj: {list_obj}') #bug: test this
         walk_setup = session.get('walk_setup', False)
         print(f'walk_setup: {walk_setup}')
         
