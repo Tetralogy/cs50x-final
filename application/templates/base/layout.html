@@ -211,10 +211,12 @@
                             const indicator = document.getElementById(
                                 "drag-outside-indicator",
                             );
-                            console.log("showDragOutsideIndicator", x, y);
-                            indicator.style.left = `${x}px`;
-                            indicator.style.top = `${y}px`;
-                            indicator.style.display = "block";
+                            if (indicator !== null) {
+                                console.log("showDragOutsideIndicator", x, y);
+                                indicator.style.left = `${x}px`;
+                                indicator.style.top = `${y}px`;
+                                indicator.style.display = "block";
+                            }
                         }
 
                         // Function to hide the indicator
@@ -222,7 +224,9 @@
                             const indicator = document.getElementById(
                                 "drag-outside-indicator",
                             );
+                            if (indicator !== null) {
                             indicator.style.display = "none";
+                            }
                         }
 
                         // Add event listeners to track dragging outside the area
