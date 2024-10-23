@@ -347,7 +347,11 @@ def create_list_and_item_and_entry(item_model):
         if not userlist:
             userlist = create_user_list(item_model, list_name, parent_entry_item_id)
         name = None
-        order_index = None
+        order_index = request.form.get('order_index')
+        if not order_index:
+            order_index = None
+        else:
+            order_index = int(order_index)
         item_id = None
         print(f'item_model: {item_model}, list_id: {userlist.id}, item_id: {item_id}, order: {order_index}, name: {name}')
         new_item = add_item_to_list(userlist.id, item_model, item_id, order_index, name)
@@ -371,7 +375,7 @@ def create_list_and_item_and_entry(item_model):
 @login_required
 def create_item_and_entry(item_model, list_id, item_id: int=None):
     order_index = request.form.get('order_index')
-    if order_index is None or order_index == '':
+    if not order_index:
         order_index = None
     else:
         order_index = int(order_index)

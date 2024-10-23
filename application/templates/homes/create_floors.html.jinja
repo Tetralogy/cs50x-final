@@ -70,12 +70,23 @@
     <button type="button" class="btn btn-primary" 
     hx-post="/create/Floor"
     hx-target="[id*='list-updater-']"
+    hx-vals='{"order_index": "0"}'
+    hx-swap="afterbegin"
+    hx-indicator="#updating-indicator"
+    hx-on::after-request="this.reset()"
+    class="d-flex justify-content-center align-items-center input-group"
+    style="min-width: 20em; max-width: 40em; display: block;"
+    >Add Upper Floor</button>
+
+    <button type="button" class="btn btn-primary" 
+    hx-post="/create/Floor"
+    hx-target="[id*='list-updater-']"
     hx-swap="beforeend"
     hx-indicator="#updating-indicator"
     hx-on::after-request="this.reset()"
     class="d-flex justify-content-center align-items-center input-group"
     style="min-width: 20em; max-width: 40em; display: block;"
-    >Add Floor</button>
+    >Add Lower Floor</button>
     <form
         action="/home/floors/setup"
         method="POST"

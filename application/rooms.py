@@ -150,6 +150,7 @@ def map(floor_id: int=None):
     floor_id, has_rooms = floor_room_check(floor_id)
     floor = set_active_floor(floor_id)
     if has_rooms is False:
+        flash(f'Floor {floor.name} has no rooms, please add some' , category='danger')
         return redirect(url_for('rooms.define_rooms', floor_id=floor_id))
     floor_list, room_list = get_room_list()
     return render_template('map/index.html.jinja', floor_list=floor_list, view=view)
