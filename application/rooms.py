@@ -32,7 +32,7 @@ def define_rooms(floor_id: int=None):
     return 'define rooms', 200
 
 def get_room_list():
-    floor_list = get_userlist('Floor', f'{current_user.active_home.name} Floors').entries # if home_id has floors, get list of floors from userlists
+    floor_list = get_userlist('Floor', f'{current_user.active_home.name} Floors', current_user.active_home_id).entries # if home_id has floors, get list of floors from userlists
     if current_user.active_home.floors.count() == 1: # if home has one floor, 
         room_list = create_user_list('Room', f'{current_user.active_home.name} Rooms', current_user.active_home.active_floor_id) # create rooms list
         print(f'room_list: {room_list} (type: {type(room_list)})')
@@ -41,10 +41,15 @@ def get_room_list():
         for floor_entry in floor_list:
             print(f'floor list get floor_entry.id: {floor_entry.id}')
             print(f'floor list get floor_entry.get_item().name: {floor_entry.get_item().name}')
-            room_list = create_user_list('Room', f'{current_user.active_home.name} {floor_entry.get_item().name} Rooms', floor_entry.id) # create rooms list
-            print(f'room_list: {room_list} (type: {type(room_list)}) parent: {room_list.parent.get_item().name}')
+            room_list = create_user_list('Room', f'{current_user.active_home.name} {floor_entry.get_item().name} Rooms', floor_entry.item_id) # create rooms list
+            if room_list is None:
+                print('room list is None')
+                raise Exception('room list is None')
+            print(f'room_list: {room_list} (type: {type(room_list)}) parent: room_list.parent.get_item().name')
+        print(f'get_userlist(Room, current_user.active_home.name:{current_user.active_home.name} current_user.active_home.active_floor.name:{current_user.active_home.active_floor.name} Rooms, current_user.active_home.active_floor_id:{current_user.active_home.active_floor_id}')
         room_list = get_userlist('Room', f'{current_user.active_home.name} {current_user.active_home.active_floor.name} Rooms', current_user.active_home.active_floor_id)
         if room_list is None:
+            print('room list is None?!?')
             raise Exception('room list is None')
     return floor_list,room_list
 

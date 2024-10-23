@@ -20,7 +20,7 @@
 {% endif %}
 <div
 id="list-updater-{{ list_obj.id }}"
-{% if list_obj.list_type == "Task" %}
+{% if list_obj.list_type == "Task" or list_obj.list_type == "Floor" %}
         class="row g-0 row-cols-1 bg-dark border border-primary border-5 rounded-4 p-1 sortable"
         style="min-width: 20em; max-width: 40em; display: block;
   margin-left: auto;

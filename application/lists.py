@@ -23,6 +23,7 @@ def create_user_list(list_type: str, list_name: str, parent_entry_item_id: int =
     if existing_list:
         return existing_list
     new_list = UserList(user_id=current_user.id, list_name=list_name, list_type=list_type, parent_entry_item_id=parent_entry_item_id)
+    print(f'new_list: {new_list}')
     db.session.add(new_list)
     db.session.commit()
     return new_list
@@ -156,30 +157,45 @@ def get_user_list_items(user_list_id: int) -> List[dict]:
     return result
 '''
 def get_userlist(item_model: str, list_name: str = None, parent_entry_item_id: int = None): #gets the primary list of a main model
-    list_type = item_model
-    if list_name is None:
-        lists = current_user.lists.filter_by(list_type=list_type, parent_entry_item_id=parent_entry_item_id).all()
+    print(f'get_userlist(): item_model: {item_model}, list_name: {list_name}, parent_entry_item_id: {parent_entry_item_id}')
+    if not item_model:
+        raise ValueError("Missing item_model argument")
+    if all((item_model, list_name, parent_entry_item_id)):
+        lists = current_user.lists.filter_by(list_type=item_model, list_name=list_name, parent_entry_item_id=parent_entry_item_id).all()
+        print(f'lists found (All args): {lists}')
+    elif not list_name and not parent_entry_item_id:
+        lists = current_user.lists.filter_by(list_type=item_model).all()
+        print(f'lists found (model): {lists}')
+    elif not list_name and parent_entry_item_id:
+        lists = current_user.lists.filter_by(list_type=item_model, parent_entry_item_id=parent_entry_item_id).all()
+        print(f'lists found (model, parent): {lists}')
     else:
-        lists = current_user.lists.filter_by(list_type=list_type, list_name=list_name, parent_entry_item_id=parent_entry_item_id).all()
-    if len(lists) == 0:
+        lists = current_user.lists.filter_by(list_type=item_model, list_name=list_name).all()
+        print(f'lists found (model, name): {lists}')
+    if not lists:
+        print(f'No lists of type {item_model} found for user {current_user.id}')
         return None
-        raise ValueError(f'No lists of type {list_type} found for user {current_user.id}')
+    if len(lists) == 0:
+        print(f'len(lists) == 0: {list_name} {item_model} {parent_entry_item_id}')
+        return None
+        raise ValueError(f'No lists of type {item_model} found for user {current_user.id}')
     if len(lists) > 1: #[ ] add ability to select which list when more than one + test this
         print('More than one list matches the string. Please select one:')
         for i, lst in enumerate(lists):
             print(f'{i+1}. {lst.list_name}')
         selected_list_index = int(input('Enter the number of the list: '))
         list_id = lists[selected_list_index-1].id
-        raise ValueError(f'multiple lists of type {list_type} with parent {parent_entry_item_id} found for user {current_user.id}')
+        raise ValueError(f'multiple lists of type {item_model} with parent {parent_entry_item_id} found for user {current_user.id}')
     else:
+        print(f'len(lists) == 1: {list_name} {item_model} {parent_entry_item_id}')
         list_id = lists[0].id
     if not isinstance(list_id, int):
-        raise ValueError(f'No lists of type {list_type} found for user {current_user.id}')
+        raise ValueError(f'No lists of type {item_model} found for user {current_user.id}')
         if isinstance(list_id, str):
-            list_type = list_id
-            lists = current_user.lists.filter_by(list_type=list_type).all()
+            item_model = list_id
+            lists = current_user.lists.filter_by(list_type=item_model).all()
             if len(lists) == 0:
-                raise ValueError(f'No lists of type {list_type} found for user {current_user.id}')
+                raise ValueError(f'No lists of type {item_model} found for user {current_user.id}')
             if len(lists) > 1:
                 print('More than one list matches the string. Please select one:')
                 for i, lst in enumerate(lists):
@@ -190,7 +206,7 @@ def get_userlist(item_model: str, list_name: str = None, parent_entry_item_id: i
                 list_id = lists[0].id
     userlist =  db.get_or_404(UserList, list_id)
     newlist = []
-    print(f'List type: {type(userlist.entries)}')
+    print(f'userlist.entries: {userlist.entries} List type: {type(userlist.entries)}')
     for entry in userlist.entries:
         print(f'List: {entry.user_list.list_name}, Order: {entry.order}')
         #newlist.append(entry.get_item().as_list_item)
@@ -324,6 +340,19 @@ def add_to_list(list_id):
 @lists.route('/create/<string:item_model>', methods=['POST'])
 @login_required
 def create_list_and_item_and_entry(item_model):
+    if item_model == 'Floor':
+        parent_entry_item_id = current_user.active_home.id
+        list_name = f'{current_user.active_home.name} {item_model}s'
+        userlist = get_userlist(item_model, list_name, parent_entry_item_id)
+        if not userlist:
+            userlist = create_user_list(item_model, list_name, parent_entry_item_id)
+        name = None
+        order_index = None
+        item_id = None
+        print(f'item_model: {item_model}, list_id: {userlist.id}, item_id: {item_id}, order: {order_index}, name: {name}')
+        new_item = add_item_to_list(userlist.id, item_model, item_id, order_index, name)
+        flash(f'Item added to list: {new_item.item_model} {new_item.item_id}', 'success')
+        return render_template('lists/model/' + new_item.item_model.lower() + '.html.jinja', entry=new_item)
     room_id = request.form.get('room_id')
     if not room_id:
         room_id = current_user.active_home.active_room_id
@@ -333,14 +362,14 @@ def create_list_and_item_and_entry(item_model):
     parent_entry_item_id = room_id
         
     userlist = get_userlist(item_model, list_name, parent_entry_item_id) 
-    if userlist is None:
+    if not userlist:
         userlist = create_user_list(item_model, list_name, parent_entry_item_id)
     return create_item_and_entry(item_model, userlist.id)
     #return redirect(url_for('lists.create_item_and_entry', item_model=item_model, list_id=userlist.id))
     
 @lists.route('/create/<string:item_model>/<int:list_id>', methods=['POST'])
 @login_required
-def create_item_and_entry(item_model, list_id, item_id=None):
+def create_item_and_entry(item_model, list_id, item_id: int=None):
     order_index = request.form.get('order_index')
     if order_index is None or order_index == '':
         order_index = None
@@ -395,6 +424,10 @@ def show_list(list_id: int = None):
         print(f'list_model: {list_model}')
         if list_model is None or list_model == '':
             raise ValueError('No list type specified')
+        elif list_model == 'Floor':
+            print(f'showing floor list list_id: {list_id}')
+            list_obj = get_userlist(list_model, f'{current_user.active_home.name} {list_model}s', current_user.active_home_id)
+            print(f'list_obj: {list_obj}')
         elif list_model == 'Room':
             print(f'showing room list list_id: {list_id}')
             list_obj = get_userlist(list_model, f'{current_user.active_home.name} {current_user.active_home.active_floor.name} {list_model}s', current_user.active_home.active_floor_id)
