@@ -1,0 +1,4 @@
+
+{% for entry in entries %}
+    {% include 'lists/model/' + entry.item_model.lower() + '.html.jinja' %}
+{% endfor %}

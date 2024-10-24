@@ -1,4 +1,5 @@
 import os
+import time
 from typing import List, Optional
 from werkzeug.utils import secure_filename
 from flask import Blueprint, current_app, flash, redirect, render_template, request, send_from_directory, session, url_for
@@ -28,7 +29,7 @@ def create_user_list(list_type: str, list_name: str, parent_entry_item_id: int =
     db.session.commit()
     return new_list
 
-def add_item_to_list(user_list_id: int, item_model: str, item_id: int = None, order: int = None, name: str = None) -> UserListEntry:
+def add_item_to_list(user_list_id: int, item_model: str, item_id: int = None, order: int = None, name: str = None, photo_url: str = None) -> UserListEntry:
     list_obj = db.get_or_404(UserList, user_list_id)
     print(f'add_item_to_list(): user_list_id: {user_list_id}, item_model: {item_model}, item_id: {item_id}, order: {order}, name: {name}')
     if not list_obj:
@@ -39,9 +40,9 @@ def add_item_to_list(user_list_id: int, item_model: str, item_id: int = None, or
     if not model_class or not issubclass(model_class, db.Model):
         raise ValueError(f'Unknown item type {item_model}')
     if item_id is None:
-        new_item = create_new_default(item_model, name, list_obj)
-        if new_item is None:
-            return None 
+        new_item = create_new_default(item_model, name, list_obj, photo_url=photo_url)
+        if not new_item:
+            return None
         item_id = new_item.item_id
     if order is None:
         order = db.session.scalars(db.select(db.func.count()).select_from(UserListEntry).where(UserListEntry.user_list_id == user_list_id)).one()
@@ -56,12 +57,12 @@ def add_item_to_list(user_list_id: int, item_model: str, item_id: int = None, or
     db.session.commit()
     return new_list_item
 
-def create_new_default(item_model: str, name: str = None, list_obj: UserList = None) -> UserListEntry:
+def create_new_default(item_model: str, name: str = None, list_obj: UserList = None, photo_url: str = None) -> UserListEntry:
     print(f'create_new_default(): item_model: {item_model}, name: {name}')
     if item_model == 'Floor':
         print(f'name (create_new_default):  {name}')
         current_home = current_user.active_home
-        if name is None:
+        if not name:
             floor_name = set_default_floor_name()
         else:
             floor_count = current_user.active_home.floors.count()
@@ -80,7 +81,7 @@ def create_new_default(item_model: str, name: str = None, list_obj: UserList = N
         db.session.commit()
         return UserListEntry(item_model=item_model, item_id=new_item.id)
     if item_model == 'Task':
-        if name is None or name == '':
+        if not name:
             room_task_count = int(len(list_obj.entries))
             print(f'room_task_count: {room_task_count}')
             name = f"{current_user.active_home.active_room.name} {item_model} {room_task_count + 1}"
@@ -90,7 +91,7 @@ def create_new_default(item_model: str, name: str = None, list_obj: UserList = N
         db.session.commit()
         return UserListEntry(item_model=item_model, item_id=new_item.id)
     if item_model == 'Room':
-        if name is None:
+        if not name:
             name = item_model
         room_type = name
         same_type_rooms_count = db.session.execute(
@@ -107,7 +108,7 @@ def create_new_default(item_model: str, name: str = None, list_obj: UserList = N
         db.session.commit()
         return UserListEntry(item_model=item_model, item_id=new_item.id)
     if item_model == 'RoomDefault':
-        if name is None:
+        if not name:
             raise ValueError('name for RoomDefault cannot be None')
         existing_item = db.session.scalars(db.select(RoomDefault.name).filter_by(name=name, user_id=current_user.id)).first()
         if existing_item:
@@ -119,23 +120,31 @@ def create_new_default(item_model: str, name: str = None, list_obj: UserList = N
         db.session.commit()
         return UserListEntry(item_model=item_model, item_id=new_item.id)
     if item_model == 'Photo':
-        #print(f'upload_photo(): {upload_photo()}')
-        filename, photo_url = upload_photo()
-        if name is None or name == '':
+        if not name:
+            raise ValueError('name for Photo cannot be None')
             room_photo_count = int(len(list_obj.entries))
             print(f'room_photo_count: {room_photo_count}')
             name = f"{filename} {current_user.active_home.active_room.name} {item_model} {room_photo_count + 1}"
             print(f'name (create_new_default): {name}')
+
         description = name 
         print(f'photo_url: {photo_url}')
-        #raise notImplementedError('create_new_default: Photo not yet implemented')#bug impliment default photo upload
-        new_item = Photo(user_id=current_user.id, room_id=current_user.active_home.active_room_id, description=description, photo_url=photo_url)
+        print(f'description: {description}')
+        
+        # Create a new Photo item for each uploaded file
+        new_item = Photo(
+            user_id=current_user.id, 
+            room_id=current_user.active_home.active_room_id, 
+            description=description, 
+            photo_url=photo_url
+        )
         db.session.add(new_item)
+            
         db.session.commit()
         return UserListEntry(item_model=item_model, item_id=new_item.id)
     else:
         raise ValueError(f'Unknown item type {item_model}')
-'''
+''' uploaded_files 
 def get_user_list_items(user_list_id: int) -> List[dict]:
     items = UserListItem.query.filter_by(user_list_id=user_list_id).order_by(UserListItem.order).all()
     result = []
@@ -264,41 +273,77 @@ def set_default_floor_name():
         suffix = "th"
     return f"{floor_count + 1}{suffix} Floor"
 
-#@upload.route('/upload', methods=['POST'])
-def upload_photo():
-    if 'room_photo' not in request.files:
+@lists.route('/upload/<string:item_model>', methods=['POST'])
+@login_required
+def upload_photo(item_model): #todo: enable multiple files at once
+    photos = request.files.getlist('room_photos')
+    if 'room_photos' not in request.files:
         print('No file part')
         return 'No file part'
-    photo = request.files['room_photo']
-    if photo.filename == '':
-        print('No selected file')
-        return 'No selected file'
-    if photo and not allowed_file(photo.filename):
-        print(f'Unexpected file type: {photo.filename}')
-        return 'Unexpected file type', 415
-    if photo and allowed_file(photo.filename):
-        filename = secure_filename(photo.filename)
-        file_path = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
-        # Check for duplicate filename and generate a unique one if needed
-        base, extension = os.path.splitext(filename)
-        counter = 1
-        while os.path.exists(file_path):
-            new_filename = f"{base}_{counter}{extension}"
-            file_path = os.path.join(current_app.config['UPLOAD_FOLDER'], new_filename)
-            counter += 1
-        filename = os.path.basename(file_path)
-        print(f'File size before saving: {len(photo.read())} bytes')  # Check file size
-        photo.seek(0)  # Reset file pointer to the beginning
-        try:
-            photo.save(file_path)
-        except Exception as e:
-            print(f"Error saving file: {e}")
-            return 'Error saving file', 500
-        print(f'File saved: {filename}')
-        photo_url = url_for('lists.uploaded_file', filename=filename)
-        print(f'Photo URL: {photo_url}')
-        flash (f'{filename} uploaded', 'success')
-        return filename, photo_url #render_template('.html.jinja', filename=filename)
+    if not photos:
+        print('No selected files')
+        return 'No selected files'
+    room_id = request.form.get('room_id')
+    if not room_id:
+        room_id = current_user.active_home.active_room_id
+    print(f'room_id: {room_id}')
+    room_name = db.get_or_404(Room, room_id).name
+    list_name = f'{room_name} {item_model}s'
+    parent_entry_item_id = room_id
+        
+    userlist = get_userlist(item_model, list_name, parent_entry_item_id) 
+    if not userlist:
+        userlist = create_user_list(item_model, list_name, parent_entry_item_id)
+    new_items = []
+    for photo in photos:
+        if photo.filename == '':
+            print('No selected file')
+            
+        if photo and not allowed_file(photo.filename):
+            print(f'Unexpected file type: {photo.filename}')
+            
+        if photo and allowed_file(photo.filename):
+            filename = f"{current_user.id}_{int(time.time())}_{secure_filename(photo.filename)}"
+            print(f'Filename 1: {filename}')
+            file_path = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
+            # Check for duplicate filename and generate a unique one if needed
+            base, extension = os.path.splitext(filename)
+            counter = 1
+            while os.path.exists(file_path):
+                new_filename = f"{base}_{counter}{extension}"
+                file_path = os.path.join(current_app.config['UPLOAD_FOLDER'], new_filename)
+                counter += 1
+            filename = os.path.basename(file_path)
+            print(f'Filename 2: {filename}')
+            print(f'File size before saving: {len(photo.read())} bytes')  # Check file size
+            photo.seek(0)  # Reset file pointer to the beginning
+            try:
+                photo.save(file_path)
+                file_size_after_upload = os.path.getsize(file_path)
+                print(f'File size after saving: {file_size_after_upload} bytes') # double Check file size
+            except Exception as e:
+                print(f"Error saving file: {e}")
+                
+            print(f'File saved: {filename}')
+            photo_url = url_for('lists.uploaded_file', filename=filename)
+            print(f'Photo URL: {photo_url}')
+            flash(f'{filename} uploaded', 'success')
+            
+            
+            
+            room_photo_count = int(len(userlist.entries))
+            print(f'room_photo_count: {room_photo_count}')
+            name = f"{filename} {current_user.active_home.active_room.name} {item_model} {room_photo_count + 1}"
+            print(f'name (create_new_default): {name}')
+            
+            item_id = None
+            order_index = None
+            
+            new_item = add_item_to_list(userlist.id, item_model, item_id, order_index, name, photo_url=photo_url)
+            
+            new_items.append(new_item)
+
+    return render_template('lists/uploaded_list.html.jinja', entries=new_items)
     return ("", 204)  # return empty response so htmx does not overwrite the progress bar value
 
 def allowed_file(filename):
@@ -337,6 +382,9 @@ def add_to_list(list_id):
     flash(f'Item added to list: {new_item.item_model} {new_item.item_id}')
     return redirect(url_for('lists.get_list', list_id=list_id))'''
 
+
+
+
 @lists.route('/create/<string:item_model>', methods=['POST'])
 @login_required
 def create_list_and_item_and_entry(item_model):
@@ -346,7 +394,7 @@ def create_list_and_item_and_entry(item_model):
         userlist = get_userlist(item_model, list_name, parent_entry_item_id)
         if not userlist:
             userlist = create_user_list(item_model, list_name, parent_entry_item_id)
-        name = None
+        name = request.form.get('name') # check if basement or not
         order_index = request.form.get('order_index')
         if not order_index:
             order_index = None
@@ -382,7 +430,6 @@ def create_item_and_entry(item_model, list_id, item_id: int=None):
     name = request.form.get('name')
     print(f'item_model: {item_model}, list_id: {list_id}, item_id: {item_id}, order: {order_index}, name: {name}')
     new_item = add_item_to_list(list_id, item_model, item_id, order_index, name)
-    
     flash(f'Item added to list: {new_item.item_model} {new_item.item_id}', 'success')
     return render_template('lists/model/' + new_item.item_model.lower() + '.html.jinja', entry=new_item) #redirect(url_for('lists.update_list_order', list_id=list_id))
 
@@ -419,7 +466,7 @@ def update_list_order(list_id: int = None):
 @lists.route('/show_list/', methods=['GET', 'POST', 'PUT', 'DELETE'])
 @lists.route('/show_list/<int:list_id>', methods=['GET', 'POST', 'PUT', 'DELETE'])
 @login_required
-def show_list(list_id: int = None):
+def show_list(list_id: int = None): #todo: add a show in reverse order option
     view = session.get('view')
     print(f'view: {view}')
     print(f'list_id1: {list_id}')

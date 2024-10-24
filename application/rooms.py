@@ -4,7 +4,7 @@ from flask_login import current_user, login_required
 from sqlalchemy import select
 from application.extension import db
 
-from application.database.models import Floor, Room
+from application.database.models import Floor, Room, UserList
 from application.floors import set_active_floor
 from application.lists import add_item_to_list, create_user_list, get_userlist
 
@@ -64,7 +64,9 @@ def room_types():
     return redirect(url_for('lists.show_list', list_id=defaults_list.id))
         
 def load_default_room_types():
-    defaults_list = get_userlist('RoomDefault')
+    defaults_list = db.session.execute(
+        select(UserList).filter_by(list_type='RoomDefault', list_name='Room Type Defaults')
+    ).scalar() # check if defaults list exists
     print(f"defaults_list: {defaults_list}")
     if not defaults_list:
         defaults_list = create_user_list('RoomDefault', 'Room Type Defaults')

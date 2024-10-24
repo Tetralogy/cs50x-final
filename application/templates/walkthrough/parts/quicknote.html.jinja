@@ -6,7 +6,7 @@
     <div class="row justify-content-center">
 <form
     hx-post="/create/Task"
-    hx-target="#list-updater-{{ list_obj.id }}"
+    hx-target="next [id*='list-updater-']"
     hx-swap="beforeend"
     hx-indicator="#updating-indicator"
     hx-on::after-request="this.reset()"
@@ -17,7 +17,7 @@
     <input class="form-control" type="text" name="name" placeholder="Task title" />
     <input type="hidden" name="room_id" value="{{ current_user.active_home.active_room_id }}" />
     <button type="submit" class="btn btn-primary">Add task draft</button>
-</form>
+</form>#fixme: formatting of this form
 
     </div>
             <div
@@ -35,8 +35,8 @@
 
 
 
-
-
+#todo: make list item text bigger on ios
+{#
 <p>----------------------------------------------------------------------------------</p>
 hx-get="/show_list/"
                 hx-vals='{"list_type": "Task"}' hx-indicator="#updating-indicator"
@@ -56,6 +56,6 @@ hx-get="/show_list/"
 >
     <input type="file" name="photo" accept="image/*" />
     <button class="btn btn-primary" type="submit">Upload</button>
-</form>
+</form>#}
 
 

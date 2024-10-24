@@ -81,6 +81,7 @@
     <button type="button" class="btn btn-primary" 
     hx-post="/create/Floor"
     hx-target="[id*='list-updater-']"
+    hx-vals='{"name": "Basement"}'
     hx-swap="beforeend"
     hx-indicator="#updating-indicator"
     hx-on::after-request="this.reset()"
