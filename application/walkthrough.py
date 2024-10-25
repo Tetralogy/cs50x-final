@@ -86,9 +86,13 @@ def views():
     
     
 
-@walkthrough.route('/walkthrough/nextroom', methods=['GET'])
+@walkthrough.route('/walkthrough/<string:direction>', methods=['GET'])
 @login_required
-def walk_next():
+def walk_next(direction):
+    if direction == 'next' or direction == 'nextroom':
+        direction = +1
+    elif direction == 'prev' or direction == 'prevroom':
+        direction = -1
     current_active_room_list_entry = get_list_entries_for_item(current_user.active_home.active_room)[0]
     if not current_user.active_home.active_room:  
         return 'No active room', 400
@@ -105,7 +109,7 @@ def walk_next():
         raise Exception('No rooms in the list')
     for i, room in enumerate(rooms_list_ordered):
         if room == current_active_room_list_entry:
-            next_room_index = (i + 1) % len(rooms_list_ordered)
+            next_room_index = (i + direction) % len(rooms_list_ordered)
             next_room = rooms_list_ordered[next_room_index]
             print(f'next_room: {next_room}')
             active_room = set_active_room(next_room.item_id)
@@ -114,32 +118,6 @@ def walk_next():
     session['view'] = view
     return redirect(url_for('walkthrough.views'))
     #return render_template('walkthrough/index.html.jinja')
-    
-@walkthrough.route('/walkthrough/prevroom', methods=['GET'])
-@login_required
-def walk_prev():
-    current_active_room_list_entry = get_list_entries_for_item(current_user.active_home.active_room)[0]
-    if not current_user.active_home.active_room:  
-        return 'No active room', 400
-    parent_entry_item_id = current_user.active_home.active_floor_id
-    #current_user.active_home.active_room_id
-    rooms_list = get_userlist('Room', f'{current_user.active_home.name} {current_user.active_home.active_floor.name} Rooms', parent_entry_item_id)
-    print(f'rooms_list: {rooms_list} entries: {rooms_list.entries}')
-    rooms_list_ordered = iter(sorted(rooms_list.entries, key=lambda x: x.order))
-    print(f'rooms_list_ordered: {rooms_list_ordered}')
-    rooms_list_ordered = sorted(rooms_list.entries, key=lambda x: x.order)
-    if not rooms_list_ordered:
-        # handle the case where the list is empty
-        raise Exception('No rooms in the list')
-    for i, room in enumerate(rooms_list_ordered):
-        if room == current_active_room_list_entry:
-            next_room_index = (i - 1) % len(rooms_list_ordered)
-            next_room = rooms_list_ordered[next_room_index]
-            active_room = set_active_room(next_room.item_id)
-            break
-    view = 'rename'
-    session['view'] = view
-    return redirect(url_for('walkthrough.views'))
 
 
 #------------------------------------------------------------------------------------------------------------
