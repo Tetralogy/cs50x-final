@@ -5,31 +5,29 @@
 </p>
 <form hx-post="/upload/Photo" enctype="multipart/form-data" hx-trigger="change" hx-target="#test-photo-list-loader"
         hx-swap="beforebegin" hx-on::after-request="this.reset()">
-    <label for="room-photo-take">Take Photo</label>
-    <input
+    <label for="room-photo-take" class="btn btn-primary btn-lg">
+    📷 Take Photo
+    <input hidden
         id="room-photo-take"
         type="file"
         accept="image/*"
         capture="environment"
-        name="room_photos"        
+        name="room_photos" 
+        multiple
     />
+    </label>
 
-    <label for="room-photo-choose">Choose Photo</label>
-    <input
+    <label for="room-photo-choose"  class="btn btn-primary btn-lg">📂 Choose Photos
+    <input hidden
         id="room-photo-choose"
         type="file"
         accept="image/*"
         name="room_photos"
         multiple
         
-    />
+    /></label>
 </form>
 
-
-    <div class="input-group mb-3">
-  <input type="file" class="form-control" id="inputGroupFile02">
-  <label class="input-group-text" for="inputGroupFile02">Upload</label>
-</div>
 
 
 <p>------------------------------------------------------------------------------------</p>

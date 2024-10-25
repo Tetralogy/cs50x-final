@@ -389,3 +389,26 @@ background: #ff0000;
 .rename {
     background-color:transparent !important;
 }
+
+    /* Hide the actual file input */
+    /*input[type="file"] {
+        display: none;
+    }*/
+
+    /* Style the labels as buttons */
+    .custom-upload-button {
+        display: inline-block;
+        padding: 10px 15px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        text-align: center;
+    }
+
+    /* Add a hover effect for better interactivity */
+    .custom-button:hover {
+        background-color: #0056b3;
+    }
