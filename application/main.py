@@ -44,9 +44,14 @@ def index():
 
 
 
-@main.route('/tasklist', methods=['GET', 'POST'])
+@main.route('/tasks', methods=['GET'])
 @login_required
 def tasklist():
+    #show all tasks
+    #gather all tasks for the current user
+    
+    #organize them by room
+    return render_template('tasks/index.html.jinja')
     raise NotImplementedError("tasklist not yet implemented")
 
 '''

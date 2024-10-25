@@ -165,7 +165,7 @@ def get_user_list_items(user_list_id: int) -> List[dict]:
         result.listsend(list_item)
     return result
 '''
-def get_userlist(item_model: str, list_name: str = None, parent_entry_item_id: int = None): #gets the primary list of a main model
+def get_userlist(item_model: str, list_name: str = None, parent_entry_item_id: int = None, multiple: bool = False): #gets the primary list of a main model
     print(f'get_userlist(): item_model: {item_model}, list_name: {list_name}, parent_entry_item_id: {parent_entry_item_id}')
     if not item_model:
         raise ValueError("Missing item_model argument")
@@ -189,6 +189,9 @@ def get_userlist(item_model: str, list_name: str = None, parent_entry_item_id: i
         return None
         raise ValueError(f'No lists of type {item_model} found for user {current_user.id}')
     if len(lists) > 1: #[ ] add ability to select which list when more than one + test this
+        print(f'len(lists) > 1: {lists}')
+        print(f'multiple: {multiple}')
+        return lists if multiple else lists[0]
         print('More than one list matches the string. Please select one:')
         for i, lst in enumerate(lists):
             print(f'{i+1}. {lst.list_name}')
@@ -486,6 +489,10 @@ def update_list_order(list_id: int = None):
 @lists.route('/show_list/<int:list_id>', methods=['GET', 'POST', 'PUT', 'DELETE'])
 @login_required
 def show_list(list_id: int = None):
+    multiple = bool(request.args.get('multiple'))
+    parent_entry_item_id = request.args.get('parent_entry_item_id')
+    if parent_entry_item_id:
+        parent_entry_item_id = int(parent_entry_item_id)
     reversed = request.args.get('reversed')
     if reversed:
         print(f'reverse true?: {reversed}')
@@ -507,7 +514,22 @@ def show_list(list_id: int = None):
             print(f'list_obj: {list_obj}')
         elif list_model == 'Task':
             print(f'showing task list list_id: {list_id}')
-            list_obj = get_userlist(list_model, f'{current_user.active_home.active_room.name} {list_model}s', current_user.active_home.active_room_id)
+            if not parent_entry_item_id and not multiple:
+                parent_entry_item_id = current_user.active_home.active_room_id
+            
+            list_obj = get_userlist(list_model, parent_entry_item_id=parent_entry_item_id, multiple=multiple)
+            if list_obj: # if list_obj is not None
+                if not isinstance(list_obj, UserList): #if lists of listobjects
+                    new_list_obj = []
+                    # get all the lists out of list_obj and append list_obj.entries from each to newlist_obj
+                    for user_list in list_obj:
+                        print(f'user_list1: {user_list}')
+                        for entry in user_list.entries:
+                            new_list_obj.append(entry)
+                            print(f'new_list_obj: {new_list_obj}')
+                    #fixme: create a new master UserList from the items associated with the entries if it hasn't already been created
+                    list_name = user-inputted text here
+                    list_obj = new_list_obj
             print(f'list_obj: {list_obj}')
         elif list_model == 'Photo':
             print(f'showing photo list list_id: {list_id}')
