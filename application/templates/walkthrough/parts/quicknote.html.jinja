@@ -2,7 +2,7 @@
     Please quickly add task drafts for this room. You can add things that need
     to be cleaned or organized or maintained or upgraded.
 </p>
-
+<div class="container-fluid">
     <div class="row justify-content-center">
 <form
     hx-post="/create/Task"
@@ -17,7 +17,7 @@
     <input class="form-control" type="text" name="name" placeholder="Task title" />
     <input type="hidden" name="room_id" value="{{ current_user.active_home.active_room_id }}" />
     <button type="submit" class="btn btn-primary">Add task draft</button>
-</form>#fixme: formatting of this form
+</form>
 
     </div>
             <div
@@ -33,7 +33,7 @@
                 
             </div>
 
-
+</div>
 
 #todo: make list item text bigger on ios
 {#

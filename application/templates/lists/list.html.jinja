@@ -1,5 +1,5 @@
 <div class="container-fluid">
-{% if view == "quicknote" %}
+{#{% if view == "quicknote" %}
     <div class="row justify-content-center">
 <form
     hx-post="/create/Task"
@@ -17,7 +17,7 @@
 </form>
 
     </div>
-{% endif %}
+{% endif %}#}
 <div
 id="list-updater-{{ list_obj.id }}"
 {% if list_obj.list_type == "Task" or list_obj.list_type == "Floor" %}
