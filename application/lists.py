@@ -294,7 +294,7 @@ def set_default_floor_name():
 
 @lists.route('/upload/<string:item_model>', methods=['POST'])
 @login_required
-def upload_photo(item_model): #todo: enable multiple files at once
+def upload_photo(item_model):
     photos = request.files.getlist('room_photos')
     if 'room_photos' not in request.files:
         print('No file part')
@@ -485,14 +485,17 @@ def update_list_order(list_id: int = None):
 @lists.route('/show_list/', methods=['GET', 'POST', 'PUT', 'DELETE'])
 @lists.route('/show_list/<int:list_id>', methods=['GET', 'POST', 'PUT', 'DELETE'])
 @login_required
-def show_list(list_id: int = None): #todo: add a show in reverse order option
+def show_list(list_id: int = None):
+    reversed = request.args.get('reversed')
+    if reversed:
+        print(f'reverse true?: {reversed}')
     view = session.get('view')
     print(f'view: {view}')
     print(f'list_id1: {list_id}')
-    if list_id is None or list_id == '':
+    if not list_id:
         list_model = request.args.get('list_type')
         print(f'list_model: {list_model}')
-        if list_model is None or list_model == '':
+        if not list_model:
             raise ValueError('No list type specified')
         elif list_model == 'Floor':
             print(f'showing floor list list_id: {list_id}')
@@ -513,9 +516,9 @@ def show_list(list_id: int = None): #todo: add a show in reverse order option
         walk_setup = session.get('walk_setup', False)
         print(f'walk_setup: {walk_setup}')
         
-        return render_template('lists/list.html.jinja', list_obj=list_obj, walk_setup=walk_setup, view=view)
+        return render_template('lists/list.html.jinja', list_obj=list_obj, walk_setup=walk_setup, view=view, reversed=reversed)
     print(f'showing list list_id: {list_id}')
-    return render_template('lists/list.html.jinja', list_obj=db.get_or_404(UserList, list_id), view=view)
+    return render_template('lists/list.html.jinja', list_obj=db.get_or_404(UserList, list_id), view=view, reversed=reversed)
 
 
 @lists.route('/rename/<string:item_model>/<int:item_id>', methods=['GET', 'PUT'])
