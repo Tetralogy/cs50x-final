@@ -72,6 +72,8 @@ def new_floor_upper():
 @floors.route('/floorplan/<int:floor_id>', methods=['GET'])
 @login_required
 def floorplan(floor_id):
+    if not floor_id:
+        floor_id = current_user.active_home.active_floor_id
 
     print(f'edit_floor_rooms called with floor_id: {floor_id}')
     floor = db.get_or_404(Floor, floor_id)
@@ -81,26 +83,42 @@ def floorplan(floor_id):
     #floor_list = get_userlist('Floor')
     return redirect(url_for('rooms.define_rooms', floor_id=floor_id))
 
-@floors.route('/floorplan/next', methods=['GET'])
+@floors.route('/floorplan/<string:direction>', methods=['GET'])
 @login_required
-def get_next_floor():
+def get_next_floor(direction):
+    if direction == 'next' or direction == 'up':
+        direction = -1
+    elif direction == 'prev' or direction == 'down':
+        direction = +1
     floor_list = get_userlist('Floor')
     floor_list_ordered = sorted(floor_list.entries, key=lambda x: x.order)
     #users = db.session.execute(db.select(User).order_by(User.username)).scalars()
     print(f'floor_list_ordered: {floor_list_ordered}')
-    current_active_floor_list_entry = get_list_entries_for_item(current_user.active_home.active_floor)[0]
-    print(f'current_active_floor_list_entry.order: {current_active_floor_list_entry.order}')
-    next_floor_order = current_active_floor_list_entry.order -1
-    print(f'next_floor_order A: {next_floor_order}')
-    if next_floor_order < 0:
-        next_floor_order = len(floor_list_ordered) - 1
-    print(f'next_floor_order B: {next_floor_order}')
-        
-    next_floor_list_entry = floor_list_ordered[next_floor_order]
-    if not next_floor_list_entry:
-        raise Exception('No next floor')
-    next_floor_id = next_floor_list_entry.item_id
-    return redirect(url_for('floors.floorplan', floor_id=next_floor_id))
+    current_active_floor = db.get_or_404(Floor, current_user.active_home.active_floor_id) #current_user.active_home.active_floor
+    current_active_floor_list_entry = get_list_entries_for_item(current_active_floor)[0]
+    print(f'current_active_floor_list_entry: {current_active_floor_list_entry}')
+    parent_entry_item_id = current_user.active_home_id
+    floors_list = get_userlist('Floor', f'{current_user.active_home.name} Floors', parent_entry_item_id)
+    print(f'floors_list: {floors_list}')
+    floors_list_ordered = iter(sorted(floors_list.entries, key=lambda x: x.order))
+    floors_list_ordered = sorted(floors_list.entries, key=lambda x: x.order)
+    print(f'floors_list_ordered: {floors_list_ordered}')
+    if not floors_list_ordered:
+        # handle the case where the list is empty
+        raise Exception('No rooms in the list')
+    for i, floor in enumerate(floors_list_ordered):
+        print(f'floor: {floor}')
+        if floor == current_active_floor_list_entry:
+            next_floor_index = (i + direction) % len(floors_list_ordered)
+            next_floor = floors_list_ordered[next_floor_index]
+            print(f'next_floor: {next_floor}')
+
+            active_floor = set_active_floor(next_floor.item_id)
+            print(f'active_floor 1: {active_floor}')
+            break
+
+    print(f'active_floor 2: {active_floor}')
+    return redirect(url_for('floors.floorplan', floor_id=active_floor.id))
 '''#____________________________________________________________________________________________________________________#
     if request.method == 'GET':
         if db.session.execute(select(Floor).filter(Floor.home_id == current_user.active_home_id)).first(): #check if there is already a floor

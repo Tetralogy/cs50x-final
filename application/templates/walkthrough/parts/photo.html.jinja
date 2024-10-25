@@ -2,7 +2,7 @@
      INSTRUCTIONS: Please take a panorama picture of the
     room. Stand in the center of the room and take either 1 wide angle picture
     from a corner or 2 pictures from the middle of the room.
-</p>#FIXME add select photos option
+</p>
 <form hx-post="/upload/Photo" enctype="multipart/form-data" hx-trigger="change" hx-target="#test-photo-list-loader"
         hx-swap="beforebegin" hx-on::after-request="this.reset()">
     <label for="room-photo-take">Take Photo</label>

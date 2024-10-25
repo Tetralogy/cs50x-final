@@ -243,7 +243,9 @@
 //    </script>
 
     <div>
-        <a class="btn btn-primary" href="/floorplan/next"> Edit next floor </a>
+        <a class="btn btn-primary" href="/floorplan/prev" hx-boost="false"> Edit Previous Floor</a>
+        <a class="btn btn-primary" href="/floorplan/next" hx-boost="false"> Edit Next Floor</a>
+
         {% if has_rooms %}
             <a
                 class="btn btn-success"

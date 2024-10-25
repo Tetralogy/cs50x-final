@@ -221,14 +221,33 @@ def get_userlist(item_model: str, list_name: str = None, parent_entry_item_id: i
         #newlist.append(entry.get_item().as_list_item)
     return userlist
 
-def get_list_entries_for_item(item: object) -> List[UserListEntry]:
-    
+def get_list_entries_for_item(item: object, user_id: int = None) -> List[UserListEntry]:
+    if not user_id:
+        user_id = current_user.id
     # Find all list entries associated with this task
-    list_entries = UserListEntry.find_entries_for_item(item)
-
+    found_entries = UserListEntry.find_entries_for_item(item)
+    if not found_entries:
+        raise ValueError(f'No list entries found for item: {item}')
+    print(f'found_entries: {found_entries}')
     # Now you can iterate through the list entries
-    for entry in list_entries:
-        print(f"List: {entry.user_list.list_name}, Order: {entry.order}")
+    list_entries = []
+    if user_id: # must belong to specified user, default to current_user
+        for entry in found_entries:
+            if not entry.user_list or not entry.user_list.user_id:
+                print(f'Entry without user: {entry}')
+            elif entry.user_list.user_id == user_id:
+                print(f'Entry: {entry}')
+                print(f"Item Model: {entry.item_model}, Item ID: {entry.item_id}")
+                print(f'User List ID: {entry.user_list.id} User List Name: {entry.user_list.list_name}')
+                print(f'user: {entry.user_list.user_id}')
+                list_entries.append(entry)
+            else:
+                print(f'Entry does not belong to current_user: {entry}')
+    else: # belongs to any user if user_id is None
+        list_entries = found_entries
+        
+        
+        
 
     return list_entries
 
@@ -490,7 +509,7 @@ def show_list(list_id: int = None): #todo: add a show in reverse order option
         elif list_model == 'Photo':
             print(f'showing photo list list_id: {list_id}')
             list_obj = get_userlist(list_model, f'{current_user.active_home.active_room.name} {list_model}s', current_user.active_home.active_room_id)
-            print(f'list_obj: {list_obj}') #bug: test this
+            print(f'list_obj: {list_obj}')
         walk_setup = session.get('walk_setup', False)
         print(f'walk_setup: {walk_setup}')
         

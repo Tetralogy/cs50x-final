@@ -97,8 +97,9 @@ def walk_next():
     rooms_list = get_userlist('Room', f'{current_user.active_home.name} {current_user.active_home.active_floor.name} Rooms', parent_entry_item_id)
     print(f'rooms_list: {rooms_list} entries: {rooms_list.entries}')
     rooms_list_ordered = iter(sorted(rooms_list.entries, key=lambda x: x.order))
-    print(f'rooms_list_ordered: {rooms_list_ordered}')
+    print(f'rooms_list_ordered 1: {rooms_list_ordered}')
     rooms_list_ordered = sorted(rooms_list.entries, key=lambda x: x.order)
+    print(f'rooms_list_ordered 2: {rooms_list_ordered}')
     if not rooms_list_ordered:
         # handle the case where the list is empty
         raise Exception('No rooms in the list')
@@ -106,6 +107,7 @@ def walk_next():
         if room == current_active_room_list_entry:
             next_room_index = (i + 1) % len(rooms_list_ordered)
             next_room = rooms_list_ordered[next_room_index]
+            print(f'next_room: {next_room}')
             active_room = set_active_room(next_room.item_id)
             break
     view = 'rename'
