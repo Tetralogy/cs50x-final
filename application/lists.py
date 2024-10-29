@@ -12,7 +12,7 @@ from application.extension import db
 lists = Blueprint('lists', __name__)
 
 # Helper functions for CRUD operations
-def create_user_list(list_type: str, list_name: str, parent_entry_item_id: int = None) -> UserList:
+def create_user_list(list_type: str, list_name: str, parent_entry_id: int = None) -> UserList:
     if not list_type or not list_name:
         raise ValueError('All arguments are required')
     model_class = globals().get(list_type)
@@ -23,7 +23,7 @@ def create_user_list(list_type: str, list_name: str, parent_entry_item_id: int =
     ).scalar()
     if existing_list:
         return existing_list
-    new_list = UserList(user_id=current_user.id, list_name=list_name, list_type=list_type, parent_entry_item_id=parent_entry_item_id)
+    new_list = UserList(user_id=current_user.id, list_name=list_name, list_type=list_type, parent_entry_id=parent_entry_id)
     print(f'new_list: {new_list}')
     db.session.add(new_list)
     db.session.commit()
@@ -52,6 +52,13 @@ def add_item_to_list(user_list_id: int, item_model: str, item_id: int = None, or
             item.order += 1
         db.session.commit()
         order = 0
+    else:
+        all_items = db.session.scalars(db.select(UserListEntry).filter_by(user_list_id=user_list_id).order_by(UserListEntry.order)).all()
+        if any(item.order == order for item in all_items):
+            order += 1
+        for item in all_items:
+            if item.order >= order:
+                item.order += 1
     new_list_item = UserListEntry(user_list_id=user_list_id, item_model=item_model, item_id=item_id, order=order)
     db.session.add(new_list_item)
     db.session.commit()
@@ -165,18 +172,18 @@ def get_user_list_items(user_list_id: int) -> List[dict]:
         result.listsend(list_item)
     return result
 '''
-def get_userlist(item_model: str, list_name: str = None, parent_entry_item_id: int = None, multiple: bool = False): #gets the primary list of a main model
-    print(f'get_userlist(): item_model: {item_model}, list_name: {list_name}, parent_entry_item_id: {parent_entry_item_id}')
+def get_userlist(item_model: str, list_name: str = None, parent_entry_id: int = None, multiple: bool = False): #gets the primary list of a main model
+    print(f'get_userlist(): item_model: {item_model}, list_name: {list_name}, parent_entry_id: {parent_entry_id}')
     if not item_model:
         raise ValueError("Missing item_model argument")
-    if all((item_model, list_name, parent_entry_item_id)):
-        lists = current_user.lists.filter_by(list_type=item_model, list_name=list_name, parent_entry_item_id=parent_entry_item_id).all()
+    if all((item_model, list_name, parent_entry_id)):
+        lists = current_user.lists.filter_by(list_type=item_model, list_name=list_name, parent_entry_id=parent_entry_id).all()
         print(f'lists found (All args): {lists}')
-    elif not list_name and not parent_entry_item_id:
+    elif not list_name and not parent_entry_id:
         lists = current_user.lists.filter_by(list_type=item_model).all()
         print(f'lists found (model): {lists}')
-    elif not list_name and parent_entry_item_id:
-        lists = current_user.lists.filter_by(list_type=item_model, parent_entry_item_id=parent_entry_item_id).all()
+    elif not list_name and parent_entry_id:
+        lists = current_user.lists.filter_by(list_type=item_model, parent_entry_id=parent_entry_id).all()
         print(f'lists found (model, parent): {lists}')
     else:
         lists = current_user.lists.filter_by(list_type=item_model, list_name=list_name).all()
@@ -185,7 +192,7 @@ def get_userlist(item_model: str, list_name: str = None, parent_entry_item_id: i
         print(f'No lists of type {item_model} found for user {current_user.id}')
         return None
     if len(lists) == 0:
-        print(f'len(lists) == 0: {list_name} {item_model} {parent_entry_item_id}')
+        print(f'len(lists) == 0: {list_name} {item_model} {parent_entry_id}')
         return None
         raise ValueError(f'No lists of type {item_model} found for user {current_user.id}')
     if len(lists) > 1: #[ ] add ability to select which list when more than one + test this
@@ -197,9 +204,9 @@ def get_userlist(item_model: str, list_name: str = None, parent_entry_item_id: i
             print(f'{i+1}. {lst.list_name}')
         selected_list_index = int(input('Enter the number of the list: '))
         list_id = lists[selected_list_index-1].id
-        raise ValueError(f'multiple lists of type {item_model} with parent {parent_entry_item_id} found for user {current_user.id}')
+        raise ValueError(f'multiple lists of type {item_model} with parent {parent_entry_id} found for user {current_user.id}')
     else:
-        print(f'len(lists) == 1: {list_name} {item_model} {parent_entry_item_id}')
+        print(f'len(lists) == 1: {list_name} {item_model} {parent_entry_id}')
         list_id = lists[0].id
     if not isinstance(list_id, int):
         raise ValueError(f'No lists of type {item_model} found for user {current_user.id}')
@@ -223,6 +230,32 @@ def get_userlist(item_model: str, list_name: str = None, parent_entry_item_id: i
         print(f'List: {entry.user_list.list_name}, Order: {entry.order}')
         #newlist.append(entry.get_item().as_list_item)
     return userlist
+
+def combine_userlists(userlists: List[UserList]) -> UserList: #bug: test this
+    # search all userlists in the list and see if they have the same list_type
+    if all(userlist.list_type == userlists[0].list_type for userlist in userlists):
+        print("All userlists have the same list_type")
+        list_type = userlists[0].list_type
+    else:
+        print("Not all userlists have the same list_type")
+        list_type = 'Mixed'
+    
+    unique_list_names = set(str(userlist.id) for userlist in userlists)
+    list_name = f'Combined: {", ".join(unique_list_names)}'
+    print(f'list_name: {list_name}')
+    combined_list = get_userlist(list_type, list_name)
+    if not combined_list:
+        print(f'combined_list not found, creating new list')
+        combined_list = create_user_list(list_type, list_name)
+        #extract item_id from each entry
+        #add each item_id as a new entry to the new UserList combined list
+        for userlist in userlists:
+            for entry in userlist.entries:
+                # check if item_id is already in combined_list
+                if entry.item_id not in [item.item_id for item in combined_list.entries]:
+                    new_list_item = add_item_to_list(user_list_id=combined_list.id, item_model=entry.item_model, item_id=entry.item_id, order=entry.order)
+                print(f'new_list_item: {new_list_item}')
+    return combined_list
 
 def get_list_entries_for_item(item: object, user_id: int = None) -> List[UserListEntry]:
     if not user_id:
@@ -311,11 +344,11 @@ def upload_photo(item_model):
     print(f'room_id: {room_id}')
     room_name = db.get_or_404(Room, room_id).name
     list_name = f'{room_name} {item_model}s'
-    parent_entry_item_id = room_id
+    parent_entry_id = room_id
         
-    userlist = get_userlist(item_model, list_name, parent_entry_item_id) 
+    userlist = get_userlist(item_model, list_name, parent_entry_id) 
     if not userlist:
-        userlist = create_user_list(item_model, list_name, parent_entry_item_id)
+        userlist = create_user_list(item_model, list_name, parent_entry_id)
     new_items = []
     for photo in photos:
         if photo.filename == '':
@@ -411,11 +444,11 @@ def add_to_list(list_id):
 @login_required
 def create_list_and_item_and_entry(item_model):
     if item_model == 'Floor':
-        parent_entry_item_id = current_user.active_home.id
+        parent_entry_id = current_user.active_home.id #fixme: edit the parent to be the entry for home
         list_name = f'{current_user.active_home.name} {item_model}s'
-        userlist = get_userlist(item_model, list_name, parent_entry_item_id)
+        userlist = get_userlist(item_model, list_name, parent_entry_id)
         if not userlist:
-            userlist = create_user_list(item_model, list_name, parent_entry_item_id)
+            userlist = create_user_list(item_model, list_name, parent_entry_id)
         name = request.form.get('name') # check if basement or not
         order_index = request.form.get('order_index')
         if not order_index:
@@ -433,11 +466,11 @@ def create_list_and_item_and_entry(item_model):
     print(f'room_id: {room_id}')
     room_name = db.get_or_404(Room, room_id).name
     list_name = f'{room_name} {item_model}s'
-    parent_entry_item_id = room_id
+    parent_entry_id = room_id
         
-    userlist = get_userlist(item_model, list_name, parent_entry_item_id) 
+    userlist = get_userlist(item_model, list_name, parent_entry_id) 
     if not userlist:
-        userlist = create_user_list(item_model, list_name, parent_entry_item_id)
+        userlist = create_user_list(item_model, list_name, parent_entry_id)
     return create_item_and_entry(item_model, userlist.id)
     #return redirect(url_for('lists.create_item_and_entry', item_model=item_model, list_id=userlist.id))
     
@@ -489,11 +522,12 @@ def update_list_order(list_id: int = None):
 @lists.route('/show_list/<int:list_id>', methods=['GET', 'POST', 'PUT', 'DELETE'])
 @login_required
 def show_list(list_id: int = None):
-    multiple = bool(request.args.get('multiple'))
-    parent_entry_item_id = request.args.get('parent_entry_item_id')
-    if parent_entry_item_id:
-        parent_entry_item_id = int(parent_entry_item_id)
-    reversed = request.args.get('reversed')
+    multiple = bool(request.args.get('multiple') == 'True')
+    parent_entry_id = request.args.get('parent_entry_id')
+    
+    if parent_entry_id:
+        parent_entry_id = int(parent_entry_id)
+    reversed = request.args.get('reversed') == 'True'
     if reversed:
         print(f'reverse true?: {reversed}')
     view = session.get('view')
@@ -514,22 +548,13 @@ def show_list(list_id: int = None):
             print(f'list_obj: {list_obj}')
         elif list_model == 'Task':
             print(f'showing task list list_id: {list_id}')
-            if not parent_entry_item_id and not multiple:
-                parent_entry_item_id = current_user.active_home.active_room_id
-            
-            list_obj = get_userlist(list_model, parent_entry_item_id=parent_entry_item_id, multiple=multiple)
-            if list_obj: # if list_obj is not None
-                if not isinstance(list_obj, UserList): #if lists of listobjects
-                    new_list_obj = []
-                    # get all the lists out of list_obj and append list_obj.entries from each to newlist_obj
-                    for user_list in list_obj:
-                        print(f'user_list1: {user_list}')
-                        for entry in user_list.entries:
-                            new_list_obj.append(entry)
-                            print(f'new_list_obj: {new_list_obj}')
-                    #fixme: create a new master UserList from the items associated with the entries if it hasn't already been created
-                    list_name = user-inputted text here
-                    list_obj = new_list_obj
+            if not parent_entry_id and not multiple:
+                parent_entry_id = current_user.active_home.active_room_id #fixme: edit the parent to be the entry for room
+            #BUG: GENERATING NEW LIST EVERY LOAD
+            list_obj = get_userlist(list_model, parent_entry_id=parent_entry_id, multiple=multiple)
+            if list_obj and multiple: # if list_obj is not None and multiple is True:
+                new_list_obj = combine_userlists(userlists=list_obj)
+                list_obj = new_list_obj
             print(f'list_obj: {list_obj}')
         elif list_model == 'Photo':
             print(f'showing photo list list_id: {list_id}')

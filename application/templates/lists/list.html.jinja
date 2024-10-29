@@ -39,6 +39,7 @@ id="list-updater-{{ list_obj.id }}"
         data-model="{{ list_obj.list_type }}"
         data-list_id="{{ list_obj.id }}"
         >
+
 {% if reversed %}
 {% for entry in list_obj.entries | sort(attribute='order')| reverse %}
     {% include 'lists/model/' + entry.item_model.lower() + '.html.jinja' %}
