@@ -5,7 +5,7 @@ from werkzeug.utils import secure_filename
 from flask import Blueprint, current_app, flash, redirect, render_template, request, send_from_directory, session, url_for
 from flask_login import current_user, login_required
 from sqlalchemy import and_, select
-from application.database.models import Floor, Photo, Room, RoomDefault, Supply, Task, UserList, UserListEntry
+from application.database.models import Floor, Home, Photo, Room, RoomDefault, Supply, Task, UserList, UserListEntry
 from application.extension import db
 
     
@@ -14,9 +14,14 @@ lists = Blueprint('lists', __name__)
 # Helper functions for CRUD operations
 def create_user_list(list_type: str, list_name: str, parent_entry_id: int = None) -> UserList:
     if not list_type or not list_name:
-        raise ValueError('All arguments are required')
-    model_class = globals().get(list_type)
-    if not model_class or not issubclass(model_class, db.Model) and list_type != 'Mixed':
+        raise ValueError('list_type and list_name arguments are required')
+    # Split the list_type if it contains ' ComboList'
+    if 'ComboList' in list_type:
+        base_list_type = list_type.replace(' ComboList', '')
+        model_class = globals().get(base_list_type)
+    else:
+        model_class = globals().get(list_type)
+    if not model_class or not issubclass(model_class, db.Model) and 'ComboList' not in list_type:
         raise ValueError(f'Unknown list type {list_type}')
     existing_list = db.session.execute(
         select(UserList).filter_by(user_id=current_user.id, list_name=list_name)
@@ -66,6 +71,14 @@ def add_item_to_list(user_list_id: int, item_model: str, item_id: int = None, or
 
 def create_new_default(item_model: str, name: str = None, list_obj: UserList = None, photo_url: str = None) -> UserListEntry:
     print(f'create_new_default(): item_model: {item_model}, name: {name}')
+    if item_model == 'Home':
+        if not name:
+            user_home_count = db.session.query(Home).filter_by(user_id=current_user.id).count()
+            name = f'{current_user.username} Home {user_home_count + 1}'
+        new_item = Home(user_id=current_user.id, name=name)
+        db.session.add(new_item)
+        db.session.commit()
+        return UserListEntry(item_model=item_model, item_id=new_item.id)
     if item_model == 'Floor':
         print(f'name (create_new_default):  {name}')
         current_home = current_user.active_home
@@ -178,15 +191,19 @@ def get_userlist(item_model: str, list_name: str = None, parent_entry_id: int = 
         raise ValueError("Missing item_model argument")
     if all((item_model, list_name, parent_entry_id)):
         lists = current_user.lists.filter_by(list_type=item_model, list_name=list_name, parent_entry_id=parent_entry_id).all()
+        combolist_name = f'Combo {item_model} {list_name} {parent_entry_id}'
         print(f'lists found (All args): {lists}')
     elif not list_name and not parent_entry_id:
         lists = current_user.lists.filter_by(list_type=item_model).all()
+        combolist_name = f'Combo All {item_model}'
         print(f'lists found (model): {lists}')
     elif not list_name and parent_entry_id:
         lists = current_user.lists.filter_by(list_type=item_model, parent_entry_id=parent_entry_id).all()
+        combolist_name = f'Combo {item_model} {parent_entry_id}'
         print(f'lists found (model, parent): {lists}')
     else:
         lists = current_user.lists.filter_by(list_type=item_model, list_name=list_name).all()
+        combolist_name = f'Combo {item_model} {list_name}'
         print(f'lists found (model, name): {lists}')
     if not lists:
         print(f'No lists of type {item_model} found for user {current_user.id}')
@@ -198,13 +215,13 @@ def get_userlist(item_model: str, list_name: str = None, parent_entry_id: int = 
     if len(lists) > 1: #[ ] add ability to select which list when more than one + test this
         print(f'len(lists) > 1: {lists}')
         print(f'multiple: {multiple}')
-        return lists if multiple else lists[0]
-        print('More than one list matches the string. Please select one:')
-        for i, lst in enumerate(lists):
-            print(f'{i+1}. {lst.list_name}')
-        selected_list_index = int(input('Enter the number of the list: '))
-        list_id = lists[selected_list_index-1].id
-        raise ValueError(f'multiple lists of type {item_model} with parent {parent_entry_id} found for user {current_user.id}')
+        # combine the lists into a single UserList object
+        if multiple:
+            userlist = combine_userlists(userlists = lists, combolist_name=combolist_name, parent_entry_id=parent_entry_id)
+        else:
+            userlist = lists[0]
+        
+        return userlist
     else:
         print(f'len(lists) == 1: {list_name} {item_model} {parent_entry_id}')
         list_id = lists[0].id
@@ -231,7 +248,7 @@ def get_userlist(item_model: str, list_name: str = None, parent_entry_id: int = 
         #newlist.append(entry.get_item().as_list_item)
     return userlist
 
-def combine_userlists(userlists: List[UserList]) -> UserList: #bug: test this
+def combine_userlists(userlists: List[UserList], combolist_name: str = None, parent_entry_id: int = None) -> UserList:
     # search all userlists in the list and see if they have the same list_type
     if all(userlist.list_type == userlists[0].list_type for userlist in userlists):
         print("All userlists have the same list_type")
@@ -239,27 +256,36 @@ def combine_userlists(userlists: List[UserList]) -> UserList: #bug: test this
     else:
         print("Not all userlists have the same list_type")
         list_type = 'Mixed'
-    
-    unique_list_names = set(str(userlist.id) for userlist in userlists)
-    list_name = f'Combined: {", ".join(unique_list_names)}'
-    print(f'list_name: {list_name}')
-    combined_list = get_userlist(list_type, list_name)
+    list_type = f'{list_type} ComboList'
+    if not combolist_name:
+        combolist_name = list_type
+    print(f'list_name: {combolist_name}')
+    if not parent_entry_id:
+        if all(userlist.parent_entry_id == userlists[0].parent_entry_id for userlist in userlists):
+            parent_entry_id = userlists[0].parent_entry_id
+        else:
+            parent_entry_id = get_list_entries_for_item(current_user.active_home)[0].id
+    combined_list = get_userlist(list_type, combolist_name, parent_entry_id=parent_entry_id)
     if not combined_list:
         print(f'combined_list not found, creating new list')
-        combined_list = create_user_list(list_type, list_name)
-        #extract item_id from each entry
-        #add each item_id as a new entry to the new UserList combined list
-        for userlist in userlists:
-            for entry in userlist.entries:
-                # check if item_id is already in combined_list
-                if entry.item_id not in [item.item_id for item in combined_list.entries]:
-                    new_list_item = add_item_to_list(user_list_id=combined_list.id, item_model=entry.item_model, item_id=entry.item_id, order=entry.order)
+        combined_list = create_user_list(list_type, combolist_name, parent_entry_id=parent_entry_id)
+    print(f'combined_list?: {combined_list}')
+    for userlist in userlists:
+        for entry in userlist.entries:
+            print(f'entry: {entry}')
+            # check if item_id is already in combined_list
+            if entry.item_id not in [item.item_id for item in combined_list.entries]:
+                #extract item_id from each entry
+                #add each item_id as a new entry to the new UserList combined list
+                new_list_item = add_item_to_list(user_list_id=combined_list.id, item_model=entry.item_model, item_id=entry.item_id, order=entry.order)
                 print(f'new_list_item: {new_list_item}')
     return combined_list
 
-def get_list_entries_for_item(item: object, user_id: int = None) -> List[UserListEntry]:
+def get_list_entries_for_item(item: object, list_type: str = None, user_id: int = None) -> List[UserListEntry]:
     if not user_id:
         user_id = current_user.id
+    if not list_type:
+        list_type = item.__class__.__name__
     # Find all list entries associated with this task
     found_entries = UserListEntry.find_entries_for_item(item)
     if not found_entries:
@@ -271,7 +297,7 @@ def get_list_entries_for_item(item: object, user_id: int = None) -> List[UserLis
         for entry in found_entries:
             if not entry.user_list or not entry.user_list.user_id:
                 print(f'Entry without user: {entry}')
-            elif entry.user_list.user_id == user_id:
+            elif entry.user_list.user_id == user_id and entry.user_list.list_type == list_type:
                 print(f'Entry: {entry}')
                 print(f"Item Model: {entry.item_model}, Item ID: {entry.item_id}")
                 print(f'User List ID: {entry.user_list.id} User List Name: {entry.user_list.list_name}')
@@ -412,7 +438,7 @@ def uploaded_file(filename):
     print(f'files in {upload_folder}: {os.listdir(upload_folder)}')  # print the contents of the folder
     return send_from_directory(upload_folder, filename)
 
-# Example usage in a Flask route
+'''# Example usage in a Flask route
 @lists.route('/create_list', methods=['POST'])
 @login_required
 def create_list():
@@ -420,7 +446,7 @@ def create_list():
     list_type = request.form.get('list_type', 'custom')
     new_list = create_user_list(current_user.id, list_name, list_type)
     flash(f'List created: {new_list.list_name}')
-    return redirect(url_for('lists.get_list', list_id=new_list.id))
+    return redirect(url_for('lists.get_list', list_id=new_list.id))'''
 
 '''@lists.route('/add_to_list/<int:list_id>', methods=['POST'])
 @login_required
@@ -443,8 +469,23 @@ def add_to_list(list_id):
 @lists.route('/create/<string:item_model>', methods=['POST'])
 @login_required
 def create_list_and_item_and_entry(item_model):
+    if item_model == 'Home':
+        multifloor=request.form.get('multifloor') == 'on'
+        print(f'multifloor: {multifloor}')
+        list_name = f'{current_user.username} {item_model}s'
+        userlist = get_userlist(item_model, list_name)
+        if not userlist:
+            userlist = create_user_list(item_model, list_name)
+        name = request.form.get('home_name') #todo: validate if name is unique
+        new_home_entry = add_item_to_list(userlist.id, item_model, name=name)
+        current_user.active_home_id = new_home_entry.item_id
+        db.session.commit()
+        if multifloor:
+            print(f'multifloor check: {multifloor}')
+            return redirect(url_for('floors.define_floors', multifloor=multifloor))
+        return redirect(url_for('homes.home_setup'))
     if item_model == 'Floor':
-        parent_entry_id = current_user.active_home.id #fixme: edit the parent to be the entry for home
+        parent_entry_id = get_list_entries_for_item(current_user.active_home)[0].id
         list_name = f'{current_user.active_home.name} {item_model}s'
         userlist = get_userlist(item_model, list_name, parent_entry_id)
         if not userlist:
@@ -464,9 +505,9 @@ def create_list_and_item_and_entry(item_model):
     if not room_id:
         room_id = current_user.active_home.active_room_id
     print(f'room_id: {room_id}')
-    room_name = db.get_or_404(Room, room_id).name
-    list_name = f'{room_name} {item_model}s'
-    parent_entry_id = room_id
+    room = db.get_or_404(Room, room_id)
+    list_name = f'{room.name} {item_model}s'
+    parent_entry_id = get_list_entries_for_item(room)[0].id
         
     userlist = get_userlist(item_model, list_name, parent_entry_id) 
     if not userlist:
@@ -524,13 +565,16 @@ def update_list_order(list_id: int = None):
 def show_list(list_id: int = None):
     multiple = bool(request.args.get('multiple') == 'True')
     parent_entry_id = request.args.get('parent_entry_id')
-    
     if parent_entry_id:
         parent_entry_id = int(parent_entry_id)
     reversed = request.args.get('reversed') == 'True'
     if reversed:
         print(f'reverse true?: {reversed}')
-    view = session.get('view')
+    view_override = request.args.get('view_override')
+    if view_override:
+        view = view_override
+    else:
+        view = session.get('view')
     print(f'view: {view}')
     print(f'list_id1: {list_id}')
     if not list_id:
@@ -540,25 +584,23 @@ def show_list(list_id: int = None):
             raise ValueError('No list type specified')
         elif list_model == 'Floor':
             print(f'showing floor list list_id: {list_id}')
-            list_obj = get_userlist(list_model, f'{current_user.active_home.name} {list_model}s', current_user.active_home_id)
+            list_obj = get_userlist(list_model, parent_entry_id=get_list_entries_for_item(current_user.active_home)[0].id)
             print(f'list_obj: {list_obj}')
         elif list_model == 'Room':
             print(f'showing room list list_id: {list_id}')
-            list_obj = get_userlist(list_model, f'{current_user.active_home.name} {current_user.active_home.active_floor.name} {list_model}s', current_user.active_home.active_floor_id)
+            list_obj = get_userlist(list_model, parent_entry_id=get_list_entries_for_item(current_user.active_home.active_floor)[0].id)
             print(f'list_obj: {list_obj}')
         elif list_model == 'Task':
             print(f'showing task list list_id: {list_id}')
-            if not parent_entry_id and not multiple:
-                parent_entry_id = current_user.active_home.active_room_id #fixme: edit the parent to be the entry for room
-            #BUG: GENERATING NEW LIST EVERY LOAD
+            if not parent_entry_id and not multiple: 
+                parent_entry_id = get_list_entries_for_item(current_user.active_home.active_room)[0].id 
+            print(f'Task list parent_entry_id: {parent_entry_id}')
+            # if multiple is True, show all tasks, else show the first list found
             list_obj = get_userlist(list_model, parent_entry_id=parent_entry_id, multiple=multiple)
-            if list_obj and multiple: # if list_obj is not None and multiple is True:
-                new_list_obj = combine_userlists(userlists=list_obj)
-                list_obj = new_list_obj
             print(f'list_obj: {list_obj}')
         elif list_model == 'Photo':
             print(f'showing photo list list_id: {list_id}')
-            list_obj = get_userlist(list_model, f'{current_user.active_home.active_room.name} {list_model}s', current_user.active_home.active_room_id)
+            list_obj = get_userlist(list_model, parent_entry_id=get_list_entries_for_item(current_user.active_home.active_room)[0].id) 
             print(f'list_obj: {list_obj}')
         walk_setup = session.get('walk_setup', False)
         print(f'walk_setup: {walk_setup}')

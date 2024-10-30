@@ -26,7 +26,7 @@ def inject_current_user():
 @main.route('/')
 @login_required
 def index():
-    return redirect(url_for('homes.home_setup')) #bug: fix home not having an entry id
+    return redirect(url_for('homes.home_setup'))
     return redirect(url_for('rooms.map'))
     #return render_template('homes/create_home.html.jinja') #temporary
     #return render_template('dashboard/index.html.jinja', user=current_user, page=1)
@@ -51,6 +51,8 @@ def tasklist():
     #gather all tasks for the current user
     
     #organize them by room
+    view = 'quicknote'
+    session['view'] = view
     return render_template('tasks/index.html.jinja')
     raise NotImplementedError("tasklist not yet implemented")
 

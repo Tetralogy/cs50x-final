@@ -1,0 +1,24 @@
+<div 
+    class="col img-thumbnail grabbable d-flex justify-content-between align-items-center"
+    
+    style="background-image: url('https://picsum.photos/1920/1080?random'); background-size: cover;"
+
+                data-bs-toggle="tooltip"
+                data-bs-html="true"
+                data-bs-placement="left"
+                data-bs-title="<u>Drag</u> to <span class='text-nowrap'><b>reorder</b> </span>"
+>  
+
+<div id="drag-outside-indicator" style="display: none; position: fixed; z-index: 1000;">🚫</div>
+
+<div hx-post="/create/Task"
+    hx-target="#list-updater-{{ list_obj.id }}"
+    hx-swap="afterBegin"
+    hx-indicator="#updating-indicator">
+    <button type="button" class="btn btn-primary">+ Create a New Task</button>
+    </div>
+testy testicles
+    {#<p class="bg-dark">order: {{ entry.order }}</p>#}
+
+        
+</div>

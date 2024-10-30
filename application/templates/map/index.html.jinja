@@ -8,7 +8,7 @@
         <h3>Choose a room to start the walkthrough (walkthrough setup=True)</h3>
     {% endif %}
     <ul class="nav nav-tabs">
-        {% for navfloor in floor_list | sort(attribute='order') | reverse %}
+        {% for navfloor in floor_list.entries | sort(attribute='order') | reverse %}
             <li class="nav-item">
                 <a
                     class="nav-link {% if navfloor.item_id == current_user.active_home.active_floor_id %}active{% endif %}"

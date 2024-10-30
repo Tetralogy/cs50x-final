@@ -6,7 +6,7 @@ from application.extension import db
 
 from application.database.models import Floor, Room, UserList
 from application.floors import set_active_floor
-from application.lists import add_item_to_list, create_user_list, get_userlist
+from application.lists import add_item_to_list, create_user_list, get_list_entries_for_item, get_userlist
 
 rooms = Blueprint('rooms', __name__)
 
@@ -32,25 +32,30 @@ def define_rooms(floor_id: int=None):
     return 'define rooms', 200
 
 def get_room_list():
-    floor_list = get_userlist('Floor', f'{current_user.active_home.name} Floors', current_user.active_home_id).entries # if home_id has floors, get list of floors from userlists
-    if current_user.active_home.floors.count() == 1: # if home has one floor, 
-        room_list = create_user_list('Room', f'{current_user.active_home.name} Rooms', current_user.active_home.active_floor_id) # create rooms list
+    floor_list = get_userlist('Floor', f'{current_user.active_home.name} Floors', get_list_entries_for_item(current_user.active_home)[0].id) # if home_id has floors, get list of floors from userlists
+    if not floor_list:
+        print('floor list is None')
+        raise Exception('floor list is None')
+    print(f'floor_list: {floor_list} (type: {type(floor_list)})')
+    print(f'floor_list entries count: {len(floor_list.entries)}')
+    if len(floor_list.entries) == 1: # if home has one floor, 
+        room_list = create_user_list('Room', f'{current_user.active_home.name} Rooms', get_list_entries_for_item(current_user.active_home.active_floor)[0].id) # create rooms list
         print(f'room_list: {room_list} (type: {type(room_list)})')
             #return render_template('homes/create_rooms.html.jinja', floor_list=floor_list, room_list=room_list)
-    if current_user.active_home.floors.count() > 1:
-        for floor_entry in floor_list:
+    if len(floor_list.entries) > 1:
+        for floor_entry in floor_list.entries:
             print(f'floor list get floor_entry.id: {floor_entry.id}')
             print(f'floor list get floor_entry.get_item().name: {floor_entry.get_item().name}')
-            room_list = create_user_list('Room', f'{current_user.active_home.name} {floor_entry.get_item().name} Rooms', floor_entry.item_id) # create rooms list
-            if room_list is None:
+            room_list = create_user_list('Room', f'{current_user.active_home.name} {floor_entry.get_item().name} Rooms', floor_entry.id) # create rooms list
+            if not room_list:
                 print('room list is None')
                 raise Exception('room list is None')
-            print(f'room_list: {room_list} (type: {type(room_list)}) parent: room_list.parent.get_item().name')
-        print(f'get_userlist(Room, current_user.active_home.name:{current_user.active_home.name} current_user.active_home.active_floor.name:{current_user.active_home.active_floor.name} Rooms, current_user.active_home.active_floor_id:{current_user.active_home.active_floor_id}')
-        room_list = get_userlist('Room', f'{current_user.active_home.name} {current_user.active_home.active_floor.name} Rooms', current_user.active_home.active_floor_id)
-        if room_list is None:
-            print('room list is None?!?')
-            raise Exception('room list is None')
+            print(f'room_list: {room_list} (type: {type(room_list)}) parent: {room_list.parent.get_item().name}')
+        print(f'get_userlist(Room, current_user.active_home.name:{current_user.active_home.name} current_user.active_home.active_floor.name:{current_user.active_home.active_floor.name} Rooms, get_list_entries_for_item(current_user.active_home)[0].id:{get_list_entries_for_item(current_user.active_home)[0].id}')
+        room_list = get_userlist('Room', parent_entry_id = get_list_entries_for_item(current_user.active_home.active_floor)[0].id)
+    if not room_list:
+        print('room list is None?!?')
+        raise Exception('room list is None')
     return floor_list,room_list
 
 @rooms.route('/room/default', methods=['GET', 'POST'])
@@ -155,6 +160,7 @@ def map(floor_id: int=None):
         flash(f'Floor {floor.name} has no rooms, please add some' , category='danger')
         return redirect(url_for('rooms.define_rooms', floor_id=floor_id))
     floor_list, room_list = get_room_list()
+    print(f'floor_list MAP: {floor_list}')
     return render_template('map/index.html.jinja', floor_list=floor_list, view=view)
     raise NotImplementedError("map not yet implemented")
 

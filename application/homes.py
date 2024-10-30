@@ -22,7 +22,7 @@ def set_active_home(home_id):
         return home #the object of the current active home
     
 
-@homes.route('/home/new', methods=['POST'])
+'''@homes.route('/home/new', methods=['POST'])
 @login_required
 def create_home():
     multifloor=request.form.get('multifloor') == 'on'
@@ -32,13 +32,16 @@ def create_home():
         name=request.form.get('home_name'),
         home_type=request.form.get('home_type'),
     )
+    #: add home as new list and list entry
+    # list = list of user's homes
+    # entry = new home
     current_user.active_home = new_home
     db.session.add(new_home)
     db.session.commit()
     if multifloor:
         print(f'multifloor check: {multifloor}')
         return redirect(url_for('floors.define_floors', home_id=new_home.id, multifloor=multifloor))
-    return redirect(url_for('homes.home_setup'))
+    return redirect(url_for('homes.home_setup'))'''
 
 
 @homes.route('/home/size', methods=['GET','POST'])

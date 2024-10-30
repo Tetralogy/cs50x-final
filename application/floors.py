@@ -97,7 +97,7 @@ def get_next_floor(direction):
     current_active_floor = db.get_or_404(Floor, current_user.active_home.active_floor_id) #current_user.active_home.active_floor
     current_active_floor_list_entry = get_list_entries_for_item(current_active_floor)[0]
     print(f'current_active_floor_list_entry: {current_active_floor_list_entry}')
-    parent_entry_id = current_user.active_home_id #fixme: make home entry id
+    parent_entry_id = get_list_entries_for_item(current_user.active_home)[0].id
     floors_list = get_userlist('Floor', f'{current_user.active_home.name} Floors', parent_entry_id)
     print(f'floors_list: {floors_list}')
     floors_list_ordered = iter(sorted(floors_list.entries, key=lambda x: x.order))
