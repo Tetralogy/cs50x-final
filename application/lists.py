@@ -282,6 +282,16 @@ def combine_userlists(userlists: List[UserList], combolist_name: str = None, par
     return combined_list
 
 def get_list_entries_for_item(item: object, list_type: str = None, user_id: int = None) -> List[UserListEntry]:
+    if not item:
+        raise ValueError('item cannot be None')
+    if isinstance(item, str):
+        input_string = item
+        words = input_string.strip("<>").split()
+        item_model = words[0]
+        item_id = int(words[1])
+        print(f'input_string: {input_string}, item_model: {item_model}, item_id: {item_id}')
+        model_class = globals().get(item_model)
+        item = db.get_or_404(model_class, item_id) # Convert string to the original object
     if not user_id:
         user_id = current_user.id
     if not list_type:
@@ -564,6 +574,10 @@ def update_list_order(list_id: int = None):
 @login_required
 def show_list(list_id: int = None):
     multiple = bool(request.args.get('multiple') == 'True')
+    parent = request.args.get('parent')
+    if parent:
+        print(f'parent1: {parent}')
+        print(f'get_list_entries_for_item(parent)[0].id: {get_list_entries_for_item(parent)[0].id}')
     parent_entry_id = request.args.get('parent_entry_id')
     if parent_entry_id:
         parent_entry_id = int(parent_entry_id)

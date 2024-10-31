@@ -24,9 +24,11 @@ class ReprMixin:                        # Mixin class to add a generic __repr__ 
         cls = self.__class__                                                             # Get the class of the current instance
         attrs = inspect.getmembers(cls, lambda a: not(inspect.isroutine(a)))             # Get all attributes of the class that are not methods
         fields = {a[0]: getattr(self, a[0]) for a in attrs if not(a[0].startswith('_'))} # Create a dictionary of attribute names and their values, excluding private attributes
-        fields_str = ', '.join(f"{k}={v!r}" for k, v in fields.entries())                  # Create a string representation of all the attributes
-        return f"{cls.__name__}({fields_str})"                                           # Return a string formatted with the class name and the attributes
-    
+        fields_str = ', '.join(f"{k}={v!r}" for k, v in fields.items())                  # Create a string representation of all the attributes
+        module_name = self.__class__.__module__                                           # Get the module name where the class is defined
+        return f"{cls.__name__}({fields_str})"
+        #return f"{module_name}.{cls.__name__}({fields_str})"                              # Return a string formatted with the module name, class name, and attributes
+
 class User(db.Model, UserMixin):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     username: Mapped[str] = mapped_column(String(80), unique=True, nullable=False)
