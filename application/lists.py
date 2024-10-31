@@ -212,7 +212,7 @@ def get_userlist(item_model: str, list_name: str = None, parent_entry_id: int = 
         print(f'len(lists) == 0: {list_name} {item_model} {parent_entry_id}')
         return None
         raise ValueError(f'No lists of type {item_model} found for user {current_user.id}')
-    if len(lists) > 1: #[ ] add ability to select which list when more than one + test this
+    if len(lists) > 1:
         print(f'len(lists) > 1: {lists}')
         print(f'multiple: {multiple}')
         # combine the lists into a single UserList object
@@ -476,7 +476,7 @@ def create_list_and_item_and_entry(item_model):
         userlist = get_userlist(item_model, list_name)
         if not userlist:
             userlist = create_user_list(item_model, list_name)
-        name = request.form.get('home_name') #todo: validate if name is unique
+        name = request.form.get('name_input')
         new_home_entry = add_item_to_list(userlist.id, item_model, name=name)
         current_user.active_home_id = new_home_entry.item_id
         db.session.commit()

@@ -1,3 +1,4 @@
+import re
 from flask import Blueprint, Flask, flash, make_response, redirect, render_template, request, session, url_for
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import select
@@ -112,3 +113,34 @@ def password():
             return redirect(url_for('auth.login'))
         
     return render_template("auth/password.html", username=user.username)
+
+@auth.route("/validate/<string:item_model>", methods=["POST"])
+@login_required
+def validate(item_model):
+    error_class = ""
+    error_message = ""
+    name = request.form.get("name_input")
+    value = name
+    if item_model == "Home":
+        placeholder="Home Name"
+        id = "HomeName"
+        if not name:
+            error_class = "is-invalid"
+            error_message = f"Home name cannot be empty"
+        elif not name[0].isalpha():
+            error_class = "is-invalid"
+            error_message = "Home name must start with a letter"
+        elif not re.search('[a-zA-Z]', name):
+            error_class = "is-invalid"
+            error_message = f"Home name must contain letters"
+        elif len(name) > 80:
+            error_class = "is-invalid"
+            error_message = f"Home name cannot exceed 80 characters"
+            
+        elif any(home.name == name for home in current_user.homes):
+            error_class = "is-invalid"
+            error_message = f"Home name {name} already exists"
+        else:
+            error_class = "is-valid"
+            error_message = ""
+    return render_template("homes/validate.html.jinja", error_class=error_class, error_message=error_message, placeholder=placeholder, id=id, item_model=item_model, value=value)
