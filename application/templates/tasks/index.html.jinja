@@ -14,19 +14,37 @@
      current_user.active_home 
     {{ current_user.active_home }}
 </h1>
-    <h1>This is a view of all tasks for the user</h1>
+    <h1>This is a view of all tasks for the user:</h1>
 
     <div
                 class="row g-0 row-cols-4 container-fluid bg-dark border border-success border-5 rounded-bottom-4 p-1"
                 id="task-list-loader"
                 hx-get="/show_list/"
-                hx-vals='{"list_type": "Task", "multiple": "True", "parent": "{{ current_user.active_home }}"}'
+                hx-vals='{"list_type": "Task", "multiple": "True", "query": "={{ current_user.active_home.id }}", "parent": "{{ current_user.active_home }}"}'
                 hx-trigger="load once"
                 hx-swap="outerHTML"
                 hx-indicator="#updating-indicator"
             >
                 <input id="dummy-placeholder" type="hidden" name="items" />
                 
-            </div>
+    </div>
+    <h1>List of all homes for the user:</h1>
+    {#<div
+                class="row g-0 row-cols-4 container-fluid bg-dark border border-success border-5 rounded-bottom-4 p-1"
+                id="home-list-loader"
+                hx-get="/show_list/"
+                hx-vals='{"list_type": "Home", "multiple": "True",}'
+                hx-trigger="load once"
+                hx-swap="outerHTML"
+                hx-indicator="#updating-indicator"
+            >
+                <input id="dummy-placeholder" type="hidden" name="items" />
+                
+    </div>#}
+
+    <h1>List of all rooms for the user:</h1>
+    <h1>List of all photos for the user:</h1>
+
+
 
 {% endblock %}

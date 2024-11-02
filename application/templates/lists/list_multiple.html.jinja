@@ -18,6 +18,17 @@
 
     </div>
 {% endif %}#}
+
+<div
+hx-get="/show_list/{{ list_obj.id }}"
+hx-trigger="load"
+>
+#fixme: load from dict: nested divs for each list
+</div>
+
+
+
+
 <h2>{{ list_obj.list_name }}</h2>
     <div
         id="list-updater-{{ list_obj.id }}"
