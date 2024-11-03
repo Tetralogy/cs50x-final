@@ -51,7 +51,7 @@ def tasklist():
     #gather all tasks for the current user
     
     #organize them by room
-    view = 'quicknote'
+    view = 'hierarchy'
     session['view'] = view
     return render_template('tasks/index.html.jinja')
     raise NotImplementedError("tasklist not yet implemented")

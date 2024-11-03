@@ -185,26 +185,39 @@ def get_user_list_items(user_list_id: int) -> List[dict]:
         result.listsend(list_item)
     return result
 '''
-def get_userlist(item_model: str, list_name: str = None, parent_entry_id: int = None, multiple: bool = False): #gets the primary list of a main model
+def get_userlists_by_parent(parent_entry_id: int) -> List[UserList]:
+        lists = current_user.lists.filter_by(parent_entry_id=parent_entry_id).all()
+        if lists:
+            print(f'lists found (parent_entry_id): {lists}')
+        else:
+            print(f'No lists found for parent_entry_id {parent_entry_id}')
+        return lists
+        
+def get_userlist(item_model: str = None, list_name: str = None, parent_entry_id: int = None, combine: bool = False): #gets the primary list of a main model
     print(f'get_userlist(): item_model: {item_model}, list_name: {list_name}, parent_entry_id: {parent_entry_id}')
-    if not item_model:
-        raise ValueError("Missing item_model argument")
+    if not item_model and not parent_entry_id:
+        raise ValueError("Must provide item_model or parent_entry_id argument")
     if all((item_model, list_name, parent_entry_id)):
         lists = current_user.lists.filter_by(list_type=item_model, list_name=list_name, parent_entry_id=parent_entry_id).all()
         combolist_name = f'Combo {item_model} {list_name} {parent_entry_id}'
         print(f'lists found (All args): {lists}')
-    elif not list_name and not parent_entry_id:
+    elif item_model and not list_name and not parent_entry_id:
         lists = current_user.lists.filter_by(list_type=item_model).all()
         combolist_name = f'Combo All {item_model}'
         print(f'lists found (model): {lists}')
-    elif not list_name and parent_entry_id:
+    elif item_model and not list_name and parent_entry_id:
         lists = current_user.lists.filter_by(list_type=item_model, parent_entry_id=parent_entry_id).all()
         combolist_name = f'Combo {item_model} {parent_entry_id}'
         print(f'lists found (model, parent): {lists}')
-    else:
+    elif item_model and list_name and not parent_entry_id:
         lists = current_user.lists.filter_by(list_type=item_model, list_name=list_name).all()
         combolist_name = f'Combo {item_model} {list_name}'
         print(f'lists found (model, name): {lists}')
+    else:
+        lists = current_user.lists.filter_by(parent_entry_id=parent_entry_id).all()
+        combolist_name = f'Combo {parent_entry_id}'
+        print(f'lists found (parent_entry_id): {lists}')
+    
     if not lists:
         print(f'No lists of type {item_model} found for user {current_user.id}')
         return None
@@ -214,9 +227,9 @@ def get_userlist(item_model: str, list_name: str = None, parent_entry_id: int = 
         raise ValueError(f'No lists of type {item_model} found for user {current_user.id}')
     if len(lists) > 1:
         print(f'len(lists) > 1: {lists}')
-        print(f'multiple: {multiple}')
+        print(f'combine: {combine}')
         # combine the lists into a single UserList object
-        if multiple:
+        if combine:
             userlist = combine_userlists(userlists = lists, combolist_name=combolist_name, parent_entry_id=parent_entry_id)
         else:
             userlist = lists[0]
@@ -337,7 +350,7 @@ def get_child_user_lists(entry_id: int) -> List[UserList]:
 # up tree: starting from a child entry; use (user_list_id to get list > parent_entry_id) until 'specified high level entry_id'
 # down tree: starting from the specified parent_entry_id; use (find lists containing parent_entry_id to get child_user_lists > for list in child_user_lists > user_list > for entry in user_list.entries > entry) until 'specified low level entry_id'
 
-def build_hierarchy(parent_entry_id: int) -> dict:
+def build_hierarchy(parent_entry_id: int) -> dict: #[ ]: remove if unnecessary
     from collections import deque
     hierarchy = {}
     queue = deque([parent_entry_id])
@@ -352,6 +365,8 @@ def build_hierarchy(parent_entry_id: int) -> dict:
         for user_list in child_user_lists:
             hierarchy[user_list.id] = {
                 'list': user_list,
+                'list_name': user_list.list_name,
+                'parent_entry_id': user_list.parent_entry_id,
                 'entries': []
             }
             
@@ -362,11 +377,26 @@ def build_hierarchy(parent_entry_id: int) -> dict:
                 # Add the entry to the list's children
                 hierarchy[user_list.id]['entries'].append(entry.id)
         level_counter += 1
-        print(f'level_counter: {level_counter}')
+        #print(f'level_counter: {level_counter}')
     print(f'level_counter at end: {level_counter}')
     return hierarchy
+
+def print_hierarchy_iterative(hierarchy: dict, parent_entry_id: int = None):
+    print("print_hierarchy_iterative:")
+    stack = [(parent_entry_id, 0)]  # Stack to track (current_parent_id, current_indent)
+
+    while stack:
+        current_parent_id, indent = stack.pop()
+
+        for user_list_id, user_list_data in hierarchy.items():
+            if user_list_data['list'].parent_entry_id == current_parent_id:
+                print('  ' * indent + f"UserList {user_list_id}:")
+                print('  ' * indent + f"  Entries: {user_list_data['entries']}")
+                print()
+                # Add child lists to the stack with increased indentation
+                stack.append((user_list_id, indent + 1))
 def unpack_hierarchy(hierarchy: dict) -> List[dict]:
-    raise NotImplementedError("unpack_hierarchy not yet implemented") #fixme
+    raise NotImplementedError("unpack_hierarchy not yet implemented") # [ ]: remove if unnecessary
 def update_entry_order(user_list_entry_id: int, new_order: int) -> Optional[UserListEntry]:
     entry = db.session.scalars(db.select(UserListEntry).filter_by(id=user_list_entry_id)).one_or_none()
     if entry:
@@ -617,15 +647,6 @@ def update_list_order(list_id: int = None):
 @lists.route('/show_list/<int:list_id>', methods=['GET', 'POST', 'PUT', 'DELETE'])
 @login_required
 def show_list(list_id: int = None):
-    multiple = bool(request.args.get('multiple') == 'True')
-    parent = request.args.get('parent')
-    parent_entry_id = request.args.get('parent_entry_id')
-    if parent_entry_id:
-        parent_entry_id = int(parent_entry_id)
-    elif parent:
-        print(f'parent1: {parent}')
-        parent_entry_id = get_list_entries_for_item(parent)[0].id
-    print(f'parent_entry_id: {parent_entry_id}')
     reversed = request.args.get('reversed') == 'True'
     if reversed:
         print(f'reverse true?: {reversed}')
@@ -636,54 +657,81 @@ def show_list(list_id: int = None):
         view = session.get('view')
     print(f'view: {view}')
     print(f'list_id1: {list_id}')
+    sublevels = request.args.get('sublevels')
+    if sublevels:
+        sublevels = int(sublevels)
+    else:
+        sublevels = 0
+    print(f'sublevels: {sublevels}')
+    print(f'showing list list_id: {list_id}')
     if not list_id:
+        combine = bool(request.args.get('combine') == 'True')
+        parent = request.args.get('parent')
+        parent_entry_id = request.args.get('parent_entry_id')
+        if parent_entry_id:
+            parent_entry_id = int(parent_entry_id)
+        elif parent:
+            print(f'parent1: {parent}')
+            parent_entry_id = get_list_entries_for_item(parent)[0].id
+        print(f'parent_entry_id: {parent_entry_id}')
         list_model = request.args.get('list_type')
         print(f'list_model: {list_model}')
-        if not list_model:
+        if not list_model and not parent_entry_id:
             raise ValueError('No list type specified')
-        elif list_model == 'Home':
-            if not parent_entry_id and not multiple: 
-                parent_entry_id = None
-        elif list_model == 'Floor':
-            if not parent_entry_id and not multiple: 
-                parent_entry_id = get_list_entries_for_item(current_user.active_home)[0].id
-        elif list_model == 'Room':
-            if not parent_entry_id and not multiple: 
-                parent_entry_id = get_list_entries_for_item(current_user.active_home.active_floor)[0].id 
-        elif list_model == 'Task':
-            if not parent_entry_id and not multiple: 
-                parent_entry_id = get_list_entries_for_item(current_user.active_home.active_room)[0].id 
-            child_user_lists = get_child_user_lists(parent_entry_id)
-            print(f'child_user_lists 1: {child_user_lists}')
-            '''while child_user_lists:
-                for user_list in child_user_lists:
-                    parent_entry_id = user_list.parent_entry_id
-                    child_user_lists = get_child_user_lists(parent_entry_id)'''
-            hierarchy = build_hierarchy(parent_entry_id)
-            print(f'hierarchy: {hierarchy}')
-            return render_template('lists/list.html.jinja', list_obj=hierarchy, view=view, reversed=reversed)
-            #hierarchy = build_hierarchy(parent_entry_id)
-            #print(f'hierarchy: {hierarchy}')
-            #if searching for all tasks,
-            # hack: query all task lists with parent_entry_id matching a room in current_user.active_home
-            # currenthome > active_floor > active_room > tasks
-            # get the task list parent_entry_id and parent_entry_id of that until the parent_entry_id has an item model of Home
-            # hack: add home_entry_id to parent_entry_id
-            #fixme: make a constraint that it needs to be from current_user.active_home
-            print(f'Task list parent_entry_id: {parent_entry_id}')
-        elif list_model == 'Photo':
-            if not parent_entry_id and not multiple: 
-                parent_entry_id = get_list_entries_for_item(current_user.active_home.active_room)[0].id 
-        else:
-            raise ValueError(f'Unknown list type {list_model}')
-        # if multiple is True, show combined lists, else show the first list found
-        list_obj = get_userlist(list_model, parent_entry_id=parent_entry_id, multiple=multiple)
-        print(f'list_obj: {list_obj}')
+        if list_model:
+            if list_model == 'Home':
+                if not parent_entry_id and not combine: 
+                    parent_entry_id = None
+            elif list_model == 'Floor':
+                if not parent_entry_id and not combine: 
+                    parent_entry_id = get_list_entries_for_item(current_user.active_home)[0].id
+            elif list_model == 'Room':
+                if not parent_entry_id and not combine: 
+                    parent_entry_id = get_list_entries_for_item(current_user.active_home.active_floor)[0].id 
+            elif list_model == 'Task':
+                if not parent_entry_id and not combine: 
+                    parent_entry_id = get_list_entries_for_item(current_user.active_home.active_room)[0].id 
+                #child_user_lists = get_child_user_lists(parent_entry_id)
+                #print(f'child_user_lists 1: {child_user_lists}')
+                '''while child_user_lists:
+                    for user_list in child_user_lists:
+                        parent_entry_id = user_list.parent_entry_id
+                        child_user_lists = get_child_user_lists(parent_entry_id)'''
+                #hierarchy = build_hierarchy(parent_entry_id)
+                #print(f'hierarchy: {hierarchy}')
+                #print_hierarchy_iterative(hierarchy)
+                #return render_template('lists/hierarchy.html.jinja', hierarchy=hierarchy)
+                #return render_template('lists/list.html.jinja', list_obj=hierarchy, view=view, reversed=reversed)
+                #hierarchy = build_hierarchy(parent_entry_id)
+                #print(f'hierarchy: {hierarchy}')
+                #if searching for all tasks,
+                # : query all task lists with parent_entry_id matching a room in current_user.active_home
+                # currenthome > active_floor > active_room > tasks
+                # get the task list parent_entry_id and parent_entry_id of that until the parent_entry_id has an item model of Home
+                # : add home_entry_id to parent_entry_id
+                #: make a constraint that it needs to be from current_user.active_home
+                print(f'Task list parent_entry_id: {parent_entry_id}')
+            elif list_model == 'Photo':
+                if not parent_entry_id and not combine: 
+                    parent_entry_id = get_list_entries_for_item(current_user.active_home.active_room)[0].id
+            else:
+                raise ValueError(f'Unknown list type {list_model}')
+            # if combine is True, show combined lists, else show the first list found
+            list_obj = get_userlist(list_model, parent_entry_id=parent_entry_id, combine=combine)
+            print(f'list_obj: {list_obj}')
+            found_lists = [list_obj]
+        if not list_model and parent_entry_id:
+            found_lists = get_userlists_by_parent(parent_entry_id)
         walk_setup = session.get('walk_setup', False)
         print(f'walk_setup: {walk_setup}')
-        return render_template('lists/list.html.jinja', list_obj=list_obj, walk_setup=walk_setup, view=view, reversed=reversed)
-    print(f'showing list list_id: {list_id}')
-    return render_template('lists/list.html.jinja', list_obj=db.get_or_404(UserList, list_id), view=view, reversed=reversed)
+        #return render_template('lists/list.html.jinja', list_obj=list_obj, walk_setup=walk_setup, view=view, reversed=reversed)
+        if found_lists:
+            return render_template('lists/list.html.jinja', userlists=found_lists, view=view, walk_setup=walk_setup, reversed=reversed, sublevels=sublevels)
+        else:
+            return '', 204
+    list_obj=db.get_or_404(UserList, list_id)
+    found_lists = [list_obj]
+    return render_template('lists/list.html.jinja', userlists=found_lists, view=view, reversed=reversed, sublevels=sublevels)
 
 
 @lists.route('/rename/<string:item_model>/<int:item_id>', methods=['GET', 'PUT'])

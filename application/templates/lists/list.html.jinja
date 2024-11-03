@@ -1,63 +1,51 @@
 <div class="container-fluid">
-    {#{% if view == "quicknote" %}
-    <div class="row justify-content-center">
-<form
-    hx-post="/create/Task"
-    hx-target="#list-updater-{{ list_obj.id }}"
-    hx-swap="beforeend"
-    hx-indicator="#updating-indicator"
-    hx-on::after-request="this.reset()"
-    class="d-flex justify-content-center align-items-center input-group"
-    style="min-width: 20em; max-width: 40em; display: block;"
->
 
-    <input class="form-control" type="text" name="name" placeholder="Task title" />
-    <input type="hidden" name="room_id" value="{{ current_user.active_home.active_room_id }}" />
-    <button type="submit" class="btn btn-primary">Add task draft</button>
-</form>
-
-    </div>
-{% endif %}#}
-<h2>{{ list_obj.list_name }}</h2>
-    <div
-        id="list-updater-{{ list_obj.id }}"
-        {% if list_obj.list_type == "Task" or view == "quicknote" or list_obj.list_type == "Floor" %}
-            class="row g-0 row-cols-1 bg-dark border border-primary border-5
-            rounded-4 p-1 sortable" style="min-width: 20em; max-width: 40em;
-            display: block; margin-left: auto; margin-right: auto;"
-        {% elif list_obj.list_type == "Room" %}
-            class="row g-0 row-cols-4 container-fluid bg-dark border
-            border-primary border-5 rounded-4 p-1 sortable"
-        {% elif list_obj.list_type == "RoomDefault" %}
-            class="row container-fluid bg-dark border border-primary border-5
-            rounded-4 p-1 typeslist"
-        {% else %}
-            class="row g-0 container-fluid bg-dark border border-primary
-            border-5 rounded-4 p-1"
-        {% endif %}
-        hx-put="/update_list_order/{{ list_obj.id }}"
-        hx-include="[name='items']"
-        hx-trigger="end, remove, add delay:1s"
-        hx-indicator="#updating-indicator"
-        data-model="{{ list_obj.list_type }}"
-        data-list_id="{{ list_obj.id }}"
-    >
-        {% if reversed %}
-            {% for entry in list_obj.entries | sort(attribute='order')| reverse %}
-                {% include 'lists/model/' + entry.item_model.lower() + '.html.jinja' %}
-            {% endfor %}
-        {% else %}
-            {% for entry in list_obj.entries | sort(attribute='order') %}
-                {% include 'lists/model/' + entry.item_model.lower() + '.html.jinja' %}
-            {% endfor %}
-        {% endif %}
-
-        {% if not list_obj %}
-            {% if view == "quicknote" %}
-                {% include 'lists/model/task_placeholder.html.jinja' %}
+{% for list_obj in userlists %}
+{% if view == "hierarchy" %}
+    {% include 'lists/hierarchy.html.jinja' %}
+{% else %}
+    <h2>list name: {{ list_obj.list_name }} list type: {{ list_obj.list_type }} list id: {{ list_obj.id }}</h2>
+        <div
+            id="list-updater-{{ list_obj.id }}"
+            {% if list_obj.list_type == "Task" or view == "quicknote" or list_obj.list_type == "Floor" %}
+                class="row g-0 row-cols-1 bg-dark border border-primary border-5
+                rounded-4 p-1 sortable" style="min-width: 20em; max-width: 40em;
+                display: block; margin-left: auto; margin-right: auto;"
+            {% elif list_obj.list_type == "Room" %}
+                class="row g-0 row-cols-4 container-fluid bg-dark border
+                border-primary border-5 rounded-4 p-1 sortable"
+            {% elif list_obj.list_type == "RoomDefault" %}
+                class="row container-fluid bg-dark border border-primary border-5
+                rounded-4 p-1 typeslist"
             {% else %}
-                <h1>Failed to load list</h1>
+                class="row g-0 container-fluid bg-dark border border-primary
+                border-5 rounded-4 p-1"
             {% endif %}
-        {% endif %}
-    </div>
+            hx-put="/update_list_order/{{ list_obj.id }}"
+            hx-include="[name='items']"
+            hx-trigger="end, remove, add delay:1s"
+            hx-indicator="#updating-indicator"
+            data-model="{{ list_obj.list_type }}"
+            data-list_id="{{ list_obj.id }}"
+        >
+            {% if reversed %}
+                {% for entry in list_obj.entries | sort(attribute='order')| reverse %}
+                    {% include 'lists/model/' + entry.item_model.lower() + '.html.jinja' %}
+                {% endfor %}
+            {% else %}
+                {% for entry in list_obj.entries | sort(attribute='order') %}
+                    {% include 'lists/model/' + entry.item_model.lower() + '.html.jinja' %}
+                {% endfor %}
+            {% endif %}
+
+            {% if not list_obj %}
+                {% if view == "quicknote" %}
+                    {% include 'lists/model/task_placeholder.html.jinja' %}
+                {% else %}
+                    <h1>Failed to load list</h1>
+                {% endif %}
+            {% endif %}
+        </div>
+{% endif %}
+{% endfor %}
 </div>

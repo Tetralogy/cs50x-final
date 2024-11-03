@@ -16,9 +16,9 @@
 
 <div id="drag-outside-indicator" style="display: none; position: fixed; z-index: 1000;">🚫</div>
 <input type='hidden' name='items' value='{{ entry.id }}'/>
-
+<h6>generic</h6>
 {% include 'lists/name.html.jinja' %}
-    {#<p class="bg-dark">order: {{ entry.order }}</p>#}
+    <p class="bg-dark">order: {{ entry.order }}</p>
 
         <button
         class="btn btn-danger"
@@ -38,7 +38,7 @@
     <div class="border border-success"
     hx-get="/show_list/"
     hx-trigger="load"
-    hx-vals='{"parent_entry_id": "{{ entry.id }}", "sublevels": "{{ sublevels }}"}'
+    hx-vals='{"parent_entry_id": "{{ entry.id }}", "sublevels": "{{ sublevels }}", "view_override":"hierarchy"}'
     >
     sublists here?
     </div>
