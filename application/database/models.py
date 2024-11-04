@@ -55,10 +55,10 @@ class User(db.Model, UserMixin):
 
 class UserList(db.Model):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    user_id: Mapped[int] = mapped_column(ForeignKey('user.id'))
+    user_id: Mapped[int] = mapped_column(ForeignKey('user.id'), nullable=False, index=True)
     list_type: Mapped[str] = mapped_column(String(50), nullable=False) # match model name
     list_name: Mapped[str] = mapped_column(String(80), nullable=False) #[ ] potentially change to name instead of list_name
-    parent_entry_id: Mapped[int] = mapped_column(ForeignKey('user_list_entry.id'), nullable=True)
+    parent_entry_id: Mapped[int] = mapped_column(ForeignKey('user_list_entry.id'), nullable=True, index=True)
     __table_args__ = (UniqueConstraint('user_id', 'list_name', name='unique_list_name'),)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=func.now())
 
@@ -72,7 +72,7 @@ class UserListEntry(db.Model):
     user_list_id: Mapped[int] = mapped_column(ForeignKey('user_list.id'))
     item_model: Mapped[str] = mapped_column(String, nullable=False)  # Store the model name as a string
     item_id: Mapped[int] = mapped_column(Integer, nullable=False)
-    order: Mapped[int] = mapped_column(Integer, nullable=False)
+    order: Mapped[int] = mapped_column(Integer, nullable=False, index=True)
 
     user_list = relationship("UserList", back_populates="entries", foreign_keys=[user_list_id])
     
@@ -83,20 +83,21 @@ class UserListEntry(db.Model):
     def get_item(self):
         # Dynamically import the model
         model_class = globals()[self.item_model]
+        if not model_class:
+            raise ValueError(f"Model '{self.item_model}' not found.")
         return model_class.query.get(self.item_id) 
     #if model_class is Floor and you want the name of the floor: {{ entry.get_item().name }} 
     
     @classmethod
-    def find_entries_for_item(cls, item):
+    def find_entries_for_item(cls, item, limit=None):
         """
         Find all list entries associated with a given item.
         
         :param item: The item object to search for
         :return: A list of UserListEntry objects associated with the item
         """
-        item_model = item.__class__.__name__
-        item_id = item.id
-        return cls.query.filter_by(item_model=item_model, item_id=item_id).all()
+        query = cls.query.filter_by(item_model=item.__class__.__name__, item_id=item.id)
+        return query.limit(limit).all() if limit else query.all()
     
 
 class UserAbility(db.Model): # User's ability to do something, disabilities to account for
