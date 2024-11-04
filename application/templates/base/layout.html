@@ -97,7 +97,7 @@
                         //const sortlist = Sortable.create(sortableElement, {
                             //const roomlist = document.getElementById("");
                             //const roomsort = new Sortable(roomlist, {
-                            group: {
+                            group: { //#fixme: make group name match sublevel value
 
                                 name: "sortableElement",
                                 pull: true,
@@ -106,7 +106,7 @@
 
                             animation: 150,
                             swapThreshold: 0.5,
-                            filter: ".htmx-indicator, .rename",
+                            filter: ".htmx-indicator, .rename, .listname",
                             ghostClass: "ghost",
                             dragClass: "ghost-red",
                             chosenClass: "ghost-red",

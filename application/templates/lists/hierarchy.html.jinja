@@ -1,9 +1,9 @@
-<h2>list name: {{ list_obj.list_name }} list type: {{ list_obj.list_type }} list id: {{ list_obj.id }}</h2>
         <div
             id="list-updater-{{ list_obj.id }}"
 
-                class="row g-0 row-cols-1 bg-dark border border-primary border-5
-                rounded-4 p-1 sortable" style="min-width: 20em; max-width: 40em;
+                class="row g-0 row-cols-1 border border-primary border-5
+                rounded-4 p-1 sortable" 
+                style="min-width: 20em; max-width: 40em;
                 display: block; margin-left: auto; margin-right: auto;"
 
 
@@ -14,19 +14,22 @@
             data-model="{{ list_obj.list_type }}"
             data-list_id="{{ list_obj.id }}"
         >
+        >
+        # todo: hide and show buttons
+<h2 class="listname text-center">list name: {{ list_obj.list_name }} list type: {{ list_obj.list_type }} list id: {{ list_obj.id }} sublevel: {{ sublevel }} sublevel_limit: {{ sublevel_limit }}</h2>
             {% if reversed %}
                 {% for entry in list_obj.entries | sort(attribute='order')| reverse %}
-                    {% include 'lists/model/generic.html.jinja' %}
+                    {% include 'lists/model/generic_text.html.jinja' %}
                 {% endfor %}
             {% else %}
                 {% for entry in list_obj.entries | sort(attribute='order') %}
-                    {% include 'lists/model/generic.html.jinja' %}
+                    {% include 'lists/model/generic_text.html.jinja' %}
                 {% endfor %}
             {% endif %}
 
             {% if not list_obj %}
                 {% if view == "quicknote" %}
-                    {% include 'lists/model/generic.html.jinja' %}
+                    {% include 'lists/model/generic_text.html.jinja' %}
                 {% else %}
                     <h1>Failed to load list</h1>
                 {% endif %}

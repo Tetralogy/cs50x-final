@@ -381,7 +381,7 @@ def build_hierarchy(parent_entry_id: int) -> dict: #[ ]: remove if unnecessary
     print(f'level_counter at end: {level_counter}')
     return hierarchy
 
-def print_hierarchy_iterative(hierarchy: dict, parent_entry_id: int = None):
+def print_hierarchy_iterative(hierarchy: dict, parent_entry_id: int = None): # [ ]: remove if unnecessary
     print("print_hierarchy_iterative:")
     stack = [(parent_entry_id, 0)]  # Stack to track (current_parent_id, current_indent)
 
@@ -613,6 +613,21 @@ def create_item_and_entry(item_model, list_id, item_id: int=None):
     flash(f'Item added to list: {new_item.item_model} {new_item.item_id}', 'success')
     return render_template('lists/model/' + new_item.item_model.lower() + '.html.jinja', entry=new_item) #redirect(url_for('lists.update_list_order', list_id=list_id))
 
+# fixme: create route for moving entries between lists
+@lists.route('/move_entry/', methods=['PUT'])
+@lists.route('/move_entry/<int:entry_id>', methods=['PUT'])
+@login_required
+def move_entry(entry_id: int = None):
+    if entry_id is None:
+        entry_id = int(request.form.get('entry_id'))
+    new_list_id = int(request.form.get('new_list_id'))
+    print(f'move_entry(): entry_id: {entry_id}, new_list_id: {new_list_id}')
+    entry = db.get_or_404(UserListEntry, entry_id)
+    userlist = db.get_or_404(UserList, new_list_id)
+    entry.user_list_id = userlist.id
+    db.session.commit()
+    flash(f'Entry {entry.id} moved to list {userlist.list_name}')
+    return ('', 204) #redirect(url_for('lists.show_list', list_id=new_list_id))
 
 @lists.route('/update_list_order/', methods=['PUT', 'POST', 'DELETE', 'GET'])
 @lists.route('/update_list_order/<int:list_id>', methods=['PUT', 'POST', 'DELETE', 'GET'])
@@ -657,12 +672,17 @@ def show_list(list_id: int = None):
         view = session.get('view')
     print(f'view: {view}')
     print(f'list_id1: {list_id}')
-    sublevels = request.args.get('sublevels')
-    if sublevels:
-        sublevels = int(sublevels)
+    sublevel_limit = request.args.get('sublevel_limit')
+    if sublevel_limit:
+        sublevel_limit = int(sublevel_limit)
     else:
-        sublevels = 0
-    print(f'sublevels: {sublevels}')
+        sublevel_limit = 0
+    sublevel = request.args.get('sublevel')
+    if sublevel:
+        sublevel = int(sublevel)
+    else:
+        sublevel = 0
+    print(f'sublevel: {sublevel}')
     print(f'showing list list_id: {list_id}')
     if not list_id:
         combine = bool(request.args.get('combine') == 'True')
@@ -691,25 +711,6 @@ def show_list(list_id: int = None):
             elif list_model == 'Task':
                 if not parent_entry_id and not combine: 
                     parent_entry_id = get_list_entries_for_item(current_user.active_home.active_room)[0].id 
-                #child_user_lists = get_child_user_lists(parent_entry_id)
-                #print(f'child_user_lists 1: {child_user_lists}')
-                '''while child_user_lists:
-                    for user_list in child_user_lists:
-                        parent_entry_id = user_list.parent_entry_id
-                        child_user_lists = get_child_user_lists(parent_entry_id)'''
-                #hierarchy = build_hierarchy(parent_entry_id)
-                #print(f'hierarchy: {hierarchy}')
-                #print_hierarchy_iterative(hierarchy)
-                #return render_template('lists/hierarchy.html.jinja', hierarchy=hierarchy)
-                #return render_template('lists/list.html.jinja', list_obj=hierarchy, view=view, reversed=reversed)
-                #hierarchy = build_hierarchy(parent_entry_id)
-                #print(f'hierarchy: {hierarchy}')
-                #if searching for all tasks,
-                # : query all task lists with parent_entry_id matching a room in current_user.active_home
-                # currenthome > active_floor > active_room > tasks
-                # get the task list parent_entry_id and parent_entry_id of that until the parent_entry_id has an item model of Home
-                # : add home_entry_id to parent_entry_id
-                #: make a constraint that it needs to be from current_user.active_home
                 print(f'Task list parent_entry_id: {parent_entry_id}')
             elif list_model == 'Photo':
                 if not parent_entry_id and not combine: 
@@ -726,12 +727,12 @@ def show_list(list_id: int = None):
         print(f'walk_setup: {walk_setup}')
         #return render_template('lists/list.html.jinja', list_obj=list_obj, walk_setup=walk_setup, view=view, reversed=reversed)
         if found_lists:
-            return render_template('lists/list.html.jinja', userlists=found_lists, view=view, walk_setup=walk_setup, reversed=reversed, sublevels=sublevels)
+            return render_template('lists/list.html.jinja', userlists=found_lists, view=view, walk_setup=walk_setup, reversed=reversed, sublevel=sublevel, sublevel_limit=sublevel_limit)
         else:
             return '', 204
     list_obj=db.get_or_404(UserList, list_id)
     found_lists = [list_obj]
-    return render_template('lists/list.html.jinja', userlists=found_lists, view=view, reversed=reversed, sublevels=sublevels)
+    return render_template('lists/list.html.jinja', userlists=found_lists, view=view, reversed=reversed, sublevel=sublevel, sublevel_limit=sublevel_limit)
 
 
 @lists.route('/rename/<string:item_model>/<int:item_id>', methods=['GET', 'PUT'])

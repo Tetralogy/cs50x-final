@@ -1,0 +1,34 @@
+<div 
+    class="col grabbable"
+    id="{{ entry.item_model }}list-{{ entry.id }}"
+    data-id="{{ entry.id }}"
+    data-name="{{ entry.get_item().name }}"
+    data-order="{{ entry.order }}"
+    data-list_id="{{ entry.user_list_id }}"
+    data-model="{{ entry.item_model }}"
+    
+
+                data-bs-toggle="tooltip"
+                data-bs-html="true"
+                data-bs-placement="left"
+                data-bs-title="<u>Drag</u> to <span class='text-nowrap'><b>reorder</b> {{entry.item_model}}</span>"
+>  
+<input type='hidden' name='items' value='{{ entry.id }}'/>
+{{ entry.get_item().name }}
+
+
+    order: {{ entry.order }}
+
+
+    sublevel: {{ sublevel }}
+{% if sublevel < sublevel_limit %}
+{% set sublevel = sublevel + 1 %}
+    <div class="border border-success"
+    hx-get="/show_list/"
+    hx-trigger="load"
+    hx-vals='{"parent_entry_id": "{{ entry.id }}", "sublevel": "{{ sublevel }}", "sublevel_limit": "{{ sublevel_limit }}", "view_override":"hierarchy"}'
+    >
+    {# sublists go here if found #}
+    </div>
+{% endif %}
+</div>
