@@ -1,0 +1,17 @@
+{% if not sublevel %}
+{% set sublevel = 0 %}
+{% set sublevel_limit = 100 %}
+{% endif %}
+sublevel: {{ sublevel }}
+{% if sublevel < sublevel_limit %}
+{% set sublevel = sublevel + 1 %}
+    <div class="border border-success"
+    id="sublist-{{ entry.id }}"
+    hx-get="/show_list/"
+    hx-trigger="load"
+    hx-vals='{"parent_entry_id": "{{ entry.id }}", "sublevel": "{{ sublevel }}", "sublevel_limit": "{{ sublevel_limit }}", "view_override":"hierarchy"}'
+    >
+    DROP HERE
+    {# sublists go here if found #}
+    </div>
+{% endif %}

@@ -19,16 +19,5 @@
 
     order: {{ entry.order }}
 
-
-    sublevel: {{ sublevel }}
-{% if sublevel < sublevel_limit %}
-{% set sublevel = sublevel + 1 %}
-    <div class="border border-success"
-    hx-get="/show_list/"
-    hx-trigger="load"
-    hx-vals='{"parent_entry_id": "{{ entry.id }}", "sublevel": "{{ sublevel }}", "sublevel_limit": "{{ sublevel_limit }}", "view_override":"hierarchy"}'
-    >
-    {# sublists go here if found #}
-    </div>
-{% endif %}
+{% include 'lists/sublist_loader.html.jinja' %}
 </div>

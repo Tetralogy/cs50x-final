@@ -617,17 +617,31 @@ def create_item_and_entry(item_model, list_id, item_id: int=None):
 @lists.route('/move_entry/', methods=['PUT'])
 @lists.route('/move_entry/<int:entry_id>', methods=['PUT'])
 @login_required
-def move_entry(entry_id: int = None):
-    if entry_id is None:
-        entry_id = int(request.form.get('entry_id'))
-    new_list_id = int(request.form.get('new_list_id'))
-    print(f'move_entry(): entry_id: {entry_id}, new_list_id: {new_list_id}')
-    entry = db.get_or_404(UserListEntry, entry_id)
-    userlist = db.get_or_404(UserList, new_list_id)
-    entry.user_list_id = userlist.id
+def move_entry(moved_entry_id: int = None, recieving_entry_id: int = None): #bug: test this
+    #1. get the id of the entry being dragged
+    if moved_entry_id is None:
+        moved_entry_id = int(request.form.get('moved_entry_id'))
+    #2. get the entry.id of the entry the moved_entry_id is being dropped on
+    if recieving_entry_id is None:
+        recieving_entry_id = int(request.form.get('recieving_entry_id'))
+    #3. if a userlist with parent_id == recieving_entry_id exists: change moved_entry.userlist_id to the userlist.id
+    item_model = db.get_or_404(UserListEntry, recieving_entry_id).item_model
+    sublist = get_userlist(item_model=item_model, parent_entry_id=recieving_entry_id)
+    #else: create a new list with the dragged-over-task.name as the list name, dragged-over-task.id as parent
+    if not sublist:
+        new_list_name = f'{db.get_or_404(UserListEntry, recieving_entry_id).get_item().name} Sublist'
+        sublist = create_user_list(list_type=item_model, list_name=new_list_name, parent_entry_id=recieving_entry_id)
+    #4. add the dropped task to the list by changing the dragged-task.user_list_id to the list.id
+    moved_entry = db.get_or_404(UserListEntry, moved_entry_id)
+    moved_entry.user_list_id = sublist.id
     db.session.commit()
-    flash(f'Entry {entry.id} moved to list {userlist.list_name}')
-    return ('', 204) #redirect(url_for('lists.show_list', list_id=new_list_id))
+    flash(f'Entry {moved_entry_id} moved to list {sublist.list_name}')
+    print(f'moved_entry_id: {moved_entry_id} name: {moved_entry.get_item().name}, '
+            f'recieving_entry_id: {recieving_entry_id} name: {db.get_or_404(UserListEntry, recieving_entry_id).get_item().name}, '
+            f'new_list_id: {moved_entry.user_list_id}, new_list_name: {sublist.list_name}'
+        )
+    #5. return
+    return ('', 204)
 
 @lists.route('/update_list_order/', methods=['PUT', 'POST', 'DELETE', 'GET'])
 @lists.route('/update_list_order/<int:list_id>', methods=['PUT', 'POST', 'DELETE', 'GET'])
