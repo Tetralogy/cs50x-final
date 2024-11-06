@@ -23,7 +23,7 @@
             {% endif %}
             hx-put="/update_list_order/{{ list_obj.id }}"
             hx-include="[name='items']"
-            hx-trigger="end, remove, add delay:1s"
+            hx-trigger="end delay:1s, remove delay:1s, add delay:1s"
             hx-indicator="#updating-indicator"
             data-model="{{ list_obj.list_type }}"
             data-list_id="{{ list_obj.id }}"

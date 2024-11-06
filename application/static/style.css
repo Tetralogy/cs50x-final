@@ -412,3 +412,28 @@ background: #ff0000;
     .custom-button:hover {
         background-color: #0056b3;
     }
+
+    #xxx.dropzone {
+        display: none;
+    }
+    .dropzone.hover {
+        display: none; /* Hidden by default */
+        border: 2px dashed #aaa;
+        background: rgb(108,99,255);
+        background: radial-gradient(circle, rgb(0, 251, 8) 0%, rgba(0,212,255,0) 100%), url("plus-square-dotted.svg"); 
+        
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: contain;
+        padding: 20px;
+        margin-top: 10px;
+        text-align: center;
+    }
+    .dropzone.visible {#BUG: #fixme
+        display: block;
+        background-image: url("list-nested.svg");
+    }
+
+    .dropzone.occupied {
+        background: none;
+    }

@@ -26,6 +26,7 @@ def inject_current_user():
 @main.route('/')
 @login_required
 def index():
+    return redirect('/walkthrough/Dining Room 1/quicknote') #temporary for testing #xxx:remove when done
     return redirect(url_for('homes.home_setup'))
     return redirect(url_for('rooms.map'))
     #return render_template('homes/create_home.html.jinja') #temporary

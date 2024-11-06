@@ -667,8 +667,8 @@ def update_list_order(list_id: int = None):
         order = [entry.id for entry in order]
             
     for index, entry_id in enumerate(order):
-        print(f'Updating entry_id: {entry_id} item_name: {db.get_or_404(UserListEntry, entry_id).get_item().name} with new order: {index}')
         update_entry_order(entry_id, index)
+        print(f'Updating entry_id: {entry_id} item_name: {db.get_or_404(UserListEntry, entry_id).get_item().name} with new order: {index}')
     flash('List order updated')
     return ('', 204) #redirect(url_for('lists.show_list', list_id=list_id))
 
@@ -710,9 +710,11 @@ def show_list(list_id: int = None):
         print(f'parent_entry_id: {parent_entry_id}')
         list_model = request.args.get('list_type')
         print(f'list_model: {list_model}')
-        if not list_model and not parent_entry_id:
-            raise ValueError('No list type specified')
-        if list_model:
+        if not list_model and parent_entry_id:
+            found_lists = get_userlists_by_parent(parent_entry_id)
+        elif not list_model and not parent_entry_id:
+            raise ValueError('No list type or parent entry id specified')
+        else: #if list_model is not None
             if list_model == 'Home':
                 if not parent_entry_id and not combine: 
                     parent_entry_id = None
@@ -735,8 +737,6 @@ def show_list(list_id: int = None):
             list_obj = get_userlist(list_model, parent_entry_id=parent_entry_id, combine=combine)
             print(f'list_obj: {list_obj}')
             found_lists = [list_obj]
-        if not list_model and parent_entry_id:
-            found_lists = get_userlists_by_parent(parent_entry_id)
         walk_setup = session.get('walk_setup', False)
         print(f'walk_setup: {walk_setup}')
         #return render_template('lists/list.html.jinja', list_obj=list_obj, walk_setup=walk_setup, view=view, reversed=reversed)
@@ -785,13 +785,15 @@ def rename_item(item_model, item_id):
 @login_required
 def delete(user_list_entry_id):
     code = request.args.get('code')
-    if not code:
+    if not code: # if swap is not set to 'delete'
         code = 204
     print(f'code: {code}')
     if delete_entry_and_item(user_list_entry_id):
         flash(f'user_list_entry_id: {user_list_entry_id} Item deleted', 'danger')
+        print(f'deleted user_list_entry_id: {user_list_entry_id} Item deleted')
     else:
         flash('Item not found', 'danger')
+        print('Item to delete not found')
     return ('', code)
 
 @lists.route('/delete/list/<int:user_list_id>', methods=['DELETE'])

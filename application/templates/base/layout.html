@@ -69,15 +69,15 @@
                     return new bootstrap.Tooltip(tooltipTriggerEl);
                 });
             }
-            
+
             function initializeSortable() {
                 //() => {
-                    // fix for error Uncaught SyntaxError: redeclaration of const typeslist
-                    console.log("htmx.onLoad triggered");
-                    const sortableElements = document.querySelectorAll(".sortable");
+                // fix for error Uncaught SyntaxError: redeclaration of const typeslist
+                console.log("htmx.onLoad triggered");
+                const sortableElements = document.querySelectorAll(".sortable");
 
-                    const typeslist = document.querySelector(".typeslist");
-                    if (typeslist !== null) {
+                const typeslist = document.querySelector(".typeslist");
+                if (typeslist !== null) {
                     new Sortable(typeslist, {
                         group: {
                             name: "typeslist",
@@ -90,39 +90,89 @@
                     });
                 }
 
-                    sortableElements.forEach(function (sortableElement) {
-                        const model = sortableElement.dataset.model;
-                        console.log("sortableElement: " + sortableElement);
-                        if (sortableElement !== null) {
+                sortableElements.forEach(function (sortableElement) {
+                    const model = sortableElement.dataset.model;
+                    console.log("sortableElement: " + sortableElement);
+                    if (sortableElement !== null) {
                         const sortlist = new Sortable(sortableElement, {
-                            
-                        //const sortlist = Sortable.create(sortableElement, {
+                            //const sortlist = Sortable.create(sortableElement, {
                             //const roomlist = document.getElementById("");
                             //const roomsort = new Sortable(roomlist, {
-                            group: { //#fixme: make group name match list type value so entries can only be moved between lists of the same type
-                                
+                            group: {
+                                //#fixme: make group name match list type value so entries can only be moved between lists of the same type
+
                                 name: model, //can only move between lists of the same type
                                 pull: true,
-                                put: ['typeslist', model],
-
-                            },//#todo: when a task is dragged over another task's drop zone, create a new list with the task drop zone as the list name and add the dropped task to the list
+                                put: ["typeslist", model],
+                            }, //#todo: when a task is dragged over another task's drop zone, create a new list with the task drop zone as the list name and add the dropped task to the list
 
                             animation: 150,
-                            swapThreshold: 0.5,
+                            swapThreshold: 0.65,
+                            //invertSwap: true,
+                            fallbackOnBody: true,
                             filter: ".htmx-indicator, .rename, .listname",
                             ghostClass: "ghost",
                             dragClass: "ghost-red",
                             chosenClass: "ghost-red",
-                            removeOnSpill: true, //#fixme: how to make this work with the confirm dialog?
+                            //removeOnSpill: true,
+                            revertOnSpill: true, //needs to be revert to work with the confirm dialog
+                            onStart: function (evt) {
+                                // Optionally, make all dropzones visible when dragging starts
+                                //document.querySelectorAll(".dropzone").forEach(dropzone => dropzone.classList.add("visible"));
+                            },
                             onMove: function (evt) {
-                                console.log("Moving:", evt.related); // Log the element being moved
-                                return (
-                                    evt.related.className.indexOf(
-                                        "htmx-indicator",
-                                    ) === -1
-                                );
+                                const draggedItem = evt.dragged; // The item being dragged
+                                //const targetItem = evt.related;       // The item currently being hovered over
+                                //
+                                //if (targetItem) {
+                                //    console.log("Currently hovering over:", targetItem.id);
+                                //        // Hide the dropzone when item is dropped or leaves the drop area
+                                //        if (targetItem.classList.contains("dropzone")) {
+                                //                targetItem.classList.add("visible");
+                                //                targetItem.addEventListener("dragleave", function() {
+                                //                console.log("dragleave" + targetItem.id);
+                                //                this.classList.remove("visible");
+                                //            });
+                                //        }
+                                //}
+
+                                const targetItem = evt.related; // The item currently being hovered over
+                                if (!targetItem) return;
+
+                                // Find the nested dropzone within the hovered item
+                                const nestedDropzone =
+                                    targetItem.querySelector(".dropzone");
+
+                                // Show the nested dropzone if it exists
+                                if (nestedDropzone) {
+                                    nestedDropzone.classList.add("visible");
+
+                                    // Optionally, hide it when drag leaves the dropzone
+                                    nestedDropzone.addEventListener(
+                                        "dragleave",
+                                        function () {
+                                            console.log(
+                                                "dragleave" + nestedDropzone.id,
+                                            );
+                                            if (
+                                                nestedDropzone.childElementCount >
+                                                0
+                                            )
+                                                return;
+                                            this.classList.remove("visible");
+                                        },
+                                    );
+                                }
+
+                                //console.log("Moving:", evt.related); // Log the element being moved
+                                //return (
+                                //    evt.related.className.indexOf(
+                                //        "htmx-indicator",
+                                //    ) === -1
+                                //);
                             },
                             onSpill: function (/**Event*/ evt) {
+                                //this.options.removeOnSpill = true;
                                 evt.item; // The spilled item
                                 showDragOutsideIndicator(
                                     evt.clientX,
@@ -131,9 +181,17 @@
                                 console.log("spill");
                                 console.log(
                                     "delete evt.item.dataset.id: " +
-                                        evt.item.dataset.id,
+                                        evt.item.dataset.id +
+                                        " evt.item.dataset.name: " +
+                                        evt.item.dataset.name,
                                 );
-                                if (confirm("Are you sure you want to delete this item? " + evt.item.dataset.name + " This cannot be undone.")) {
+                                if (
+                                    confirm(
+                                        "Are you sure you want to delete this item? " +
+                                            evt.item.dataset.name +
+                                            " This cannot be undone.",
+                                    )
+                                ) {
                                     htmx.ajax(
                                         "DELETE",
                                         "/delete/entry/" + evt.item.dataset.id,
@@ -141,23 +199,29 @@
                                             values: {
                                                 code: 200,
                                             },
+                                            swap: "delete",
+                                            target: evt.item,
                                         },
+                                        console.log(
+                                            "deleted ?" + evt.item.dataset.name,
+                                        ),
                                     );
                                 }
                                 hideDragOutsideIndicator();
                             },
-                            onAdd: function (/**Event*/ evt) { //#BUG: move between lists is broken
+                            onAdd: function (/**Event*/ evt) {
+                                //#BUG: move between lists is broken
                                 console.log("onAdd event triggered");
                                 const itemEl = evt.item; // dragged HTMLElement
                                 const addedNewEntry = itemEl.dataset.name;
                                 const newIndex = evt.newIndex;
-                                
+
                                 const list_id = sortableElement.dataset.list_id;
                                 //recieving_entry_id =  data-id=entry.id #fixme
                                 //moved_entry_id
-                                
+
                                 //if (itemEl.dataset.model === model) {
-                                //   htmx.ajax( 
+                                //   htmx.ajax(
                                 //       "PUT",
                                 //       "/move_entry/" + model + "/" + list_id,#bug
                                 //       {
@@ -177,7 +241,7 @@
                                 //               newIndex,
                                 //       );
                                 //   // Make an htmx AJAX request to the server to create a new room
-                                //   htmx.ajax( 
+                                //   htmx.ajax(
                                 //       "POST",
                                 //       "/create/" + model + "/" + list_id,
                                 //       {
@@ -191,14 +255,21 @@
                                 //   );
 
                                 //   }
-
-
-
                             },
                             //Disable sorting on the `end` event
                             onEnd: function (evt) {
                                 console.log("onEnd event triggered");
                                 this.option("disabled", true);
+                                // Hide all dropzones when dragging ends
+                                const dropzones =
+                                    document.querySelectorAll(".dropzone");
+                                dropzones.forEach((dropzone) => {
+                                    if (dropzone.childElementCount > 0) {
+                                        dropzone.classList.add("occupied");
+                                    } else {
+                                        dropzone.classList.remove("visible");
+                                    }
+                                });
                             },
                         });
 
@@ -259,7 +330,7 @@
                                 "drag-outside-indicator",
                             );
                             if (indicator !== null) {
-                            indicator.style.display = "none";
+                                indicator.style.display = "none";
                             }
                         }
 
@@ -289,21 +360,22 @@
                         document.addEventListener("drop", function () {
                             hideDragOutsideIndicator();
                         });
-                    
 
-                    document.querySelectorAll("input").forEach((element) => {
-                        element.addEventListener("focus", function () {
-                            console.log("focus");
-                            sortlist.option("disabled", true);
-                        });
-                        element.addEventListener("blur", function () {
-                            console.log("blur");
-                            sortlist.option("disabled", false);
-                        });
-                    });
-                }
-            });
-        };
+                        document
+                            .querySelectorAll("input")
+                            .forEach((element) => {
+                                element.addEventListener("focus", function () {
+                                    console.log("focus");
+                                    sortlist.option("disabled", true);
+                                });
+                                element.addEventListener("blur", function () {
+                                    console.log("blur");
+                                    sortlist.option("disabled", false);
+                                });
+                            });
+                    }
+                });
+            }
             //};
 
             // Re-initialize tooltips and sortable after content update
@@ -347,7 +419,6 @@
                         //clearTooltips();
                         initializeTooltips();
                     });
-                
                 });
         </script>
         <div id="updating-indicator" class="htmx-indicator">Updating...</div>
