@@ -398,6 +398,8 @@ def print_hierarchy_iterative(hierarchy: dict, parent_entry_id: int = None): # [
 def unpack_hierarchy(hierarchy: dict) -> List[dict]:
     raise NotImplementedError("unpack_hierarchy not yet implemented") # [ ]: remove if unnecessary
 def update_entry_order(user_list_entry_id: int, new_order: int) -> Optional[UserListEntry]:
+    if not new_order:
+        return None
     entry = db.session.scalars(db.select(UserListEntry).filter_by(id=user_list_entry_id)).one_or_none()
     if entry:
         entry.order = new_order
@@ -406,7 +408,7 @@ def update_entry_order(user_list_entry_id: int, new_order: int) -> Optional[User
     return None
 
 def delete_entry_and_item(user_list_entry_id: int) -> bool:
-    userlist_entry = db.get_or_404(UserListEntry, user_list_entry_id)
+    userlist_entry = UserListEntry.query.get(user_list_entry_id)
     
     if userlist_entry:
         item = userlist_entry.get_item()  # Use the get_item method to fetch the item
@@ -615,33 +617,38 @@ def create_item_and_entry(item_model, list_id, item_id: int=None):
 
 
 @lists.route('/move_entry/', methods=['PUT'])
-@lists.route('/move_entry/<int:moved_entry_id>/<int:recieving_entry_id>', methods=['PUT'])
+@lists.route('/move_entry/<int:moved_entry_id>/<int:list_id>', methods=['PUT'])
 @login_required
-def move_entry(moved_entry_id: int = None, recieving_entry_id: int = None):
+def move_entry(moved_entry_id: int = None, list_id: int = None):
     #1. get the id of the entry being dragged
     if not moved_entry_id:
         moved_entry_id = int(request.form.get('moved_entry_id'))
-    #2. get the entry.id of the entry the moved_entry_id is being dropped on
-    if not recieving_entry_id:
-        recieving_entry_id = int(request.form.get('recieving_entry_id'))
-    #3. if a userlist with parent_id == recieving_entry_id exists: change moved_entry.userlist_id to the userlist.id
-    item_model = db.get_or_404(UserListEntry, recieving_entry_id).item_model
-    sublist = get_userlist(item_model=item_model, parent_entry_id=recieving_entry_id)
-    #else: create a new list with the dragged-over-task.name as the list name, dragged-over-task.id as parent
-    if not sublist:
-        new_list_name = f'{db.get_or_404(UserListEntry, recieving_entry_id).get_item().name} Sublist'
-        sublist = create_user_list(list_type=item_model, list_name=new_list_name, parent_entry_id=recieving_entry_id)
-    #4. add the dropped task to the list by changing the dragged-task.user_list_id to the list.id
     moved_entry = db.get_or_404(UserListEntry, moved_entry_id)
-    moved_entry.user_list_id = sublist.id
+    is_list = request.form.get('is_list') == 'true'
+    print(f'is_list: {is_list}')
+    #2. get the entry.id of the entry the moved_entry_id is being dropped on
+    if not list_id or not is_list:
+        recieving_entry_id = int(request.form.get('recieving_entry_id'))       
+        #3. if a userlist with parent_id == recieving_entry_id exists: change moved_entry.userlist_id to the userlist.id
+        item_model = db.get_or_404(UserListEntry, recieving_entry_id).item_model
+        new_list = get_userlist(item_model=item_model, parent_entry_id=recieving_entry_id)
+        #else: create a new list with the dragged-over-task.name as the list name, dragged-over-task.id as parent
+        if not new_list:
+            new_list_name = f'{db.get_or_404(UserListEntry, recieving_entry_id).get_item().name} Sublist'
+            new_list = create_user_list(list_type=item_model, list_name=new_list_name, parent_entry_id=recieving_entry_id)
+        #4. add the dropped task to the list by changing the dragged-task.user_list_id to the list.id
+        moved_entry.user_list_id = new_list.id
+    else:
+        new_list = db.get_or_404(UserList, list_id)
+        moved_entry.user_list_id = list_id
     order_index = request.form.get('order_index')
     if order_index:
         moved_entry.order = int(order_index)
     db.session.commit()
-    flash(f'Entry {moved_entry_id} moved to list {sublist.list_name}')
+    flash(f'Entry {moved_entry_id} moved to list {new_list.list_name}')
     print(f'moved_entry_id: {moved_entry_id} name: {moved_entry.get_item().name}, '
-            f'recieving_entry_id: {recieving_entry_id} name: {db.get_or_404(UserListEntry, recieving_entry_id).get_item().name}, '
-            f'new_list_id: {moved_entry.user_list_id}, new_list_name: {sublist.list_name}'
+            f'recieving_entry_id: {new_list.parent_entry_id} name: {db.get_or_404(UserListEntry, new_list.parent_entry_id).get_item().name}, '
+            f'new_list_id: {moved_entry.user_list_id}, new_list_name: {new_list.list_name}'
         )
     #5. return
     return ('', 204)
@@ -670,8 +677,12 @@ def update_list_order(list_id: int = None):
         order = [entry.id for entry in order]
             
     for index, entry_id in enumerate(order):
-        update_entry_order(entry_id, index)
-        print(f'Updating entry_id: {entry_id} item_name: {db.get_or_404(UserListEntry, entry_id).get_item().name} with new order: {index}')
+        entry = update_entry_order(entry_id, index)
+        if not entry:
+            print(f'Entry {entry_id} not found')
+            return ('', 204)
+        else:
+            print(f'Updating entry_id: {entry_id} item_name: {entry.get_item().name} with new order: {index}')
     flash('List order updated')
     return ('', 204) #redirect(url_for('lists.show_list', list_id=list_id))
 

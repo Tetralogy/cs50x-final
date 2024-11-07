@@ -105,6 +105,7 @@
 
                 document.addEventListener("DOMContentLoaded", updateDropzones);
             
+
                 sortableElements.forEach(function (sortableElement) {
                     const model = sortableElement.dataset.model;
                     
@@ -126,7 +127,7 @@
                             swapThreshold: 0.65,
                             //invertSwap: true,
                             fallbackOnBody: true,
-                            filter: ".htmx-indicator, .rename, .listname",
+                            filter: ".htmx-indicator, .rename, .listname, .accordion-header, .accordion-button",
                             ghostClass: "ghost",
                             dragClass: "ghost-red",
                             chosenClass: "ghost-red",
@@ -232,29 +233,49 @@
                                 const itemEl = evt.item; // dragged HTMLElement
                                 const addedNewEntry = itemEl.dataset.name;
                                 const newIndex = evt.newIndex;
+                                const oldIndex = evt.oldIndex;
+                                const originalParent = evt.from;
 
                                 const list_id = sortableElement.dataset.list_id;
 
                                 const moved_entry_id = itemEl.dataset.id;  
                                 //moved_entry_id
                                 const recieving_entry_id = sortableElement.dataset.id;
+                                console.log("moved_entry_id: " + moved_entry_id + " recieving_entry_id: " + recieving_entry_id);
+                                console.log("itemEl.dataset.model: " + itemEl.dataset.model + " sortableElement.dataset.model: " + model);
+                                const isList = sortableElement.dataset.isList === "true";
+                                console.log("recieving sortableElement isList: " + isList);
+                                if (isList) {
+                                    console.log("isList: " + isList);
+                                    //originalParent.insertBefore(itemEl, originalParent.children[oldIndex]);
+                                    //return;
+                                }
+                                if ((!moved_entry_id) || (!list_id && !recieving_entry_id)) {
+                                    console.log("missing moved_entry_id: " + moved_entry_id + " recieving_entry_id: " + recieving_entry_id + " list_id: " + list_id + " isList: " + isList);
+                                    originalParent.insertBefore(itemEl, originalParent.children[oldIndex]);
+                                    return;
+                                }
 
 
 
                                 if (itemEl.dataset.model === model) {
                                     htmx.ajax(
                                         "PUT",
-                                        "/move_entry/" + moved_entry_id + "/" + recieving_entry_id, 
+                                        "/move_entry/" + moved_entry_id + "/" + list_id,
                                         {
                                             values: {
                                                 order_index: newIndex, 
+                                                recieving_entry_id: recieving_entry_id,
+                                                is_list: isList
                                             },
                                             target: itemEl,
                                             //swap: "outerHTML", // returns the new content
                                         },
                                     );
+                                    console.log("PUT");
                                 } else {
                                     console.log(
+                                        "POST" +
                                         "addedNewEntry: " +
                                             addedNewEntry +
                                             "new index: " +

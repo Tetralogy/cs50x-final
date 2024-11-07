@@ -3,6 +3,9 @@
     id="{{ entry.item_model }}list-{{ entry.id }}"
     data-id="{{ entry.id }}"
     data-name="{{ entry.get_item().name }}"
+    data-order="{{ entry.order }}"
+    data-list_id="{{ entry.user_list_id }}"
+    data-model="{{ entry.item_model }}"
     style="min-height: 100px; min-width: 100px; background-image: url('https://picsum.photos/1920/1080?random={{ entry.id }}'); background-size: cover;"
 
                 data-bs-toggle="tooltip"

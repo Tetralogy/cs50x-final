@@ -2,6 +2,9 @@
     class="input-group mb-0"
     id="{{ entry.item_model }}list-{{ entry.id }}"
     data-id="{{ entry.id }}"
+        data-order="{{ entry.order }}"
+    data-list_id="{{ entry.user_list_id }}"
+    data-model="{{ entry.item_model }}"
 ><input type='hidden' name='items' value='{{ entry.id }}'/>
 
     <span id="handle" class="handle input-group-text glyphicon-move">↕️</span>
