@@ -1,9 +1,8 @@
 /* Default light mode styles */
-@media (prefers-color-scheme: light)
-{
+@media (prefers-color-scheme: light) {
     body {
-    background-color: rgb(212, 212, 212);
-    color: black;
+        background-color: rgb(212, 212, 212);
+        color: black;
     }
 }
 
@@ -16,8 +15,7 @@
 }
 
 nav {
-    color:#CC0000;
-    
+    color: #cc0000;
 }
 .form-floating {
     color: black;
@@ -38,7 +36,7 @@ nav {
 }
 .flash-message.htmx-added {
     opacity: 0;
-  }
+}
 
 .flash-message {
     opacity: 1;
@@ -52,11 +50,11 @@ nav {
 .fade-in {
     opacity: 0;
     transition: opacity 0.5s ease-in;
-  }
-  
-  .fade-in.show {
+}
+
+.fade-in.show {
     opacity: 1;
-  }
+}
 
 .flash-message.htmx-swapping {
     opacity: 0;
@@ -74,7 +72,6 @@ nav {
     width: 85%;
     padding: 1%;
 }
-
 
 /* for the delete_row example */
 tr.htmx-swapping td {
@@ -97,7 +94,7 @@ img {
 }
 
 .error input {
-    box-shadow: 0 0 3px #CC0000;
+    box-shadow: 0 0 3px #cc0000;
 }
 
 .valid input {
@@ -111,7 +108,7 @@ img {
     overflow: hidden;
     background-color: #f5f5f5;
     border-radius: 4px;
-    box-shadow: inset 0 1px 2px rgba(0, 0, 0, .1);
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .progress-bar {
@@ -123,11 +120,11 @@ img {
     color: #fff;
     text-align: center;
     background-color: #337ab7;
-    -webkit-box-shadow: inset 0 -1px 0 rgba(0, 0, 0, .15);
-    box-shadow: inset 0 -1px 0 rgba(0, 0, 0, .15);
-    -webkit-transition: width .6s ease;
-    -o-transition: width .6s ease;
-    transition: width .6s ease;
+    -webkit-box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+    box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+    -webkit-transition: width 0.6s ease;
+    -o-transition: width 0.6s ease;
+    transition: width 0.6s ease;
 }
 
 /* for the animations/color_swap example */
@@ -161,13 +158,13 @@ img {
 
 /* for the animations/in_flight_animation example */
 form.htmx-request {
-    opacity: .5;
+    opacity: 0.5;
     transition: opacity 300ms linear;
 }
 
 /* for the animations/class_tools example */
 .demo.faded {
-    opacity: .3;
+    opacity: 0.3;
 }
 
 .demo {
@@ -205,12 +202,14 @@ form.htmx-request {
 }
 
 ::view-transition-old(slide-it) {
-    animation: 180ms cubic-bezier(0.4, 0, 1, 1) both fade-out,
+    animation:
+        180ms cubic-bezier(0.4, 0, 1, 1) both fade-out,
         600ms cubic-bezier(0.4, 0, 0.2, 1) both slide-to-left;
 }
 
 ::view-transition-new(slide-it) {
-    animation: 420ms cubic-bezier(0, 0, 0.2, 1) 90ms both fade-in,
+    animation:
+        420ms cubic-bezier(0, 0, 0.2, 1) 90ms both fade-in,
         600ms cubic-bezier(0.4, 0, 0.2, 1) both slide-from-right;
 }
 
@@ -236,7 +235,7 @@ form.htmx-request {
     animation-timing-function: ease;
 }
 
-#modal>.modal-underlay {
+#modal > .modal-underlay {
     /* underlay takes up the entire viewport. This is only required if you want to click to dismiss the popup */
     position: absolute;
     z-index: -1;
@@ -246,7 +245,7 @@ form.htmx-request {
     right: 0px;
 }
 
-#modal>.modal-content {
+#modal > .modal-content {
     /* Position visible dialog near the top of the window */
     margin-top: 10vh;
 
@@ -274,7 +273,7 @@ form.htmx-request {
     animation-timing-function: ease;
 }
 
-#modal.closing>.modal-content {
+#modal.closing > .modal-content {
     /* Animate when closing */
     animation-name: zoomOut;
     animation-duration: 150ms;
@@ -335,19 +334,18 @@ form.htmx-request {
     transform: translate(-50%, -50%);
 }
 
-
 .glyphicon-move {
     cursor: move;
     cursor: -webkit-grabbing;
-  }
-  .grabbable {
+}
+.grabbable {
     cursor: move; /* fallback if grab cursor is unsupported */
     cursor: grab;
     cursor: -moz-grab;
     cursor: -webkit-grab;
 }
- /* (Optional) Apply a "closed-hand" cursor during drag operation. */
- .grabbable:active {
+/* (Optional) Apply a "closed-hand" cursor during drag operation. */
+.grabbable:active {
     cursor: grabbing;
     cursor: -moz-grabbing;
     cursor: -webkit-grabbing;
@@ -359,13 +357,13 @@ form.htmx-request {
 
 /* ghostClass */
 .ghost {
-    opacity: .5;
-    background: #C8EBFB;
+    opacity: 0.5;
+    background: #c8ebfb;
 }
 
 .ghost-red {
-opacity: .5;
-background: #ff0000;
+    opacity: 0.5;
+    background: #ff0000;
 }
 
 .room-list-form {
@@ -384,56 +382,69 @@ background: #ff0000;
     text-align: center;
     color: white !important;
     text-shadow: 0 0 3px #000;
-  }
-
-.rename {
-    background-color:transparent !important;
 }
 
-    /* Hide the actual file input */
-    /*input[type="file"] {
+.rename {
+    background-color: transparent !important;
+}
+
+/* Hide the actual file input */
+/*input[type="file"] {
         display: none;
     }*/
 
-    /* Style the labels as buttons */
-    .custom-upload-button {
-        display: inline-block;
-        padding: 10px 15px;
-        background-color: #007bff;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 16px;
-        text-align: center;
-    }
+/* Style the labels as buttons */
+.custom-upload-button {
+    display: inline-block;
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    text-align: center;
+}
 
-    /* Add a hover effect for better interactivity */
-    .custom-button:hover {
-        background-color: #0056b3;
-    }
+/* Add a hover effect for better interactivity */
+.custom-button:hover {
+    background-color: #0056b3;
+}
 
-    #xxx.dropzone {
-        display: none;
-    }
-    .dropzone.hover {
-        display: none; /* Hidden by default */
-        border: 2px dashed #aaa;
-        background: rgb(108,99,255);
-        background: radial-gradient(circle, rgb(0, 251, 8) 0%, rgba(0,212,255,0) 100%), url("plus-square-dotted.svg"); 
-        
+.dropzone {
+    display: block; /* Hidden by default */
+    
+    padding: 0px;
+    background: none;
+}
+
+.dropzone.visible {
+    display: block;
+    border: 2px dashed #aaa;
+    background-image: url("list-nested.svg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    padding: 20px;
+    
+}
+.dropzone.hover {
+    display: block;
+    background: rgb(108, 99, 255);
+    background: radial-gradient(
+        circle,
+        rgb(0, 251, 8) 0%,
+        rgba(0, 212, 255, 0) 100%
+        ),
+        url("plus-square-dotted.svg");
         background-position: center;
         background-repeat: no-repeat;
         background-size: contain;
-        padding: 20px;
-        margin-top: 10px;
-        text-align: center;
-    }
-    .dropzone.visible {#BUG: #fixme
-        display: block;
-        background-image: url("list-nested.svg");
-    }
 
-    .dropzone.occupied {
-        background: none;
-    }
+    padding: 0px;
+}
+
+.dropzone.occupied {
+    background: none;
+    padding: 0px;
+}

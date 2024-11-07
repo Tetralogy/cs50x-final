@@ -1,15 +1,15 @@
 {% if not sublevel %}
 {% set sublevel = 0 %}
-{% set sublevel_limit = 100 %}
+{% set sublevel_limit = 10 %}
 {% endif %}
 sublevel: {{ sublevel }}
 {% if sublevel < sublevel_limit %}
 {% set sublevel = sublevel + 1 %}
-    <div class="border border-success p-5 sortable dropzone"
+    <div class="sortable dropzone"
     id="sublist-loader-{{ entry.id }}"
     hx-get="/show_list/"
-    hx-trigger="load"
-    hx-vals='{"parent_entry_id": "{{ entry.id }}", "sublevel": "{{ sublevel }}", "sublevel_limit": "{{ sublevel_limit }}", "view_override":"hierarchy"}'
+    hx-trigger="load once from:body"
+    hx-vals='{"parent_entry_id": "{{ entry.id }}", "sublevel": "{{ sublevel }}", "sublevel_limit": "{{ sublevel_limit }}", "view_override":"{{ view_override }}"}'
     data-id="{{ entry.id }}"
     data-name="{{ entry.get_item().name }}"
     data-order="{{ entry.order }}"

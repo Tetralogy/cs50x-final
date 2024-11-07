@@ -613,16 +613,16 @@ def create_item_and_entry(item_model, list_id, item_id: int=None):
     flash(f'Item added to list: {new_item.item_model} {new_item.item_id}', 'success')
     return render_template('lists/model/' + new_item.item_model.lower() + '.html.jinja', entry=new_item) #redirect(url_for('lists.update_list_order', list_id=list_id))
 
-# fixme: create route for moving entries between lists
+
 @lists.route('/move_entry/', methods=['PUT'])
-@lists.route('/move_entry/<int:entry_id>', methods=['PUT'])
+@lists.route('/move_entry/<int:moved_entry_id>/<int:recieving_entry_id>', methods=['PUT'])
 @login_required
-def move_entry(moved_entry_id: int = None, recieving_entry_id: int = None): #bug: test this
+def move_entry(moved_entry_id: int = None, recieving_entry_id: int = None):
     #1. get the id of the entry being dragged
-    if moved_entry_id is None:
+    if not moved_entry_id:
         moved_entry_id = int(request.form.get('moved_entry_id'))
     #2. get the entry.id of the entry the moved_entry_id is being dropped on
-    if recieving_entry_id is None:
+    if not recieving_entry_id:
         recieving_entry_id = int(request.form.get('recieving_entry_id'))
     #3. if a userlist with parent_id == recieving_entry_id exists: change moved_entry.userlist_id to the userlist.id
     item_model = db.get_or_404(UserListEntry, recieving_entry_id).item_model
@@ -634,6 +634,9 @@ def move_entry(moved_entry_id: int = None, recieving_entry_id: int = None): #bug
     #4. add the dropped task to the list by changing the dragged-task.user_list_id to the list.id
     moved_entry = db.get_or_404(UserListEntry, moved_entry_id)
     moved_entry.user_list_id = sublist.id
+    order_index = request.form.get('order_index')
+    if order_index:
+        moved_entry.order = int(order_index)
     db.session.commit()
     flash(f'Entry {moved_entry_id} moved to list {sublist.list_name}')
     print(f'moved_entry_id: {moved_entry_id} name: {moved_entry.get_item().name}, '
@@ -741,12 +744,12 @@ def show_list(list_id: int = None):
         print(f'walk_setup: {walk_setup}')
         #return render_template('lists/list.html.jinja', list_obj=list_obj, walk_setup=walk_setup, view=view, reversed=reversed)
         if found_lists:
-            return render_template('lists/list.html.jinja', userlists=found_lists, view=view, walk_setup=walk_setup, reversed=reversed, sublevel=sublevel, sublevel_limit=sublevel_limit)
+            return render_template('lists/list.html.jinja', userlists=found_lists, view=view, walk_setup=walk_setup, reversed=reversed, sublevel=sublevel, sublevel_limit=sublevel_limit, view_override=view_override)
         else:
             return '', 204
     list_obj=db.get_or_404(UserList, list_id)
     found_lists = [list_obj]
-    return render_template('lists/list.html.jinja', userlists=found_lists, view=view, reversed=reversed, sublevel=sublevel, sublevel_limit=sublevel_limit)
+    return render_template('lists/list.html.jinja', userlists=found_lists, view=view, reversed=reversed, sublevel=sublevel, sublevel_limit=sublevel_limit, view_override=view_override)
 
 
 @lists.route('/rename/<string:item_model>/<int:item_id>', methods=['GET', 'PUT'])
