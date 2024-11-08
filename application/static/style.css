@@ -448,3 +448,16 @@ form.htmx-request {
     background: none;
     padding: 0px;
 }
+
+.revert-animation {
+    animation: revert-animation 0.5s ease-in-out;
+    will-change: transform;
+}
+@keyframes revert-animation {
+    from {
+        transform: translateX(90px) !important;
+    }
+    to {
+        transform: translateX(0) !important;
+    }
+}

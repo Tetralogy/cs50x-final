@@ -13,8 +13,10 @@ lists = Blueprint('lists', __name__)
 
 # Helper functions for CRUD operations
 def create_user_list(list_type: str, list_name: str, parent_entry_id: int = None) -> UserList:
-    if not list_type or not list_name:
-        raise ValueError('list_type and list_name arguments are required')
+    if not list_type:
+        raise ValueError('list_type argument is required')
+    if not list_name:
+        list_name = default_list_name(list_type, parent_entry_id)
     # Split the list_type if it contains ' ComboList'
     if 'ComboList' in list_type:
         base_list_type = list_type.replace(' ComboList', '')
@@ -29,11 +31,30 @@ def create_user_list(list_type: str, list_name: str, parent_entry_id: int = None
     if existing_list:
         return existing_list
     new_list = UserList(user_id=current_user.id, list_name=list_name, list_type=list_type, parent_entry_id=parent_entry_id)
-    print(f'new_list: {new_list}')
+    print(f'create_user_list: new_list: {new_list}')
     db.session.add(new_list)
     db.session.commit()
     return new_list
-
+def default_list_name(item_model, parent_entry_id: int=None, room_id: int=None):
+    if not item_model:
+        raise ValueError('item_model cannot be None')
+    print(f'default_list_name() A: item_model: {item_model}, parent_entry_id: {parent_entry_id}')
+    if not parent_entry_id:
+        if not room_id:
+            room_id = current_user.active_home.active_room_id
+            if not room_id:
+                raise ValueError('No active room or parent_entry_id provided')
+        print(f'room_id: {room_id}')
+        room = db.get_or_404(Room, room_id)
+        parent = room
+        parent_entry_id = get_list_entries_for_item(room)[0].id
+        item_name = room.name
+    else:
+        parent = db.get_or_404(UserListEntry, parent_entry_id)
+        item_name = parent.get_item().name
+    list_name = f'{item_name} {item_model}s'
+    print(f'default_list_name() B: list_name: {list_name} parent_entry_id: {parent_entry_id}')
+    return list_name, parent_entry_id
 def add_item_to_list(user_list_id: int, item_model: str, item_id: int = None, order: int = None, name: str = None, photo_url: str = None) -> UserListEntry:
     list_obj = db.get_or_404(UserList, user_list_id)
     print(f'add_item_to_list(): user_list_id: {user_list_id}, item_model: {item_model}, item_id: {item_id}, order: {order}, name: {name}')
@@ -188,9 +209,9 @@ def get_user_list_items(user_list_id: int) -> List[dict]:
 def get_userlists_by_parent(parent_entry_id: int) -> List[UserList]:
         lists = current_user.lists.filter_by(parent_entry_id=parent_entry_id).all()
         if lists:
-            print(f'lists found (parent_entry_id): {lists}')
+            print(f'get_userlists_by_parent: lists found (parent_entry_id){parent_entry_id}: {lists}')
         else:
-            print(f'No lists found for parent_entry_id {parent_entry_id}')
+            print(f'get_userlists_by_parent: No lists found for parent_entry_id {parent_entry_id}')
         return lists
         
 def get_userlist(item_model: str = None, list_name: str = None, parent_entry_id: int = None, combine: bool = False): #gets the primary list of a main model
@@ -313,7 +334,7 @@ def get_list_entries_for_item(item: object, list_type: str = None, user_id: int 
     found_entries = UserListEntry.find_entries_for_item(item)
     if not found_entries:
         raise ValueError(f'No list entries found for item: {item}')
-    print(f'found_entries: {found_entries}')
+    print(f'found_entries for {item}: {found_entries}')
     # Now you can iterate through the list entries
     list_entries = []
     if user_id: # must belong to specified user, default to current_user
@@ -557,7 +578,7 @@ def add_to_list(list_id):
 
 @lists.route('/create/<string:item_model>', methods=['POST'])
 @login_required
-def create_list_and_item_and_entry(item_model):
+def create_list_and_item_and_entry(item_model, retrieve: str=None):
     if item_model == 'Home':
         multifloor=request.form.get('multifloor') == 'on'
         print(f'multifloor: {multifloor}')
@@ -591,22 +612,16 @@ def create_list_and_item_and_entry(item_model):
         flash(f'Item added to list: {new_item.item_model} {new_item.item_id}', 'success')
         return render_template('lists/model/' + new_item.item_model.lower() + '.html.jinja', entry=new_item)
     room_id = request.form.get('room_id')
-    if not room_id:
-        room_id = current_user.active_home.active_room_id
-    print(f'room_id: {room_id}')
-    room = db.get_or_404(Room, room_id)
-    list_name = f'{room.name} {item_model}s'
-    parent_entry_id = get_list_entries_for_item(room)[0].id
-        
+    list_name, parent_entry_id = default_list_name(item_model=item_model, room_id=room_id)
     userlist = get_userlist(item_model, list_name, parent_entry_id) 
     if not userlist:
         userlist = create_user_list(item_model, list_name, parent_entry_id)
-    return create_item_and_entry(item_model, userlist.id)
+    return create_item_and_entry(item_model, userlist.id, retrieve=retrieve)
     #return redirect(url_for('lists.create_item_and_entry', item_model=item_model, list_id=userlist.id))
     
 @lists.route('/create/<string:item_model>/<int:list_id>', methods=['POST'])
 @login_required
-def create_item_and_entry(item_model, list_id, item_id: int=None):
+def create_item_and_entry(item_model, list_id, item_id: int=None, retrieve: str=None):
     order_index = request.form.get('order_index')
     if not order_index:
         order_index = None
@@ -616,13 +631,18 @@ def create_item_and_entry(item_model, list_id, item_id: int=None):
     print(f'item_model: {item_model}, list_id: {list_id}, item_id: {item_id}, order: {order_index}, name: {name}')
     new_item = add_item_to_list(list_id, item_model, item_id, order_index, name)
     flash(f'Item added to list: {new_item.item_model} {new_item.item_id}', 'success')
+    if retrieve == 'list':
+        userlist = db.get_or_404(UserList, list_id)
+        return userlist
     return render_template('lists/model/' + new_item.item_model.lower() + '.html.jinja', entry=new_item) #redirect(url_for('lists.update_list_order', list_id=list_id))
 
 
 @lists.route('/move_entry/', methods=['PUT'])
+@lists.route('/move_entry/<int:moved_entry_id>', methods=['PUT'])
 @lists.route('/move_entry/<int:moved_entry_id>/<int:list_id>', methods=['PUT'])
 @login_required
 def move_entry(moved_entry_id: int = None, list_id: int = None):
+    print(f'move_entry called moved_entry_id: {moved_entry_id}, list_id: {list_id}')
     #1. get the id of the entry being dragged
     if not moved_entry_id:
         moved_entry_id = int(request.form.get('moved_entry_id'))
@@ -630,17 +650,30 @@ def move_entry(moved_entry_id: int = None, list_id: int = None):
     is_list = request.form.get('is_list') == 'true'
     print(f'is_list: {is_list}')
     #2. get the entry.id of the entry the moved_entry_id is being dropped on
+    list_id = request.form.get('list_id')
+    if list_id == 'undefined':
+        list_id = None
+    else:
+        list_id = int(list_id)
+    print(f'list_id: {list_id}')
     if not list_id or not is_list:
-        recieving_entry_id = int(request.form.get('recieving_entry_id'))       
+        recieving_entry_id = int(request.form.get('recieving_entry_id'))  
         #3. if a userlist with parent_id == recieving_entry_id exists: change moved_entry.userlist_id to the userlist.id
-        item_model = db.get_or_404(UserListEntry, recieving_entry_id).item_model
-        new_list = get_userlist(item_model=item_model, parent_entry_id=recieving_entry_id)
+        recieving_entry = db.get_or_404(UserListEntry, recieving_entry_id)
+        recieving_item_model = recieving_entry.item_model
+        print(f'recieving_entry_id: {recieving_entry_id} name: {recieving_entry.get_item().name} recieving_item_model: {recieving_item_model}')     
+        new_list = get_userlist(item_model=recieving_item_model, parent_entry_id=recieving_entry_id)
+        print(f'new_list after get_userlist: {new_list}')
         #else: create a new list with the dragged-over-task.name as the list name, dragged-over-task.id as parent
         if not new_list:
+            print(f'not new_list')
             new_list_name = f'{db.get_or_404(UserListEntry, recieving_entry_id).get_item().name} Sublist'
-            new_list = create_user_list(list_type=item_model, list_name=new_list_name, parent_entry_id=recieving_entry_id)
+            print(f'new_list_name: {new_list_name}')
+            new_list = create_user_list(list_type=recieving_item_model, list_name=new_list_name, parent_entry_id=recieving_entry_id)
+            print(f'new_list after create_user_list: {new_list}')
         #4. add the dropped task to the list by changing the dragged-task.user_list_id to the list.id
         moved_entry.user_list_id = new_list.id
+        print(f'moved_entry.user_list_id: {moved_entry.user_list_id} = new_list.id: {new_list.id}')
     else:
         new_list = db.get_or_404(UserList, list_id)
         moved_entry.user_list_id = list_id
@@ -650,17 +683,17 @@ def move_entry(moved_entry_id: int = None, list_id: int = None):
     db.session.commit()
     flash(f'Entry {moved_entry_id} moved to list {new_list.list_name}')
     print(f'moved_entry_id: {moved_entry_id} name: {moved_entry.get_item().name}, '
-            f'recieving_entry_id: {new_list.parent_entry_id} name: {db.get_or_404(UserListEntry, new_list.parent_entry_id).get_item().name}, '
+            f'new_list.parent_entry_id: {new_list.parent_entry_id},'
             f'new_list_id: {moved_entry.user_list_id}, new_list_name: {new_list.list_name}'
         )
     #5. return
     return ('', 204)
 
-@lists.route('/update_list_order/', methods=['PUT', 'POST', 'DELETE', 'GET'])#bug  broken
+@lists.route('/update_list_order/', methods=['PUT', 'POST', 'DELETE', 'GET'])
 @lists.route('/update_list_order/<int:list_id>', methods=['PUT', 'POST', 'DELETE', 'GET'])
 @login_required
 def update_list_order(list_id: int = None):
-    hidden_list_id = request.form.get('hidden_list_id') #bug
+    hidden_list_id = request.form.get('hidden_list_id')
     if not list_id:
         raise ValueError('list_id cannot be None')
         if hidden_list_id is not None and hidden_list_id != '':
@@ -688,12 +721,12 @@ def update_list_order(list_id: int = None):
         if not entry:
             print(f'Entry {entry_id} not found')
             # Respond with an X-Revert header
-            response = make_response("")
-            revert = True
-            if revert:
-                response.headers['X-Revert'] = 'true'
-            return response
-            return ('', 204)
+            #response = make_response("")
+            #revert = True
+            #if revert:
+            #    response.headers['X-Revert'] = 'true'
+            #return response
+            #return ('', 204)
         else:
             print(f'Updating entry_id: {entry_id} item_name: {entry.get_item().name} with new order: {index}')
     flash('List order updated')
@@ -726,6 +759,7 @@ def show_list(list_id: int = None):
         sublevel = 0
     print(f'sublevel: {sublevel}')
     print(f'showing list list_id: {list_id}')
+    force_new_list = request.args.get('force_new_list') == 'true'
     if not list_id:
         combine = bool(request.args.get('combine') == 'True')
         parent = request.args.get('parent')
@@ -754,8 +788,9 @@ def show_list(list_id: int = None):
                     parent_entry_id = get_list_entries_for_item(current_user.active_home.active_floor)[0].id 
             elif list_model == 'Task':
                 if not parent_entry_id and not combine: 
-                    parent_entry_id = get_list_entries_for_item(current_user.active_home.active_room)[0].id 
-                print(f'Task list parent_entry_id: {parent_entry_id}')
+                    parent_entry_id = get_list_entries_for_item(current_user.active_home.active_room)[0].id   
+                print(f'force_new_list: {force_new_list}')    
+                print(f'show_list: Task list parent_entry_id: {parent_entry_id}')
             elif list_model == 'Photo':
                 if not parent_entry_id and not combine: 
                     parent_entry_id = get_list_entries_for_item(current_user.active_home.active_room)[0].id
@@ -763,17 +798,24 @@ def show_list(list_id: int = None):
                 raise ValueError(f'Unknown list type {list_model}')
             # if combine is True, show combined lists, else show the first list found
             list_obj = get_userlist(list_model, parent_entry_id=parent_entry_id, combine=combine)
-            print(f'list_obj: {list_obj}')
+            print(f'list_obj A: {list_obj}')
+            if not list_obj and force_new_list:
+                list_obj = create_list_and_item_and_entry(list_model, retrieve='list')
+            print(f'list_obj B: {list_obj}')
             found_lists = [list_obj]
         walk_setup = session.get('walk_setup', False)
         print(f'walk_setup: {walk_setup}')
         #return render_template('lists/list.html.jinja', list_obj=list_obj, walk_setup=walk_setup, view=view, reversed=reversed)
-        if found_lists:
+        if any(found_lists):
+            print(f'found_lists - inner return: {found_lists}')
             return render_template('lists/list.html.jinja', userlists=found_lists, view=view, walk_setup=walk_setup, reversed=reversed, sublevel=sublevel, sublevel_limit=sublevel_limit, view_override=view_override)
         else:
+            print("no lists found - return")
             return '', 204
     list_obj=db.get_or_404(UserList, list_id)
+    print(f'list_obj: {list_obj}')
     found_lists = [list_obj]
+    print(f'found_lists - outer return: {found_lists}')
     return render_template('lists/list.html.jinja', userlists=found_lists, view=view, reversed=reversed, sublevel=sublevel, sublevel_limit=sublevel_limit, view_override=view_override)
 
 

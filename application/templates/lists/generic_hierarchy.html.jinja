@@ -15,7 +15,13 @@
             data-list_id="{{ list_obj.id }}"
         >
         >
-        # todo: hide and show buttons
+            <div class="accordion" id="accordionExample">
+    <div class="accordion-item">
+
+        <h2 class="accordion-header">
+
+    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#list-updater-{{ list_obj.id }}" aria-expanded="true" aria-controls="multiCollapseExample1 multiCollapseExample2">hide/show sublevel: {{ sublevel }} sublevel_limit: {{ sublevel_limit }} text-hierarchy</button>
+        </h2>
             {% if reversed %}
                 {% for entry in list_obj.entries | sort(attribute='order')| reverse %}
                     {% include 'lists/model/generic_text.html.jinja' %}
@@ -34,3 +40,5 @@
                 {% endif %}
             {% endif %}
         </div>
+            </div>
+    </div>
