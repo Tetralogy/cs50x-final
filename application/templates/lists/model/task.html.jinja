@@ -18,7 +18,9 @@
 <input type='hidden' name='items' value='{{ entry.id }}'/>
 
 {% include 'lists/name.html.jinja' %}
-    {#<p class="bg-dark">order: {{ entry.order }}</p>#}
+{% set info = order  %}
+    {% include 'base/parts/debug_text.html.jinja' %}
+    
 
         <button
         class="btn btn-danger"

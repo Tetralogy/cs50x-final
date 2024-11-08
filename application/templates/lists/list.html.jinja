@@ -3,13 +3,14 @@
 {% if view == "text-hierarchy" %}
     {% include 'lists/generic_hierarchy.html.jinja' %}
 {% else %}
-    {% include 'lists/listname.html.jinja' %} {# todo: make toggle to hide/show debug info #}
+    {% set info = name  %}
+    {% include 'base/parts/debug_text.html.jinja' %} {# todo: make toggle to hide/show debug info #}
     <div class="accordion" id="accordionExample">
     <div class="accordion-item">
 
         <h2 class="accordion-header">
 
-    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#list-updater-{{ list_obj.id }}" aria-expanded="true" aria-controls="multiCollapseExample1 multiCollapseExample2">hide/show sublevel: {{ sublevel }} sublevel_limit: {{ sublevel_limit }}</button>
+    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#list-updater-{{ list_obj.id }}" aria-expanded="true" aria-controls="multiCollapseExample1 multiCollapseExample2">hide/show{% set info = list %}{% include 'base/parts/debug_text.html.jinja' %}</button>
         </h2>
         <div
             id="list-updater-{{ list_obj.id }}"

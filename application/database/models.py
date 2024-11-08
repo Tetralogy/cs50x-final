@@ -1,7 +1,7 @@
 from flask import Blueprint
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import Mapped, mapped_column, relationship, column_property
-from sqlalchemy import String, Integer, DateTime, UniqueConstraint, and_, func, ForeignKey, select, text, event
+from sqlalchemy import Boolean, String, Integer, DateTime, UniqueConstraint, and_, func, ForeignKey, select, text, event
 from sqlalchemy.ext.hybrid import hybrid_property
 from datetime import datetime, timezone
 from typing import Optional, List
@@ -37,6 +37,7 @@ class User(db.Model, UserMixin):
     profile_picture_url: Mapped[Optional[str]]
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=func.now())
     last_login: Mapped[datetime] = mapped_column(DateTime, nullable=True)
+    debug: Mapped[bool] = mapped_column(Boolean, server_default="0")
     # Define relationships
     abilities = relationship('UserAbility', back_populates="user", lazy='dynamic')
     preferences = relationship('UserPreference', back_populates="user", lazy='dynamic')

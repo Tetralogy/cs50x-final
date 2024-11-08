@@ -2,7 +2,9 @@
 {% set sublevel = 0 %}
 {% set sublevel_limit = 1 %}
 {% endif %}
-entry id: {{ entry.id }} list id: {{ entry.user_list_id }} sublevel: {{ sublevel }} sublevel_limit: {{ sublevel_limit }}
+{% set info = sublist  %}
+    {% include 'base/parts/debug_text.html.jinja' %}
+
 {% if sublevel < sublevel_limit %}
 {% set sublevel = sublevel + 1 %}
     <div class="sortable dropzone"
@@ -19,12 +21,5 @@ entry id: {{ entry.id }} list id: {{ entry.user_list_id }} sublevel: {{ sublevel
     
     >
     {# sublists go here if found #}
-        {#<div class="dz-label"
-        id="sublist-dropzone-{{ entry.id }}"
-        
-        
-        >
-        DROP HERE {{ entry.id }}
-        </div>#}
     </div>
 {% endif %}

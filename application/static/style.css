@@ -413,7 +413,7 @@ form.htmx-request {
 
 .dropzone {
     display: block; /* Hidden by default */
-    
+
     padding: 0px;
     background: none;
 }
@@ -426,20 +426,19 @@ form.htmx-request {
     background-repeat: no-repeat;
     background-size: contain;
     padding: 20px;
-    
 }
 .dropzone.hover {
     display: block;
     background: rgb(108, 99, 255);
     background: radial-gradient(
-        circle,
-        rgb(0, 251, 8) 0%,
-        rgba(0, 212, 255, 0) 100%
+            circle,
+            rgb(0, 251, 8) 0%,
+            rgba(0, 212, 255, 0) 100%
         ),
         url("plus-square-dotted.svg");
-        background-position: center;
-        background-repeat: no-repeat;
-        background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
 
     padding: 0px;
 }
@@ -460,4 +459,9 @@ form.htmx-request {
     to {
         transform: translateX(0) !important;
     }
+}
+
+.debug-info {
+    color: red;
+    font-size: .75em !important;
 }

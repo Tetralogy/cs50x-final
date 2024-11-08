@@ -41,6 +41,13 @@ def index():
 
 
 
+@main.route('/debug', methods=['PUT'])
+@login_required
+def debug():
+    current_user.debug = not current_user.debug
+    db.session.commit()
+    print(f'debug toggled: {current_user.debug}')
+    return '', 204
 
 
 
