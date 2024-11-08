@@ -2,7 +2,7 @@ import os
 import time
 from typing import List, Optional
 from werkzeug.utils import secure_filename
-from flask import Blueprint, current_app, flash, redirect, render_template, request, send_from_directory, session, url_for
+from flask import Blueprint, current_app, flash, make_response, redirect, render_template, request, send_from_directory, session, url_for
 from flask_login import current_user, login_required
 from sqlalchemy import and_, select
 from application.database.models import Floor, Home, Photo, Room, RoomDefault, Supply, Task, UserList, UserListEntry
@@ -398,9 +398,12 @@ def print_hierarchy_iterative(hierarchy: dict, parent_entry_id: int = None): # [
 def unpack_hierarchy(hierarchy: dict) -> List[dict]:
     raise NotImplementedError("unpack_hierarchy not yet implemented") # [ ]: remove if unnecessary
 def update_entry_order(user_list_entry_id: int, new_order: int) -> Optional[UserListEntry]:
-    if not new_order:
-        return None
+    print(f'user_list_entry_id: {user_list_entry_id}, new_order: {new_order}')
     entry = db.session.scalars(db.select(UserListEntry).filter_by(id=user_list_entry_id)).one_or_none()
+    #entry = UserListEntry.query.get(user_list_entry_id)
+    print(f'entry A: {entry}')
+    if new_order is None:
+        return None
     if entry:
         entry.order = new_order
         db.session.commit()
@@ -653,33 +656,43 @@ def move_entry(moved_entry_id: int = None, list_id: int = None):
     #5. return
     return ('', 204)
 
-@lists.route('/update_list_order/', methods=['PUT', 'POST', 'DELETE', 'GET'])
+@lists.route('/update_list_order/', methods=['PUT', 'POST', 'DELETE', 'GET'])#bug  broken
 @lists.route('/update_list_order/<int:list_id>', methods=['PUT', 'POST', 'DELETE', 'GET'])
 @login_required
 def update_list_order(list_id: int = None):
-    hidden_list_id = request.form.get('hidden_list_id')
-    if list_id is None or list_id == '':
+    hidden_list_id = request.form.get('hidden_list_id') #bug
+    if not list_id:
+        raise ValueError('list_id cannot be None')
         if hidden_list_id is not None and hidden_list_id != '':
             list_id = int(hidden_list_id)
     order = request.form.getlist('items')
     print(f'list_id: {list_id}, order1: {order}')
-    if order is None or len(order) == 0:
+    if not order:
         userlist = db.get_or_404(UserList, list_id)
         order = db.session.scalars(select(UserListEntry).filter_by(user_list_id=userlist.id).order_by(UserListEntry.order)).all()
         print(f'UserList {userlist.list_name} order2: {order}')
         if order is None or len(order) == 0:
             flash(f'No items in list {userlist.list_name}')
+            print(f'No items in list {userlist.list_name}')
             return ('', 204) #redirect(url_for('lists.show_list', list_id=list_id))
 
     # Extract the IDs if they are UserListEntry objects
     if hasattr(order[0], 'id'):
         print(f'UserList {userlist.list_name} order3: {order}')
         order = [entry.id for entry in order]
-            
+    print(f'order3: {order}')
     for index, entry_id in enumerate(order):
+        print(f'index: {index}, entry_id: {entry_id}')
         entry = update_entry_order(entry_id, index)
+        print(f'entry B: {entry}')
         if not entry:
             print(f'Entry {entry_id} not found')
+            # Respond with an X-Revert header
+            response = make_response("")
+            revert = True
+            if revert:
+                response.headers['X-Revert'] = 'true'
+            return response
             return ('', 204)
         else:
             print(f'Updating entry_id: {entry_id} item_name: {entry.get_item().name} with new order: {index}')
@@ -701,6 +714,7 @@ def show_list(list_id: int = None):
     print(f'view: {view}')
     print(f'list_id1: {list_id}')
     sublevel_limit = request.args.get('sublevel_limit')
+    print(f'sublevel_limit: {sublevel_limit}')
     if sublevel_limit:
         sublevel_limit = int(sublevel_limit)
     else:

@@ -1,6 +1,6 @@
-{% if not sublevel %}
+{% if sublevel is not defined or sublevel is None %}
 {% set sublevel = 0 %}
-{% set sublevel_limit = 10 %}
+{% set sublevel_limit = 1 %}
 {% endif %}
 sublevel: {{ sublevel }}
 {% if sublevel < sublevel_limit %}
@@ -9,7 +9,7 @@ sublevel: {{ sublevel }}
     id="sublist-loader-{{ entry.id }}"
     hx-get="/show_list/"
     hx-trigger="load once from:body"
-    hx-vals='{"parent_entry_id": "{{ entry.id }}", "sublevel": "{{ sublevel }}", "sublevel_limit": "{{ sublevel_limit }}", "view_override":"{{ view_override }}"}'
+    hx-vals='{"parent_entry_id": "{{ entry.id }}", "sublevel": "{{ sublevel }}", "sublevel_limit": {{ sublevel_limit }}, "view_override":"{{ view_override }}"}'
     data-id="{{ entry.id }}"
     data-name="{{ entry.get_item().name }}"
     data-order="{{ entry.order }}"

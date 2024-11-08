@@ -149,6 +149,8 @@ def map(floor_id: int=None):
     session['view'] = view
     session['walk_setup'] = False
     if floor_id is None:
+        if not current_user.active_home:
+            return redirect(url_for('homes.home_setup'))
         floor_id = current_user.active_home.active_floor_id
         if floor_id is None:
             return redirect(url_for('floors.define_floors'))

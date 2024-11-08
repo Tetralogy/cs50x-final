@@ -140,6 +140,9 @@
                                     .forEach((dropzone) =>
                                         dropzone.classList.add("visible"),
                                     );
+                                    originalIndex = evt.oldIndex;  // Store the original index
+                                    draggedItem = evt.item;        // Store the dragged item reference
+                                    fromList = evt.from;          // Store the from list reference
                             },
                             onMove: function (evt) {
                                 const draggedItem = evt.dragged; // The item being dragged
@@ -302,6 +305,10 @@
                                 this.option("disabled", true);
                                 // Hide all dropzones when dragging ends
                                 updateDropzones();
+                                console.log(
+                                    "sortableElement:",
+                                    sortableElement,
+                                )
                             },
                         });
 

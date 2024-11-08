@@ -1,15 +1,15 @@
 <div class="container-fluid border border-primary">
 {% for list_obj in userlists %}
-{% if view == "hierarchy" %}
-    {% include 'lists/hierarchy.html.jinja' %}
-{% else %}
+{#{% if view == "hierarchy" %}
+    {% include 'lists/generic_hierarchy.html.jinja' %}
+{% else %}#}
     {% include 'lists/listname.html.jinja' %} {# todo: make toggle to hide/show debug info #}
     <div class="accordion" id="accordionExample">
     <div class="accordion-item">
 
         <h2 class="accordion-header">
 
-    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#list-updater-{{ list_obj.id }}" aria-expanded="true" aria-controls="multiCollapseExample1 multiCollapseExample2">hide/show</button>
+    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#list-updater-{{ list_obj.id }}" aria-expanded="true" aria-controls="multiCollapseExample1 multiCollapseExample2">hide/show sublevel: {{ sublevel }} sublevel_limit: {{ sublevel_limit }}</button>
         </h2>
         <div
             id="list-updater-{{ list_obj.id }}"
@@ -29,6 +29,19 @@
             hx-put="/update_list_order/{{ list_obj.id }}"
             hx-include="[name='items']"
             hx-trigger="end delay:1s, remove delay:1s, add delay:1s"
+            hx-swap="none"
+            hx-on::after-request=
+            "console.log('revert called'); 
+            if (event.detail.xhr.getResponseHeader('X-Revert') === 'true') {
+                console.log('reverting');
+                if (draggedItem && originalIndex !== null) {
+                console.log('Reverting to original index');
+                console.log('this:' + fromList.id + ', draggedItem: ' + draggedItem.id + ', originalIndex: ' + originalIndex);
+                fromList.appendChild(draggedItem);
+                fromList.insertBefore(draggedItem, fromList.children[originalIndex]);
+                return;
+                }
+            }"
             hx-indicator="#updating-indicator"
             data-model="{{ list_obj.list_type }}"
             data-is-list="true"
@@ -55,6 +68,6 @@
         </div>
     </div>
     </div>
-{% endif %}
+{#{% endif %}#}
 {% endfor %}
 </div>
