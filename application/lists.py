@@ -213,7 +213,16 @@ def get_userlists_by_parent(parent_entry_id: int) -> List[UserList]:
         else:
             print(f'get_userlists_by_parent: No lists found for parent_entry_id {parent_entry_id}')
         return lists
-        
+
+def get_top_userlists_by_root_parent(root_parent_entry_id: int, model) -> List[UserList]:#bug fix to find all tasks for current home
+        lists = current_user.lists.filter_by(parent_entry_id=parent_entry_id).all()
+        task_lists = current_user.lists.filter_by(list_type='Task').join(Room).filter_by(home_id=current_user.active_home.id).all() #bug test this and implement
+        if lists:
+            print(f'get_userlists_by_parent: lists found (parent_entry_id){parent_entry_id}: {lists}')
+        else:
+            print(f'get_userlists_by_parent: No lists found for parent_entry_id {parent_entry_id}')
+        return lists
+    
 def get_userlist(item_model: str = None, list_name: str = None, parent_entry_id: int = None, combine: bool = False): #gets the primary list of a main model
     print(f'get_userlist(): item_model: {item_model}, list_name: {list_name}, parent_entry_id: {parent_entry_id}')
     if not item_model and not parent_entry_id:
@@ -762,6 +771,7 @@ def show_list(list_id: int = None):
     force_new_list = request.args.get('force_new_list') == 'true'
     if not list_id:
         combine = bool(request.args.get('combine') == 'True')
+        root_parent = request.args.get('root_parent')
         parent = request.args.get('parent')
         parent_entry_id = request.args.get('parent_entry_id')
         if parent_entry_id:
@@ -769,11 +779,17 @@ def show_list(list_id: int = None):
         elif parent:
             print(f'parent1: {parent}')
             parent_entry_id = get_list_entries_for_item(parent)[0].id
-        print(f'parent_entry_id: {parent_entry_id}')
+            print(f'parent_entry_id A: {parent_entry_id}')
+        elif root_parent:
+            root_parent_entry_id = get_list_entries_for_item(root_parent)[0].id
+            print(f'root_parent_entry_id: {root_parent_entry_id}')
+        print(f'parent_entry_id B: {parent_entry_id}')
         list_model = request.args.get('list_type')
         print(f'list_model: {list_model}')
         if not list_model and parent_entry_id:
             found_lists = get_userlists_by_parent(parent_entry_id)
+        elif root_parent:
+            found_lists = get_userlists_by_parent(root_parent_entry_id)
         elif not list_model and not parent_entry_id:
             raise ValueError('No list type or parent entry id specified')
         else: #if list_model is not None
@@ -790,7 +806,7 @@ def show_list(list_id: int = None):
                 if not parent_entry_id and not combine: 
                     parent_entry_id = get_list_entries_for_item(current_user.active_home.active_room)[0].id   
                 print(f'force_new_list: {force_new_list}')    
-                print(f'show_list: Task list parent_entry_id: {parent_entry_id}')
+                print(f'show_list: Task list parent_entry_id C: {parent_entry_id}')
             elif list_model == 'Photo':
                 if not parent_entry_id and not combine: 
                     parent_entry_id = get_list_entries_for_item(current_user.active_home.active_room)[0].id
