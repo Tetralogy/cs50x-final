@@ -214,14 +214,26 @@ def get_userlists_by_parent(parent_entry_id: int) -> List[UserList]:
             print(f'get_userlists_by_parent: No lists found for parent_entry_id {parent_entry_id}')
         return lists
 
-def get_top_userlists_by_root_parent(root_parent_entry_id: int, model) -> List[UserList]:#bug fix to find all tasks for current home
-        lists = current_user.lists.filter_by(parent_entry_id=parent_entry_id).all()
-        task_lists = current_user.lists.filter_by(list_type='Task').join(Room).filter_by(home_id=current_user.active_home.id).all() #bug test this and implement
-        if lists:
-            print(f'get_userlists_by_parent: lists found (parent_entry_id){parent_entry_id}: {lists}')
+def get_top_userlists_by_root_parent(root_parent_entry_id: int, model) -> List[UserList]:
+        if not model:
+            raise ValueError('model cannot be None')
+        print(f'input root_parent_entry_id: {root_parent_entry_id} model: {model}')
+        parent_entry_id=root_parent_entry_id
+        parent_lists = get_userlists_by_parent(parent_entry_id=root_parent_entry_id) # -> List[UserList]:
+        parent_lists_with_model = [userlist for userlist in parent_lists if userlist.list_type == model]
+        while not parent_lists_with_model and parent_lists:
+            found_lists = []
+            for userlist in parent_lists:
+                for entry in userlist.entries:
+                    child_lists = get_userlists_by_parent(parent_entry_id=entry.id)
+                    found_lists.extend(child_lists)
+            parent_lists_with_model = [userlist for userlist in found_lists if userlist.list_type == model]
+            parent_lists = found_lists
+        if parent_lists_with_model:
+            print(f'get_top_userlists_by_root_parent: lists found (parent_entry_id){root_parent_entry_id}: {lists}')
         else:
-            print(f'get_userlists_by_parent: No lists found for parent_entry_id {parent_entry_id}')
-        return lists
+            print(f'get_top_userlists_by_root_parent: No {model} lists found for root_parent_entry_id {root_parent_entry_id}')
+        return parent_lists_with_model
     
 def get_userlist(item_model: str = None, list_name: str = None, parent_entry_id: int = None, combine: bool = False): #gets the primary list of a main model
     print(f'get_userlist(): item_model: {item_model}, list_name: {list_name}, parent_entry_id: {parent_entry_id}')
@@ -789,7 +801,7 @@ def show_list(list_id: int = None):
         if not list_model and parent_entry_id:
             found_lists = get_userlists_by_parent(parent_entry_id)
         elif root_parent:
-            found_lists = get_userlists_by_parent(root_parent_entry_id)
+            found_lists = get_top_userlists_by_root_parent(root_parent_entry_id, model=list_model)
         elif not list_model and not parent_entry_id:
             raise ValueError('No list type or parent entry id specified')
         else: #if list_model is not None
