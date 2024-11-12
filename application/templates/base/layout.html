@@ -17,9 +17,9 @@
             integrity="sha384-0895/pl2MU10Hqc6jd4RvrthNlDiE9U1tWmX7WRESftEDRosgxNsQG/Ze9YMRzHq"
             crossorigin="anonymous"
         ></script>
-        {#<script>
-            //htmx.config.indicatorClass = "updating-indicator"; # [ ] need to fix and style
-        </script>#}
+        {# <script>
+           // htmx.config.indicatorClass = ".spinner-border .text-warning"; //# [ ] need to fix and style
+        </script> #}
         <script
             src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
@@ -28,7 +28,12 @@
         <!-- jsDelivr :: Sortable :: Latest (https://www.jsdelivr.com/package/npm/sortablejs) -->
         <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
     </head>
-    <body hx-boost="true">
+    <body hx-boost="true" hx-indicator="#updating-indicator">
+        <div class="position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center" style="pointer-events: none; z-index: 1050;">
+    <div id="updating-indicator" class="htmx-indicator spinner-border text-warning shadow" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+</div>
         <div class="container-fluid">
             {% include 'base/parts/nav_top.html.jinja' %}
             {#{% include 'base/parts/flash_container.html.jinja' %}#}
@@ -264,7 +269,7 @@
                                 if (itemEl.dataset.model === model) {
                                     htmx.ajax(
                                         "PUT",
-                                        "/move_entry/" + moved_entry_id,
+                                        "/move_entry/" + moved_entry_id, // #bug: not getting called on task page
                                         {
                                             values: {
                                                 order_index: newIndex, 
@@ -468,7 +473,7 @@ document.body.addEventListener('htmx:responseError', function(event) {
                     });
                 });
         </script>
-        <div id="updating-indicator" class="htmx-indicator">Updating...</div>
+        
         <footer>{% include 'base/parts/nav_bottom.html.jinja' %}</footer>
     </body>
 </html>

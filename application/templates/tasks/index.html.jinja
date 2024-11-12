@@ -5,8 +5,12 @@
 
 {% block main %}
 # list all tasks
-#todo: list all rooms
-#todo: move tasks between rooms
+# list all rooms
+#bug: move tasks between rooms
+#todo: minimal style for tasks in list form
+#todo: attach photos to tasks
+#todo: interactive tasks in photo form
+#todo: different sorting options
 #todo: remove 'zones' concept
 #todo: list all photos
 #todo: heigharchial view of tasks
@@ -16,9 +20,9 @@
     {{ current_user.active_home }}
 </h1>
 <h2>view: {{ view }}</h2>
-<h1>List of all lists for the current home:</h1>
+{#<h1>List of all lists for the current home:</h1>
 
-    <div
+    {# <div
                 class="row g-0 row-cols-4 container-fluid border border-success border-5 rounded-bottom-4 p-1"
                 id="task-list-loader"
                 hx-get="/show_list/"
@@ -29,7 +33,7 @@
             >
                 <input id="dummy-placeholder" type="hidden" name="items" />
                 
-    </div>
+    </div> #}
 
     <h1>This is a view of all tasks for the curent home:</h1>
 
@@ -45,12 +49,12 @@
                 <input id="dummy-placeholder" type="hidden" name="items" />
                 
     </div>
-    <h1>List of all homes for the user:</h1>
+     <h1>List of all homes for the user:</h1>
     <div
                 class="row g-0 row-cols-4 container-fluid  border border-success border-5 rounded-bottom-4 p-1"
                 id="task-list-loader"
                 hx-get="/show_list/"
-                hx-vals='{"list_type": "Home", "sublevel_limit": 100, "view_override": "text-hierarchy"}'
+                hx-vals='{"list_type": "Home", "sublevel_limit": 1, "view_override": "text-hierarchy"}'
                 hx-trigger="load once"
                 hx-swap="outerHTML"
                 hx-indicator="#updating-indicator"
@@ -65,7 +69,7 @@
                 class="row g-0 row-cols-4 container-fluid  border border-success border-5 rounded-bottom-4 p-1"
                 id="task-list-loader"
                 hx-get="/show_list/"
-                hx-vals='{"list_type": "Room", "root_parent": "{{ current_user.active_home }}", "sublevel_limit": 100, "view_override": "text-hierarchy"}'
+                hx-vals='{"list_type": "Room", "root_parent": "{{ current_user.active_home }}", "sublevel_limit": 0, "view_override": "text-hierarchy"}'
                 hx-trigger="load once"
                 hx-swap="outerHTML"
                 hx-indicator="#updating-indicator"
