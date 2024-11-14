@@ -1,5 +1,5 @@
 <li
-    class="list-group-item shadow grabbable"
+    class="list-group-item pe-0 align-items-start shadow grabbable"
     id="{{ entry.item_model }}list-{{ entry.id }}"
     data-id="{{ entry.id }}"
     data-name="{{ entry.get_item().name }}"
@@ -11,6 +11,7 @@
     data-bs-placement="left"
     data-bs-title="<u>Drag</u> to <span class='text-nowrap'><b>reorder</b> {{ entry.item_model }}</span>"
 >
+<div class="d-flex">
     {% set ns = namespace(has_children=False) %}
 
     {% for parent_list, child_lists in child_lists.items() %}
@@ -25,31 +26,31 @@
         {% endfor %}
     {% endfor %}
 
-    <div
-        class=""
-        id="accordion-button-{{ entry.item_model }}list-{{ entry.id }}"
-        {% if ns.has_children %}
-            style="display: block;"
-        {% else %}
-            style="display: none;"
-        {% endif %}
-    >
-        <button
-            class="accordion-button flex-shrink-1"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#sublist-collapse-{{ entry.item_model }}list-{{ entry.id }}"
-            aria-expanded="true"
+        <div
+            class="flex-shrink-1"
+            id="accordion-button-{{ entry.item_model }}list-{{ entry.id }}"
+            {% if ns.has_children %}
+                style="display: block;"
+            {% else %}
+                style="display: none;"
+            {% endif %}
         >
-            hide/show
-            sublists{% include 'base/parts/debug/listname.html.jinja' %}
-        </button>
-    </div>
-
-    <div class="col">
-        <input type="hidden" name="items" value="{{ entry.id }}" />
-        {{ entry.get_item().name }}
-        {% include 'base/parts/debug/order.html.jinja' %}
-    </div>
+            <button
+                class="accordion-button p-0 border border-danger"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#sublist-collapse-{{ entry.item_model }}list-{{ entry.id }}"
+                aria-expanded="true"
+            >
+                {% include 'base/parts/debug/listname.html.jinja' %}
+            </button>
+        </div>
+    
+        <div class="flex-grow-1 border border-warning">
+            <input type="hidden" name="items" value="{{ entry.id }}" />
+            {{ entry.get_item().name }}
+            {% include 'base/parts/debug/order.html.jinja' %}
+        </div>
+</div>
     {% include 'lists/sublist_loader.html.jinja' %}
 </li>
