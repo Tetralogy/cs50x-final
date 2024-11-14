@@ -18,7 +18,15 @@
             <div class="form-check form-switch">
   <input class="form-check-input" type="checkbox" role="switch" id="debug-switch"
         hx-put="/debug"
-        {% if current_user.debug %} checked {% endif %}>
+        {% if current_user.debug %}
+        checked>
+        {% set debugging = True %}
+        
+        {% else %}
+        >
+        {% set debugging = False %}
+        
+        {% endif %}
   <label class="form-check-label" for="flexSwitchCheckChecked">Debug</label>
 </div>
 

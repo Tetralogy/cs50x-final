@@ -1,64 +1,71 @@
-<div class="container-fluid border border-primary">
-{% for list_obj in userlists %}
-
-    {% set info = name  %}
-    {% include 'base/parts/debug_text.html.jinja' %}
-    <div class="accordion" id="accordionExample">
-    <div class="accordion-item">
+<div class="container border border-primary">
+<!--     <div class="accordion border border-warning border-5" id="list-accordion-">
+        <div class="accordion-item border border-danger">
 
         <h2 class="accordion-header">
-
-    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#list-updater-{{ list_obj.id }}" aria-expanded="true" aria-controls="multiCollapseExample1 multiCollapseExample2">hide/show{% set info = list %}{% include 'base/parts/debug_text.html.jinja' %}</button>
-        </h2>
-        <div
-            id="list-updater-{{ list_obj.id }}"
-        {% if view == "text-hierarchy" %}
-        class="row g-0 row-cols-1  border border-primary border-5
-                rounded-4  sortable collapse show"
-        {% else %}
-            {% if list_obj.list_type == "RoomDefault" %}
-                class="row container-fluid  border border-primary border-5
-                rounded-4 p-1 typeslist"
-            {% elif list_obj.list_type == "Room" %}
-                class="row g-0 row-cols-4 container-fluid  border
-                border-primary border-5 rounded-4 p-1 sortable"
+<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="" aria-expanded="true" aria-controls="multiCollapseExample1 multiCollapseExample2">hide/show</button>
+        </h2> 
+        
+            <div class="accordion-collapse collapse show">
+                <div class="accordion-body"> -->
+                
+    {% for list_obj in userlists %}
+    
+{% include 'base/parts/debug/listname.html.jinja'%}
+        
+                            
+            <ul
+                id="list-updater-{{ list_obj.id }}"
+            {% if view == "text-hierarchy" %}
+            class="list-group list-group-numbered sortable"
             {% else %}
-                class="row g-0 row-cols-1  border border-primary border-5
-                rounded-4  sortable collapse show"
-            {% endif %}
-        {% endif %}
-            hx-put="/update_list_order/{{ list_obj.id }}"
-            hx-include="[name='items']"
-            hx-trigger="end delay:1s, remove delay:1s, add delay:1s"
-            hx-indicator="#updating-indicator"
-            data-model="{{ list_obj.list_type }}"
-            data-is-list="true"
-            data-list_id="{{ list_obj.id }}"
-            data-parent_entry_id = "{{ list_obj.parent_entry_id }}"
-        >
-        {% if view == "text-hierarchy" %}
-    {% include 'lists/generic_hierarchy.html.jinja' %}
-{% else %}
-            {% if reversed %}
-                {% for entry in list_obj.entries | sort(attribute='order')| reverse %}
-                    {% include 'lists/model/' + entry.item_model.lower() + '.html.jinja' %}
-                {% endfor %}
-            {% else %}
-                {% for entry in list_obj.entries | sort(attribute='order') %}
-                    {% include 'lists/model/' + entry.item_model.lower() + '.html.jinja' %}
-                {% endfor %}
-            {% endif %}
-
-            {% if not list_obj %}
-                {% if view == "quicknote" %}
-                    {% include 'lists/model/task_placeholder.html.jinja' %}
+                {% if list_obj.list_type == "RoomDefault" %}
+                    class="row container-fluid  border border-primary border-5
+                    rounded-4 p-1 typeslist"
+                {% elif list_obj.list_type == "Room" %}
+                    class="row g-0 row-cols-4 container-fluid  border
+                    border-primary border-5 rounded-4 p-1 sortable"
                 {% else %}
-                    <h1>Failed to load list</h1>
+                    class="row g-0 row-cols-1  border border-primary border-5
+                    rounded-4 sortable"
                 {% endif %}
             {% endif %}
-{% endif %}
-        </div>
+                hx-put="/update_list_order/{{ list_obj.id }}"
+                hx-include="[name='items']"
+                hx-trigger="end delay:1s, remove delay:1s, add delay:1s"
+                hx-indicator="#updating-indicator"
+                data-model="{{ list_obj.list_type }}"
+                data-is-list="true"
+                data-list_id="{{ list_obj.id }}"
+                data-parent_entry_id = "{{ list_obj.parent_entry_id }}"
+            >
+    
+            
+            {% if view == "text-hierarchy" %}
+        {% include 'lists/generic_hierarchy.html.jinja' %}
+    {% else %}
+                {% if reversed %}
+                    {% for entry in list_obj.entries | sort(attribute='order')| reverse %}
+                        {% include 'lists/model/' + entry.item_model.lower() + '.html.jinja' %}
+                    {% endfor %}
+                {% else %}
+                    {% for entry in list_obj.entries | sort(attribute='order') %}
+                        {% include 'lists/model/' + entry.item_model.lower() + '.html.jinja' %}
+                    {% endfor %}
+                {% endif %}
+    
+                {% if not list_obj %}
+                    {% if view == "quicknote" %}
+                        {% include 'lists/model/task_placeholder.html.jinja' %}
+                    {% else %}
+                        <h1>Failed to load list</h1>
+                    {% endif %}
+                {% endif %}
+    {% endif %}
+            </ul>
+        
+    {% endfor %}
+<!--             </div></div></div>
     </div>
-    </div>
-{% endfor %}
+    </div> -->
 </div>

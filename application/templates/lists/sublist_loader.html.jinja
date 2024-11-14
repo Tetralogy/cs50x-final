@@ -1,27 +1,50 @@
 {% if sublevel is not defined %}
-{% set sublevel = 0 %}
-{% set sublevel_limit = 1 %}
+    {% set sublevel = 0 %}
+    {% set sublevel_limit = 1 %}
 {% endif %}
-{% set info = sublist  %}
-    {% include 'base/parts/debug_text.html.jinja' %}
+
+
+{% include 'base/parts/debug/sublist.html.jinja' %}
 
 {% if sublevel < sublevel_limit %}
-{% set sublevel = sublevel + 1 %}
-    <div class="sublist sortable dropzone"
-    id="sublist-loader-{{ entry.id }}"
-    hx-get="/show_list/"
-    hx-trigger="load once"
-    hx-sync=".sublist:queue all"
-    hx-indicator="#updating-indicator"
-    hx-vals='{"parent_entry_id": {{ entry.id }}, "sublevel": {{ sublevel }}, "sublevel_limit": {{ sublevel_limit }}, "view_override":"{{ view_override }}"}'
-    data-id="{{ entry.id }}"
-    data-name="{{ entry.get_item().name }}"
-    
-    data-order="{{ entry.order }}"
-    
-    data-model="{{ entry.item_model }}"
-    
+    {% set sublevel = sublevel + 1 %}
+    <div
+        class="accordion"
+        id="sublist-accordion-{{ entry.item_model }}list-{{ entry.id }}"
     >
-    {# sublists go here if found #}
+        <div class="accordion-item border border-danger">
+            <div
+                class="accordion-collapse collapse show"
+                id="sublist-collapse-{{ entry.item_model }}list-{{ entry.id }}"
+            >    {% if ns.has_children %}
+                <div
+                    class="sublist"
+                    id="sublist-loader-{{ entry.id }}"
+                    hx-get="/show_list/"
+                    hx-trigger="load"
+                    hx-indicator="#updating-indicator"
+                    hx-vals='{"parent_entry_id": {{ entry.id }}, "sublevel": {{ sublevel }}, "sublevel_limit": {{ sublevel_limit }}, "view_override":"{{ view_override }}"}'
+                    hx-swap="outerHTML"
+                    data-id="{{ entry.id }}"
+                    data-name="{{ entry.get_item().name }}"
+                    data-order="{{ entry.order }}"
+                    data-model="{{ entry.item_model }}"
+                >
+                    #fixme: hide accordion button when no sublists SUBLEVEL: {{ sublevel }} CHILDREN?: {{ child_lists }}
+                    {# sublists go here if found #}
+                </div>
+                {% endif %}
+                <div
+                    class="sortable dropzone"
+                    id="dropzone-{{ entry.item_model }}list-{{ entry.id }}"
+                    data-id="{{ entry.id }}"
+                    data-name="{{ entry.get_item().name }}"
+                    data-order="{{ entry.order }}"
+                    data-model="{{ entry.item_model }}"
+                    data-accordion_button="#accordion-button-{{ entry.item_model }}list-{{ entry.id }}"
+                >
+                </div>
+            </div>
+        </div>
     </div>
 {% endif %}

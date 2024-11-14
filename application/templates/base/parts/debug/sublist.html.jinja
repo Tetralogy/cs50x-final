@@ -1,0 +1,26 @@
+{% if current_user.debug %}
+    <div class="debug-info">
+        sublevel: {{ sublevel }} sublevel_limit: {{ sublevel_limit }} CHILDREN?:
+   has_children 1: {{ ns.has_children }}
+{% for parent_list, child_lists in child_lists.items() %}
+            {% for child_list in child_lists %}
+                {% if child_list.parent_entry_id == entry.id %}
+                    {{ child_list.id }}
+                    {{ child_list.list_name }}
+                    | Parent id {{ child_list.parent_entry_id }} ( this list id:
+                    {{ entry.id }} ) child_list has entries?
+                    {{ child_list.entries|length }}
+                    <br />
+                    {% if child_list.entries|length <= 0 %}
+                    Falsexxx
+                        {% set ns.has_children = False %}
+                    {% else %}
+                        {% set ns.has_children = True %}
+                        Truexxx
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+        {% endfor %}
+has_children 2: {{ ns.has_children }}
+    </div>
+{% endif %}

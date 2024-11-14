@@ -234,7 +234,17 @@ def get_top_userlists_by_root_parent(root_parent_entry_id: int, model) -> List[U
         else:
             print(f'get_top_userlists_by_root_parent: No {model} lists found for root_parent_entry_id {root_parent_entry_id}')
         return parent_lists_with_model
-    
+
+def get_immediate_child_lists(parent_lists: List[UserList]) -> List[UserList]:
+    found_lists = {}
+    for parent_list in parent_lists:
+        for entry in parent_list.entries:
+            child_lists = get_userlists_by_parent(parent_entry_id=entry.id)
+            if parent_list not in found_lists:
+                found_lists[parent_list] = []
+            found_lists[parent_list].extend(child_lists)
+    return found_lists
+
 def get_userlist(item_model: str = None, list_name: str = None, parent_entry_id: int = None, combine: bool = False): #gets the primary list of a main model
     print(f'get_userlist(): item_model: {item_model}, list_name: {list_name}, parent_entry_id: {parent_entry_id}')
     if not item_model and not parent_entry_id:
@@ -781,7 +791,11 @@ def show_list(list_id: int = None):
     print(f'sublevel: {sublevel}')
     print(f'showing list list_id: {list_id}')
     force_new_list = request.args.get('force_new_list') == 'true'
-    if not list_id:
+    if list_id:
+        list_obj=db.get_or_404(UserList, list_id)
+        print(f'list_obj {list_id}: {list_obj}')
+        found_lists = [list_obj]
+    elif not list_id:
         combine = bool(request.args.get('combine') == 'True')
         root_parent = request.args.get('root_parent')
         parent = request.args.get('parent')
@@ -834,15 +848,13 @@ def show_list(list_id: int = None):
         walk_setup = session.get('walk_setup', False)
         print(f'walk_setup: {walk_setup}')
         #return render_template('lists/list.html.jinja', list_obj=list_obj, walk_setup=walk_setup, view=view, reversed=reversed)
-        if any(found_lists):
-            print(f'found_lists - inner return: {found_lists}')
-            return render_template('lists/list.html.jinja', userlists=found_lists, view=view, walk_setup=walk_setup, reversed=reversed, sublevel=sublevel, sublevel_limit=sublevel_limit, view_override=view_override)
-        else:
-            print("no lists found - return")
-            return '', 204
-    list_obj=db.get_or_404(UserList, list_id)
-    print(f'list_obj: {list_obj}')
-    found_lists = [list_obj]
+    if any(found_lists):
+        child_lists = get_immediate_child_lists(found_lists)
+        print(f'found_lists - inner return: {found_lists}')
+        return render_template('lists/list.html.jinja', userlists=found_lists, view=view, walk_setup=walk_setup, reversed=reversed, sublevel=sublevel, sublevel_limit=sublevel_limit, view_override=view_override, child_lists=child_lists)
+    else:
+        print("no lists found - return")
+        return '', 204
     print(f'found_lists - outer return: {found_lists}')
     return render_template('lists/list.html.jinja', userlists=found_lists, view=view, reversed=reversed, sublevel=sublevel, sublevel_limit=sublevel_limit, view_override=view_override)
 
