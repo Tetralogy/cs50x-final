@@ -665,7 +665,7 @@ def create_item_and_entry(item_model, list_id, item_id: int=None, retrieve: str=
     if retrieve == 'list':
         userlist = db.get_or_404(UserList, list_id)
         return userlist
-    return render_template('lists/model/' + new_item.item_model.lower() + '.html.jinja', entry=new_item) #redirect(url_for('lists.update_list_order', list_id=list_id))
+    return render_template('lists/model/' + new_item.item_model.lower() + '.html.jinja', entry=new_item, child_lists=None) #redirect(url_for('lists.update_list_order', list_id=list_id))
 
 
 @lists.route('/move_entry/', methods=['PUT'])
@@ -845,8 +845,8 @@ def show_list(list_id: int = None):
                 list_obj = create_list_and_item_and_entry(list_model, retrieve='list')
             print(f'list_obj B: {list_obj}')
             found_lists = [list_obj]
-        walk_setup = session.get('walk_setup', False)
-        print(f'walk_setup: {walk_setup}')
+    walk_setup = session.get('walk_setup', False) #todo remove walk_setup
+    print(f'walk_setup: {walk_setup}')
         #return render_template('lists/list.html.jinja', list_obj=list_obj, walk_setup=walk_setup, view=view, reversed=reversed)
     if any(found_lists):
         child_lists = get_immediate_child_lists(found_lists)

@@ -2,7 +2,9 @@
 {% if current_user.debug %}
         <div class="debug-info">
 
+                {% if entry is defined %}
                 <p class="bg-dark">order: {{ entry.order }}</p>
+{% endif %}
 
         </div>
     {% endif %}

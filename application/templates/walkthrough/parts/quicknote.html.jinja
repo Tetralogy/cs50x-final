@@ -7,7 +7,7 @@
 #todo: make form remove new task placeholder button on first task add
 <form
     hx-post="/create/Task"
-    hx-target="next [id*='list-updater-']"
+    hx-target="next [id*='toplist-collapse-Tasklist-']"
     hx-swap="beforeend"
     hx-indicator="#updating-indicator"
     hx-on::after-request="this.reset()"

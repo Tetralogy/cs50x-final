@@ -65,33 +65,91 @@
         <script>
             // Initialize tooltips and sortable
             document.addEventListener("DOMContentLoaded", function () {
-                initializeTooltips();
+                //initializeTooltips();
                 initializeSortable();
                 
                 console.log("DOMContentLoaded triggered");
             });
 
-            function initializeTooltips() {
-                const tooltipTriggerList = [].slice.call(
-                    document.querySelectorAll('[data-bs-toggle="tooltip"]'),
-                );
-                tooltipTriggerList.map(function (tooltipTriggerEl) {
-                    return new bootstrap.Tooltip(tooltipTriggerEl);
+   //        function initializeTooltips() {
+   //            const tooltipTriggerList = [].slice.call(
+   //                document.querySelectorAll('[data-bs-toggle="tooltip"]'),
+   //            );
+   //            tooltipTriggerList.map(function (tooltipTriggerEl) {
+   //                return new bootstrap.Tooltip(tooltipTriggerEl);
+   //            });
+   //        }
+
+   let activeTooltip = null;
+
+function clearAndInitializeTooltips() {
+    // Dispose of any existing tooltips to prevent conflicts
+    document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach((tooltipTriggerEl) => {
+        const existingTooltip = bootstrap.Tooltip.getInstance(tooltipTriggerEl);
+        if (existingTooltip) {
+            existingTooltip.dispose();
+        }
+    });
+
+    // Use a slight delay to ensure HTMX updates have completed
+    setTimeout(() => {
+        const tooltipTriggerList = [].slice.call(
+            document.querySelectorAll('[data-bs-toggle="tooltip"]')
+        );
+
+        // Initialize tooltips with additional strict existence checks
+        tooltipTriggerList.forEach((tooltipTriggerEl) => {
+            if (tooltipTriggerEl && document.body.contains(tooltipTriggerEl)) {
+                const tooltipInstance = new bootstrap.Tooltip(tooltipTriggerEl);
+
+                tooltipTriggerEl.addEventListener('mouseenter', function () {
+                    // Hide any active tooltip before showing a new one
+                    if (activeTooltip && activeTooltip !== tooltipInstance && activeTooltip._element) {
+                        activeTooltip.hide();
+                    }
+
+                    // Check if element and tooltip instance still exist before showing
+                    if (document.body.contains(tooltipTriggerEl) && tooltipInstance._element) {
+                        activeTooltip = tooltipInstance;
+                        activeTooltip.show();
+                    }
+                });
+
+                tooltipTriggerEl.addEventListener('mouseleave', function () {
+                    // Hide tooltip if it’s still active and attached
+                    if (activeTooltip && activeTooltip._element) {
+                        activeTooltip.hide();
+                        activeTooltip = null;
+                    }
                 });
             }
+        });
+    }, 100); // Adjust delay as needed
+}
+
+
+
+
+
+
             function updateDropzones() {
                 const dropzones =
                 document.querySelectorAll(".dropzone");
-                const accordionButtons = document.querySelectorAll(".accordion-button");
+                //const accordionButtons = document.querySelectorAll(".accordion-button");
             dropzones.forEach((dropzone) => {
-                accordionButton = document.getElementById(dropzone.dataset.accordion_button);
+                //accordionButton = document.getElementById(dropzone.dataset.accordion_button);
+                //console.log(`dropzone: ${dropzone} style: ${dropzone.style.display}`);
+                accordionButton = document.querySelector(dropzone.dataset.accordion_button);
+                //console.log(`accordionButton: ${accordionButton} style: ${accordionButton.style.display}`);
                 dropzone.classList.remove("hover");
                 if (dropzone.childElementCount > 0) {
                     dropzone.classList.add("occupied");
                     accordionButton.style.display = 'block';
+                    //console.log("occupied: accordionButton.style.display: " + accordionButton.style.display);
                 } else {
                     dropzone.classList.remove("visible");
                     accordionButton.style.display = 'none';
+                    //console.log("not occupied: accordionButton.style.display: " + accordionButton.style.display);
                 }
             });
             console.log("updateDropzones triggered");
@@ -117,6 +175,7 @@
                 }
 
                 document.addEventListener("DOMContentLoaded", updateDropzones);
+                //window.addEventListener("load", updateDropzones);
             
 
                 sortableElements.forEach(function (sortableElement) {
@@ -140,7 +199,9 @@
                             swapThreshold: 0.65,
                             //invertSwap: true,
                             fallbackOnBody: true,
-                            filter: ".htmx-indicator, .rename, .listname, .accordion-header, .accordion-button",
+                            //draggable: "li",
+                            // Prevent dragging on specific elements
+                            filter: ".htmx-indicator, .rename", //.listname, .accordion-header, .accordion-button, .accordion",
                             ghostClass: "ghost",
                             dragClass: "ghost-red",
                             chosenClass: "ghost-red",
@@ -438,48 +499,51 @@ document.body.addEventListener('htmx:responseError', function(event) {
             }
             //};
 
-            // Re-initialize tooltips and sortable after content update
+           // Re-initialize tooltips and sortable after content update
             document.addEventListener("htmx:afterSwap", function () {
-                initializeTooltips();
+                //initializeTooltips()
+                clearAndInitializeTooltips();
                 initializeSortable();
             });
 
             // Define the function to clear all tooltips
-            function clearTooltips() {
-                const tooltipTriggerList = [].slice.call(
-                    document.querySelectorAll('[data-bs-toggle="tooltip"]'),
-                );
-                tooltipTriggerList.map(function (tooltipTriggerEl) {
-                    const tooltip =
-                        bootstrap.Tooltip.getInstance(tooltipTriggerEl);
-                    if (tooltip) {
-                        tooltip.dispose();
-                    }
-                });
-                document
-                    .querySelectorAll('div[role="tooltip"]')
-                    .forEach(function (tooltipDiv) {
-                        tooltipDiv.remove();
-                    });
-            }
+           // function clearTooltips() {
+           //     const tooltipTriggerList = [].slice.call(
+           //         document.querySelectorAll('[data-bs-toggle="tooltip"]'),
+           //     );
+           //     tooltipTriggerList.map(function (tooltipTriggerEl) {
+           //         const tooltip =
+           //             bootstrap.Tooltip.getInstance(tooltipTriggerEl);
+           //         if (tooltip) {
+           //             tooltip.dispose();
+           //         }
+           //     });
+           //     document
+           //         .querySelectorAll('div[role="tooltip"]')
+           //         .forEach(function (tooltipDiv) {
+           //             if (tooltipDiv) {
+           //     tooltipDiv.remove();
+           // }
+           //         });
+           // }
 
-            // Add event listeners to elements that should trigger the tooltip clearing
-            document
-                .querySelectorAll("input, select, textarea, span, div, body")
-                .forEach((element) => {
-                    element.addEventListener("click", function () {
-                        clearTooltips();
-                        initializeTooltips();
-                    });
-                    element.addEventListener("drag", function () {
-                        clearTooltips();
-                        //initializeTooltips();
-                    });
-                    element.addEventListener("drop", function () {
-                        //clearTooltips();
-                        initializeTooltips();
-                    });
-                });
+           // // Add event listeners to elements that should trigger the tooltip clearing
+           // document
+           //     .querySelectorAll("input, select, textarea, span, div, body")
+           //     .forEach((element) => {
+           //         element.addEventListener("click", function () {
+           //             clearTooltips();
+           //             //initializeTooltips();
+           //         });
+           //         element.addEventListener("drag", function () {
+           //             clearTooltips();
+           //             ////initializeTooltips();
+           //         });
+           //         element.addEventListener("drop", function () {
+           //             //clearTooltips();
+           //             //initializeTooltips();
+           //         });
+           //     });
         </script>
         
         <footer>{% include 'base/parts/nav_bottom.html.jinja' %}</footer>

@@ -1,4 +1,4 @@
-<div 
+{# <div 
     class="col img-thumbnail grabbable d-flex justify-content-between align-items-center"
     id="{{ entry.item_model }}list-{{ entry.id }}"
     data-id="{{ entry.id }}"
@@ -37,4 +37,6 @@
     
 {% include 'lists/sublist_loader.html.jinja' %}
 
-</div>
+</div> #}
+
+{% include 'lists/model/generic_text.html.jinja' %}

@@ -1,4 +1,4 @@
-<div 
+{#  <div 
     class="col grabbable"
     id="{{ entry.item_model }}list-{{ entry.id }}"
     data-id="{{ entry.id }}"
@@ -13,9 +13,11 @@
             data-bs-title="<u>Drag</u> to <b>create</b> {{ entry.get_item().name }}"
         >{{ entry.get_item().name }}
     
-        </span>
+        </span> #}
     
     
         {#<span class="input-group-text glyphicon-move">({{ entry.order }})</span>#}
-    </div>
-</div>
+{#     </div>
+</div> #}
+
+{% include 'lists/model/generic_text.html.jinja' %}

@@ -11,21 +11,67 @@
     data-bs-placement="left"
     data-bs-title="<u>Drag</u> to <span class='text-nowrap'><b>reorder</b> {{ entry.item_model }}</span>"
 >
-<div class="d-flex">
-    {% set ns = namespace(has_children=False) %}
+        {% if sublevel == 0 and sublevel_limit > 0 %}
 
+
+            <div
+                class="accordion list-group-item"
+                id="toplist-accordion-{{ list_obj.list_type }}list-{{ list_obj.id }}"
+            >
+            {# <div class="d-flex">
+                <div
+                    class="flex-shrink-1"
+                    id="accordion-button-{{ list_obj.list_type }}list-{{ list_obj.id }}"
+                    style="display: block;"
+                >
+                    <button
+                        class="accordion-button p-0 border border-danger"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#toplist-collapse-{{ list_obj.list_type }}list-{{ list_obj.id }}"
+                        aria-expanded="true"
+                    >
+                        {% include 'base/parts/debug/listname.html.jinja' %}
+                    </button>
+                </div>
+
+                <h2 class="flex-grow-1 border border-warning">
+                    
+                    {{ list_obj.list_name }}
+                    {% include 'base/parts/debug/order.html.jinja' %}
+                </h2>
+            </div> #}
+                <div class="accordion-item border border-danger">
+                    <div
+                        class="accordion-collapse collapse show"
+                        id="toplist-collapse-{{ list_obj.list_type }}list-{{ list_obj.id }}"
+                    >
+        {% endif %}
+
+    {% set ns = namespace(has_children=False) %}
+{% if child_lists %}
     {% for parent_list, child_lists in child_lists.items() %}
         {% for child_list in child_lists %}
             {% if child_list.parent_entry_id == entry.id %}
                 {% if child_list.entries|length <= 0 %}
                     {% set ns.has_children = False %}
                 {% else %}
+                {% if sublevel < sublevel_limit %}
                     {% set ns.has_children = True %}
+                    {% endif %}
                 {% endif %}
             {% endif %}
         {% endfor %}
     {% endfor %}
-
+{% endif %}
+<div class="d-flex">
+{# {% if ns.has_children %}
+has_children 1: {{ ns.has_children }}
+                style="display: block;"
+            {% else %}
+            has_children 2: {{ ns.has_children }}
+                style="display: none;"
+            {% endif %} #}
         <div
             class="flex-shrink-1"
             id="accordion-button-{{ entry.item_model }}list-{{ entry.id }}"
@@ -53,4 +99,9 @@
         </div>
 </div>
     {% include 'lists/sublist_loader.html.jinja' %}
+    {% if sublevel == 0 and sublevel_limit > 0 %}
+                    </div>
+                </div>
+            </div>
+    {% endif %}
 </li>

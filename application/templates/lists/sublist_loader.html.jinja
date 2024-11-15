@@ -15,15 +15,16 @@
                 class="accordion-collapse collapse show"
                 id="sublist-collapse-{{ entry.item_model }}list-{{ entry.id }}"
             >
-                {% if ns.has_children %}
+                {% if ns.has_children %}{# has_children 3: {{ ns.has_children }} #}
                     <div
-                        class="sublist"
+                        class="sublist" style="display: none; pointer-events: none;"
                         id="sublist-loader-{{ entry.id }}"
                         hx-get="/show_list/"
                         hx-trigger="load"
+                        hx-target="#dropzone-{{ entry.item_model }}list-{{ entry.id }}"
                         hx-indicator="#updating-indicator"
                         hx-vals='{"parent_entry_id": {{ entry.id }}, "sublevel": {{ sublevel }}, "sublevel_limit": {{ sublevel_limit }}, "view_override":"{{ view_override }}"}'
-                        hx-swap="outerHTML"
+                        hx-swap="innerHTML"
                         data-id="{{ entry.id }}"
                         data-name="{{ entry.get_item().name }}"
                         data-order="{{ entry.order }}"
@@ -42,7 +43,8 @@
                     data-order="{{ entry.order }}"
                     data-model="{{ entry.item_model }}"
                     data-accordion_button="#accordion-button-{{ entry.item_model }}list-{{ entry.id }}"
-                ></div>
+                >
+                </div>
             </div>
         </div>
     </div>

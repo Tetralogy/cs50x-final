@@ -1,4 +1,4 @@
-<div 
+{# <li 
     class="col img-thumbnail grabbable d-flex justify-content-center align-items-center"
     id="{{ entry.item_model }}list-{{ entry.id }}"
     data-id="{{ entry.id }}"
@@ -16,9 +16,9 @@
 
 <div id="drag-outside-indicator" style="display: none; position: fixed; z-index: 1000;">🚫</div>
 <input type='hidden' name='items' value='{{ entry.id }}'/>
-{% if walk_setup == True %}
+{% if walk_setup == True %}#}
 {#[ ]: change this to sortable select single item and get rid of walk_setup variables#}
-<input required
+{# <input required
             class="form-check-input mt-0"
             type="radio"
             name="active_room"
@@ -26,7 +26,9 @@
             value="{{ entry.item_id }}"
         />
 {% endif %}
-{% include 'lists/name.html.jinja' %}
+{% include 'lists/name.html.jinja' %} #}
     {#<p class="bg-dark">order: {{ entry.order }}</p>#}
-    {#{% include 'lists/sublist_loader.html.jinja' %}#}
-</div>
+   {#{% include 'lists/sublist_loader.html.jinja' %}#}
+{# </li> #}
+
+{% include 'lists/model/generic_text.html.jinja' %}
