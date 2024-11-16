@@ -411,42 +411,39 @@ form.htmx-request {
     background-color: #0056b3;
 }
 
-.dropzone {
-    display: block; /* Hidden by default */
 
-    padding: 0px;
-    background: none;
+.dropzone {
+    display: inline-block;
+    background: rgb(108, 99, 255);
+    align-items: center;
+    justify-content: end;
+    min-width: 50px;
+    min-height: 50px;
+    border: 1px dashed transparent;
+    transition: all 0.3s;
 }
 
-.dropzone.visible {
+/* .dropzone.visible {
     display: block;
     border: 2px dashed #aaa;
     background-image: url("list-nested.svg");
     background-position: center;
     background-repeat: no-repeat;
     background-size: contain;
-    padding: 20px;
-}
+    padding: 10px;
+} */
+
 .dropzone.hover {
-    display: block;
-    background: rgb(108, 99, 255);
-    background: radial-gradient(
-            circle,
-            rgb(0, 251, 8) 0%,
-            rgba(0, 212, 255, 0) 100%
-        ),
-        url("plus-square-dotted.svg");
+    min-width: 100px;
+    min-height: 100px;
+
+    background-image: url("plus-square-dotted.svg");
     background-position: center;
     background-repeat: no-repeat;
     background-size: contain;
-
-    padding: 0px;
 }
 
-.dropzone.occupied {
-    background: none;
-    padding: 0px;
-}
+
 
 .revert-animation {
     animation: revert-animation 0.5s ease-in-out;
@@ -465,4 +462,7 @@ form.htmx-request {
     color: red;
     font-size: .75em !important;
 }
-/* [ ] edit out unused tags */
+/* 
+[ ] edit out unused tags 
+[ ] reorganize 
+  */

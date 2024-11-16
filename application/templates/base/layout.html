@@ -4,9 +4,7 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta name="color-scheme" content="dark light" />
-        
-        
-        
+
         <link
             href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
             rel="stylesheet"
@@ -33,11 +31,18 @@
     </head>
     <body hx-boost="true" hx-indicator="#updating-indicator">
         {% from 'base/parts/debug_text.html.jinja' import debug_text %}
-        <div class="position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center" style="pointer-events: none; z-index: 9999;">
-    <div id="updating-indicator" class="htmx-indicator spinner-border text-warning shadow" role="status">
-        <span class="visually-hidden">Loading...</span>
-    </div>
-</div>
+        <div
+            class="position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center"
+            style="pointer-events: none; z-index: 9999;"
+        >
+            <div
+                id="updating-indicator"
+                class="htmx-indicator spinner-border text-warning shadow"
+                role="status"
+            >
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
         <div class="container-fluid">
             {% include 'base/parts/nav_top.html.jinja' %}
             {#{% include 'base/parts/flash_container.html.jinja' %}#}
@@ -67,97 +72,160 @@
             document.addEventListener("DOMContentLoaded", function () {
                 //initializeTooltips();
                 initializeSortable();
-                
+
                 console.log("DOMContentLoaded triggered");
             });
 
-   //        function initializeTooltips() {
-   //            const tooltipTriggerList = [].slice.call(
-   //                document.querySelectorAll('[data-bs-toggle="tooltip"]'),
-   //            );
-   //            tooltipTriggerList.map(function (tooltipTriggerEl) {
-   //                return new bootstrap.Tooltip(tooltipTriggerEl);
-   //            });
-   //        }
+            //        function initializeTooltips() {
+            //            const tooltipTriggerList = [].slice.call(
+            //                document.querySelectorAll('[data-bs-toggle="tooltip"]'),
+            //            );
+            //            tooltipTriggerList.map(function (tooltipTriggerEl) {
+            //                return new bootstrap.Tooltip(tooltipTriggerEl);
+            //            });
+            //        }
 
-   let activeTooltip = null;
+            let activeTooltip = null;
 
-function clearAndInitializeTooltips() {
-    // Dispose of any existing tooltips to prevent conflicts
-    document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach((tooltipTriggerEl) => {
-        const existingTooltip = bootstrap.Tooltip.getInstance(tooltipTriggerEl);
-        if (existingTooltip) {
-            existingTooltip.dispose();
-        }
-    });
+            function clearAndInitializeTooltips() {
+                // Dispose of any existing tooltips to prevent conflicts
+                document
+                    .querySelectorAll('[data-bs-toggle="tooltip"]')
+                    .forEach((tooltipTriggerEl) => {
+                        const existingTooltip =
+                            bootstrap.Tooltip.getInstance(tooltipTriggerEl);
+                        if (existingTooltip) {
+                            console.log(`existingTooltip: ${existingTooltip}`);
+                            existingTooltip.dispose();
+                        }
+                    });
 
-    // Use a slight delay to ensure HTMX updates have completed
-    setTimeout(() => {
-        const tooltipTriggerList = [].slice.call(
-            document.querySelectorAll('[data-bs-toggle="tooltip"]')
-        );
+                // Use a slight delay to ensure HTMX updates have completed
+                setTimeout(() => {
+                    const tooltipTriggerList = [].slice.call(
+                        document.querySelectorAll('[data-bs-toggle="tooltip"]'),
+                    );
 
-        // Initialize tooltips with additional strict existence checks
-        tooltipTriggerList.forEach((tooltipTriggerEl) => {
-            if (tooltipTriggerEl && document.body.contains(tooltipTriggerEl)) {
-                const tooltipInstance = new bootstrap.Tooltip(tooltipTriggerEl);
+                    // Initialize tooltips with additional strict existence checks
+                    tooltipTriggerList.forEach((tooltipTriggerEl) => {
+                        if (
+                            tooltipTriggerEl &&
+                            document.body.contains(tooltipTriggerEl)
+                        ) {
+                            const tooltipInstance = new bootstrap.Tooltip(
+                                tooltipTriggerEl,
+                            );
 
-                tooltipTriggerEl.addEventListener('mouseenter', function () {
-                    // Hide any active tooltip before showing a new one
-                    if (activeTooltip && activeTooltip !== tooltipInstance && activeTooltip._element) {
-                        activeTooltip.hide();
-                    }
+                            tooltipTriggerEl.addEventListener(
+                                "mouseenter",
+                                function () {
+                                    // Hide any active tooltip before showing a new one
+                                    if (
+                                        activeTooltip &&
+                                        activeTooltip !== tooltipInstance &&
+                                        activeTooltip._element
+                                    ) {
+                                        activeTooltip.hide();
+                                    }
 
-                    // Check if element and tooltip instance still exist before showing
-                    if (document.body.contains(tooltipTriggerEl) && tooltipInstance._element) {
-                        activeTooltip = tooltipInstance;
-                        activeTooltip.show();
-                    }
-                });
+                                    // Check if element and tooltip instance still exist before showing
+                                    if (
+                                        document.body.contains(
+                                            tooltipTriggerEl,
+                                        ) &&
+                                        tooltipInstance._element
+                                    ) {
+                                        activeTooltip = tooltipInstance;
+                                        activeTooltip.show();
+                                    }
+                                },
+                            );
 
-                tooltipTriggerEl.addEventListener('mouseleave', function () {
-                    // Hide tooltip if it’s still active and attached
-                    if (activeTooltip && activeTooltip._element) {
-                        activeTooltip.hide();
-                        activeTooltip = null;
-                    }
-                });
+                            tooltipTriggerEl.addEventListener(
+                                "mouseleave",
+                                function () {
+                                    // Hide tooltip if it’s still active and attached
+                                    if (
+                                        activeTooltip &&
+                                        activeTooltip._element
+                                    ) {
+                                        activeTooltip.hide();
+                                        activeTooltip = null;
+                                    }
+                                },
+                            );
+                        }
+                    });
+                }, 100); // Adjust delay as needed
             }
-        });
-    }, 100); // Adjust delay as needed
-}
-
-
-
-
-
 
             function updateDropzones() {
-                const dropzones =
-                document.querySelectorAll(".dropzone");
+                const dropzones = document.querySelectorAll(".dropzone");
                 //const accordionButtons = document.querySelectorAll(".accordion-button");
-            dropzones.forEach((dropzone) => {
-                //accordionButton = document.getElementById(dropzone.dataset.accordion_button);
-                //console.log(`dropzone: ${dropzone} style: ${dropzone.style.display}`);
-                accordionButton = document.querySelector(dropzone.dataset.accordion_button);
-                //console.log(`accordionButton: ${accordionButton} style: ${accordionButton.style.display}`);
-                dropzone.classList.remove("hover");
-                if (dropzone.childElementCount > 0) {
-                    dropzone.classList.add("occupied");
-                    accordionButton.style.display = 'block';
-                    //console.log("occupied: accordionButton.style.display: " + accordionButton.style.display);
-                } else {
-                    dropzone.classList.remove("visible");
-                    accordionButton.style.display = 'none';
-                    //console.log("not occupied: accordionButton.style.display: " + accordionButton.style.display);
-                }
-            });
-            console.log("updateDropzones triggered");
+                dropzones.forEach((dropzone) => {
+                    //accordionButton = document.getElementById(dropzone.dataset.accordion_button);
+                    //console.log(`dropzone: ${dropzone} style: ${dropzone.style.display}`);
+                    const accordionButton = document.querySelector(
+                        dropzone.dataset.accordion_button,
+                    );
+                    const sublists = document.querySelector(
+                        dropzone.dataset.sublists_div,
+                    );
+                    //console.log(
+                    //    `sublists: ${sublists} style: ${sublists.style.display}`,
+                    //)
+                    //console.log(`accordionButton: ${accordionButton} style: ${accordionButton.style.display}`);
+                    dropzone.classList.remove("hover");
+                    if (dropzone.childElementCount > 0) {
+                       // if (sublists){ 
+                            console.log(`sublists exist`);
+                        accordionButton.classList.remove("d-none");
+                       // Move the dropzone to the accordion area
+                            
+                            dropzone.classList.add("d-none");
+                            sublists.classList.remove("d-none");
+                            
+                            // Ensure accordion is expanded
+                            
+                            if (accordionButton.ariaExpanded === "false"){
+                        accordionButton.click();
+                        };
+                            //};
+                        //console.log("occupied: accordionButton.style.display: " + accordionButton.style.display);
+                    } else {
+                        //console.log("not occupied");
+                        //dropzone.classList.remove("visible");
+                        accordionButton.classList.add("d-none");
+                        dropzone.classList.add("d-none");
+                        //accordionDiv.classList.add(
+                        //    "position-absolute",
+                        //    "top-50",
+                        //    "end-0",
+                        //    "translate-middle",
+                        //);
+
+                        //console.log("not occupied: accordionButton.style.display: " + accordionButton.style.display);
+                    };
+                    if (sublists){ //console.log(`sublists.childElementCount: ${sublists.childElementCount}`);
+                        if (sublists.childElementCount > 0) {
+                            dropzone.classList.add("d-none");
+                            sublists.classList.remove("d-block");
+                            accordionButton.classList.remove("d-none");
+                            if (accordionButton.ariaExpanded === "false"){
+                            accordionButton.click();
+                            };
+                        };
+                    };
+                });
+                //console.log("updateDropzones triggered");
             }
+
+
+
             function initializeSortable() {
                 //() => {
                 // fix for error Uncaught SyntaxError: redeclaration of const typeslist
-                console.log("htmx.onLoad triggered");
+                //console.log("htmx.onLoad triggered");
                 const sortableElements = document.querySelectorAll(".sortable");
 
                 const typeslist = document.querySelector(".typeslist");
@@ -176,11 +244,10 @@ function clearAndInitializeTooltips() {
 
                 document.addEventListener("DOMContentLoaded", updateDropzones);
                 //window.addEventListener("load", updateDropzones);
-            
 
                 sortableElements.forEach(function (sortableElement) {
                     const model = sortableElement.dataset.model;
-                    
+
                     //console.log("sortableElement: " + sortableElement);
                     if (sortableElement !== null) {
                         const sortlist = new Sortable(sortableElement, {
@@ -188,8 +255,6 @@ function clearAndInitializeTooltips() {
                             //const roomlist = document.getElementById("");
                             //const roomsort = new Sortable(roomlist, {
                             group: {
-                                
-
                                 name: model, //can only move between lists of the same type
                                 pull: true,
                                 put: ["typeslist", model],
@@ -208,15 +273,26 @@ function clearAndInitializeTooltips() {
                             //removeOnSpill: true,
                             revertOnSpill: true, //needs to be revert to work with the confirm dialog
                             onStart: function (evt) {
+                                clearAndInitializeTooltips();
                                 // Optionally, make all dropzones visible when dragging starts
                                 document
                                     .querySelectorAll(".dropzone")
-                                    .forEach((dropzone) =>
-                                        dropzone.classList.add("visible"),
-                                    );
-                                    originalIndex = evt.oldIndex;  // Store the original index
-                                    draggedItem = evt.item;        // Store the dragged item reference
-                                    fromList = evt.from;          // Store the from list reference
+                                    .forEach((dropzone) => {
+                                        //accordionDiv = document.querySelector(
+                                        //    dropzone.dataset.accordion_div,
+                                        //);
+                                        //accordionDiv.classList.add(
+                                        //    "position-absolute",
+                                        //    "top-50",
+                                        //    "end-0",
+                                        //    "translate-middle",
+                                        //);
+                                        dropzone.classList.remove("d-none");
+                                        
+                                    });
+                                originalIndex = evt.oldIndex; // Store the original index
+                                draggedItem = evt.item; // Store the dragged item reference
+                                fromList = evt.from; // Store the from list reference
                             },
                             onMove: function (evt) {
                                 const draggedItem = evt.dragged; // The item being dragged
@@ -227,15 +303,19 @@ function clearAndInitializeTooltips() {
                                 const nestedDropzone =
                                     targetItem.querySelector(".dropzone");
 
+                                    const sublists = targetItem.querySelector(".sublists");
+                                if (draggedItem) { console.log("draggedItem: " + draggedItem);
+
                                 // Show the nested dropzone if it exists
                                 if (nestedDropzone) {
                                     nestedDropzone.classList.add("hover");
 
                                     // Get the bounding boxes of both the dragged item and target item
                                     const draggedRect =
-                                        draggedItem.getBoundingClientRect();
+                                        evt.draggedRect;
                                     const targetRect =
-                                        nestedDropzone.getBoundingClientRect();
+                                        evt.relatedRect;
+                                        //nestedDropzone.getBoundingClientRect();
 
                                     // Check for intersection
                                     const isIntersecting =
@@ -250,13 +330,17 @@ function clearAndInitializeTooltips() {
                                         );
                                         // You can add any visual effect here, like highlighting
 
-                                        nestedDropzone.classList.add("hover"); //[ ] this is not working/not getting triggered correctly
+                                        nestedDropzone.classList.add("hover"); //fixme: this is not working/not getting triggered correctly
+                                        console.log("add .hover");
                                     } else {
                                         nestedDropzone.classList.remove(
                                             "hover",
                                         );
+                                        console.log("remove .hover");
                                     }
-                                }
+                                };                                            
+                                };
+                                
                             },
 
                             //console.log("Moving:", evt.related); // Log the element being moved
@@ -305,7 +389,6 @@ function clearAndInitializeTooltips() {
                                 hideDragOutsideIndicator();
                             },
                             onAdd: function (/**Event*/ evt) {
-                                
                                 console.log("onAdd event triggered");
                                 const itemEl = evt.item; // dragged HTMLElement
                                 const addedNewEntry = itemEl.dataset.name;
@@ -314,26 +397,56 @@ function clearAndInitializeTooltips() {
                                 const originalParent = evt.from;
 
                                 const list_id = sortableElement.dataset.list_id;
-                                const moved_entry_id = itemEl.dataset.id;  
+                                const moved_entry_id = itemEl.dataset.id;
                                 //moved_entry_id
-                                const recieving_entry_id = sortableElement.dataset.id;
-                                console.log("moved_entry_id: " + moved_entry_id + " recieving_entry_id: " + recieving_entry_id + " list_id: " + list_id);
-                                console.log("itemEl.dataset.model: " + itemEl.dataset.model + " sortableElement.dataset.model: " + model);
-                                const isList = sortableElement.dataset.isList === "true";
-                                console.log("recieving sortableElement isList: " + isList);
+                                const recieving_entry_id =
+                                    sortableElement.dataset.id;
+                                console.log(
+                                    "moved_entry_id: " +
+                                        moved_entry_id +
+                                        " recieving_entry_id: " +
+                                        recieving_entry_id +
+                                        " list_id: " +
+                                        list_id,
+                                );
+                                console.log(
+                                    "itemEl.dataset.model: " +
+                                        itemEl.dataset.model +
+                                        " sortableElement.dataset.model: " +
+                                        model,
+                                );
+                                const isList =
+                                    sortableElement.dataset.isList === "true";
+                                console.log(
+                                    "recieving sortableElement isList: " +
+                                        isList,
+                                );
                                 if (isList) {
                                     console.log("isList: " + isList);
                                     //originalParent.insertBefore(itemEl, originalParent.children[oldIndex]);
                                     //return;
                                 }
-                                if ((!moved_entry_id) || (!list_id && !recieving_entry_id)) {
-                                    console.log("missing moved_entry_id: " + moved_entry_id + " recieving_entry_id: " + recieving_entry_id + " list_id: " + list_id + " isList: " + isList);
-                                    originalParent.insertBefore(itemEl, originalParent.children[oldIndex]);
+                                if (
+                                    !moved_entry_id ||
+                                    (!list_id && !recieving_entry_id)
+                                ) {
+                                    console.log(
+                                        "missing moved_entry_id: " +
+                                            moved_entry_id +
+                                            " recieving_entry_id: " +
+                                            recieving_entry_id +
+                                            " list_id: " +
+                                            list_id +
+                                            " isList: " +
+                                            isList,
+                                    );
+                                    originalParent.insertBefore(
+                                        itemEl,
+                                        originalParent.children[oldIndex],
+                                    );
                                     return;
                                 }
                                 console.log("list_id: " + list_id);
-
-
 
                                 if (itemEl.dataset.model === model) {
                                     htmx.ajax(
@@ -341,10 +454,11 @@ function clearAndInitializeTooltips() {
                                         "/move_entry/" + moved_entry_id,
                                         {
                                             values: {
-                                                order_index: newIndex, 
+                                                order_index: newIndex,
                                                 list_id: list_id,
-                                                recieving_entry_id: recieving_entry_id,
-                                                is_list: isList
+                                                recieving_entry_id:
+                                                    recieving_entry_id,
+                                                is_list: isList,
                                             },
                                             target: itemEl,
                                             //swap: "outerHTML", // returns the new content
@@ -354,7 +468,7 @@ function clearAndInitializeTooltips() {
                                 } else {
                                     console.log(
                                         "POST" +
-                                        "addedNewEntry: " +
+                                            "addedNewEntry: " +
                                             addedNewEntry +
                                             "new index: " +
                                             newIndex,
@@ -372,35 +486,63 @@ function clearAndInitializeTooltips() {
                                             swap: "outerHTML", // returns the new content
                                         },
                                     );
+                                };
+                                const dropzone = evt.to.querySelector(
+                                    ".dropzone",
+                                )
+
+                                if (dropzone) {
+                                console.log("Found dropzone:", dropzone);
+                                } else {
+                                console.log("No dropzone found in target container.");
                                 }
+
+                                const sublists = evt.to.querySelector(".sublists");
+
+                                if (sublists) {
+                                console.log("Found sublists:", sublists);
+                                } else {
+                                console.log("No sublists found in target container.");
+                                }
+
+                                sublists.innerHTML = dropzone.innerHTML;
+                                dropzone.innerHTML = ""; // Clear original dropzone
+                                
                             },
                             //Disable sorting on the `end` event
                             onEnd: function (evt) {
                                 console.log("onEnd event triggered");
-                                this.option("disabled", true);
+                                //this.option("disabled", true);
                                 // Hide all dropzones when dragging ends
                                 updateDropzones();
                                 //console.log("sortableElement:", sortableElement)
-                                    },
+                            },
                         });
-// Listen for HTMX response errors
-document.body.addEventListener('htmx:responseError', function(event) {
-    if (event.detail.xhr.status === 404) {
-        // Handle 404 error
-        console.log('404 Not Found error?');
-        draggedItem.classList.add('revert-animation'); //[ ] animation does not work
-        fromList.appendChild(draggedItem);
-        fromList.insertBefore(draggedItem, fromList.children[originalIndex]);
+                        // Listen for HTMX response errors
+                        document.body.addEventListener(
+                            "htmx:responseError",
+                            function (event) {
+                                if (event.detail.xhr.status === 404) {
+                                    // Handle 404 error
+                                    console.log("404 Not Found error?");
+                                    draggedItem.classList.add(
+                                        "revert-animation",
+                                    ); //[ ] animation does not work
+                                    fromList.appendChild(draggedItem);
+                                    fromList.insertBefore(
+                                        draggedItem,
+                                        fromList.children[originalIndex],
+                                    );
 
-        
-        return;
-    }
-});
+                                    return;
+                                }
+                            },
+                        );
                         // Re-enable sorting on the `htmx:afterSwap` event
                         sortableElement.addEventListener(
                             "htmx:afterOnLoad",
                             function () {
-                                console.log("htmx:afterOnLoad event triggered");
+                                //console.log("htmx:afterOnLoad event triggered");
                                 //console.log("sortableElement:", sortableElement);
                                 sortlist.option("disabled", false);
                                 // check for focus events to let the user type
@@ -428,7 +570,7 @@ document.body.addEventListener('htmx:responseError', function(event) {
                                             },
                                         );
                                     });
-                                    updateDropzones();
+                                updateDropzones();
                             },
                         );
 
@@ -499,7 +641,7 @@ document.body.addEventListener('htmx:responseError', function(event) {
             }
             //};
 
-           // Re-initialize tooltips and sortable after content update
+            // Re-initialize tooltips and sortable after content update
             document.addEventListener("htmx:afterSwap", function () {
                 //initializeTooltips()
                 clearAndInitializeTooltips();
@@ -507,45 +649,47 @@ document.body.addEventListener('htmx:responseError', function(event) {
             });
 
             // Define the function to clear all tooltips
-           // function clearTooltips() {
-           //     const tooltipTriggerList = [].slice.call(
-           //         document.querySelectorAll('[data-bs-toggle="tooltip"]'),
-           //     );
-           //     tooltipTriggerList.map(function (tooltipTriggerEl) {
-           //         const tooltip =
-           //             bootstrap.Tooltip.getInstance(tooltipTriggerEl);
-           //         if (tooltip) {
-           //             tooltip.dispose();
-           //         }
-           //     });
-           //     document
-           //         .querySelectorAll('div[role="tooltip"]')
-           //         .forEach(function (tooltipDiv) {
-           //             if (tooltipDiv) {
-           //     tooltipDiv.remove();
-           // }
-           //         });
-           // }
+            // function clearTooltips() {
+            //     const tooltipTriggerList = [].slice.call(
+            //         document.querySelectorAll('[data-bs-toggle="tooltip"]'),
+            //     );
+            //     tooltipTriggerList.map(function (tooltipTriggerEl) {
+            //         const tooltip =
+            //             bootstrap.Tooltip.getInstance(tooltipTriggerEl);
+            //         if (tooltip) {
+            //             tooltip.dispose();
+            //         }
+            //     });
+            //     document
+            //         .querySelectorAll('div[role="tooltip"]')
+            //         .forEach(function (tooltipDiv) {
+            //             if (tooltipDiv) {
+            //     tooltipDiv.remove();
+            // }
+            //         });
+            // }
 
-           // // Add event listeners to elements that should trigger the tooltip clearing
-           // document
-           //     .querySelectorAll("input, select, textarea, span, div, body")
-           //     .forEach((element) => {
-           //         element.addEventListener("click", function () {
-           //             clearTooltips();
-           //             //initializeTooltips();
-           //         });
-           //         element.addEventListener("drag", function () {
-           //             clearTooltips();
-           //             ////initializeTooltips();
-           //         });
-           //         element.addEventListener("drop", function () {
-           //             //clearTooltips();
-           //             //initializeTooltips();
-           //         });
-           //     });
+            // // Add event listeners to elements that should trigger the tooltip clearing
+            // document
+            //     .querySelectorAll("input, select, textarea, span, div, body")
+            //     .forEach((element) => {
+            //         element.addEventListener("click", function () {
+            //             clearTooltips();
+            //             //initializeTooltips();
+            //         });
+            //         element.addEventListener("drag", function () {
+            //             clearTooltips();
+            //             ////initializeTooltips();
+            //         });
+            //         element.addEventListener("drop", function () {
+            //             //clearTooltips();
+            //             //initializeTooltips();
+            //         });
+            //     });
+
+            //#[ ]: move javascript to separate file
         </script>
-        
+
         <footer>{% include 'base/parts/nav_bottom.html.jinja' %}</footer>
     </body>
 </html>

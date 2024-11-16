@@ -9,10 +9,52 @@
             <div class="accordion-collapse collapse show">
                 <div class="accordion-body"> -->
     {% for list_obj in userlists %}
+        {% include 'base/parts/debug/listname.html.jinja' %}
+        {% if sublevel == 0 and sublevel_limit > 0 %}
+        <div class="container bg-body text-body p-0 rounded">
+            <div class="d-flex">
+                <div
+                    class="accordion"
+                    id="accordion-button-{{ list_obj.list_type }}list-{{ list_obj.id }}"
+                >
+                    <button
+                        class="accordion-button p-2 rounded"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#toplist-collapse-{{ list_obj.list_type }}list-{{ list_obj.id }}"
+                        aria-expanded="true"
+                    >
+                        {% include 'base/parts/debug/listname.html.jinja' %}
+                    </button>
+                </div>
+
+                <h2 class="accordion-header text-center flex-grow-1">
+                    
+                    {{ list_obj.list_name }}
+                    {% include 'base/parts/debug/order.html.jinja' %}
+                </h2>
+            </div>
+        {% endif %}
+
+        {% if sublevel == 0 and sublevel_limit > 0 %}
+
+
+            <div
+                class="accordion"
+                id="toplist-accordion-{{ list_obj.list_type }}list-{{ list_obj.id }}"
+            >
+
+                <div class="accordion-item">
+                    <div
+                        class="accordion-collapse collapse show"
+                        id="toplist-collapse-{{ list_obj.list_type }}list-{{ list_obj.id }}"
+                    >
+        {% endif %}
+
         <ul
             id="list-updater-{{ list_obj.id }}"
             {% if view == "text-hierarchy" %}
-                class="list-group border border-primary sortable"
+                class="list-group list-group-numbered sortable"
             {% else %}
                 {% if list_obj.list_type == "RoomDefault" %}
                     class="list-group border border-primary border-5
@@ -35,42 +77,6 @@
             data-parent_entry_id="{{ list_obj.parent_entry_id }}"
         >
 
-        {% if sublevel == 0 and sublevel_limit > 0 %}
-        {# <li> #}
-{#             <div
-                class="accordion list-group-item"
-                id="toplist-accordion-{{ list_obj.list_type }}list-{{ list_obj.id }}"
-            > #}
-            <div class="d-flex list-group-item">
-                <div
-                    class="flex-shrink-1"
-                    id="accordion-button-{{ list_obj.list_type }}list-{{ list_obj.id }}"
-                    style="display: block;"
-                >
-                    <button
-                        class="accordion-button p-0 border border-danger"
-                        type="button"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#toplist-collapse-{{ list_obj.list_type }}list-{{ list_obj.id }}"
-                        aria-expanded="true"
-                    >
-                        {% include 'base/parts/debug/listname.html.jinja' %}
-                    </button>
-                </div>
-
-                <h2 class="flex-grow-1 border border-warning">
-                    
-                    {{ list_obj.list_name }}
-                    {% include 'base/parts/debug/order.html.jinja' %}
-                </h2>
-            </div>
-                {# <div class="accordion-item border border-danger">
-                    <div
-                        class="accordion-collapse collapse show"
-                        id="toplist-collapse-{{ list_obj.list_type }}list-{{ list_obj.id }}"
-                    > #}
-        {% endif %}
-        {% include 'base/parts/debug/listname.html.jinja' %}
 
             {% if view == "text-hierarchy" %}
                 {% include 'lists/generic_hierarchy.html.jinja' %}
@@ -93,12 +99,11 @@
                     {% endif %}
                 {% endif %}
             {% endif %}
-    {% if sublevel == 110 and sublevel_limit > 0 %}
+        </ul>
+    {% if sublevel == 0 and sublevel_limit > 0 %}
                     </div>
                 </div>
             </div>
-           {#  </li> #}
+</div>
     {% endif %}
-        </ul>
     {% endfor %}
-{# </div> #}
