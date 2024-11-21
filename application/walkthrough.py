@@ -14,10 +14,8 @@ walkthrough = Blueprint('walkthrough', __name__)
 @walkthrough.route('/walkthrough/setup', methods=['GET'])
 @login_required
 def walkthrough_setup():
-    walk_setup = True
-    session['walk_setup'] = walk_setup
     floor_list = get_userlist('Floor', f'{current_user.active_home.name} Floors').entries
-    return render_template('map/index.html.jinja', floor_list=floor_list, walk_setup=walk_setup)
+    return render_template('map/index.html.jinja', floor_list=floor_list)
 
 @walkthrough.route('/walkthrough/', methods=['GET'])
 @walkthrough.route('/walkthrough/<room_name>/', methods=['GET'])

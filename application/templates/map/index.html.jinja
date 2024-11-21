@@ -4,9 +4,9 @@
 {% endblock %}
 
 {% block main %}
-    {% if walk_setup == True %}
+    
         <h3>Choose a room to start the walkthrough (walkthrough setup=True)</h3>
-    {% endif %}
+   
     <ul class="nav nav-tabs">
         {% for navfloor in floor_list.entries | sort(attribute='order') | reverse %}
             <li class="nav-item">
@@ -36,14 +36,14 @@
             </div>
         
 
-        {% if walk_setup == True %}
+        
             <button type="submit" class="btn btn-success">
                 Start Walkthrough
             </button>
-        {% else %}
-            <a class="btn btn-success" href="/walkthrough/setup">
+        
+            {# <a class="btn btn-success" href="/walkthrough/setup">
                 Setup Walkthrough
-            </a>
-        {% endif %}
+            </a> #}
+        
 </form>
 {% endblock %}

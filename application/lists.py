@@ -845,13 +845,10 @@ def show_list(list_id: int = None):
                 list_obj = create_list_and_item_and_entry(list_model, retrieve='list')
             print(f'list_obj B: {list_obj}')
             found_lists = [list_obj]
-    walk_setup = session.get('walk_setup', False) #todo remove walk_setup
-    print(f'walk_setup: {walk_setup}')
-        #return render_template('lists/list.html.jinja', list_obj=list_obj, walk_setup=walk_setup, view=view, reversed=reversed)
     if any(found_lists):
         child_lists = get_immediate_child_lists(found_lists)
         print(f'found_lists - inner return: {found_lists}')
-        return render_template('lists/list.html.jinja', userlists=found_lists, view=view, walk_setup=walk_setup, reversed=reversed, sublevel=sublevel, sublevel_limit=sublevel_limit, view_override=view_override, child_lists=child_lists)
+        return render_template('lists/list.html.jinja', userlists=found_lists, view=view, reversed=reversed, sublevel=sublevel, sublevel_limit=sublevel_limit, view_override=view_override, child_lists=child_lists)
     else:
         print("no lists found - return")
         return '', 204
