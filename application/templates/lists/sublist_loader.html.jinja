@@ -6,13 +6,9 @@
 
 {% if sublevel < sublevel_limit %}
     {% set sublevel = sublevel + 1 %}
-        <div
-            class="accordion"
-            id="sublist-accordion-{{ entry.item_model }}list-{{ entry.id }}"
-        >
-            <div class="accordion-item">
+
                 <div
-                    class="accordion-collapse collapse"
+                    class="collapse"
                     id="sublist-collapse-{{ entry.item_model }}list-{{ entry.id }}"
                 >
                     {% if ns.has_children %}{# has_children 3: {{ ns.has_children }} #}
@@ -48,7 +44,6 @@
                     {# sublists go here if found #}
                     </div>
                 </div>
-            </div>
-        </div>
+
 
 {% endif %}

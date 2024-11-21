@@ -419,7 +419,7 @@ form.htmx-request {
     justify-content: end;
     min-width: 50px;
     min-height: 50px;
-    border: 1px dashed transparent;
+    border: 5px dashed;
     transition: all 0.3s;
 }
 
