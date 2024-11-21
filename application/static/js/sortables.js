@@ -87,7 +87,7 @@
                                         `Intersecting with: ${targetItem.id}`,
                                     );
                                     // You can add any visual effect here, like highlighting
-                                    dropzone.classList.add("hover"); //fixme: this is not working/not getting triggered correctly
+                                    dropzone.classList.add("hover"); 
                                     console.log("add .hover");
                                 } else {
                                     dropzone.classList.remove("hover");
@@ -147,6 +147,9 @@
                             //invertSwap: true,
                             fallbackOnBody: true,
                             //draggable: "li",
+                            multiDrag: true, // Enable multi-drag
+                            selectedClass: "selected", // The class applied to the selected items
+                            fallbackTolerance: 3, // So that we can select items on mobile
                             // Prevent dragging on specific elements
                             filter: ".htmx-indicator, .rename", //.listname, .accordion-header, .accordion-button, .accordion",
                             ghostClass: "ghost",
@@ -156,7 +159,7 @@
                             revertOnSpill: true, //needs to be revert to work with the confirm dialog
                             onStart: function (evt) {
                                 isDragging = true;
-                                clearAndInitializeTooltips();
+                                //clearAndInitializeTooltips();
                                 console.log("onStart isDragging " + isDragging);
                                 originalIndex = evt.oldIndex; // Store the original index
                                 draggedItem = evt.item; // Store the dragged item reference
@@ -174,6 +177,81 @@
                             //    ) === -1
                             //);
                             //},
+                            onSelect: function (evt) {
+                                const itemEl = evt.item;
+                                
+
+                                console.log("onSelect evt.item " + evt.item.dataset.name);
+                                console.log("onSelect evt.items " + evt.items);
+                                console.log(evt.items.map(item => item.dataset.name));
+                                console.log("onSelect evt.clones " + evt.clones);
+                                console.log("onSelect evt.oldIndicies " + evt.oldIndicies);
+                                console.log(evt.oldIndicies.map(oldIndex => oldIndex));
+                                console.log("onSelect evt.newIndicies " + evt.newIndicies);
+                                console.log(evt.newIndicies.map(newIndex => newIndex));
+document.querySelectorAll(`.selected`).forEach(item => {
+if (item.id != itemEl.id) {
+    item.classList.remove("selected");}    
+});
+                                //only allow one selected item at a time
+                                if (evt.items.length > 1) {
+                                    Sortable.utils.deselect(evt.items[0]);
+                                }
+                                if (itemEl.dataset.model === "Room") {
+                                    htmx.ajax(
+                                        "PUT",
+                                        `/home/room/${itemEl.dataset.item_id}/active`,
+                                        {
+                                            swap: "none",
+                                            target: itemEl,
+                                        },
+                                    );
+                                    console.log("PUT: select active room");
+                                }
+                                // Get the radio input element
+//const radioInput = evt.item.querySelector(`#radio-${evt.item.dataset.id}`);
+//console.log(`contains? ${document.body.contains(radioInput)}`); // Should log `true` if the element is part of the DOM
+//
+////const radioInput = document.getElementById(`radio-${evt.item.dataset.id}`);
+//// Set the checked property to true
+//
+//    document.querySelectorAll(`input[type="radio"][name="active_room"]`).forEach(radio => {
+//        radio.checked = false;
+//    });
+//if (radioInput) {
+//    //radioInput.focus();
+//    radioInput.checked = true;
+//    //radioInput.click();
+//    //radioInput.dispatchEvent(new Event('change', { bubbles: true })); // Ensures event propagation
+//    //radioInput.setAttribute('checked', 'checked');
+//    console.log(radioInput.checked); // Should log `true` after setting
+//} else {
+//    console.error("Radio input element not found");
+//}
+//
+//console.log(radioInput); // Check if the element is found
+//                                document.querySelectorAll(`input[type="radio"]`).forEach(radio => {
+//                                    console.log(`${radio.id} ${radio.checked}`);
+//                                })
+                            },
+//                            onDeselect: function (evt) {
+//                                console.log("onDeselect evt.item " + evt.item.dataset.name);
+//                                                                // Get the radio input element
+//const radioInput = evt.item.querySelector(`#radio-${evt.item.dataset.id}`);
+////const radioInput = document.getElementById(`radio-${evt.item.dataset.id}`);
+//// Set the checked property to true
+//if (radioInput) {
+//    //radioInput.focus();
+//    radioInput.checked = false;
+//    //radioInput.click();
+//    //radioInput.dispatchEvent(new Event('change', { bubbles: true })); // Ensures event propagation
+//    //radioInput.setAttribute('checked', 'checked');
+//    console.log(radioInput.checked); // Should log `true` after setting
+//} else {
+//    console.error("Radio input element not found");
+//}
+//console.log(radioInput); // Check if the element is found
+                           // },
                             onSpill: function (/**Event*/ evt) {
                                 //this.options.removeOnSpill = true;
                                 evt.item; // The spilled item
@@ -362,7 +440,9 @@
                                         "No sublists found in target container.",
                                     );
                                 }
-
+                                evt.items.forEach(function (item) {
+                                    Sortable.utils.deselect(item)
+                                });
                                 //sublists.innerHTML = dropzone.innerHTML;
                                 //dropzone.innerHTML = ""; // Clear original dropzone
                                 console.log("isdragging onEnd: " + isDragging);
@@ -496,6 +576,6 @@
                         // Re-initialize tooltips and sortable after content update
                         document.addEventListener("htmx:afterSwap", function () {
                             //initializeTooltips()
-                            clearAndInitializeTooltips();
+                            //clearAndInitializeTooltips();
                             initializeSortable();
                         });

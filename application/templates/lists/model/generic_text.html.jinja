@@ -1,7 +1,8 @@
 <li
-    class="list-group-item pe-0 shadow grabbable"
+    class="list-group-item pe-0 shadow grabbable {% if current_user.active_home.active_room_id == entry.item_id %}selected{% endif %}"
     id="{{ entry.item_model }}list-{{ entry.id }}"
     data-id="{{ entry.id }}"
+    data-item_id="{{ entry.item_id }}"
     data-name="{{ entry.get_item().name }}"
     data-order="{{ entry.order }}"
     data-list_id="{{ entry.user_list_id }}"
@@ -72,6 +73,7 @@ has_children 1: {{ ns.has_children }}
                     </div>
             <div>testy</div>
     </div>
+        
         
         {% include 'lists/sublist_loader.html.jinja' %}
 </li>

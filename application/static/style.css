@@ -365,6 +365,10 @@ form.htmx-request {
     opacity: 0.5;
     background: #ff0000;
 }
+.selected {
+    opacity: 0.5;
+    background: #99ff00;
+}
 
 .room-list-form {
     background: #31d774;

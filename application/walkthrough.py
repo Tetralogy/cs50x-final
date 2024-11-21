@@ -33,7 +33,7 @@ def walk_start(room_name: str = None, view: str = None):
             if room:
                 print(f'room: {room} room_name: {room_name} room name name: {room[0].name}')
                 room_id = room[0].id
-                active_room = set_active_room(room_id)
+                set_active_room(room_id)
                 if not view:
                     view = 'rename'
                 
@@ -42,8 +42,8 @@ def walk_start(room_name: str = None, view: str = None):
         print(f'post room_name: {room_name}')
         print(f'post view: {view}')
         active_room_id = request.form.get('active_room')
-        active_room = set_active_room(active_room_id)
-        print(f'active_room: {active_room}')
+        set_active_room(active_room_id)
+        print(f'active_room: {current_user.active_home.active_room}')
         view = "rename"
     session['view'] = view
     print(f'view: {view}')
@@ -112,7 +112,7 @@ def walk_next(direction):
             next_room_index = (i + direction) % len(rooms_list_ordered)
             next_room = rooms_list_ordered[next_room_index]
             print(f'next_room: {next_room}')
-            active_room = set_active_room(next_room.item_id)
+            set_active_room(next_room.item_id)
             break
     view = 'rename'
     session['view'] = view
