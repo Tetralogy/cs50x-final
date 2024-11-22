@@ -1,4 +1,6 @@
-window.isDragging = false;
+if (!window.isDragging) {
+    window.isDragging = false;
+}
 console.log('After check:', window.isDragging);
 // Initialize tooltips and sortable
 //document.addEventListener("DOMContentLoaded", function () {
@@ -8,67 +10,69 @@ console.log('After check:', window.isDragging);
 //    console.log("DOMContentLoaded triggered");
 //});
 window.addEventListener("load", initializeSortable);
-console.log("sortables.js loaded");
 
 // Observe changes in the document
-const observer = new MutationObserver((mutations) => {
-    mutations.forEach((mutation) => {
-        if (mutation.addedNodes.length > 0) {
-            toggleDropzones();
-        }
+if (!window.observer) {
+    window.observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+            if (mutation.addedNodes.length > 0) {
+                toggleDropzones();
+            }
+        });
     });
-});
+}
 
 // Start observing the document for changes
-observer.observe(document.body, {
+window.observer.observe(document.body, {
     childList: true,
     subtree: true
 });
+console.log("sortables.js loaded");
 
 function toggleDropzones() {
     //setTimeout(() => {
-        const allDropzones = document.querySelectorAll(".dropzone");
-        allDropzones.forEach((dropzone) => {
-            const accordionButton =
-                dropzone.parentElement.querySelector(
-                    dropzone.dataset.accordion_button,
-                );
-            //console.log(`dropzone.dataset.sublists_div: ${dropzone.dataset.sublists_div} dropzone.dataset.name: ${dropzone.dataset.name}`);
-            const sublists = document.getElementById(
-                dropzone.dataset.sublists_div,
+    const allDropzones = document.querySelectorAll(".dropzone");
+    allDropzones.forEach((dropzone) => {
+        const accordionButton =
+            dropzone.parentElement.querySelector(
+                dropzone.dataset.accordion_button,
             );
-            //console.log(`toggleDropzones $(sublists): ${sublists.dataset.name} dropzone: ${dropzone.dataset.name}`);
-            if (sublists) {
-                //console.log(`sublists.childElementCount: ${sublists.childElementCount}`);
-                if (
-                    sublists.childElementCount > 0 ||
-                    dropzone.childElementCount > 0
-                ) {
-                    //console.log("toggleDropzones children");
-                    dropzone.classList.add("d-none"); // hide dropzone
-                    sublists.classList.remove("d-none"); // show sublists
-                    accordionButton.classList.remove("d-none"); // show accordion
-                    if (accordionButton.ariaExpanded === "false") {
-                        accordionButton.click();
-                        console.log(
-                            `accordionButton.ariaExpanded: ${accordionButton.ariaExpanded}`,
-                        )
-                        //console.log(`sublists withchild: ${sublists.dataset.name}`);
-                    }
+        //console.log(`dropzone.dataset.sublists_div: ${dropzone.dataset.sublists_div} dropzone.dataset.name: ${dropzone.dataset.name}`);
+        const sublists = document.getElementById(
+            dropzone.dataset.sublists_div,
+        );
+        //console.log(`toggleDropzones $(sublists): ${sublists.dataset.name} dropzone: ${dropzone.dataset.name}`);
+        if (sublists) {
+            //console.log(`sublists.childElementCount: ${sublists.childElementCount}`);
+            if (
+                sublists.childElementCount > 0 ||
+                dropzone.childElementCount > 0
+            ) {
+                //console.log("toggleDropzones children");
+                dropzone.classList.add("d-none"); // hide dropzone
+                sublists.classList.remove("d-none"); // show sublists
+                accordionButton.classList.remove("d-none"); // show accordion
+                if (accordionButton.ariaExpanded === "false") {
+                    accordionButton.click();
+                    console.log(
+                        `accordionButton.ariaExpanded: ${accordionButton.ariaExpanded}`,
+                    )
+                    //console.log(`sublists withchild: ${sublists.dataset.name}`);
+                }
+            } else {
+                //console.log(`not occupied: ${dropzone.dataset.name}`);
+                accordionButton.classList.add("d-none");
+                sublists.classList.add("d-none");
+                if (window.isDragging) {
+                    dropzone.classList.remove("d-none");
                 } else {
-                    //console.log(`not occupied: ${dropzone.dataset.name}`);
-                    accordionButton.classList.add("d-none");
-                    sublists.classList.add("d-none");
-                    if (window.isDragging) {
-                        dropzone.classList.remove("d-none");
-                    } else {
-                        dropzone.classList.add("d-none");
-                    }
+                    dropzone.classList.add("d-none");
                 }
             }
+        }
 
-            dropzone.classList.remove("hover");
-        });
+        dropzone.classList.remove("hover");
+    });
     //}, 100);
 }
 
@@ -288,10 +292,10 @@ function initializeSortable() {
                 onSpill: function (/**Event*/ evt) {
                     //this.options.removeOnSpill = true;
                     evt.item; // The spilled item
-                    showDragOutsideIndicator(
-                        evt.clientX,
-                        evt.clientY,
-                    );
+                    //showDragOutsideIndicator(
+                    //    evt.clientX,
+                    //    evt.clientY,
+                    //);
                     console.log("spill");
                     console.log(
                         "delete evt.item.dataset.id: " +
@@ -321,7 +325,7 @@ function initializeSortable() {
                             ),
                         );
                     }
-                    hideDragOutsideIndicator();
+                    //hideDragOutsideIndicator();
                 },
                 onAdd: function (/**Event*/ evt) {
                     console.log("onAdd event triggered");
@@ -534,103 +538,103 @@ function initializeSortable() {
                 },
             );
             // Re-enable sorting on the `htmx:afterSwap` event
-        //    sortableElement.addEventListener(
-        //        "htmx:afterOnLoad",
-        //        function () {
-        //            //console.log("htmx:afterOnLoad event triggered");
-        //            //console.log("sortableElement:", sortableElement);
-        //            sortlist.option("disabled", false);
-        //            // check for focus events to let the user type
-        //            document
-        //                .querySelectorAll("input")
-        //                .forEach((element) => {
-        //                    element.addEventListener(
-        //                        "focus",
-        //                        function () {
-        //                            console.log("focus");
-        //                            sortlist.option(
-        //                                "disabled",
-        //                                true,
-        //                            );
-        //                        },
-        //                    );
-        //                    element.addEventListener(
-        //                        "blur",
-        //                        function () {
-        //                            console.log("blur");
-        //                            sortlist.option(
-        //                                "disabled",
-        //                                false,
-        //                            );
-        //                        },
-        //                    );
-        //                });
-        //            //updateDropzones();
-        //        },
-        //    );
+            //    sortableElement.addEventListener(
+            //        "htmx:afterOnLoad",
+            //        function () {
+            //            //console.log("htmx:afterOnLoad event triggered");
+            //            //console.log("sortableElement:", sortableElement);
+            //            sortlist.option("disabled", false);
+            //            // check for focus events to let the user type
+            //            document
+            //                .querySelectorAll("input")
+            //                .forEach((element) => {
+            //                    element.addEventListener(
+            //                        "focus",
+            //                        function () {
+            //                            console.log("focus");
+            //                            sortlist.option(
+            //                                "disabled",
+            //                                true,
+            //                            );
+            //                        },
+            //                    );
+            //                    element.addEventListener(
+            //                        "blur",
+            //                        function () {
+            //                            console.log("blur");
+            //                            sortlist.option(
+            //                                "disabled",
+            //                                false,
+            //                            );
+            //                        },
+            //                    );
+            //                });
+            //            //updateDropzones();
+            //        },
+            //    );
 
             // Function to show the indicator
-        //   function showDragOutsideIndicator(x, y) {
-        //       const indicator = document.getElementById(
-        //           "drag-outside-indicator",
-        //       );
-        //       if (indicator !== null) {
-        //           console.log("showDragOutsideIndicator", x, y);
-        //           indicator.style.left = `${x}px`;
-        //           indicator.style.top = `${y}px`;
-        //           indicator.style.display = "block";
-        //       }
-        //   }
+            //   function showDragOutsideIndicator(x, y) {
+            //       const indicator = document.getElementById(
+            //           "drag-outside-indicator",
+            //       );
+            //       if (indicator !== null) {
+            //           console.log("showDragOutsideIndicator", x, y);
+            //           indicator.style.left = `${x}px`;
+            //           indicator.style.top = `${y}px`;
+            //           indicator.style.display = "block";
+            //       }
+            //   }
 
-        //   // Function to hide the indicator
-        //   function hideDragOutsideIndicator() {
-        //       const indicator = document.getElementById(
-        //           "drag-outside-indicator",
-        //       );
-        //       if (indicator !== null) {
-        //           indicator.style.display = "none";
-        //       }
-        //   }
+            //   // Function to hide the indicator
+            //   function hideDragOutsideIndicator() {
+            //       const indicator = document.getElementById(
+            //           "drag-outside-indicator",
+            //       );
+            //       if (indicator !== null) {
+            //           indicator.style.display = "none";
+            //       }
+            //   }
 
-        //   // Add event listeners to track dragging outside the area
+            //   // Add event listeners to track dragging outside the area
 
-        //   sortableElements.forEach(function (area) {
-        //       area.addEventListener("dragover", function (e) {
-        //           const rect = area.getBoundingClientRect();
+            //   sortableElements.forEach(function (area) {
+            //       area.addEventListener("dragover", function (e) {
+            //           const rect = area.getBoundingClientRect();
 
-        //           //console.log("dragover" + rect);
-        //           if (
-        //               e.clientX < rect.left ||
-        //               e.clientX > rect.right ||
-        //               e.clientY < rect.top ||
-        //               e.clientY > rect.bottom
-        //           ) {
-        //               showDragOutsideIndicator(
-        //                   e.clientX,
-        //                   e.clientY,
-        //               );
-        //           } else {
-        //               hideDragOutsideIndicator();
-        //           }
-        //       });
-        //   });
+            //           //console.log("dragover" + rect);
+            //           if (
+            //               e.clientX < rect.left ||
+            //               e.clientX > rect.right ||
+            //               e.clientY < rect.top ||
+            //               e.clientY > rect.bottom
+            //           ) {
+            //               showDragOutsideIndicator(
+            //                   e.clientX,
+            //                   e.clientY,
+            //               );
+            //           } else {
+            //               hideDragOutsideIndicator();
+            //           }
+            //       });
+            //   });
 
-        //   document.addEventListener("drop", function () {
-        //       hideDragOutsideIndicator();
-        //   });
+            //   document.addEventListener("drop", function () {
+            //       hideDragOutsideIndicator();
+            //   });
 
-        //   document
-        //       .querySelectorAll("input")
-        //       .forEach((element) => {
-        //           element.addEventListener("focus", function () {
-        //               console.log("focus");
-        //               sortlist.option("disabled", true);
-        //           });
-        //           element.addEventListener("blur", function () {
-        //               console.log("blur");
-        //               sortlist.option("disabled", false);
-        //           });
-        //       });
+            //   document
+            //       .querySelectorAll("input")
+            //       .forEach((element) => {
+            //           element.addEventListener("focus", function () {
+            //               console.log("focus");
+            //               sortlist.option("disabled", true);
+            //           });
+            //           element.addEventListener("blur", function () {
+            //               console.log("blur");
+            //               sortlist.option("disabled", false);
+            //           });
+            //       });
         }
     });
     //}, 100);
