@@ -7,8 +7,8 @@
             //                return new bootstrap.Tooltip(tooltipTriggerEl);
             //            });
             //        }
+            window.activeTooltip = null;
             console.log("tooltips.js loaded");
-let activeTooltip = null;
 
 function clearAndInitializeTooltips() {
     // Dispose of any existing tooltips to prevent conflicts
@@ -44,11 +44,11 @@ function clearAndInitializeTooltips() {
                     function () {
                         // Hide any active tooltip before showing a new one
                         if (
-                            activeTooltip &&
-                            activeTooltip !== tooltipInstance &&
-                            activeTooltip._element
+                            window.activeTooltip &&
+                            window.activeTooltip !== tooltipInstance &&
+                            window.activeTooltip._element
                         ) {
-                            activeTooltip.hide();
+                            window.activeTooltip.hide();
                         }
 
                         // Check if element and tooltip instance still exist before showing
@@ -58,8 +58,8 @@ function clearAndInitializeTooltips() {
                             ) &&
                             tooltipInstance._element
                         ) {
-                            activeTooltip = tooltipInstance;
-                            activeTooltip.show();
+                            window.activeTooltip = tooltipInstance;
+                            window.activeTooltip.show();
                         }
                     },
                 );
@@ -69,11 +69,11 @@ function clearAndInitializeTooltips() {
                     function () {
                         // Hide tooltip if it’s still active and attached
                         if (
-                            activeTooltip &&
-                            activeTooltip._element
+                            window.activeTooltip &&
+                            window.activeTooltip._element
                         ) {
-                            activeTooltip.hide();
-                            activeTooltip = null;
+                            window.activeTooltip.hide();
+                            window.activeTooltip = null;
                         }
                     },
                 );
