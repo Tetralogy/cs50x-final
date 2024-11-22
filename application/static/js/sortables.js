@@ -1,35 +1,83 @@
-if (!window.isDragging) {
+//if (!window.isDragging) {
     window.isDragging = false;
-}
+//}    
 console.log('After check:', window.isDragging);
+
+
+// observer.js
+//export 
+function observeRecursiveLists(callback) {
+    const observer = new MutationObserver(callback);
+    observer.observe(document.body, {
+        childList: true,
+        subtree: true
+    });
+}
+/* // main.js
+import { observeRecursiveLists } from './observer.js';
+import { initializeSortable } from './dragDrop.js'; */
+
+function initialize() {
+    initializeSortable();
+    toggleDropzones();
+
+    /* observeRecursiveLists(() => {
+        console.log('New elements detected, re-initializing...');
+        initializeSortable(); // Re-initialize for new elements.
+        toggleDropzones();
+        
+    }); */
+
+    console.log('App initialized.');
+}
+
+window.addEventListener('load', initialize);
+
+
 // Initialize tooltips and sortable
 //document.addEventListener("DOMContentLoaded", function () {
-//    //initializeTooltips();
+//    //initializeTooltips();    
 //    initializeSortable();
 //
 //    console.log("DOMContentLoaded triggered");
 //});
-window.addEventListener("load", initializeSortable);
+//window.addEventListener("load", initializeSortable);
 
+
+
+
+
+window.sortableTimeoutId = null;
 // Observe changes in the document
-if (!window.observer) {
+//if (!window.observer) {
     window.observer = new MutationObserver((mutations) => {
         mutations.forEach((mutation) => {
             if (mutation.addedNodes.length > 0) {
                 toggleDropzones();
+
+                if (window.sortableTimeoutId) {
+                    clearTimeout(window.sortableTimeoutId);
+                    }
+                window.sortableTimeoutId = setTimeout(() => {
+                initializeSortable();
+                window.sortableTimeoutId = null;
+                }, 500);
             }
         });
     });
-}
+//}
 
 // Start observing the document for changes
 window.observer.observe(document.body, {
     childList: true,
     subtree: true
 });
+
+
+
 console.log("sortables.js loaded");
 
-function toggleDropzones() {
+function toggleDropzones() { console.log("toggleDropzones");
     //setTimeout(() => {
     const allDropzones = document.querySelectorAll(".dropzone");
     allDropzones.forEach((dropzone) => {
@@ -132,7 +180,7 @@ function updateDropzones(evt) {
     }
 }
 
-function initializeSortable() {
+function initializeSortable() { console.log("initializeSortable triggered");
     //setTimeout(() => {
     //() => {
     // fix for error Uncaught SyntaxError: redeclaration of const typeslist
