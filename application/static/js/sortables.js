@@ -189,6 +189,9 @@
                                 console.log(evt.oldIndicies.map(oldIndex => oldIndex));
                                 console.log("onSelect evt.newIndicies " + evt.newIndicies);
                                 console.log(evt.newIndicies.map(newIndex => newIndex));
+                                if (itemEl.dataset.model === "Room"){
+                                    
+                                
 document.querySelectorAll(`.selected`).forEach(item => {
 if (item.id != itemEl.id) {
     item.classList.remove("selected");}    
@@ -208,6 +211,7 @@ if (item.id != itemEl.id) {
                                     );
                                     console.log("PUT: select active room");
                                 }
+                            }
                                 // Get the radio input element
 //const radioInput = evt.item.querySelector(`#radio-${evt.item.dataset.id}`);
 //console.log(`contains? ${document.body.contains(radioInput)}`); // Should log `true` if the element is part of the DOM

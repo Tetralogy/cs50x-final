@@ -9,6 +9,11 @@
             <div class="accordion-collapse collapse show">
                 <div class="accordion-body"> -->
     {% for list_obj in userlists %}
+    {% if list_obj.entries | length < 1 %}
+    {% if list_obj.list_type == "Room" %}
+            <h1>Please add rooms to this floor</h1>
+            {% endif %}
+{% endif %}
         {% include 'base/parts/debug/listname.html.jinja' %}
         {% if sublevel == 0 and sublevel_limit > 0 %}
         <div class="container bg-body text-body p-0 rounded">

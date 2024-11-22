@@ -1,4 +1,4 @@
-<div
+{#<div
     class="input-group mb-0"
     id="{{ entry.item_model }}list-{{ entry.id }}"
     data-id="{{ entry.id }}"
@@ -63,6 +63,8 @@
     >
         X
     </button>
-    order {{ entry.order }}
+    order {{ entry.order }}#}
     {#{% include 'lists/sublist_loader.html.jinja' %}#}
-</div>
+{#</div>#}
+
+{% include 'lists/model/generic_text.html.jinja' %}
