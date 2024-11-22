@@ -86,7 +86,7 @@
                 class="row g-0 row-cols-4 container-fluid  border border-success border-5 rounded-bottom-4 p-1"
                 id="task-list-loader"
                 hx-get="/show_list/"
-                hx-vals='{"list_type": "Photo", "sublevel_limit": 100, "view_override": "text-hierarchy"}'
+                hx-vals='{"list_type": "Photo", "root_parent": "{{ current_user.active_home }}",  "view_override": "photos"}'
                 hx-trigger="load once"
                 hx-swap="outerHTML"
                 hx-indicator="#updating-indicator"

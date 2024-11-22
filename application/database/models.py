@@ -232,6 +232,7 @@ class Photo(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey('user.id'))
     room_id: Mapped[int] = mapped_column(ForeignKey('room.id'))
+    name: Mapped[str] = mapped_column(String(80), nullable=False)
     description: Mapped[str] = mapped_column(String, nullable=False)
     photo_url: Mapped[str]
     photo_timestamp: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=func.now())

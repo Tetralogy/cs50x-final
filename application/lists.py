@@ -176,6 +176,7 @@ def create_new_default(item_model: str, name: str = None, list_obj: UserList = N
         new_item = Photo(
             user_id=current_user.id, 
             room_id=current_user.active_home.active_room_id, 
+            name=name,
             description=description, 
             photo_url=photo_url
         )
@@ -509,10 +510,10 @@ def upload_photo(item_model):
     if not room_id:
         room_id = current_user.active_home.active_room_id
     print(f'room_id: {room_id}')
-    room_name = db.get_or_404(Room, room_id).name
+    room = db.get_or_404(Room, room_id)
+    room_name = room.name
     list_name = f'{room_name} {item_model}s'
-    parent_entry_id = room_id
-        
+    parent_entry_id = get_list_entries_for_item(room, user_id=current_user.id)[0].id
     userlist = get_userlist(item_model, list_name, parent_entry_id) 
     if not userlist:
         userlist = create_user_list(item_model, list_name, parent_entry_id)
@@ -793,13 +794,15 @@ def show_list(list_id: int = None):
     force_new_list = request.args.get('force_new_list') == 'true'
     if list_id:
         list_obj=db.get_or_404(UserList, list_id)
-        print(f'list_obj {list_id}: {list_obj}')
+        print(f'list_obj with list_id {list_id}: {list_obj}')
         found_lists = [list_obj]
     elif not list_id:
+        print(f'not list_id')
         combine = bool(request.args.get('combine') == 'True')
         root_parent = request.args.get('root_parent')
         parent = request.args.get('parent')
         parent_entry_id = request.args.get('parent_entry_id')
+        print(f'force_new_list: {force_new_list}')  
         if parent_entry_id:
             parent_entry_id = int(parent_entry_id)
         elif parent:
@@ -831,7 +834,6 @@ def show_list(list_id: int = None):
             elif list_model == 'Task':
                 if not parent_entry_id and not combine: 
                     parent_entry_id = get_list_entries_for_item(current_user.active_home.active_room)[0].id   
-                print(f'force_new_list: {force_new_list}')    
                 print(f'show_list: Task list parent_entry_id C: {parent_entry_id}')
             elif list_model == 'Photo':
                 if not parent_entry_id and not combine: 

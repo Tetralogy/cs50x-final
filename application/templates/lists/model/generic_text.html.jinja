@@ -1,5 +1,5 @@
 <li
-    class="list-group-item pe-0 shadow grabbable {% if current_user.active_home.active_room_id == entry.item_id %}selected{% endif %}"
+    class="list-group-item pe-0 shadow grabbable {% if current_user.active_home.active_room_id == entry.item_id and entry.item_model == 'Room' %}selected{% endif %}"
     id="{{ entry.item_model }}list-{{ entry.id }}"
     data-id="{{ entry.id }}"
     data-item_id="{{ entry.item_id }}"

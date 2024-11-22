@@ -48,7 +48,7 @@ window.addEventListener('load', initialize);
 
 
 window.sortableTimeoutId = null;
-// Observe changes in the document
+// Observe changes in the document #xxx: only works on the first load
 //if (!window.observer) {
     window.observer = new MutationObserver((mutations) => {
         mutations.forEach((mutation) => {

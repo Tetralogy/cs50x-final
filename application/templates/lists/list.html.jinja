@@ -39,10 +39,6 @@
                     {% include 'base/parts/debug/order.html.jinja' %}
                 </h2>
             </div>
-        {% endif %}
-
-        {% if sublevel == 0 and sublevel_limit > 0 %}
-
 
             <div
                 class="accordion"
@@ -67,6 +63,8 @@
                 {% elif list_obj.list_type == "Room" %}
                     class="list-group container-fluid border
                     border-primary border-5 rounded-4 p-1 sortable"
+                {% elif list_obj.list_type == "Photo" %}
+                    class="list-group list-group-horizontal sortable"
                 {% else %}
                     class="list-group row g-0 row-cols-1 border border-primary border-5
                     rounded-4 sortable"
