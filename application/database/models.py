@@ -155,7 +155,7 @@ class Floor(db.Model):
     home_id: Mapped[int] = mapped_column(ForeignKey('home.id'))
     name: Mapped[str] = mapped_column(String(80), nullable=False)
     homes = relationship('Home', back_populates="floors", foreign_keys=[home_id])
-    rooms = relationship('Room', back_populates="floors")
+    rooms = relationship('Room', back_populates="floors", lazy='dynamic', foreign_keys='Room.floor_id')
 
     '''@property
     def as_list_item(self):

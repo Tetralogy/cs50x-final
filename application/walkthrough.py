@@ -96,8 +96,8 @@ def walk_next(direction):
         return 'No active room', 400
     parent_entry_id = get_list_entries_for_item(current_user.active_home.active_floor)[0].id
     #current_user.active_home.active_room_id
-    rooms_list = get_userlist('Room', f'{current_user.active_home.name} {current_user.active_home.active_floor.name} Rooms', parent_entry_id)
-    print(f'rooms_list: {rooms_list} entries: {rooms_list.entries}')
+    rooms_list = get_userlist(item_model='Room', parent_entry_id=parent_entry_id)
+    print(f'rooms_list: {rooms_list} entries: {rooms_list.entries}') 
     rooms_list_ordered = iter(sorted(rooms_list.entries, key=lambda x: x.order))
     print(f'rooms_list_ordered 1: {rooms_list_ordered}')
     rooms_list_ordered = sorted(rooms_list.entries, key=lambda x: x.order)

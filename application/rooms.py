@@ -97,9 +97,9 @@ def new_room_type_default():
 @rooms.route('/home/room/<int:room_id>/active', methods=['PUT'])
 @login_required
 def set_active_room(room_id):
-    if room_id is None:
+    if not room_id:
         room_id = current_user.active_home.active_room_id
-        if room_id is None:
+        if not room_id:
             first_room = current_user.active_home.active_floor.rooms.order_by(Room.id).first()
             print(f'first_room: {first_room.id}')
             room_id = first_room.id
@@ -118,30 +118,32 @@ def set_active_room(room_id):
     
 def floor_room_check(floor_id):
     has_rooms = True
-    if floor_id is None:
-        for floor in current_user.active_home.floors: # check if all floors have rooms
-            print(f'len(floor.rooms) {floor} = {len(floor.rooms)}')
-            if len(floor.rooms) == 0:
-                print(f'floor {floor.name} has no rooms')
-                flash(f'floor {floor.name} has no rooms' , category='danger')
-                floor_id=floor.id
-                has_rooms = False
-                return floor_id, has_rooms
-            floor_id = current_user.active_home.active_floor_id
+    if not floor_id:
+        floor_id, has_rooms = check_each_floor_for_rooms()
+        floor_id = current_user.active_home.active_floor_id
     else:
         floor = db.get_or_404(Floor, floor_id)
-        if len(floor.rooms) == 0:
+        if floor.rooms.count() == 0:
             print(f'floor {floor.name} has no rooms')
             flash(f'floor {floor.name} has no rooms' , category='danger')
             has_rooms = False
             return floor_id, has_rooms
-        for floor in current_user.active_home.floors: # check if all floors have rooms
-            print(f'len(floor.rooms) {floor} = {len(floor.rooms)}')
-            if len(floor.rooms) == 0:
-                has_rooms = False
-                return floor.id, has_rooms
+        floor_id, has_rooms = check_each_floor_for_rooms()
     return floor_id, has_rooms
 
+def check_each_floor_for_rooms():
+    for floor in current_user.active_home.floors: # check if all floors have rooms
+        print(f'floor.rooms.count() {floor} = {floor.rooms.count()}')
+        if floor.rooms.count() == 0:
+            print(f'floor {floor.name} has no rooms')
+            flash(f'floor {floor.name} has no rooms' , category='danger')
+            floor_id=floor.id
+            has_rooms = False
+            return floor_id, has_rooms
+    # If all floors have rooms, return a default value indicating this
+    return None, True
+
+        
 @rooms.route('/map/', methods=['GET'])
 @rooms.route('/map/<int:floor_id>', methods=['GET'])
 @login_required
