@@ -1,7 +1,19 @@
-//if (!window.isDragging) {
-    window.isDragging = false;
+(() => {
+/* // Store Sortable instances
+//window.sortableInstances = new Map();
+
+function //cleanupSortables() {
+    // Destroy all sortable instances
+    //window.sortableInstances.forEach((instance, element) => {
+        instance.destroy();
+    });
+    //window.sortableInstances.clear();
+}
+
+//if (!isDragging) {
+    isDragging = false;
 //}    
-console.log('After check:', window.isDragging);
+console.log('After check:', isDragging);
 
 
 // observer.js
@@ -16,20 +28,8 @@ function observeRecursiveLists(callback) {
 /* // main.js
 import { observeRecursiveLists } from './observer.js';
 import { initializeSortable } from './dragDrop.js'; */
+/*
 
-function initialize() {
-    initializeSortable();
-    toggleDropzones();
-
-    /* observeRecursiveLists(() => {
-        console.log('New elements detected, re-initializing...');
-        initializeSortable(); // Re-initialize for new elements.
-        toggleDropzones();
-        
-    }); */
-
-    console.log('App initialized.');
-}
 
 window.addEventListener('load', initialize);
 
@@ -50,7 +50,7 @@ window.addEventListener('load', initialize);
 window.sortableTimeoutId = null;
 // Observe changes in the document #xxx: only works on the first load
 //if (!window.observer) {
-    window.observer = new MutationObserver((mutations) => {
+    window.observer = new MutationObserver((mutations) => { console.log("observer triggered");
         mutations.forEach((mutation) => {
             if (mutation.addedNodes.length > 0) {
                 toggleDropzones();
@@ -73,9 +73,57 @@ window.observer.observe(document.body, {
     subtree: true
 });
 
+ */
+//htmx.onLoad(initialize);
+//htmx.onLoad(throttle(initialize, 1000));
+//if (!isDragging) {
+let isDragging = false;
+//}  
+const throttledInitialize = throttle(initialize, 1000);
+
+htmx.onLoad(throttledInitialize);
 
 
+function throttle(func, delay) {
+    let lastCallTime = 0;
+    let timeout;
+
+    return function (...args) {
+        const currentTime = Date.now();
+        const remainingTime = delay - (currentTime - lastCallTime);
+
+        if (remainingTime <= 0) {
+            clearTimeout(timeout);
+            lastCallTime = currentTime;
+            func.apply(this, args);
+        } else {
+            clearTimeout(timeout);
+            timeout = setTimeout(() => {
+                lastCallTime = Date.now();
+                func.apply(this, args);
+            }, remainingTime);
+        }
+    };
+}
+
+
+function initialize() { console.log("initialize");
+    initializeSortable();
+    toggleDropzones();
+    
+
+    /* observeRecursiveLists(() => {
+        console.log('New elements detected, re-initializing...');
+        initializeSortable(); // Re-initialize for new elements.
+        toggleDropzones();
+        
+    }); */
+
+    console.log('App initialized.');
+}
 console.log("sortables.js loaded");
+
+
 
 function toggleDropzones() { console.log("toggleDropzones");
     //setTimeout(() => {
@@ -111,7 +159,7 @@ function toggleDropzones() { console.log("toggleDropzones");
                 //console.log(`not occupied: ${dropzone.dataset.name}`);
                 accordionButton.classList.add("d-none");
                 sublists.classList.add("d-none");
-                if (window.isDragging) {
+                if (isDragging) {
                     dropzone.classList.remove("d-none");
                 } else {
                     dropzone.classList.add("d-none");
@@ -127,9 +175,9 @@ function toggleDropzones() { console.log("toggleDropzones");
 
 
 function updateDropzones(evt) {
-    if (window.isDragging) {
-        toggleDropzones(window.isDragging);
-        console.log("window.isDragging t: " + window.isDragging);
+    if (isDragging) {
+        toggleDropzones(isDragging);
+        console.log("isDragging t: " + isDragging);
         const draggedItem = evt.dragged; // The item being dragged
         const targetItem = evt.related; // The item currently being hovered over
         console.log("targetItem?");
@@ -175,21 +223,26 @@ function updateDropzones(evt) {
             console.log("targetItem NO");
         }
     } else {
-        console.log("window.isDragging f: " + window.isDragging);
-        toggleDropzones(window.isDragging);
+        console.log("isDragging f: " + isDragging);
+        toggleDropzones(isDragging);
     }
 }
 
+
+
 function initializeSortable() { console.log("initializeSortable triggered");
+        // Clean up first
+        //cleanupSortables();
+
     //setTimeout(() => {
     //() => {
     // fix for error Uncaught SyntaxError: redeclaration of const typeslist
     //console.log("htmx.onLoad triggered");
     const sortableElements = document.querySelectorAll(".sortable");
-
     const typeslist = document.querySelector(".typeslist");
+
     if (typeslist !== null) {
-        new Sortable(typeslist, {
+        const instance = new Sortable(typeslist, {
             group: {
                 name: "typeslist",
                 pull: "clone",
@@ -202,6 +255,7 @@ function initializeSortable() { console.log("initializeSortable triggered");
             selectedClass: "selected", // The class applied to the selected items
             fallbackTolerance: 3, // So that we can select items on mobile
         });
+        //window.sortableInstances.set(typeslist, instance);
     }
 
     //document.addEventListener("DOMContentLoaded", updateDropzones);
@@ -209,10 +263,9 @@ function initializeSortable() { console.log("initializeSortable triggered");
 
     sortableElements.forEach(function (sortableElement) {
         const model = sortableElement.dataset.model;
-
         //console.log("sortableElement: " + sortableElement);
         if (sortableElement !== null) {
-            const sortlist = new Sortable(sortableElement, {
+            const instance = new Sortable(sortableElement, {
                 //const sortlist = Sortable.create(sortableElement, {
                 //const roomlist = document.getElementById("");
                 //const roomsort = new Sortable(roomlist, {
@@ -221,7 +274,6 @@ function initializeSortable() { console.log("initializeSortable triggered");
                     pull: true,
                     put: ["typeslist", model],
                 },
-
                 animation: 150,
                 swapThreshold: 0.65,
                 invertSwap: true,
@@ -238,15 +290,15 @@ function initializeSortable() { console.log("initializeSortable triggered");
                 //removeOnSpill: true,
                 revertOnSpill: true, //needs to be revert to work with the confirm dialog
                 onStart: function (evt) {
-                    window.isDragging = true;
+                    isDragging = true;
                     //clearAndInitializeTooltips();
-                    console.log("onStart window.isDragging " + window.isDragging);
+                    console.log("onStart isDragging " + isDragging);
                     originalIndex = evt.oldIndex; // Store the original index
                     draggedItem = evt.item; // Store the dragged item reference
                     fromList = evt.from; // Store the from list reference
                 },
                 onMove: function (evt) {
-                    console.log("onMove window.isDragging " + window.isDragging);
+                    console.log("onMove isDragging " + isDragging);
                     updateDropzones(evt);
                 },
 
@@ -524,7 +576,7 @@ function initializeSortable() { console.log("initializeSortable triggered");
 
                     //sublists.innerHTML = dropzone.innerHTML;
                     //dropzone.innerHTML = ""; // Clear original dropzone
-                    console.log("window.isDragging onAdd: " + window.isDragging);
+                    console.log("isDragging onAdd: " + isDragging);
                     updateDropzones(evt)
                 },
                 //Disable sorting on the `end` event
@@ -532,7 +584,7 @@ function initializeSortable() { console.log("initializeSortable triggered");
                     console.log("onEnd event triggered");
                     //this.option("disabled", true);
                     // Hide all dropzones when dragging ends
-                    window.isDragging = false;
+                    isDragging = false;
                     const dropzone = evt.item.parentElement; //from.querySelector(".dropzone");
 
                     if (dropzone) {
@@ -560,7 +612,7 @@ function initializeSortable() { console.log("initializeSortable triggered");
                     });
                     //sublists.innerHTML = dropzone.innerHTML;
                     //dropzone.innerHTML = ""; // Clear original dropzone
-                    console.log("window.isDragging onEnd: " + window.isDragging);
+                    console.log("isDragging onEnd: " + isDragging);
                     updateDropzones(evt);
                     //console.log("sortableElement:", sortableElement)
                 },
@@ -683,6 +735,7 @@ function initializeSortable() { console.log("initializeSortable triggered");
             //               sortlist.option("disabled", false);
             //           });
             //       });
+            //window.sortableInstances.set(sortableElement, instance);
         }
     });
     //}, 100);
@@ -695,3 +748,4 @@ function initializeSortable() { console.log("initializeSortable triggered");
 //     //clearAndInitializeTooltips();
 //     initializeSortable();
 // });
+})();

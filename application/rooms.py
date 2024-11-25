@@ -143,7 +143,13 @@ def check_each_floor_for_rooms():
     # If all floors have rooms, return a default value indicating this
     return None, True
 
-        
+@rooms.route('/room/<string:list_type>/<int:list_id>', methods=['GET'])
+@login_required
+def room_dashboard():
+    #todo: add room dashboard
+    return render_template('room/index.html.jinja')
+
+
 @rooms.route('/map/', methods=['GET'])
 @rooms.route('/map/<int:floor_id>', methods=['GET'])
 @login_required
