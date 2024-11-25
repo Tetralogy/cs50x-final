@@ -4,7 +4,7 @@ from flask_login import current_user, login_required
 from sqlalchemy import select
 from application.extension import db
 
-from application.database.models import Floor, Room, UserList
+from application.database.models import Floor, Room, UserList, UserListEntry
 from application.floors import set_active_floor
 from application.lists import add_item_to_list, create_user_list, get_list_entries_for_item, get_userlist
 
@@ -109,6 +109,7 @@ def set_active_room(room_id):
     room = db.session.execute(room_query).scalar_one_or_none()'''
     if room.home_id == current_user.active_home_id:
         current_user.active_home.active_room = room
+        current_user.active_home.active_floor_id = room.floor_id
         
         db.session.commit()
         print(f'current_user.active_home.active_room: {current_user.active_home.active_room}')
@@ -143,11 +144,20 @@ def check_each_floor_for_rooms():
     # If all floors have rooms, return a default value indicating this
     return None, True
 
-@rooms.route('/room/<string:list_type>/<int:list_id>', methods=['GET'])
+@rooms.route('/room/<int:list_id>', methods=['GET'])
 @login_required
-def room_dashboard():
+def room_dashboard(list_id: int):
+    userlist = db.get_or_404(UserList, list_id)
+    if userlist.parent_entry_id: 
+        list_parent_entry = db.get_or_404(UserListEntry, userlist.parent_entry_id)
+        if list_parent_entry.item_model == 'Room':
+            room_id = list_parent_entry.item_id
+            set_active_room(room_id)
+        return render_template('walkthrough/index.html.jinja') #temporary
+    else: #probably a home list
+        return redirect(url_for('rooms.map')) #temporary
     #todo: add room dashboard
-    return render_template('room/index.html.jinja')
+    #return render_template('room/index.html.jinja')
 
 
 @rooms.route('/map/', methods=['GET'])

@@ -52,6 +52,14 @@
         >
             quicknote
         </button>
+        <button
+            hx-put="/walkthrough/steps"
+            hx-target="#walkthrough-steps"
+            hx-vals='{"view": "sort"}'
+            class="btn btn-primary"
+        >
+            sort
+        </button>
 
         {#
     <button
