@@ -36,56 +36,53 @@ has_children 1: {{ ns.has_children }}
                 style="display: none;"
             {% endif %} #}
 
-    
-        
-            
-                
-            <div class="hstack gap-3">
-                        <div>
-                            <button
-                            id="accordion-button-{{ entry.item_model }}list-{{ entry.id }}"
-                                class="accordion-button p-0 w-auto
+    <div class="hstack gap-3">
+        <div>
+            <button
+                id="accordion-button-{{ entry.item_model }}list-{{ entry.id }}"
+                class="accordion-button p-0 w-auto
                                 {% if ns.has_children %}{% else %}d-none{% endif %}"
-                                type="button"
-                                data-bs-toggle="collapse"
-                                data-bs-target="#sublist-collapse-{{ entry.item_model }}list-{{ entry.id }}"
-                                aria-expanded="false"
-                            >
-                                {% include 'base/parts/debug/listname.html.jinja' %}
-                            </button>
-                        </div>
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#sublist-collapse-{{ entry.item_model }}list-{{ entry.id }}"
+                aria-expanded="false"
+            >
+                {% include 'base/parts/debug/listname.html.jinja' %}
+            </button>
+        </div>
+        <div>
+            <div class="form-check">
+                <input
+                    class="form-check-input"
+                    hx-put="/update/{{ entry.id }}"
+                    type="checkbox"
+                    value=""
+                    id="flexCheckDefault"
+                />
+                <label class="form-check-label" for="flexCheckDefault"
+                    >{#TODO:CHECKBOX hx-put route#}
+                    <input type="hidden" name="items" value="{{ entry.id }}" />
+                    {{ entry.get_item().name }}
+                    {% include 'base/parts/debug/order.html.jinja' %}
+                </label>
+            </div>
+        </div>
+        <div class="vr"></div>
+        <div>task_description</div>
+        <div class="ms-auto vr"></div>
+        <div class="">task_due_date</div>
 
-<div>
-                        <div class="form-check">
-                          <input class="form-check-input" hx-put="/update/{{ entry.id }}" type="checkbox" value="" id="flexCheckDefault">
-      <label class="form-check-label" for="flexCheckDefault">{#TODO:CHECKBOX hx-put route#}
-        <input type="hidden" name="items" value="{{ entry.id }}" />
-                        {{ entry.get_item().name }}
-                        {% include 'base/parts/debug/order.html.jinja' %}
-      </label>
+        <div
+            class="ms-auto sortable dropzone d-none"
+            id="dropzone-{{ entry.item_model }}list-{{ entry.id }}"
+            data-id="{{ entry.id }}"
+            data-name="{{ entry.get_item().name }}"
+            data-order="{{ entry.order }}"
+            data-model="{{ entry.item_model }}"
+            data-accordion_button="#accordion-button-{{ entry.item_model }}list-{{ entry.id }}"
+            data-sublists_div="sublists-{{ entry.item_model }}list-{{ entry.id }}"
+        ></div>
     </div>
-</div>
-<div class="vr"></div>
-<div>task_description</div>
-<div class="ms-auto vr"></div>
-<div class="">task_due_date</div>
 
-
-                <div
-                        class="ms-auto sortable dropzone d-none"
-                        id="dropzone-{{ entry.item_model }}list-{{ entry.id }}"
-                        data-id="{{ entry.id }}"
-                        data-name="{{ entry.get_item().name }}"
-                        data-order="{{ entry.order }}"
-                        data-model="{{ entry.item_model }}"
-                        data-accordion_button="#accordion-button-{{ entry.item_model }}list-{{ entry.id }}"
-                        data-sublists_div="sublists-{{ entry.item_model }}list-{{ entry.id }}"
-                    >
-                    
-                    </div>
-            
-    </div>
-        
-
-        {% include 'lists/sublist_loader.html.jinja' %}
+    {% include 'lists/sublist_loader.html.jinja' %}
 </li>
