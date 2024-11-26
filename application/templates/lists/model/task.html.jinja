@@ -60,7 +60,7 @@ has_children 1: {{ ns.has_children }}
                     id="flexCheckDefault"
                 />
                 <label class="form-check-label" for="flexCheckDefault"
-                    >{#TODO:CHECKBOX hx-put route#}
+                    >{#Bug:CHECKBOX hx-put route#}
                     <input type="hidden" name="items" value="{{ entry.id }}" />
                     {{ entry.get_item().name }}
                     {% include 'base/parts/debug/order.html.jinja' %}
