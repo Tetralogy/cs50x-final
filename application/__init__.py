@@ -90,7 +90,6 @@ def create_app(config_filename=None):
     from .auth import auth
     from .database.models import Base, models, User
     from .utils import utils
-    from .crud import crud
     from .upload import upload
     from .annotate import annotate
     from .onboard import onboard
@@ -118,7 +117,6 @@ def create_app(config_filename=None):
     app.register_blueprint(auth)
     app.register_blueprint(models)
     app.register_blueprint(utils)
-    app.register_blueprint(crud)
     app.register_blueprint(upload)
     app.register_blueprint(annotate)
     app.register_blueprint(onboard)

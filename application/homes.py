@@ -75,8 +75,8 @@ def home_setup():
         return redirect(url_for('homes.home_size'))
     if current_home.floors:
         for floor in current_home.floors: # check if all floors have rooms
-            print(f'len(floor.rooms) {floor} = {len(floor.rooms)}')
-            if len(floor.rooms) == 0:
+            print(f'floor.rooms.count() {floor} = {floor.rooms.count()}')
+            if floor.rooms.count() == 0:
                 print(f'floor {floor.name} has no rooms')
                 flash(f'floor {floor.name} has no rooms' , category='danger')
                 return redirect(url_for('rooms.define_rooms', floor_id=floor.id))

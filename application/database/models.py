@@ -1,8 +1,10 @@
+import enum
 from flask import Blueprint
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import Mapped, mapped_column, relationship, column_property
-from sqlalchemy import Boolean, String, Integer, DateTime, UniqueConstraint, and_, func, ForeignKey, select, text, event
+from sqlalchemy import Boolean, String, Integer, DateTime, UniqueConstraint, and_, func, ForeignKey, select, text, event, Enum
 from sqlalchemy.ext.hybrid import hybrid_property
+from sqlalchemy.sql import func
 from datetime import datetime, timezone
 from typing import Optional, List
 from sqlalchemy.ext.declarative import as_declarative, declared_attr
@@ -238,44 +240,52 @@ class Photo(db.Model):
     photo_timestamp: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=func.now())
     user = relationship("User", back_populates="photos")
     annotations = relationship('TaskAnnotation', back_populates="photos", lazy='dynamic')
-
+    
+class TaskStatus(enum.Enum):
+    PENDING = "pending"
+    IN_PROGRESS = "in_progress"
+    COMPLETED = "completed"
+    CANCELLED = "cancelled"
+    
 class Task(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey('user.id'))
     name: Mapped[str] = mapped_column(default=text("'Task #' || (last_insert_rowid() + 1)"))
     task_description: Mapped[str] = mapped_column(nullable=True)
-    task_created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=func.now())
-    task_updated_at: Mapped[datetime] = mapped_column('task_updated_at', DateTime(timezone=True), default=func.now())
-    task_due_date: Mapped[datetime] = mapped_column(nullable=True)
-    task_priority: Mapped[int] = mapped_column(nullable=True)
-    task_status: Mapped[str] = mapped_column(nullable=True)
-    task_tags: Mapped[str] = mapped_column(nullable=True)
-    task_scheduled_time: Mapped[datetime] = mapped_column(nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=func.now())
+    last_updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=func.now(), onupdate=func.now())
+    due_date: Mapped[datetime] = mapped_column(nullable=True)
+    priority: Mapped[int] = mapped_column(nullable=True)
+    status: Mapped[TaskStatus] = mapped_column(Enum(TaskStatus), nullable=False, default=TaskStatus.PENDING)
+    tags: Mapped[str] = mapped_column(nullable=True)
+    scheduled_time: Mapped[datetime] = mapped_column(nullable=True)
     completed_at: Mapped[Optional[datetime]] = mapped_column(nullable=True)
+    archived: Mapped[bool] = mapped_column(Boolean, server_default="0")
     user = relationship("User", back_populates="tasks")
     progress = relationship('TaskProgress', back_populates="tasks")
     annotations = relationship("TaskAnnotation", back_populates="tasks")
-    '''@property
-    def as_list_item(self):
-        return {
-            'id': self.id,
-            'type': 'task',
-            'name': self.task_title,
-            'additional_info': f"Due: {self.task_due_date.strftime('%Y-%m-%d') if self.task_due_date else 'Not set'}"
-        }'''
     
-    @hybrid_property
-    def task_updated_at(self):
-        return self._task_updated_at
-
-    @task_updated_at.setter
-    def task_updated_at(self, value):
-        self._task_updated_at = value
+    def mark_as_completed(self):
+        self.status = TaskStatus.COMPLETED
+        self.completed_at = datetime.now()
+        db.session.commit()
+        print(f'{self.name} Completed at: {self.completed_at}')
+        
+    def mark_as_pending(self):
+        self.status = TaskStatus.PENDING
+        self.completed_at = None
+        db.session.commit()
 
 @event.listens_for(Task, 'before_update')
 def receive_before_update(mapper, connection, target):
-    target.task_updated_at = func.now()
+    target.last_updated_at = func.now()
+    
+    # Check if the status is being set to COMPLETED
+    if target.status == TaskStatus.COMPLETED and target.completed_at is None:
+        target.completed_at = datetime.now()
+        
 
+    
 class TaskAnnotation(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     task_id: Mapped[int] = mapped_column(ForeignKey('task.id'))

@@ -11,7 +11,6 @@ from application.extension import db
     
 lists = Blueprint('lists', __name__)
 
-# Helper functions for CRUD operations
 def create_user_list(list_type: str, list_name: str, parent_entry_id: int = None) -> UserList:
     if not list_type:
         raise ValueError('list_type argument is required')
@@ -719,6 +718,23 @@ def move_entry(moved_entry_id: int = None, list_id: int = None):
             f'new_list_id: {moved_entry.user_list_id}, new_list_name: {new_list.list_name}'
         )
     #5. return
+    return ('', 204)
+
+@lists.route('/update/<int:entry_id>', methods=['PUT'])
+@login_required
+def update(entry_id): #currently only for tasks
+    entry = db.get_or_404(UserListEntry, entry_id)
+    print(f'entry_id: {entry_id}, entry.item_model: {entry.item_model}')
+    if entry.item_model == 'Task':
+        print(f'test')
+        task = entry.get_item()
+        is_checked = request.form.get('isChecked')#, 'off') == 'on'
+        print(f'is_checked: {is_checked}')
+        if is_checked:
+            print(f'{task.name} is_checked: {is_checked}')
+            task.mark_as_completed()
+        else:
+            task.mark_as_pending()
     return ('', 204)
 
 @lists.route('/update_list_order/', methods=['PUT', 'POST', 'DELETE', 'GET'])
