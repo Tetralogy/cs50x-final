@@ -133,6 +133,25 @@
         console.log("initializeSortable triggered");
         const sortableElements = document.querySelectorAll(".sortable");
         const typeslist = document.querySelector(".typeslist");
+        const gridtest = document.querySelector(".gridtest");
+        const tasktest = document.querySelector(".tasktest");
+       // xxx const sortableImageContainer = document.querySelector(".sortable-image-container");
+//#BUG 1: create sortableImageContainer sortable function
+//#BUG 2: add tasks to sortableImageContainer dropzone
+//#todo 0. take wide pic of room as main "before" proof or update proof pic
+//#todo 1. take closer "before" pics of each thing to be done
+    //#todo 1. modal popup to add tasks to each "before pic" in qucknote
+    //#todo 2. add other tasks to main cover image of room to be sorted later
+//#todo 2. in sort page for room, add tasks to sortableImageContainer dropzone on each photo and drill into each photo to order the tasks
+//3.#todo show master list with most relevant task to do next when in cleaning mode, figure out sorting for tasks based on
+    //1. due date
+    //2. room adjacency to task
+    //3. sorted order priority
+//4. when user is doing task in a room and they haven't taken a before pic, ask to take a before pic
+//4.#todo when user checks off all tasks in a list, prompt to take an after pic as proof
+        //1. set pic as new cover image of room
+        //2. if they don't take an after pic, mark photo for room as old
+
 
         if (typeslist !== null) {
             const instance = new Sortable(typeslist, {
@@ -149,6 +168,86 @@
                 fallbackTolerance: 3, // So that we can select items on mobile
             });
         }
+        if (gridtest !== null) {
+            const instance = new Sortable(gridtest, {
+                group: {
+                    name: "gridtest",
+                    pull: false,
+                    put: true,
+                },
+                //swap: false, // Enable swap mode
+                //swapClass: "sortable-swap-highlight", // Class name for swap item (if swap mode is enabled)
+                animation: 150,
+                sort: true,
+                cursor: "move",
+                multiDrag: true, // Enable multi-drag
+                selectedClass: "selected", // The class applied to the selected items
+                //forceFallback: true,  // ignore the HTML5 DnD behaviour and force the fallback to kick in
+                fallbackOnBody: true,  // Ensure the clone is appended to the body
+                fallbackClass: "test-fallback",  // Class name for the cloned DOM Element when using forceFallback
+                fallbackTolerance: 3, // So that we can select items on mobile
+                ghostClass: "none-ghost", // Class name for the drop placeholder
+                onStart: function (evt) {
+                        // Create a clone manually (the library also creates a clone but invisible)
+    const original = evt.item;
+    const clone = original.cloneNode(true);
+    clone.classList.add('clone-placeholder');
+    clone.setAttribute('id', 'cl');
+                    //instance.option('sort', false);
+                    /* const itemEl = evt.item;
+                    const oldIndex = evt.oldIndex;
+                    const originalParent = evt.from;
+                    
+                    originalParent.insertBefore(itemEl, originalParent.children[oldIndex]); */
+                },
+
+                onMove: function (evt, originalEvent) {
+                    
+                },
+                onAdd: function (evt) {
+                    if (evt.from !== gridtest) {
+                        const itemEl = evt.item; // dragged HTMLElement
+                        const clonedNode = evt.item.cloneNode(true);
+                        const originalParent = evt.from;
+                        const newParent = evt.to;
+                        const oldIndex = evt.oldIndex;
+                        const newIndex = evt.newIndex;
+                        newParent.insertBefore(clonedNode, newParent.children[newIndex])
+                        originalParent.insertBefore(itemEl, originalParent.children[oldIndex]);
+                }
+                },
+                onEnd: function (evt) {
+                    /* instance.option('sort', true);
+                    const itemEl = evt.item;
+                    const newIndex = evt.newIndex;
+                    console.log("onEnd newIndex: " + newIndex);
+                    const newParent = evt.to;
+
+                    newParent.insertBefore(itemEl, newParent.children[newIndex]); */
+                }
+            });
+        }
+
+        if (tasktest !== null) {
+            const instance = new Sortable(tasktest, {
+                group: {
+                    name: "tasktest",
+                    pull: true,
+                    put: true,
+                },
+                //swap: true, // Enable swap mode
+                //swapClass: "sortable-swap-highlight", // Class name for swap item (if swap mode is enabled)
+                revertClone: true,
+                animation: 150,
+                sort: true,
+                cursor: "move",
+                multiDrag: true, // Enable multi-drag
+                selectedClass: "selected", // The class applied to the selected items
+                fallbackTolerance: 3, // So that we can select items on mobile
+            });
+
+
+        }
 
         sortableElements.forEach(function (sortableElement) {
             const model = sortableElement.dataset.model;
@@ -161,7 +260,7 @@
                     group: {
                         name: model, //can only move between lists of the same type
                         pull: true,
-                        put: ["typeslist", model],
+                        put: ["typeslist", model], //can only accept items from lists of the same type
                     },
                     animation: 150,
                     swapThreshold: 0.65,

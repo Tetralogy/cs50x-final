@@ -365,6 +365,19 @@ form.htmx-request {
     opacity: 0.5;
     background: #ff0000;
 }
+
+.none-ghost {
+    display: none !important;
+    opacity: 0.5;
+    background: #ff00e6;
+    
+}
+
+.test-fallback {
+    display: block !important;
+    opacity: 0.5;
+    background: #ff00e6;
+}
 .selected {
     opacity: 0.5;
     background: #99ff00;
@@ -381,7 +394,7 @@ form.htmx-request {
 
 /* scale titles */
 .scalename {
-    font-size: 2vw;
+    font-size: 4vw;
     font-weight: bold;
     text-align: center;
     color: white !important;
