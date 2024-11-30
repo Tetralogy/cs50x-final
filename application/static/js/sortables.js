@@ -133,7 +133,7 @@
         console.log("initializeSortable triggered");
         const sortableElements = document.querySelectorAll(".sortable");
         const typeslist = document.querySelector(".typeslist");
-        const gridtest = document.querySelector(".gridtest");
+        const photoGrid = document.querySelector(".photogrid");
         const tasktest = document.querySelector(".tasktest");
        // xxx const sortableImageContainer = document.querySelector(".sortable-image-container");
 //#BUG 1: create sortableImageContainer sortable function
@@ -152,6 +152,7 @@
         //1. set pic as new cover image of room
         //2. if they don't take an after pic, mark photo for room as old
 
+        
 
         if (typeslist !== null) {
             const instance = new Sortable(typeslist, {
@@ -168,62 +169,144 @@
                 fallbackTolerance: 3, // So that we can select items on mobile
             });
         }
-        if (gridtest !== null) {
-            const instance = new Sortable(gridtest, {
+        if (photoGrid !== null) { let onStartSibling = null;
+            const instance = new Sortable(photoGrid, {
                 group: {
-                    name: "gridtest",
+                    name: "photogrid",
                     pull: false,
                     put: true,
                 },
                 //swap: false, // Enable swap mode
                 //swapClass: "sortable-swap-highlight", // Class name for swap item (if swap mode is enabled)
-                animation: 150,
+                animation: 0,
                 sort: true,
                 cursor: "move",
-                multiDrag: true, // Enable multi-drag
-                selectedClass: "selected", // The class applied to the selected items
+                filter: ".replaceableitem",
+                //multiDrag: true, // Enable multi-drag
+                //selectedClass: "selected", // The class applied to the selected items
                 //forceFallback: true,  // ignore the HTML5 DnD behaviour and force the fallback to kick in
                 fallbackOnBody: true,  // Ensure the clone is appended to the body
-                fallbackClass: "test-fallback",  // Class name for the cloned DOM Element when using forceFallback
+                //fallbackClass: "test-fallback",  // Class name for the cloned DOM Element when using forceFallback
                 fallbackTolerance: 3, // So that we can select items on mobile
                 ghostClass: "none-ghost", // Class name for the drop placeholder
+                swap: true,
                 onStart: function (evt) {
-                        // Create a clone manually (the library also creates a clone but invisible)
-    const original = evt.item;
-    const clone = original.cloneNode(true);
-    clone.classList.add('clone-placeholder');
-    clone.setAttribute('id', 'cl');
-                    //instance.option('sort', false);
-                    /* const itemEl = evt.item;
-                    const oldIndex = evt.oldIndex;
-                    const originalParent = evt.from;
-                    
-                    originalParent.insertBefore(itemEl, originalParent.children[oldIndex]); */
+                    onStartSibling = evt.item.nextElementSibling;
+                    this.options.swap = true;
+                    const original = evt.item;
+                    //original.classList.add('none-ghost');
+                    originalGhost = original.cloneNode(true); // Clone the original item
+                    originalGhost.classList.remove('none-ghost');
+                    originalGhost.classList.add('static-ghost'); // Add a class for styling
+                    original.parentNode.insertBefore(originalGhost, original); // Insert the ghost before the original
                 },
-
                 onMove: function (evt, originalEvent) {
+
+
+                   /*  const itemEl = evt.dragged;
+                    //console.dir(itemEl);
+                    const oldIndex = itemEl.oldIndex;
+                    //console.log(`onMove oldIndex: ${oldIndex}`);
+                    const targetItem = evt.related;
+                    //console.log(`onMove ${targetItem.textContent}`);
+                    if (targetItem.dataset.model === itemEl.dataset.model){
+                        this.options.swap = false;
+                    }
+                    else {
+                        this.options.swap = true;
+                    } */
+                    //itemEl.nextElementSibling = onStartSibling;
+                    //console.log(`onMove itemEl sibling: ${itemEl.nextElementSibling.textContent}`);
+                    //console.log(`onMove itemEl sibling: ${itemEl.nextSibling.textContent}`);
+                    //console.log(`onMove swap: ${this.options.swap}`);
+
+                },
+                onUnchoose: function (evt, originalEvent) {
+                    const itemEl = evt.item;
+                    //console.dir(itemEl);
+                    const oldIndex = itemEl.oldIndex;
+                    //console.dir(evt);
+                    //console.dir(originalEvent);
+                    //console.log(`onMove oldIndex: ${oldIndex}`);
+                    //const targetItem = evt.to.children[(evt.newIndex)];
+                    //console.log(`onMove ${targetItem.textContent}`);
                     
+                    /* const itemElModel = itemEl.dataset.model;
+                    const targetItemModel = evt.originalEvent.target.dataset.model;
+                    console.log(`itemEl model: ${itemElModel} , originalEvent target: ${targetItemModel}`);
+                    
+                    if (itemElModel === targetItemModel){
+                        this.options.swap = false;
+                    }
+                    else {
+                        this.options.swap = true;
+                    }
+                    console.log(`onUnchoose swap: ${this.options.swap}`); */
                 },
                 onAdd: function (evt) {
-                    if (evt.from !== gridtest) {
-                        const itemEl = evt.item; // dragged HTMLElement
-                        const clonedNode = evt.item.cloneNode(true);
-                        const originalParent = evt.from;
-                        const newParent = evt.to;
-                        const oldIndex = evt.oldIndex;
-                        const newIndex = evt.newIndex;
+                    console.log(`onAdd evt.from: ${evt.from}, evt.to: ${evt.to}, evt.item: ${evt.item}`);
+                    const itemEl = evt.item; // dragged HTMLElement
+                    const clonedNode = evt.item.cloneNode(true);
+                    const originalParent = evt.from;
+                    const newParent = evt.to;
+                    const oldIndex = evt.oldIndex;
+                    let newIndex = evt.newIndex;
+                    //if from tasklist, replace target item with cloned item
+                    let targetItem = evt.to.children[(evt.newIndex + 1)]; // The item at the new index
+                    console.log(`onAdd targetItem: ${targetItem.textContent}`);
+
+                    /* if (targetItem.dataset.model === itemEl.dataset.model){
+                        this.options.swap = false;
+                    }else {
+                        this.options.swap = true;
+                    }console.log(`onAdd swap: ${this.options.swap}`); */
+
+                    // if targetitem is a task, move itemEl to next empty index
+                    while (targetItem.dataset.model === itemEl.dataset.model) { console.log(`onAdd modelmatch targetItem: ${targetItem.textContent}`);
+                        if ((targetItem.dataset.item_id === itemEl.dataset.item_id) && (targetItem.dataset.model === itemEl.dataset.model)) {
+                        break;
+                        }
+                        newIndex += 1;
+                        targetItem = evt.to.children[(newIndex)];
+                    }
+                    if (evt.from !== photoGrid) {
+                        // check if dragged item matches an item already in gridtest
+                        const matchingDuplicate = Array.from(newParent.children).filter((item) => {
+                            return (item.dataset.item_id === itemEl.dataset.item_id) && (item.dataset.model === itemEl.dataset.model);
+                        });
+                        if (matchingDuplicate.length > 1) {
+                            matchingDuplicate.forEach((item) => {
+                                dupindex = Array.from(newParent.children).indexOf(item);
+                                if (dupindex !== newIndex) {
+                                    newParent.insertBefore(targetItem, newParent.children[dupindex])
+                                    item.remove();
+                                }
+                            })
+                        }else{
+                            targetItem.remove();
+                        }
+                    }
+                        // behave like a cloned item and put dragged item back in original position
                         newParent.insertBefore(clonedNode, newParent.children[newIndex])
                         originalParent.insertBefore(itemEl, originalParent.children[oldIndex]);
-                }
+                
                 },
                 onEnd: function (evt) {
-                    /* instance.option('sort', true);
-                    const itemEl = evt.item;
-                    const newIndex = evt.newIndex;
-                    console.log("onEnd newIndex: " + newIndex);
-                    const newParent = evt.to;
+                        // Remove the static ghost when dragging ends
+                    if (originalGhost) {
+                        originalGhost.remove();
+                        originalGhost = null;
+                        console.log("onEnd originalGhost: " + originalGhost);
+                    }
+                    
+                    //console.dir(`onEnd evt.swapitem: ${evt.swapItem}`); 
+                    //evt.swapItem = evt.item;
 
-                    newParent.insertBefore(itemEl, newParent.children[newIndex]); */
+                    //console.dir(evt.swapItem);
+
+                    
+                    
+                    console.log(`onEnd swap: ${this.options.swap}`);
                 }
             });
         }
@@ -241,12 +324,11 @@
                 animation: 150,
                 sort: true,
                 cursor: "move",
-                multiDrag: true, // Enable multi-drag
-                selectedClass: "selected", // The class applied to the selected items
+                //multiDrag: true, // Enable multi-drag
+                //selectedClass: "selected", // The class applied to the selected items
                 fallbackTolerance: 3, // So that we can select items on mobile
+                //ghostClass: "none-ghost", // Class name for the drop placeholder
             });
-
-
         }
 
         sortableElements.forEach(function (sortableElement) {

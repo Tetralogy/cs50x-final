@@ -41,13 +41,13 @@
   <img src="/media/uploads/1_1732308837_image.jpg" alt="Overlay Example" class="img-fluid">
 
   <!-- Overlay Grid -->
-  <div class="position-absolute top-0 start-0 w-100 h-100 row g-0 gridtest">
+  <div class="position-absolute top-0 start-0 w-100 h-100 row g-0 photogrid">
     <!-- Row 1 -->
     {% set rows = 12 %}
     {% set columns = 12 %}
     {% set cells = (columns * rows)+1 %}
 {% for i in range(1, cells) %}
-<div id="div-{{i}}" class="col-1 border border-primary d-flex justify-content-center align-items-center">{{ i }}</div>
+<div id="div-{{i}}" data-item_id="item_id-{{i}}" data-model="photogrid" class="col-1 {# border border-primary #} d-flex justify-content-center align-items-center replaceableitem">{# {{ i }} #}</div>
 {% endfor %}
 
   </div>
@@ -64,7 +64,13 @@
     {% set columns = 12 %}
     {% set cells = (columns * rows)+1 %}
 {% for i in range(1, cells) %}
-<div id="div-{{i}}" class="col-1 border bg-dark border-primary d-flex justify-content-center align-items-center">{{ i }}</div>
+<div id="div-{{i}}" data-item_id="item_id-{{i}}" data-model="tasktest" class="col-1 {# border bg-dark border-primary #} shadow d-flex justify-content-center align-items-center testytask">
+
+<div class="position-relative py-2 px-4 text-bg-secondary border border-secondary rounded-pill">
+  Marker{{ i }}  <svg width="1em" height="1em" viewBox="0 0 16 16" class="position-absolute top-100 start-50 translate-middle mt-1" fill="var(--bs-secondary)" xmlns="http://www.w3.org/2000/svg"><path d="M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/></svg>
+</div>
+
+</div>
 {% endfor %}
 
   </div>

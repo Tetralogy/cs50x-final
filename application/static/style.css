@@ -370,8 +370,16 @@ form.htmx-request {
     display: none !important;
     opacity: 0.5;
     background: #ff00e6;
+    height: auto;
     
 }
+/* Style the static ghost to look like the original item */
+.static-ghost {
+    background: #ff00e6;
+    opacity: 0.5;          /* Make it semi-transparent */
+    pointer-events: none;  /* Disable interactions */
+    /* position: relative; */    /* Ensure it stays in the flow */
+  }
 
 .test-fallback {
     display: block !important;
