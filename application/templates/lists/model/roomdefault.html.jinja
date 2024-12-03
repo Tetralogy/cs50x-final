@@ -20,4 +20,16 @@
 {#     </div>
 </div> #}
 
-{% include 'lists/model/generic_text.html.jinja' %}
+<li
+    class="list-group-item flex-fill grabbable"
+    id="{{ entry.item_model }}list-{{ entry.id }}"
+    data-id="{{ entry.id }}"
+    data-item_id="{{ entry.item_id }}"
+    data-name="{{ entry.get_item().name }}"
+    data-order="{{ entry.order }}"
+    data-list_id="{{ entry.user_list_id }}"
+    data-model="{{ entry.item_model }}"
+    >
+{{ entry.get_item().name }}
+</li>
+{# {% include 'lists/model/generic_text.html.jinja' %} #}

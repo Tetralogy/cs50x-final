@@ -135,25 +135,25 @@
         const typeslist = document.querySelector(".typeslist");
         const photoGrid = document.querySelector(".photogrid");
         const tasktest = document.querySelector(".tasktest");
-       // xxx const sortableImageContainer = document.querySelector(".sortable-image-container");
-       //bug dragging marker on image floats ghost outside page
-//#BUG 1: create sortableImageContainer sortable function
-//#BUG 2: add tasks to sortableImageContainer dropzone
-//#todo 0. take wide pic of room as main "before" proof or update proof pic
-//#todo 1. take closer "before" pics of each thing to be done
-    //#todo 1. modal popup to add tasks to each "before pic" in qucknote
-    //#todo 2. add other tasks to main cover image of room to be sorted later
-//#todo 2. in sort page for room, add tasks to sortableImageContainer dropzone on each photo and drill into each photo to order the tasks
-//3.#todo show master list with most relevant task to do next when in cleaning mode, figure out sorting for tasks based on
-    //1. due date
-    //2. room adjacency to task
-    //3. sorted order priority
-//4. when user is doing task in a room and they haven't taken a before pic, ask to take a before pic
-//4.#todo when user checks off all tasks in a list, prompt to take an after pic as proof
+        // xxx const sortableImageContainer = document.querySelector(".sortable-image-container");
+
+        //1: create sortableImageContainer sortable function
+        //#BUG 2: add tasks to sortableImageContainer dropzone
+        //#todo 0. take wide pic of room as main "before" proof or update proof pic
+        //#todo 1. take closer "before" pics of each thing to be done
+        //#todo 1. modal popup to add tasks to each "before pic" in qucknote
+        //#todo 2. add other tasks to main cover image of room to be sorted later
+        //#todo 2. in sort page for room, add tasks to sortableImageContainer dropzone on each photo and drill into each photo to order the tasks
+        //3.#todo show master list with most relevant task to do next when in cleaning mode, figure out sorting for tasks based on
+        //1. due date
+        //2. room adjacency to task
+        //3. sorted order priority
+        //4. when user is doing task in a room and they haven't taken a before pic, ask to take a before pic
+        //4.#todo when user checks off all tasks in a list, prompt to take an after pic as proof
         //1. set pic as new cover image of room
         //2. if they don't take an after pic, mark photo for room as old
 
-        
+
 
         if (typeslist !== null) {
             const instance = new Sortable(typeslist, {
@@ -170,7 +170,8 @@
                 fallbackTolerance: 3, // So that we can select items on mobile
             });
         }
-        if (photoGrid !== null) { let onStartSibling = null;
+        if (photoGrid !== null) {
+            let onStartSibling = null;
             const instance = new Sortable(photoGrid, {
                 group: {
                     name: "photogrid",
@@ -194,21 +195,22 @@
                 onStart: function (evt) {
                     onStartSibling = evt.item.nextElementSibling;
                     this.options.swap = true;
-                    
+
                     const original = evt.item;
                     //original.classList.add('static-ghost');
                     originalGhost = original.cloneNode(true); // Clone the original item
                     //originalGhost.classList.remove('static-ghost');
                     originalGhost.classList.add('d-none'); // Add a class for styling
                     original.parentNode.insertBefore(originalGhost, original); // Insert the ghost before the original (swap in same position)
-                    
+
                 },
                 onChange: function (evt, originalEvent) {
-                    if (evt.from !== evt.to) { console.log("onChange from other list");
+                    if (evt.from !== evt.to) {
+                        console.log("onChange from other list");
                         //evt.item.classList.add('static-ghost');
                         //console.dir(evt.to.children[evt.newIndex]);
                         evt.to.children[evt.newIndex].classList.add('none-ghost');
-                        
+
 
 
                         /* const original = evt.item;
@@ -220,26 +222,27 @@
                     }
 
 
-                /*  const itemEl = evt.dragged;
-                    //console.dir(itemEl);
-                    const oldIndex = itemEl.oldIndex;
-                    //console.log(`onMove oldIndex: ${oldIndex}`);
-                    const targetItem = evt.related;
-                    //console.log(`onMove ${targetItem.textContent}`);
-                    if (targetItem.dataset.model === itemEl.dataset.model){
-                        this.options.swap = false;
-                    }
-                    else {
-                        this.options.swap = true;
-                    } */
+                    /*  const itemEl = evt.dragged;
+                        //console.dir(itemEl);
+                        const oldIndex = itemEl.oldIndex;
+                        //console.log(`onMove oldIndex: ${oldIndex}`);
+                        const targetItem = evt.related;
+                        //console.log(`onMove ${targetItem.textContent}`);
+                        if (targetItem.dataset.model === itemEl.dataset.model){
+                            this.options.swap = false;
+                        }
+                        else {
+                            this.options.swap = true;
+                        } */
                     //itemEl.nextElementSibling = onStartSibling;
                     //console.log(`onMove itemEl sibling: ${itemEl.nextElementSibling.textContent}`);
                     //console.log(`onMove itemEl sibling: ${itemEl.nextSibling.textContent}`);
                     //console.log(`onMove swap: ${this.options.swap}`);
 
                 },
-                onUnchoose: function (evt, originalEvent) { console.log("onUnchoose");
-                    
+                onUnchoose: function (evt, originalEvent) {
+                    console.log("onUnchoose");
+
                     //const itemEl = evt.item;
                     //console.dir(itemEl);
                     //const oldIndex = itemEl.oldIndex;
@@ -248,7 +251,7 @@
                     //console.log(`onMove oldIndex: ${oldIndex}`);
                     //const targetItem = evt.to.children[(evt.newIndex)];
                     //console.log(`onMove ${targetItem.textContent}`);
-                    
+
                     /* const itemElModel = itemEl.dataset.model;
                     const targetItemModel = evt.originalEvent.target.dataset.model;
                     console.log(`itemEl model: ${itemElModel} , originalEvent target: ${targetItemModel}`);
@@ -281,9 +284,10 @@
                     }console.log(`onAdd swap: ${this.options.swap}`); */
 
                     // if targetitem is a task, move itemEl to next empty index
-                    while (targetItem.dataset.model === itemEl.dataset.model) { console.log(`onAdd modelmatch targetItem: ${targetItem.textContent}`);
+                    while (targetItem.dataset.model === itemEl.dataset.model) {
+                        console.log(`onAdd modelmatch targetItem: ${targetItem.textContent}`);
                         if ((targetItem.dataset.item_id === itemEl.dataset.item_id) && (targetItem.dataset.model === itemEl.dataset.model)) {
-                        break;
+                            break;
                         }
                         newIndex += 1;
                         targetItem = evt.to.children[(newIndex)];
@@ -301,30 +305,53 @@
                                     item.remove();
                                 }
                             })
-                        }else{
+                        } else {
                             targetItem.remove();
                         }
                     }
-                        // behave like a cloned item and put dragged item back in original position
-                        newParent.insertBefore(clonedNode, newParent.children[newIndex])
-                        originalParent.insertBefore(itemEl, originalParent.children[oldIndex]);
-                
+                    // behave like a cloned item and put dragged item back in original position
+                    newParent.insertBefore(clonedNode, newParent.children[newIndex])
+                    originalParent.insertBefore(itemEl, originalParent.children[oldIndex]);
+//bug: tweak and fix this
+                    if (evt.items.length > 1) { //for multi-drag
+                        evt.items.forEach((item, index) => {
+                            setTimeout(() => {
+                                // Get the corresponding new and old indices
+                                console.log("item: " + item);
+                                console.log("foreach more than 1 item");
+                                console.log("item.dataset.name: " + item.dataset.name);
+                                const itemEl = item; // dragged HTMLElement
+                                const newIndex = evt.newIndicies[index].index;
+                                console.log("newIndex: " + newIndex);
+                                const oldIndex = evt.oldIndicies[index].index;
+                                console.log("oldIndex: " + oldIndex);
+                                addedItem(evt, itemEl, newIndex, oldIndex, model, sortableElement);
+                            }, index * 100); // Add a delay for each request so it works
+                        })
+                    } else {
+                        const itemEl = evt.item; // dragged HTMLElement
+                        const newIndex = evt.newIndex;
+                        const oldIndex = evt.oldIndex;
+                        addedItem(evt, itemEl, newIndex, oldIndex, model, sortableElement);
+                    }
+                    //addedItem(evt, itemEl, newIndex, oldIndex, model, sortableElement);
+
                 },
                 onEnd: function (evt) {
-                        // Remove the static ghost when dragging ends
+                    // Remove the static ghost when dragging ends
                     if (originalGhost) {
                         originalGhost.remove();
                         originalGhost = null;
                         console.log("onEnd originalGhost: " + originalGhost);
                     }
-                    
+
                     //console.dir(`onEnd evt.swapitem: ${evt.swapItem}`); 
                     //evt.swapItem = evt.item;
 
                     //console.dir(evt.swapItem);
 
-                    
-                    
+
+
                     console.log(`onEnd swap: ${this.options.swap}`);
                 }
             });
@@ -462,7 +489,7 @@
                         console.table("evt.items: ", evt);
                         console.table("evt.oldIndicies: ", evt.oldIndicies);
                         console.table("evt.newIndicies: ", evt.newIndicies); */
-                        if (evt.items.length > 1) {
+                        if (evt.items.length > 1) { //for multi-drag
                             evt.items.forEach((item, index) => {
                                 setTimeout(() => {
                                     // Get the corresponding new and old indices
@@ -474,108 +501,16 @@
                                     console.log("newIndex: " + newIndex);
                                     const oldIndex = evt.oldIndicies[index].index;
                                     console.log("oldIndex: " + oldIndex);
-                                    added(itemEl, newIndex, oldIndex);
-                                }, index * 100); // Add a delay for each request
+                                    addedItem(evt, itemEl, newIndex, oldIndex, model, sortableElement);
+                                }, index * 100); // Add a delay for each request so it works
                             })
                         } else {
                             const itemEl = evt.item; // dragged HTMLElement
                             const newIndex = evt.newIndex;
                             const oldIndex = evt.oldIndex;
-                            added(itemEl, newIndex, oldIndex);
+                            addedItem(evt, itemEl, newIndex, oldIndex, model, sortableElement);
                         }
-                        function added(itemEl, newIndex, oldIndex) {
-                            const addedNewEntry = itemEl.dataset.name;
-                            const moved_entry_id = itemEl.dataset.id;
-
-                            const originalParent = evt.from;
-                            const list_id = sortableElement.dataset.list_id;
-                            //moved_entry_id
-                            const recieving_entry_id =
-                                sortableElement.dataset.id;
-                            console.log(
-                                "moved_entry_id: " +
-                                moved_entry_id +
-                                " recieving_entry_id: " +
-                                recieving_entry_id +
-                                " list_id: " +
-                                list_id,
-                            );
-                            console.log(
-                                "itemEl.dataset.model: " +
-                                itemEl.dataset.model +
-                                " sortableElement.dataset.model: " +
-                                model,
-                            );
-                            const isList =
-                                sortableElement.dataset.isList === "true";
-                            console.log(
-                                "recieving sortableElement isList: " +
-                                isList,
-                            );
-                            if (isList) {
-                                console.log("isList: " + isList);
-                            }
-                            if (
-                                !moved_entry_id ||
-                                (!list_id && !recieving_entry_id)
-                            ) {
-                                console.log(
-                                    "missing moved_entry_id: " +
-                                    moved_entry_id +
-                                    " recieving_entry_id: " +
-                                    recieving_entry_id +
-                                    " list_id: " +
-                                    list_id +
-                                    " isList: " +
-                                    isList,
-                                );
-                                originalParent.insertBefore(
-                                    itemEl,
-                                    originalParent.children[oldIndex],
-                                );
-                                return;
-                            }
-                            console.log("list_id: " + list_id);
-                            if (itemEl.dataset.model === model) {
-                                htmx.ajax(
-                                    "PUT",
-                                    "/move_entry/" + moved_entry_id,
-                                    {
-                                        values: {
-                                            order_index: newIndex,
-                                            list_id: list_id,
-                                            recieving_entry_id:
-                                                recieving_entry_id,
-                                            is_list: isList,
-                                        },
-                                        target: itemEl,
-                                        //swap: "outerHTML", // returns the new content
-                                    },
-                                );
-                                console.log("PUT");
-                            } else {
-                                console.log(
-                                    "POST" +
-                                    "addedNewEntry: " +
-                                    addedNewEntry +
-                                    "new index: " +
-                                    newIndex,
-                                );
-                                // Make an htmx AJAX request to the server to create a new room
-                                htmx.ajax(
-                                    "POST",
-                                    "/create/" + model + "/" + list_id,
-                                    {
-                                        values: {
-                                            name: addedNewEntry,
-                                            order_index: newIndex,
-                                        },
-                                        target: itemEl,
-                                        swap: "outerHTML", // returns the new content
-                                    },
-                                );
-                            }
-                        }
+                        //addedItem(evt, itemEl, newIndex, oldIndex, model, sortableElement);
                         console.log("isDragging onAdd: " + isDragging);
                         updateDropzones(evt)
                     },
@@ -633,5 +568,102 @@
                 );
             }
         });
+
+        function addedItem(evt, itemEl, newIndex, oldIndex, model, sortableElement) {
+            const addedNewEntry = itemEl.dataset.name;
+            const moved_entry_id = itemEl.dataset.id;
+
+            const originalParent = evt.from;
+            const list_id = sortableElement.dataset.list_id;
+            //moved_entry_id
+            const recieving_entry_id =
+                sortableElement.dataset.id;
+            console.log(
+                "moved_entry_id: " +
+                moved_entry_id +
+                " recieving_entry_id: " +
+                recieving_entry_id +
+                " list_id: " +
+                list_id,
+            );
+            console.log(
+                "itemEl.dataset.model: " +
+                itemEl.dataset.model +
+                " sortableElement.dataset.model: " +
+                model,
+            );
+            const isList =
+                sortableElement.dataset.isList === "true";
+            console.log(
+                "recieving sortableElement isList: " +
+                isList,
+            );
+            if (isList) {
+                console.log("isList: " + isList);
+            }
+            if ( //revert to original position if missing data
+                !moved_entry_id ||
+                (!list_id && !recieving_entry_id)
+            ) {
+                console.log(
+                    "missing moved_entry_id: " +
+                    moved_entry_id +
+                    " recieving_entry_id: " +
+                    recieving_entry_id +
+                    " list_id: " +
+                    list_id +
+                    " isList: " +
+                    isList,
+                );
+                originalParent.insertBefore(
+                    itemEl,
+                    originalParent.children[oldIndex],
+                );
+                return;
+            }
+            console.log("list_id: " + list_id);
+            //if moving between lists of the same type (task to task)
+            if (itemEl.dataset.model === model) {
+                htmx.ajax(
+                    "PUT",
+                    "/move_entry/" + moved_entry_id,
+                    {
+                        values: {
+                            order_index: newIndex,
+                            list_id: list_id,
+                            recieving_entry_id:
+                                recieving_entry_id,
+                            is_list: isList,
+                        },
+                        target: itemEl,
+                        //swap: "outerHTML", // returns the new content
+                    },
+                );
+                console.log("PUT");
+            } else //if moving between lists of different types (roomtype to room)
+            {
+                console.log(
+                    "POST" +
+                    "addedNewEntry: " +
+                    addedNewEntry +
+                    "new index: " +
+                    newIndex,
+                );
+                // Make an htmx AJAX request to the server to create a new room
+                htmx.ajax(
+                    "POST",
+                    "/create/" + model + "/" + list_id,
+                    {
+                        values: {
+                            name: addedNewEntry,
+                            order_index: newIndex,
+                        },
+                        target: itemEl,
+                        swap: "outerHTML", // returns the new content
+                    },
+                );
+            }
+        }
+
     }
 })();
