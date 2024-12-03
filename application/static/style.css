@@ -369,19 +369,24 @@ form.htmx-request {
 .none-ghost {
     display: none !important;
     opacity: 0.5;
-    background: #ff00e6;
-    height: auto;
+    background: #05f5f5;
+    /* height: auto; */
     
 }
 /* Style the static ghost to look like the original item */
 .static-ghost {
+    /* display: none !important; */
+    
     background: #ff00e6;
     opacity: 0.5;          /* Make it semi-transparent */
-    pointer-events: none;  /* Disable interactions */
+    /* pointer-events: none; */  /* Disable interactions */
+    /* height: auto; */
     /* position: relative; */    /* Ensure it stays in the flow */
-  }
+}
+
 
 .test-fallback {
+
     display: block !important;
     opacity: 0.5;
     background: #ff00e6;
@@ -390,6 +395,9 @@ form.htmx-request {
     opacity: 0.5;
     background: #99ff00;
 }
+
+/* .testytask {
+} */
 
 .room-list-form {
     background: #31d774;

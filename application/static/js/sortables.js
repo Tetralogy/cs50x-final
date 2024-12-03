@@ -136,6 +136,7 @@
         const photoGrid = document.querySelector(".photogrid");
         const tasktest = document.querySelector(".tasktest");
        // xxx const sortableImageContainer = document.querySelector(".sortable-image-container");
+       //bug dragging marker on image floats ghost outside page
 //#BUG 1: create sortableImageContainer sortable function
 //#BUG 2: add tasks to sortableImageContainer dropzone
 //#todo 0. take wide pic of room as main "before" proof or update proof pic
@@ -183,27 +184,43 @@
                 cursor: "move",
                 filter: ".replaceableitem",
                 //multiDrag: true, // Enable multi-drag
-                //selectedClass: "selected", // The class applied to the selected items
+                selectedClass: "selected", // The class applied to the selected items
                 //forceFallback: true,  // ignore the HTML5 DnD behaviour and force the fallback to kick in
-                fallbackOnBody: true,  // Ensure the clone is appended to the body
+                //fallbackOnBody: true,  // Ensure the clone is appended to the body
                 //fallbackClass: "test-fallback",  // Class name for the cloned DOM Element when using forceFallback
-                fallbackTolerance: 3, // So that we can select items on mobile
-                ghostClass: "none-ghost", // Class name for the drop placeholder
+                //fallbackTolerance: 3, // So that we can select items on mobile
+                ghostClass: "static-ghost", // Class name for the drop placeholder
                 swap: true,
                 onStart: function (evt) {
                     onStartSibling = evt.item.nextElementSibling;
                     this.options.swap = true;
+                    
                     const original = evt.item;
-                    //original.classList.add('none-ghost');
+                    //original.classList.add('static-ghost');
                     originalGhost = original.cloneNode(true); // Clone the original item
-                    originalGhost.classList.remove('none-ghost');
-                    originalGhost.classList.add('static-ghost'); // Add a class for styling
-                    original.parentNode.insertBefore(originalGhost, original); // Insert the ghost before the original
+                    //originalGhost.classList.remove('static-ghost');
+                    originalGhost.classList.add('d-none'); // Add a class for styling
+                    original.parentNode.insertBefore(originalGhost, original); // Insert the ghost before the original (swap in same position)
+                    
                 },
-                onMove: function (evt, originalEvent) {
+                onChange: function (evt, originalEvent) {
+                    if (evt.from !== evt.to) { console.log("onChange from other list");
+                        //evt.item.classList.add('static-ghost');
+                        //console.dir(evt.to.children[evt.newIndex]);
+                        evt.to.children[evt.newIndex].classList.add('none-ghost');
+                        
 
 
-                   /*  const itemEl = evt.dragged;
+                        /* const original = evt.item;
+                        //original.classList.add('static-ghost');
+                        originalGhost = original.cloneNode(true); // Clone the original item
+                        //originalGhost.classList.remove('static-ghost');
+                        originalGhost.classList.add('d-none'); // Add a class for styling
+                        original.parentNode.insertBefore(originalGhost, original); // Insert the ghost before the original (swap in same position) */
+                    }
+
+
+                /*  const itemEl = evt.dragged;
                     //console.dir(itemEl);
                     const oldIndex = itemEl.oldIndex;
                     //console.log(`onMove oldIndex: ${oldIndex}`);
@@ -221,10 +238,11 @@
                     //console.log(`onMove swap: ${this.options.swap}`);
 
                 },
-                onUnchoose: function (evt, originalEvent) {
-                    const itemEl = evt.item;
+                onUnchoose: function (evt, originalEvent) { console.log("onUnchoose");
+                    
+                    //const itemEl = evt.item;
                     //console.dir(itemEl);
-                    const oldIndex = itemEl.oldIndex;
+                    //const oldIndex = itemEl.oldIndex;
                     //console.dir(evt);
                     //console.dir(originalEvent);
                     //console.log(`onMove oldIndex: ${oldIndex}`);
@@ -244,6 +262,7 @@
                     console.log(`onUnchoose swap: ${this.options.swap}`); */
                 },
                 onAdd: function (evt) {
+                    document.querySelectorAll('.none-ghost').forEach(element => element.classList.remove('none-ghost'));
                     console.log(`onAdd evt.from: ${evt.from}, evt.to: ${evt.to}, evt.item: ${evt.item}`);
                     const itemEl = evt.item; // dragged HTMLElement
                     const clonedNode = evt.item.cloneNode(true);
@@ -327,7 +346,7 @@
                 //multiDrag: true, // Enable multi-drag
                 //selectedClass: "selected", // The class applied to the selected items
                 fallbackTolerance: 3, // So that we can select items on mobile
-                //ghostClass: "none-ghost", // Class name for the drop placeholder
+                //ghostClass: "static-ghost", // Class name for the drop placeholder
             });
         }
 

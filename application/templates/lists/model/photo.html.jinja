@@ -27,11 +27,11 @@
                         {{ entry.get_item().description }}
                         {% include 'base/parts/debug/order.html.jinja' %}
                     </div>
-        #}
-    photo view state: 1.  sortable block {% if entry.get_item().status.value == "unsorted" %}checked{% endif %}
-    2. room view background image {% if entry.get_item().status.value == "before" %}checked{% endif %}
-    3. room view updated background image {% if entry.get_item().status.value == "after" %}checked{% endif %}
-
+        
+    xxx photo view state: 1.  sortable block {% if entry.get_item().status.value == "unsorted" %}checked{% endif %}
+    xxx 2. room view background image {% if entry.get_item().status.value == "before" %}checked{% endif %}
+    xxx 3. room view updated background image {% if entry.get_item().status.value == "after" %}checked{% endif %}
+#}
         <button
             class=" position-absolute top-0 end-0 btn btn-sm btn-danger"
             hx-delete="/delete/entry/{{ entry.id }}"
