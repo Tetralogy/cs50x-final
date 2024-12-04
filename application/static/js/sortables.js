@@ -312,7 +312,7 @@
                     // behave like a cloned item and put dragged item back in original position
                     newParent.insertBefore(clonedNode, newParent.children[newIndex])
                     originalParent.insertBefore(itemEl, originalParent.children[oldIndex]);
-//bug: tweak and fix this
+//bug 1: tweak and fix this to save pin marker lists on photos
                     if (evt.items.length > 1) { //for multi-drag
                         evt.items.forEach((item, index) => {
                             setTimeout(() => {
