@@ -57,12 +57,15 @@
             {% if view == "text-hierarchy" %}
                 class="list-group list-group-numbered sortable"
             {% else %}
-                {% if list_obj.list_type == "RoomDefault" %}
+                {% if list_obj.list_type == "Task" %}
+                    class="list-group row g-0 row-cols-1 border border-primary border-5
+                    rounded-4 tasks sortable"
+                {% elif list_obj.list_type == "RoomDefault" %}
                     class="list-group list-group-horizontal d-flex flex-wrap border border-primary border-5
-                    rounded-4 p-1 typeslist"
+                    rounded-4 p-1 sortable roomdefaults typeslist"
                 {% elif list_obj.list_type == "Room" %}
                     class="list-group container-fluid border
-                    border-primary border-5 rounded-4 p-1 sortable"
+                    border-primary border-5 rounded-4 p-1 rooms sortable"
                 {% elif list_obj.list_type == "Photo" %}
                     class="row row-cols-4 g-0 sortable"
                 {% else %}

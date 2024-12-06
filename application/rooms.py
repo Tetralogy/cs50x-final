@@ -117,6 +117,13 @@ def set_active_room(room_id):
     else:
         raise ValueError('Invalid room_id')
     
+@rooms.route('/get_active_room_entry_id', methods=['GET'])
+@login_required
+def get_active_room_entry_id():
+    room_entry_id = get_list_entries_for_item(current_user.active_home.active_room, 'Room', current_user.id)[0].id
+    print(f'get_active_room_entry_id called {room_entry_id}')
+    return str(room_entry_id), 200
+
 def floor_room_check(floor_id):
     has_rooms = True
     if not floor_id:
