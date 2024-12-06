@@ -9,7 +9,7 @@ export function getSelectedActiveRoom(evt) {
 }
 
 /* function htmxGetActiveRoomEntryId() { 
-    const response = htmx.ajax("GET", "/get_active_room_entry_id", { // [ ] this is broken in htmx 2.0.3
+    const response = htmx.ajax("GET", "/get_active_room_entry_id", { // [ ] this is broken in htmx 2.0.3 try testing again with 2.0.4 when available
         //target: 'body',
         handler: function (responseText) {
             try {
