@@ -98,7 +98,7 @@ def create_app(config_filename=None):
     from .floors import floors
     from .rooms import rooms
     from .walkthrough import walkthrough
-    from .lists import lists
+    from .list_routes import lists
 
     login_manager.init_app(app)  # Initialize login_manager with the app
 

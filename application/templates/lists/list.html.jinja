@@ -8,14 +8,14 @@
         
             <div class="accordion-collapse collapse show">
                 <div class="accordion-body"> -->
-    {% for list_obj in userlists %}
+{% for list_obj in userlists %}
     {% if list_obj.entries | length < 1 %}
-    {% if list_obj.list_type == "Room" %}
+        {% if list_obj.list_type == "Room" %}
             <h1>Please add rooms to this floor</h1>
-            {% endif %}
-{% endif %}
-        {% include 'base/parts/debug/listname.html.jinja' %}
-        {% if sublevel == 0 and sublevel_limit > 0 %}
+        {% endif %}
+    {% endif %}
+    {% include 'base/parts/debug/listname.html.jinja' %}
+    {% if sublevel == 0 and sublevel_limit > 0 %}
         <div class="container bg-body text-body p-0 rounded">
             <div class="d-flex">
                 <div
@@ -32,26 +32,26 @@
                         {% include 'base/parts/debug/listname.html.jinja' %}
                     </button>
                 </div>
-
                 <a href="/room/{{ list_obj.id }}" class="accordion-header text-center flex-grow-1">
                     
                     {{ list_obj.list_name }}
                     {% include 'base/parts/debug/order.html.jinja' %}
                 </a>
             </div>
-
             <div
                 class="accordion"
                 id="toplist-accordion-{{ list_obj.list_type }}list-{{ list_obj.id }}"
             >
-
                 <div class="accordion-item">
                     <div
                         class="accordion-collapse collapse show"
                         id="toplist-collapse-{{ list_obj.list_type }}list-{{ list_obj.id }}"
                     >
-        {% endif %}
+    {% endif %}
 
+{% if list_obj.list_type == "Pin" %}
+{% include 'lists/pingrid.html.jinja' %}
+{% else %}
         <ul
             id="list-updater-{{ list_obj.id }}"
             {% if view == "text-hierarchy" %}
@@ -82,8 +82,6 @@
             data-list_id="{{ list_obj.id }}"
             data-parent_entry_id="{{ list_obj.parent_entry_id }}"
         >
-
-
             {% if view == "text-hierarchy" %}
                 {% include 'lists/generic_hierarchy.html.jinja' %}
             {% else %}
@@ -96,7 +94,6 @@
                         {% include 'lists/model/' + entry.item_model.lower() + '.html.jinja' %}
                     {% endfor %}
                 {% endif %}
-
                 {% if not list_obj %}
                     {% if view == "quicknote" %}
                         {% include 'lists/model/task_placeholder.html.jinja' %}
@@ -106,10 +103,11 @@
                 {% endif %}
             {% endif %}
         </ul>
+{% endif %}
     {% if sublevel == 0 and sublevel_limit > 0 %}
                     </div>
                 </div>
             </div>
-</div>
+        </div>
     {% endif %}
     {% endfor %}

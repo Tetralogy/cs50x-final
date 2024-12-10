@@ -6,7 +6,7 @@ from flask_login import current_user, login_required
 from sqlalchemy import select
 from application.extension import db
 from application.database.models import Room
-from application.lists import get_list_entries_for_item, get_userlist
+from application.list_utils import get_list_entries_for_item, get_userlist
 from application.rooms import set_active_room
 
 walkthrough = Blueprint('walkthrough', __name__)

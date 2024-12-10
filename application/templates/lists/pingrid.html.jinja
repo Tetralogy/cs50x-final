@@ -1,0 +1,28 @@
+todo fill in pingrid
+<!-- Overlay Grid -->
+<div
+    class="position-absolute top-0 start-0 w-100 h-100 row g-0 photogrid sortable"
+    hx-put="/update_list_order/{{ list_obj.id }}"
+    hx-include="[name='items']"
+    hx-trigger="end delay:1s, remove delay:1s, add delay:1s"
+    hx-indicator="#updating-indicator"
+    data-model="{{ list_obj.list_type }}"
+    data-is-list="true"
+    data-list_id="{{ list_obj.id }}"
+    data-parent_entry_id="{{ list_obj.parent_entry_id }}"
+>
+    {% set rows = 12 %}
+    {% set columns = 12 %}
+    {% set cells = (columns * rows)+1 %}
+    {% for i in range(1, cells) %}
+
+        {% for entry in list_obj.entries | sort(attribute='order') %}
+            {% include 'lists/model/gridcell.html.jinja' %}
+        {% endfor %}
+
+        {% if not list_obj %}
+            <h1>Failed to load list</h1>
+        {% endif %}
+
+    {% endfor %}
+</div>

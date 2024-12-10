@@ -1,18 +1,17 @@
-            {% if reversed %}
-                {% for entry in list_obj.entries | sort(attribute='order')| reverse %}
-                    {% include 'lists/model/generic_text.html.jinja' %}
-                {% endfor %}
-            {% else %}
-                {% for entry in list_obj.entries | sort(attribute='order') %}
-                    {% include 'lists/model/generic_text.html.jinja' %}
-                {% endfor %}
-            {% endif %}
+{% if reversed %}
+    {% for entry in list_obj.entries | sort(attribute='order')| reverse %}
+        {% include 'lists/model/generic_text.html.jinja' %}
+    {% endfor %}
+{% else %}
+    {% for entry in list_obj.entries | sort(attribute='order') %}
+        {% include 'lists/model/generic_text.html.jinja' %}
+    {% endfor %}
+{% endif %}
 
-            {% if not list_obj %}
-                {% if view == "quicknote" %}
-                    {% include 'lists/model/generic_text.html.jinja' %}
-                {% else %}
-                    <h1>Failed to load list</h1>
-                {% endif %}
-            {% endif %}
-        
+{% if not list_obj %}
+    {% if view == "quicknote" %}
+        {% include 'lists/model/generic_text.html.jinja' %}
+    {% else %}
+        <h1>Failed to load list</h1>
+    {% endif %}
+{% endif %}

@@ -11,7 +11,70 @@
     data-bs-html="true"
     data-bs-placement="left"
     data-bs-title="<u>Drag</u> to <span class='text-nowrap'><b>reorder</b> {{ entry.item_model }}</span>"
-><input type="hidden" name="items" value="{{ entry.id }}" />
+>
+<input type="hidden" name="items" value="{{ entry.id }}" />
+
+    {% set ns = namespace(has_children=False) %}
+    {% if child_lists %}
+        {% for parent_list, child_lists in child_lists.items() %}
+            {% for child_list in child_lists %}
+                {% if child_list.parent_entry_id == entry.id %}
+                    {% if child_list.entries|length <= 0 %}
+                        {% set ns.has_children = False %}
+                    {% else %}
+                        {% if sublevel < sublevel_limit %}
+                            {% set ns.has_children = True %}
+                        {% endif %}
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+        {% endfor %}
+    {% endif %}
+
+
+<div class="container">
+    <div class="position-relative">
+        <!-- Image -->
+        <img src="{{ entry.get_item().photo_url }}" class="img-fluid">
+        <!-- bug: fix /sholist route to show the grid -->
+            <div
+                class="row g-0 row-cols-4 container-fluid bg-dark border border-success border-5 rounded-bottom-4 p-1"
+                id="photogrid-list-loader"
+                hx-get="/show_list/"
+                hx-vals='{"list_type": "Pin", "view_override":"pins", "sublevel_limit": 1, "force_new_list": "true"}'
+                hx-trigger="load once"
+                hx-swap="outerHTML"
+                hx-indicator="#updating-indicator"
+            >
+                <input id="dummy-placeholder" type="hidden" name="items" />
+                
+            </div>
+
+
+
+        <!-- Overlay Grid -->
+        <div class="position-absolute top-0 start-0 w-100 h-100 row g-0 photogrid sortable">
+            <!-- Row 1 -->
+            {% set rows = 12 %}
+            {% set columns = 12 %}
+            {% set cells = (columns * rows)+1 %}
+        {% for i in range(1, cells) %}
+            {% include 'gridcell.html.jinja' %}
+        {% endfor %}
+        
+        </div>
+
+    </div>
+</div>
+
+
+
+
+
+
+
+
+------------------------------------------------------------------
 <div class="card bg-dark text-white ratio ratio-1x1">
     <img class="card-img" src="{{ entry.get_item().photo_url }}" alt="{{ entry.get_item().description }}"/>
     <div class="card-img-overlay">

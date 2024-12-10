@@ -3,7 +3,7 @@ from flask_login import current_user, login_required
 from sqlalchemy import asc, func, select
 from application.extension import db
 from application.database.models import Floor, UserList
-from application.lists import add_item_to_list, create_user_list, get_list_entries_for_item, get_userlist
+from application.list_utils import add_item_to_list, create_user_list, get_list_entries_for_item, get_userlist
 
 
 floors = Blueprint('floors', __name__)

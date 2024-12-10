@@ -1,6 +1,6 @@
 from marshmallow_sqlalchemy import SQLAlchemyAutoSchema, auto_field
 from marshmallow import fields
-from .models import User, UserAbility, UserStatus, UserPreference, Home, Room, Zone, Appliance, Photo, Task, TaskAnnotation, TaskProgress, Supply
+from .models import User, UserAbility, UserStatus, UserPreference, Home, Room, Zone, Appliance, Photo, Task, Pin, TaskProgress, Supply
 
 class UserSchema(SQLAlchemyAutoSchema):
     class Meta:
@@ -62,11 +62,12 @@ class TaskSchema(SQLAlchemyAutoSchema):
         include_relationships = True
         load_instance = True
 
-class TaskAnnotationSchema(SQLAlchemyAutoSchema):
+class PinSchema(SQLAlchemyAutoSchema):
     class Meta:
-        model = TaskAnnotation
+        model = Pin
         include_relationships = True
         load_instance = True
+        
 
 class TaskProgressSchema(SQLAlchemyAutoSchema):
     class Meta:
@@ -91,7 +92,7 @@ zone_schema = ZoneSchema()
 appliance_schema = ApplianceSchema()
 photo_schema = PhotoSchema()
 task_schema = TaskSchema()
-task_annotation_schema = TaskAnnotationSchema()
+pin_schema = PinSchema()
 task_progress_schema = TaskProgressSchema()
 supply_schema = SupplySchema()
 

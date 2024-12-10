@@ -239,7 +239,7 @@ class Photo(db.Model):
     photo_url: Mapped[str]
     photo_timestamp: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=func.now())
     user = relationship("User", back_populates="photos")
-    annotations = relationship('TaskAnnotation', back_populates="photos", lazy='dynamic')
+    pins = relationship('Pin', back_populates="photo", lazy='dynamic')
     
 class TaskStatus(enum.Enum):
     PENDING = "pending"
@@ -263,7 +263,7 @@ class Task(db.Model):
     archived: Mapped[bool] = mapped_column(Boolean, server_default="0")
     user = relationship("User", back_populates="tasks")
     progress = relationship('TaskProgress', back_populates="tasks")
-    annotations = relationship("TaskAnnotation", back_populates="tasks")
+    pins = relationship("Pin", back_populates="task")
     
     def mark_as_completed(self):
         self.status = TaskStatus.COMPLETED
@@ -283,18 +283,22 @@ def receive_before_update(mapper, connection, target):
     # Check if the status is being set to COMPLETED
     if target.status == TaskStatus.COMPLETED and target.completed_at is None:
         target.completed_at = datetime.now()
-        
-
     
-class TaskAnnotation(db.Model):
+    
+class Pin(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     task_id: Mapped[int] = mapped_column(ForeignKey('task.id'))
     photo_id: Mapped[int] = mapped_column(ForeignKey('photo.id'))
-    x_coordinate: Mapped[float]
-    y_coordinate: Mapped[float]
-    annotation_text: Mapped[str]
-    photos = relationship('Photo', back_populates="annotations")
-    tasks = relationship('Task', back_populates="annotations")
+    photo = relationship('Photo', foreign_keys=[photo_id])
+    task = relationship('Task', foreign_keys=[task_id])
+    
+    @hybrid_property
+    def name(self):
+        return self.task.name if self.task else None
+    
+    @name.expression
+    def name(cls):
+        return select(Task.name).where(Task.id == cls.task_id).scalar_subquery()
 
 class TaskProgress(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)

@@ -6,7 +6,7 @@ from application.extension import db
 
 from application.database.models import Floor, Room, UserList, UserListEntry
 from application.floors import set_active_floor
-from application.lists import add_item_to_list, create_user_list, get_list_entries_for_item, get_userlist
+from application.list_utils import add_item_to_list, create_user_list, get_list_entries_for_item, get_userlist
 
 rooms = Blueprint('rooms', __name__)
 
