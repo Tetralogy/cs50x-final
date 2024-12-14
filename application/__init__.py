@@ -1,4 +1,5 @@
 import functools
+import logging
 import os
 from time import time
 from dotenv import load_dotenv
@@ -7,9 +8,10 @@ from flask_login import LoginManager
 from flask_migrate import Migrate
 from flask_session import Session
 
+from logs.logging_config import ApplicationLogger, configure_logging
+
 #from application.utils import setup_recursive_detection
 from .extension import db
-
 
 
 # Load both .env and .flaskenv files
@@ -21,7 +23,9 @@ session = Session()
 
 def create_app(config_filename=None):
     app = Flask(__name__)
-    
+    configure_logging(app)
+    logger = ApplicationLogger.get_logger(__name__)
+    logger.debug('test2')
     @app.before_request
     def before_request_time():
         request.start_time = time()
@@ -35,16 +39,16 @@ def create_app(config_filename=None):
         if hasattr(request, 'start_time'):
             duration = time() - request.start_time
             response.headers.add('X-Request-Duration', duration)
-            print(f"Request to {request.path} took {duration} seconds")
+            logger.debug(f"Request to {request.path} took {duration} seconds")
             view = fsession.get('view')
-            print(f'view (after_request): {view}')
+            logger.debug(f'view (after_request): {view}')
             template = getattr(g, 'template', None)
-            print(f'template (after_request): {template}')
+            logger.debug(f'template (after_request): {template}')
         return response
 
     # Debug: Print current working directory
-    #print(f"Current working directory: {os.getcwd()}")
-    #print(f"Application root: {app.root_path}")
+    #logger.debug(f"Current working directory: {os.getcwd()}")
+    #logger.debug(f"Application root: {app.root_path}")
     
     # Load configurations from environment variables
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(app.root_path, 'database', 'test_database.db')
@@ -56,14 +60,14 @@ def create_app(config_filename=None):
     
     # Debug: Print interpreted database path
     #db_path = os.path.join(app.root_path, app.config['SQLALCHEMY_DATABASE_URI'].replace('sqlite:///', ''))
-    #print(f"Interpreted database path: {db_path}")
-    #print(f"Database file exists: {os.path.exists(db_path)}")
+    #logger.debug(f"Interpreted database path: {db_path}")
+    #logger.debug(f"Database file exists: {os.path.exists(db_path)}")
 
     # Ensure database directory exists
     #db_dir = os.path.dirname(db_path)
     #os.makedirs(db_dir, exist_ok=True)
-    #print(f"Database directory: {db_dir}")
-    #print(f"Database directory exists: {os.path.exists(db_dir)}")
+    #logger.debug(f"Database directory: {db_dir}")
+    #logger.debug(f"Database directory exists: {os.path.exists(db_dir)}")
 
     # Configure Flask-Session
     app.config['SESSION_TYPE'] = 'sqlalchemy'
@@ -80,6 +84,7 @@ def create_app(config_filename=None):
     os.makedirs(upload_folder, exist_ok=True)
     
     app.config['ICONS_FOLDER'] = os.path.join(os.path.dirname(app.root_path), 'media/icons')
+    app.config['DEFAULT_ROOM_PHOTO_URL'] = '/static/defaults/generic_room.jpg'
     
     # Initialize extensions
     db.init_app(app)
@@ -89,6 +94,7 @@ def create_app(config_filename=None):
     from .main import main
     from .auth import auth
     from .database.models import Base, models, User
+    from .database.events import duplicate_pins_for_new_cover_photo, set_timestamp_on_completion#, remove_old_pin_and_entry_if_duplicate_task_on_photo
     from .utils import utils
     from .upload import upload
     from .annotate import annotate
@@ -99,6 +105,7 @@ def create_app(config_filename=None):
     from .rooms import rooms
     from .walkthrough import walkthrough
     from .list_routes import lists
+    from .map import map
 
     login_manager.init_app(app)  # Initialize login_manager with the app
 
@@ -126,6 +133,7 @@ def create_app(config_filename=None):
     app.register_blueprint(rooms)
     app.register_blueprint(walkthrough)
     app.register_blueprint(lists)
+    app.register_blueprint(map)
     
     migrate = Migrate(app, db) # [ ]: Migrate should be initialized after all blueprints are registered
 

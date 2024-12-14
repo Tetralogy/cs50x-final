@@ -5,13 +5,13 @@
                 {% include 'lists/listname.html.jinja' %}
             {% elif arg == 'sublevel' %}
                 sublevel: {{ sublevel }} sublevel_limit: {{ sublevel_limit }}
-                CHILDREN?: {{ child_lists }} SHIT
+                CHILDREN?: {{ child_lists }} 
             {% elif arg == 'order' %}
                 <p class="bg-dark">order: {{ entry.order }}</p>
             {% elif arg == 'sublist' %}
                 {{ sublevel }}
                 sublevel_limit: {{ sublevel_limit }} CHILDREN?:
-                {{ child_lists }} FUCK
+                {{ child_lists }} 
             {% endif %}
         </div>
     {% endif %}

@@ -1,36 +1,38 @@
+import logging
 from flask import Blueprint, jsonify, render_template, request
 from flask_login import current_user, login_required
 from application.extension import db
 
 from application.database.models import Floor, Home, Room
-
+from logs.logging_config import ApplicationLogger
 
 onboard = Blueprint('onboard', __name__)
+logger = ApplicationLogger.get_logger(__name__)
 
 '''@onboard.route('/onboarding', methods=['GET'])
 @login_required
 def onboarding():
-    print('onboarding called')
+    logger.debug('onboarding called')
     if current_user.profile_picture_url is None:
-        print('profile_picture_url is None')
+        logger.debug('profile_picture_url is None')
         return render_template('profile/parts/upload_profile_photo.html.jinja')
     home_ids = [home.home_id for home in current_user.homes]
-    print(f'homes: {home_ids}')
+    logger.debug(f'homes: {home_ids}')
     if not home_ids:
-        print('homes is empty')
+        logger.debug('homes is empty')
         return render_template('onboarding/parts/home/index.html.jinja')
-    print(f'current_user.active_home: {current_user.active_home}')
-    print(f'current_user.active_home.active_floor: {current_user.active_home.active_floor}')
-    print(f'current_user.active_home.rooms: {all([floor.rooms for floor in current_user.active_home.floors])}')
+    logger.debug(f'current_user.active_home: {current_user.active_home}')
+    logger.debug(f'current_user.active_home.active_floor: {current_user.active_home.active_floor}')
+    logger.debug(f'current_user.active_home.rooms: {all([floor.rooms for floor in current_user.active_home.floors])}')
     if current_user.active_home and current_user.active_home.active_floor and all([floor.rooms for floor in current_user.active_home.floors]):
-        print('all home, floor, and room are set')
+        logger.debug('all home, floor, and room are set')
         return render_template('walkthrough/index.html.jinja') #go to walkthrough
     return render_template('onboarding/parts/home/index.html.jinja') #temporary, go to home setup
     
     get the current home id when it is created
     room_ids = [room.room_id for room in current_user.room_ids]
     if not room_ids:
-        print('rooms is empty')
+        logger.debug('rooms is empty')
         return render_template('onboarding/parts/room/index.html.jinja')'''
     
 

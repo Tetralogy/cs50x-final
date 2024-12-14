@@ -2,13 +2,14 @@ import Sortable from 'sortablejs/modular/sortable.complete.esm.js';
 import { getIsDragging, setIsDragging } from "./isDragging.js";
 import { updateDropzones } from "./dropzones.js";
 import { addedItem } from "./addedListItem.js";
-import { getSelectedActiveRoom } from './getSelected.js';
+import { getSelectedActive } from './getSelected.js';
 
 export function initializeSortableLists() {
     const sortableElements = document.querySelectorAll(".sortable");
     sortableElements.forEach(function (sortableElement) {
         if (sortableElement !== null) {
             const model = sortableElement.dataset.model;
+            const parent_entry_id = sortableElement.dataset.parent_entry_id;
             let originalGhost = null;
             let sortableOptions = {
                 group: {
@@ -63,21 +64,40 @@ export function initializeSortableLists() {
                         if (evt.items.length > 1) {
                             Sortable.utils.deselect(evt.items[0]);
                         }
-                        if (itemEl.dataset.model === "Room") {
-                            htmx.ajax(
-                                "PUT",
-                                `/home/room/${itemEl.dataset.item_id}/active`,
-                                {
-                                    swap: "none",
-                                    target: itemEl,
-                                },
-                            );
-                            console.log("PUT: select active room");
+                        // update active room as current selected
+                        htmx.ajax(
+                            "PUT",
+                            `/home/room/${itemEl.dataset.item_id}/active`,
+                            {
+                                swap: "none",
+                                target: itemEl,
+                            },
+                        );
+                        console.log("PUT: select active room");
+                    }
+                    else if (itemEl.dataset.model === "Photo") {
+                        document.querySelectorAll(`.selected`).forEach(item => {
+                            if (item.id != itemEl.id) {
+                                item.classList.remove("selected");
+                            }
+                        });
+                        //only allow one selected item at a time
+                        if (evt.items.length > 1) {
+                            Sortable.utils.deselect(evt.items[0]);
                         }
+                        // update active room as current selected
+                        htmx.ajax( //todo add confirm dialog and reverting back to previous photo selection
+                            "PUT",
+                            `/set_room_cover_photo/${itemEl.dataset.item_id}`,
+                            {
+                                swap: "none",
+                                target: itemEl,
+                            },
+                        );
                     }
                 },
                 onDeselect: function (evt) {
-                    getSelectedActiveRoom(evt);
+                    getSelectedActive(evt, parent_entry_id);
                 },
                 onSpill: function (/**Event*/ evt) {
                     evt.item; // The spilled item
@@ -145,7 +165,7 @@ export function initializeSortableLists() {
                     //addedItem(evt, itemEl, newIndex, oldIndex, model, sortableElement);
                     console.log("isDragging onAdd: " + getIsDragging());
                     updateDropzones(evt);
-                    getSelectedActiveRoom(evt);
+                    getSelectedActive(evt, parent_entry_id);
                 },
                 onEnd: function (evt) {
                     console.log("onEnd event triggered");
@@ -183,7 +203,7 @@ export function initializeSortableLists() {
                     });
                     console.log("isDragging onEnd: " + getIsDragging());
                     updateDropzones(evt);
-                    getSelectedActiveRoom(evt);
+                    getSelectedActive(evt, parent_entry_id);
 
                 },
             };
@@ -223,17 +243,16 @@ export function initializeSortableLists() {
 
                 console.log("sortableOptions.sort?: " + sortableOptions.sort);
             }
-            else if (sortableElement.classList.contains("photogrid")) {
+            else if (sortableElement.classList.contains("pingrid")) {
                 sortableOptions.group = {
-                    name: "photogrid",
-                    pull: false,
-                    put: true,
+                    name: "pingrid",
+                    pull: false, //todo: only allow pull to other pingrid
+                    put: true, //todo: change this to only from other pingrid or tasklist
                 };
                 sortableOptions.animation = 0;
-                sortableOptions.filter.push(".replaceableitem");
+                sortableOptions.filter += ", .replaceableitem";
                 sortableOptions.ghostClass = "static-ghost";
-
-                //modify onStart
+                //modify onStart for pingrid
                 sortableOptions.onStart = (function (originalFunction) {
                     return function (evt) {
                         originalFunction(evt);
@@ -243,18 +262,18 @@ export function initializeSortableLists() {
                         original.parentNode.insertBefore(originalGhost, original); // Insert the ghost before the original (swap in same position)
                     };
                 })(sortableOptions.onStart);
-                //modify onChange
-                sortableOptions.onChange = (function (originalFunction) {
+                //modify onChange for pingrid
+                sortableOptions.onChange = (function (originalFunction) { //todo: test if this is needed
                     return function (evt, originalEvent) {
                         if (evt.from !== evt.to) {
-                            console.log("onChange from other list");
+                            //console.log("onChange from other list");
                             evt.item.classList.add('static-ghost');
-                            console.dir(evt.to.children[evt.newIndex]);
+                            //console.dir(evt.to.children[evt.newIndex]);
                             evt.to.children[evt.newIndex].classList.add('none-ghost');
                         }
                     };
                 })(sortableOptions.onChange);
-                //modify onAdd
+                //modify onAdd for pingrid
                 sortableOptions.onAdd = (function (originalFunction) {
                     return function (evt) {
                         document.querySelectorAll('.none-ghost').forEach(element => element.classList.remove('none-ghost'));
@@ -275,8 +294,8 @@ export function initializeSortableLists() {
                             this.options.swap = true;
                         }console.log(`onAdd swap: ${this.options.swap}`); */
 
-                        // if targetitem is a task, move itemEl to next empty index
-                        while (targetItem.dataset.model === itemEl.dataset.model) {
+                        // if targetitem is a task, move itemEl to next empty index so it doesn't move other pins
+                        while (targetItem.dataset.model === itemEl.dataset.model) { //todo: test if broken
                             console.log(`onAdd modelmatch targetItem: ${targetItem.textContent}`);
                             if ((targetItem.dataset.item_id === itemEl.dataset.item_id) && (targetItem.dataset.model === itemEl.dataset.model)) {
                                 break;
@@ -284,28 +303,50 @@ export function initializeSortableLists() {
                             newIndex += 1;
                             targetItem = evt.to.children[(newIndex)];
                         }
-                        if (evt.from !== photoGrid) {
-                            // check if dragged item matches an item already in gridtest
+                        if (originalParent !== newParent) { //if from other list
+                            // check if dragged task matches a task already in gridtest
                             const matchingDuplicate = Array.from(newParent.children).filter((item) => {
-                                return (item.dataset.item_id === itemEl.dataset.item_id) && (item.dataset.model === itemEl.dataset.model);
+                                return (item.dataset.task_id === itemEl.dataset.task_id);
                             });
                             if (matchingDuplicate.length > 1) {
-                                matchingDuplicate.forEach((item) => {
-                                    dupindex = Array.from(newParent.children).indexOf(item);
+                                matchingDuplicate.forEach((item) => { //remove the existing pin and accept clone in the new position
+                                    let dupindex = Array.from(newParent.children).indexOf(item)
                                     if (dupindex !== newIndex) {
                                         newParent.insertBefore(targetItem, newParent.children[dupindex])
                                         item.remove();
                                     }
                                 })
                             } else {
-                                targetItem.remove();
+                                targetItem.remove(); //replace the blank
                             }
                         }
-                        // behave like a cloned item and put dragged item back in original position
+                        // behave like a cloned item and put dragged item back in original position after clone
                         newParent.insertBefore(clonedNode, newParent.children[newIndex])
                         originalParent.insertBefore(itemEl, originalParent.children[oldIndex]);
                         //bug 1: tweak and fix this to save pin marker lists on photos
-                        originalFunction(evt);
+                        //originalFunction(evt); //continue with original function
+                        if (evt.items.length > 1) { //for multi-drag//todo: modify as needed
+                            evt.items.forEach((item, index) => {
+                                setTimeout(() => {
+                                    // Get the corresponding new and old indices
+                                    console.log("item: " + item);
+                                    console.log("foreach more than 1 item");
+                                    console.log("item.dataset.name: " + item.dataset.name);
+                                    const itemEl = item; // dragged HTMLElement
+                                    const newIndex = evt.newIndicies[index].index;
+                                    console.log("newIndex: " + newIndex);
+                                    const oldIndex = evt.oldIndicies[index].index;
+                                    console.log("oldIndex: " + oldIndex);
+                                    addedItem(evt, itemEl, newIndex, oldIndex, model, sortableElement);
+                                }, index * 100); // Add a delay for each request so it works
+                            })
+                        } else { 
+                            addedItem(evt, clonedNode, newIndex, oldIndex, model, sortableElement);
+                        }
+                        //addedItem(evt, itemEl, newIndex, oldIndex, model, sortableElement);
+                        console.log("isDragging onAdd: " + getIsDragging());
+                        updateDropzones(evt);
+                        getSelectedActive(evt, parent_entry_id);
                     };
                 })(sortableOptions.onAdd);
             }

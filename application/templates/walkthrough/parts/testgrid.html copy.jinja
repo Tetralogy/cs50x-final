@@ -1,4 +1,4 @@
-photogrid here
+pingrid here
 
 tasklist here
 {#bug show grid list and task list
@@ -75,13 +75,13 @@ tasklist here
       <img src="/media/uploads/1_1732308837_image.jpg" class="img-fluid">
     
       <!-- Overlay Grid -->
-      <div class="position-absolute top-0 start-0 w-100 h-100 row g-0 photogrid">
+      <div class="position-absolute top-0 start-0 w-100 h-100 row g-0 pingrid">
         <!-- Row 1 -->
         {% set rows = 12 %}
         {% set columns = 12 %}
         {% set cells = (columns * rows)+1 %}
     {% for i in range(1, cells) %}
-    <div id="div-{{i}}" data-item_id="item_id-{{i}}" data-model="photogrid" class="col-1 {# border border-primary #} d-flex justify-content-center align-items-center replaceableitem">{# {{ i }} #}</div>
+    <div id="div-{{i}}" data-item_id="item_id-{{i}}" data-model="pingrid" class="col-1 {# border border-primary #} d-flex justify-content-center align-items-center replaceableitem">{# {{ i }} #}</div>
     {% endfor %}
     
       </div>

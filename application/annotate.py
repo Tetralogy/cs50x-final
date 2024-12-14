@@ -1,13 +1,15 @@
+import logging
 from flask import Blueprint, render_template, request
 from flask_login import login_required
-
+from logs.logging_config import ApplicationLogger
 
 annotate = Blueprint('annotate', __name__)
+logger = ApplicationLogger.get_logger(__name__)
 
 @annotate.route('/annotate_form/<filename>')
 @login_required
 def annotate_form(filename):
-    print('annotate_form called') 
+    logger.debug('annotate_form called') 
     return render_template('forms/annotate.html.jinja', image_url=f'/media/uploads/{filename}')
 
 @annotate.route('/annotate', methods=['POST'])

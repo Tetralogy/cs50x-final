@@ -1,5 +1,5 @@
 export function addedItem(evt, itemEl, newIndex, oldIndex, model, sortableElement) {
-    const addedNewEntry = itemEl.dataset.name;
+    const addedNewEntry_name = itemEl.dataset.name;
     const moved_entry_id = itemEl.dataset.id;
 
     const originalParent = evt.from;
@@ -69,14 +69,16 @@ export function addedItem(evt, itemEl, newIndex, oldIndex, model, sortableElemen
             },
         );
         console.log("PUT");
-    } else //if moving between lists of different types (roomtype to room)
+    } else //if moving between lists of different types (roomtype to room) (task to pin)
     {
         console.log(
             "POST" +
             "addedNewEntry: " +
-            addedNewEntry +
+            addedNewEntry_name +
             "new index: " +
-            newIndex,
+            newIndex +
+            "task_id: " + itemEl.dataset.task_id +
+            "from_model: " + itemEl.dataset.model,
         );
         // Make an htmx AJAX request to the server to create a new room
         htmx.ajax(
@@ -84,11 +86,13 @@ export function addedItem(evt, itemEl, newIndex, oldIndex, model, sortableElemen
             "/create/" + model + "/" + list_id,
             {
                 values: {
-                    name: addedNewEntry,
+                    task_id: itemEl.dataset.task_id,
+                    from_model: itemEl.dataset.model,
+                    name: addedNewEntry_name,
                     order_index: newIndex,
                 },
                 target: itemEl,
-                swap: "outerHTML", // returns the new content
+                swap: "outerHTML", // returns the new content //BUG: NOT SWAPPING onAdd
             },
         );
     }

@@ -1,7 +1,7 @@
-todo fill in pingrid
+{#todo fill in pingrid#}
 <!-- Overlay Grid -->
 <div
-    class="position-absolute top-0 start-0 w-100 h-100 row g-0 photogrid sortable"
+    class="position-absolute top-0 start-0 w-100 h-100 row g-0 pingrid sortable"
     hx-put="/update_list_order/{{ list_obj.id }}"
     hx-include="[name='items']"
     hx-trigger="end delay:1s, remove delay:1s, add delay:1s"
@@ -11,18 +11,25 @@ todo fill in pingrid
     data-list_id="{{ list_obj.id }}"
     data-parent_entry_id="{{ list_obj.parent_entry_id }}"
 >
+{% if list_obj %}
     {% set rows = 12 %}
     {% set columns = 12 %}
-    {% set cells = (columns * rows)+1 %}
+    {% set cells = (columns * rows) + 1 %}
+    {% set sorted_entries = list_obj.entries | sort(attribute='order') %}
     {% for i in range(1, cells) %}
-
-        {% for entry in list_obj.entries | sort(attribute='order') %}
-            {% include 'lists/model/gridcell.html.jinja' %}
+        {% set found = namespace(pin=False) %}
+        {% for entry in sorted_entries if not found.pin %}
+            {% if entry.order == i %}
+                {% include 'lists/model/pin.html.jinja' %}
+                {% set found.pin = True %}
+            {% endif %}
         {% endfor %}
-
-        {% if not list_obj %}
-            <h1>Failed to load list</h1>
+        {% if not found.pin %}
+            {% include 'lists/model/gridcell.html.jinja' %}
         {% endif %}
-
     {% endfor %}
+{% else %}
+    <h1>Failed to load list</h1>
+{% endif %}
+
 </div>

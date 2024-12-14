@@ -1,5 +1,4 @@
-#todo add routes from lists.py
-
+import logging
 import os
 import time
 from sqlalchemy import select
@@ -7,18 +6,20 @@ from werkzeug.utils import secure_filename
 from flask import Blueprint, current_app, flash, redirect, render_template, request, send_from_directory, session, url_for
 from flask_login import current_user, login_required
 
-from application.database.models import Room, UserList, UserListEntry
+from application.database.models import Photo, Room, Task, UserList, UserListEntry
 from application.list_utils import add_item_to_list, create_user_list, default_list_name, delete_entry_and_item, get_immediate_child_lists, get_list_entries_for_item, get_top_userlists_by_root_parent, get_userlist, get_userlists_by_parent, update_entry_order
 from application.extension import db
+from logs.logging_config import ApplicationLogger
 
 lists = Blueprint('lists', __name__)
+logger = ApplicationLogger.get_logger(__name__)
 
 @lists.route('/create/<string:item_model>', methods=['POST'])
 @login_required
 def create_list_and_item_and_entry(item_model, retrieve: str=None):
     if item_model == 'Home':
         multifloor=request.form.get('multifloor') == 'on'
-        print(f'multifloor: {multifloor}')
+        #logger.debug(f'multifloor: {multifloor}')
         list_name = f'{current_user.username} {item_model}s'
         userlist = get_userlist(item_model, list_name)
         if not userlist:
@@ -28,7 +29,7 @@ def create_list_and_item_and_entry(item_model, retrieve: str=None):
         current_user.active_home_id = new_home_entry.item_id
         db.session.commit()
         if multifloor:
-            print(f'multifloor check: {multifloor}')
+            #logger.debug(f'multifloor check: {multifloor}')
             return redirect(url_for('floors.define_floors', multifloor=multifloor))
         return redirect(url_for('homes.home_setup'))
     if item_model == 'Floor':
@@ -44,7 +45,7 @@ def create_list_and_item_and_entry(item_model, retrieve: str=None):
         else:
             order_index = int(order_index)
         item_id = None
-        print(f'item_model: {item_model}, list_id: {userlist.id}, item_id: {item_id}, order: {order_index}, name: {name}')
+        #logger.debug(f'item_model: {item_model}, list_id: {userlist.id}, item_id: {item_id}, order: {order_index}, name: {name}')
         new_item = add_item_to_list(userlist.id, item_model, item_id, order_index, name)
         flash(f'Item added to list: {new_item.item_model} {new_item.item_id}', 'success')
         return render_template('lists/model/' + new_item.item_model.lower() + '.html.jinja', entry=new_item)
@@ -58,19 +59,25 @@ def create_list_and_item_and_entry(item_model, retrieve: str=None):
     
 @lists.route('/create/<string:item_model>/<int:list_id>', methods=['POST'])
 @login_required
-def create_item_and_entry(item_model, list_id, item_id: int=None, retrieve: str=None):
+def create_item_and_entry(item_model, list_id, item_id: int=None, retrieve: str=None, task_id: int=None):
     order_index = request.form.get('order_index')
     if not order_index:
         order_index = None
     else:
         order_index = int(order_index)
     name = request.form.get('name')
-    print(f'item_model: {item_model}, list_id: {list_id}, item_id: {item_id}, order: {order_index}, name: {name}')
-    new_item = add_item_to_list(list_id, item_model, item_id, order_index, name)
-    flash(f'Item added to list: {new_item.item_model} {new_item.item_id}', 'success')
+    from_model = request.form.get('from_model')
+    logger.debug(f'create_item_and_entry(): item_model: {item_model}, list_id: {list_id}, item_id: {item_id}, order: {order_index}, name: {name}')
+    if from_model == 'Task':
+        task_id = request.form.get('task_id')
+        task = db.get_or_404(Task, task_id)
+    new_item = add_item_to_list(list_id, item_model, item_id, order_index, name, task_id=task_id)
+    logger.debug(f'Item added to list: {new_item.item_model} {new_item.item_id}')
     if retrieve == 'list':
         userlist = db.get_or_404(UserList, list_id)
+        logger.debug(f'retrieve: {retrieve}')
         return userlist
+    #return render_template('lists/model/pin.html.jinja', entry=new_item)
     return render_template('lists/model/' + new_item.item_model.lower() + '.html.jinja', entry=new_item, child_lists=None) #redirect(url_for('lists.update_list_order', list_id=list_id))
 
 
@@ -79,38 +86,38 @@ def create_item_and_entry(item_model, list_id, item_id: int=None, retrieve: str=
 @lists.route('/move_entry/<int:moved_entry_id>/<int:list_id>', methods=['PUT'])
 @login_required
 def move_entry(moved_entry_id: int = None, list_id: int = None):
-    print(f'move_entry called moved_entry_id: {moved_entry_id}, list_id: {list_id}')
+    #logger.debug(f'move_entry called moved_entry_id: {moved_entry_id}, list_id: {list_id}')
     #1. get the id of the entry being dragged
     if not moved_entry_id:
         moved_entry_id = int(request.form.get('moved_entry_id'))
     moved_entry = db.get_or_404(UserListEntry, moved_entry_id)
     is_list = request.form.get('is_list') == 'true'
-    print(f'is_list: {is_list}')
+    #logger.debug(f'is_list: {is_list}')
     #2. get the entry.id of the entry the moved_entry_id is being dropped on
     list_id = request.form.get('list_id')
     if list_id == 'undefined':
         list_id = None
     else:
         list_id = int(list_id)
-    print(f'list_id: {list_id}')
+    #logger.debug(f'list_id: {list_id}')
     if not list_id or not is_list:
         recieving_entry_id = int(request.form.get('recieving_entry_id'))  
         #3. if a userlist with parent_id == recieving_entry_id exists: change moved_entry.userlist_id to the userlist.id
         recieving_entry = db.get_or_404(UserListEntry, recieving_entry_id)
         recieving_item_model = recieving_entry.item_model
-        print(f'recieving_entry_id: {recieving_entry_id} name: {recieving_entry.get_item().name} recieving_item_model: {recieving_item_model}')     
+        #logger.debug(f'recieving_entry_id: {recieving_entry_id} name: {recieving_entry.get_item().name} recieving_item_model: {recieving_item_model}')     
         new_list = get_userlist(item_model=recieving_item_model, parent_entry_id=recieving_entry_id)
-        print(f'new_list after get_userlist: {new_list}')
+        #logger.debug(f'new_list after get_userlist: {new_list}')
         #else: create a new list with the dragged-over-task.name as the list name, dragged-over-task.id as parent
         if not new_list:
-            print(f'not new_list')
+            #logger.debug(f'not new_list')
             new_list_name = f'{db.get_or_404(UserListEntry, recieving_entry_id).get_item().name} Sublist'
-            print(f'new_list_name: {new_list_name}')
+            #logger.debug(f'new_list_name: {new_list_name}')
             new_list = create_user_list(list_type=recieving_item_model, list_name=new_list_name, parent_entry_id=recieving_entry_id)
-            print(f'new_list after create_user_list: {new_list}')
+            #logger.debug(f'new_list after create_user_list: {new_list}')
         #4. add the dropped task to the list by changing the dragged-task.user_list_id to the list.id
         moved_entry.user_list_id = new_list.id
-        print(f'moved_entry.user_list_id: {moved_entry.user_list_id} = new_list.id: {new_list.id}')
+        #logger.debug(f'moved_entry.user_list_id: {moved_entry.user_list_id} = new_list.id: {new_list.id}')
     else:
         new_list = db.get_or_404(UserList, list_id)
         moved_entry.user_list_id = list_id
@@ -119,10 +126,10 @@ def move_entry(moved_entry_id: int = None, list_id: int = None):
         moved_entry.order = int(order_index)
     db.session.commit()
     flash(f'Entry {moved_entry_id} moved to list {new_list.list_name}')
-    print(f'moved_entry_id: {moved_entry_id} name: {moved_entry.get_item().name}, '
+    '''#logger.debug(f'moved_entry_id: {moved_entry_id} name: {moved_entry.get_item().name}, '
             f'new_list.parent_entry_id: {new_list.parent_entry_id},'
             f'new_list_id: {moved_entry.user_list_id}, new_list_name: {new_list.list_name}'
-        )
+        )'''
     #5. return
     return ('', 204)
 
@@ -130,14 +137,14 @@ def move_entry(moved_entry_id: int = None, list_id: int = None):
 @login_required
 def update(entry_id): #currently only for tasks
     entry = db.get_or_404(UserListEntry, entry_id)
-    print(f'entry_id: {entry_id}, entry.item_model: {entry.item_model}')
+    #logger.debug(f'entry_id: {entry_id}, entry.item_model: {entry.item_model}')
     if entry.item_model == 'Task':
-        print(f'test')
+        #logger.debug(f'test')
         task = entry.get_item()
         is_checked = request.form.get('isChecked')#, 'off') == 'on'
-        print(f'is_checked: {is_checked}')
+        #logger.debug(f'is_checked: {is_checked}')
         if is_checked:
-            print(f'{task.name} is_checked: {is_checked}')
+            #logger.debug(f'{task.name} is_checked: {is_checked}')
             task.mark_as_completed()
         else:
             task.mark_as_pending()
@@ -153,27 +160,26 @@ def update_list_order(list_id: int = None):
         if hidden_list_id is not None and hidden_list_id != '':
             list_id = int(hidden_list_id)
     order = request.form.getlist('items')
-    print(f'list_id: {list_id}, order1: {order}')
+    #logger.debug(f'list_id: {list_id}, order1: {order}')
     if not order:
         userlist = db.get_or_404(UserList, list_id)
         order = db.session.scalars(select(UserListEntry).filter_by(user_list_id=userlist.id).order_by(UserListEntry.order)).all()
-        print(f'UserList {userlist.list_name} order2: {order}')
+        #logger.debug(f'UserList {userlist.list_name} order2: {order}')
         if order is None or len(order) == 0:
             flash(f'No items in list {userlist.list_name}')
-            print(f'No items in list {userlist.list_name}')
+            #logger.debug(f'No items in list {userlist.list_name}')
             return ('', 204) #redirect(url_for('lists.show_list', list_id=list_id))
-
     # Extract the IDs if they are UserListEntry objects
     if hasattr(order[0], 'id'):
-        print(f'UserList {userlist.list_name} order3: {order}')
+        #logger.debug(f'UserList {userlist.list_name} order3: {order}')
         order = [entry.id for entry in order]
-    print(f'order3: {order}')
+    #logger.debug(f'order3: {order}')
     for index, entry_id in enumerate(order):
-        print(f'index: {index}, entry_id: {entry_id}')
+        #logger.debug(f'index: {index}, entry_id: {entry_id}')
         entry = update_entry_order(entry_id, index)
-        print(f'entry B: {entry}')
-        if not entry:
-            print(f'Entry {entry_id} not found')
+        #logger.debug(f'entry B: {entry}')
+        #if not entry:
+            #logger.debug(f'Entry {entry_id} not found')
             # Respond with an X-Revert header
             #response = make_response("")
             #revert = True
@@ -181,8 +187,8 @@ def update_list_order(list_id: int = None):
             #    response.headers['X-Revert'] = 'true'
             #return response
             #return ('', 204)
-        else:
-            print(f'Updating entry_id: {entry_id} item_name: {entry.get_item().name} with new order: {index}')
+        #else:
+            #logger.debug(f'Updating entry_id: {entry_id} item_name: {entry.get_item().name} with new order: {index}')
     flash('List order updated')
     return ('', 204) #redirect(url_for('lists.show_list', list_id=list_id))
 
@@ -191,17 +197,17 @@ def update_list_order(list_id: int = None):
 @login_required
 def show_list(list_id: int = None):
     reversed = request.args.get('reversed') == 'True'
-    if reversed:
-        print(f'reverse true?: {reversed}')
+    #if reversed:
+        #logger.debug(f'reverse true?: {reversed}')
     view_override = request.args.get('view_override')
     if view_override:
         view = view_override
     else:
         view = session.get('view')
-    print(f'view: {view}')
-    print(f'list_id1: {list_id}')
+    #logger.debug(f'view: {view}')
+    #logger.debug(f'list_id1: {list_id}')
     sublevel_limit = request.args.get('sublevel_limit')
-    print(f'sublevel_limit: {sublevel_limit}')
+    #logger.debug(f'sublevel_limit: {sublevel_limit}')
     if sublevel_limit:
         sublevel_limit = int(sublevel_limit)
     else:
@@ -211,32 +217,32 @@ def show_list(list_id: int = None):
         sublevel = int(sublevel)
     else:
         sublevel = 0
-    print(f'sublevel: {sublevel}')
-    print(f'showing list list_id: {list_id}')
+    #logger.debug(f'sublevel: {sublevel}')
+    #logger.debug(f'showing list list_id: {list_id}')
     force_new_list = request.args.get('force_new_list') == 'true'
     if list_id:
         list_obj=db.get_or_404(UserList, list_id)
-        print(f'list_obj with list_id {list_id}: {list_obj}')
+        #logger.debug(f'list_obj with list_id {list_id}: {list_obj}')
         found_lists = [list_obj]
     elif not list_id:
-        print(f'not list_id')
+        #logger.debug(f'not list_id')
         combine = bool(request.args.get('combine') == 'True')
         root_parent = request.args.get('root_parent')
         parent = request.args.get('parent')
         parent_entry_id = request.args.get('parent_entry_id')
-        print(f'force_new_list: {force_new_list}')  
+        #logger.debug(f'force_new_list: {force_new_list}')  
         if parent_entry_id:
             parent_entry_id = int(parent_entry_id)
         elif parent:
-            print(f'parent1: {parent}')
+            #logger.debug(f'parent1: {parent}')
             parent_entry_id = get_list_entries_for_item(parent)[0].id
-            print(f'parent_entry_id A: {parent_entry_id}')
+            #logger.debug(f'parent_entry_id A: {parent_entry_id}')
         elif root_parent:
             root_parent_entry_id = get_list_entries_for_item(root_parent)[0].id
-            print(f'root_parent_entry_id: {root_parent_entry_id}')
-        print(f'parent_entry_id B: {parent_entry_id}')
+            #logger.debug(f'root_parent_entry_id: {root_parent_entry_id}')
+        #logger.debug(f'parent_entry_id B: {parent_entry_id}')
         list_model = request.args.get('list_type')
-        print(f'list_model: {list_model}')
+        #logger.debug(f'list_model: {list_model}')
         if not list_model and parent_entry_id:
             found_lists = get_userlists_by_parent(parent_entry_id)
         elif root_parent:
@@ -256,28 +262,40 @@ def show_list(list_id: int = None):
             elif list_model == 'Task':
                 if not parent_entry_id and not combine: 
                     parent_entry_id = get_list_entries_for_item(current_user.active_home.active_room)[0].id   
-                print(f'show_list: Task list parent_entry_id C: {parent_entry_id}')
-            elif list_model == 'Photo': #todo make photogrid work
+                #logger.debug(f'show_list: Task list parent_entry_id C: {parent_entry_id}')
+            elif list_model == 'Photo': #todo make pingrid work
                 if not parent_entry_id and not combine: 
                     parent_entry_id = get_list_entries_for_item(current_user.active_home.active_room)[0].id
+            elif list_model == 'Pin':
+                raise ValueError(f'Pin list should be given by the parent photo')
+                '''if not parent_entry_id and not combine: 
+                    parent_entry_id = get_list_entries_for_item(current_user.active_home.active_room.)[0].id'''
             else:
                 raise ValueError(f'Unknown list type {list_model}')
             # if combine is True, show combined lists, else show the first list found
             list_obj = get_userlist(list_model, parent_entry_id=parent_entry_id, combine=combine)
-            print(f'list_obj A: {list_obj}')
+            #logger.debug(f'list_obj A: {list_obj}')
             if not list_obj and force_new_list:
                 list_obj = create_list_and_item_and_entry(list_model, retrieve='list')
-            print(f'list_obj B: {list_obj}')
+            #logger.debug(f'list_obj B: {list_obj}')
             found_lists = [list_obj]
     if any(found_lists):
         child_lists = get_immediate_child_lists(found_lists)
-        print(f'found_lists - inner return: {found_lists}')
+        #logger.debug(f'found_lists - inner return: {found_lists}')
         return render_template('lists/list.html.jinja', userlists=found_lists, view=view, reversed=reversed, sublevel=sublevel, sublevel_limit=sublevel_limit, view_override=view_override, child_lists=child_lists)
     else:
-        print("no lists found - return")
+        #logger.debug("no lists found - return")
         return '', 204
-    print(f'found_lists - outer return: {found_lists}')
+    #logger.debug(f'found_lists - outer return: {found_lists}')
     return render_template('lists/list.html.jinja', userlists=found_lists, view=view, reversed=reversed, sublevel=sublevel, sublevel_limit=sublevel_limit, view_override=view_override)
+
+@lists.route('/show_photo_entry/<int:photo_id>', methods=['GET'])
+@login_required
+def show_photo_entry(photo_id):
+    photo = db.get_or_404(Photo, photo_id)
+    entry_id = get_list_entries_for_item(photo, list_type='Photo')[0].id
+    photo_entry = db.get_or_404(UserListEntry, entry_id)
+    return render_template('lists/model/photo.html.jinja', entry=photo_entry)
 
 
 @lists.route('/rename/<string:item_model>/<int:item_id>', methods=['GET', 'PUT'])
@@ -299,16 +317,16 @@ def rename_item(item_model, item_id):
         if not model_class or not issubclass(model_class, db.Model):
             raise ValueError(f'Unknown item type {item_model}')
         item = db.get_or_404(model_class, item_id)
-        print(request.form)
+        #logger.debug(request.form)
         new_name = request.form.get(f'input_{item_model}_name-{item_id}')
         if not new_name or new_name == '':
-            print(f'prev_name: {prev_name}')
+            #logger.debug(f'prev_name: {prev_name}')
             return render_template('lists/name.html.jinja', entry=entry)
             #return prev_name, 200
         if item:
-            print(f'Found item: {item.name} to rename to: {new_name}')
+            #logger.debug(f'Found item: {item.name} to rename to: {new_name}')
             item.name = new_name
-            print(f'renaming item_model: {item_model}, item_id: {item_id} to {new_name}')
+            #logger.debug(f'renaming item_model: {item_model}, item_id: {item_id} to {new_name}')
             db.session.commit()
             return render_template('lists/name.html.jinja', entry=entry)
 
@@ -318,13 +336,13 @@ def delete(user_list_entry_id):
     code = request.args.get('code')
     if not code: # if swap is not set to 'delete'
         code = 204
-    print(f'code: {code}')
+    #logger.debug(f'code: {code}')
     if delete_entry_and_item(user_list_entry_id):
         flash(f'user_list_entry_id: {user_list_entry_id} Item deleted', 'danger')
-        print(f'deleted user_list_entry_id: {user_list_entry_id} Item deleted')
+        #logger.debug(f'deleted user_list_entry_id: {user_list_entry_id} Item deleted')
     else:
         flash('Item not found', 'danger')
-        print('Item to delete not found')
+        #logger.debug('Item to delete not found')
     return ('', code)
 
 @lists.route('/delete/list/<int:user_list_id>', methods=['DELETE'])

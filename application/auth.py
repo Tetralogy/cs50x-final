@@ -1,3 +1,4 @@
+import logging
 import re
 from flask import Blueprint, Flask, flash, make_response, redirect, render_template, request, session, url_for
 from flask_sqlalchemy import SQLAlchemy
@@ -9,8 +10,10 @@ from .database.models import User
 from .utils import apology
 
 from .extension import db  
+from logs.logging_config import ApplicationLogger
 
 auth = Blueprint('auth', __name__)
+logger = ApplicationLogger.get_logger(__name__)
 
 @auth.route("/login", methods=["GET", "POST"])
 def login():

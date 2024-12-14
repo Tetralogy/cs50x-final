@@ -1,12 +1,16 @@
+import logging
 from flask import Blueprint, flash, jsonify, render_template
 from flask_login import current_user, login_required
 from sqlalchemy import delete
 from application.extension import db
 from application.database.models import RoomDefault, Floor, UserAbility, UserList, UserListEntry, UserStatus, UserPreference, Home, Room, Zone, Appliance, Photo, Task, Pin, TaskProgress, Supply
+from logs.logging_config import ApplicationLogger
 
 
 
 account = Blueprint('account', __name__)
+
+logger = ApplicationLogger.get_logger(__name__)
 
 @account.route('/profile', methods=['GET', 'POST'])
 @login_required

@@ -1,3 +1,4 @@
+import logging
 import os
 from flask import Blueprint, current_app, make_response, redirect, render_template, request, session, url_for
 from jinja2.exceptions import TemplateNotFound
@@ -8,8 +9,10 @@ from application.extension import db
 from application.database.models import Room
 from application.list_utils import get_list_entries_for_item, get_userlist
 from application.rooms import set_active_room
+from logs.logging_config import ApplicationLogger
 
 walkthrough = Blueprint('walkthrough', __name__)
+logger = ApplicationLogger.get_logger(__name__)
 
 @walkthrough.route('/walkthrough/setup', methods=['GET'])
 @login_required
@@ -24,12 +27,12 @@ def walkthrough_setup():
 @login_required
 def walk_start(room_name: str = None, view: str = None):
     if request.method == 'GET':
-        print(f'get room_name: {room_name}')
-        print(f'get view: {view}')
+        logger.debug(f'get room_name: {room_name}')
+        logger.debug(f'get view: {view}')
         if room_name:
             room = db.session.execute(select(Room).where(Room.home_id == current_user.active_home_id).where(Room.name == room_name)).first()
             if room:
-                print(f'room: {room} room_name: {room_name} room name name: {room[0].name}')
+                logger.debug(f'room: {room} room_name: {room_name} room name name: {room[0].name}')
                 room_id = room[0].id
                 set_active_room(room_id)
                 if not view:
@@ -37,15 +40,15 @@ def walk_start(room_name: str = None, view: str = None):
                 
         
     if request.method == 'POST':
-        print(f'post room_name: {room_name}')
-        print(f'post view: {view}')
+        logger.debug(f'post room_name: {room_name}')
+        logger.debug(f'post view: {view}')
         active_room_id = request.form.get('active_room')
         set_active_room(active_room_id)
-        print(f'active_room: {current_user.active_home.active_room}')
+        logger.debug(f'active_room: {current_user.active_home.active_room}')
         view = "rename"
     session['view'] = view
-    print(f'view: {view}')
-    #print(f'active_room: {active_room}')
+    logger.debug(f'view: {view}')
+    #logger.debug(f'active_room: {active_room}')
     return redirect(url_for('walkthrough.views', view=view))
     #return render_template('walkthrough/index.html.jinja', active_room=active_room)
 
@@ -60,15 +63,15 @@ def views():
 
     if request.method == 'PUT':
         view = request.form.get('view')
-        print(f'view: {view}')
+        logger.debug(f'view: {view}')
         session['view'] = view
-    print(f'view?: {view}')
+    logger.debug(f'view?: {view}')
     
     if os.path.exists(os.path.join(current_app.root_path, 'templates', f'walkthrough/parts/{view}.html.jinja')):
-        print(f'File exists!: walkthrough/parts/{view}.html.jinja')
+        logger.debug(f'File exists!: walkthrough/parts/{view}.html.jinja')
         
     else:
-        print(f'File not found! {view}.html.jinja')
+        logger.debug(f'File not found! {view}.html.jinja')
         view = 'rename'
 
     if 'HX-Request' in request.headers:
@@ -97,11 +100,11 @@ def walk_next(direction):
     parent_entry_id = get_list_entries_for_item(current_user.active_home.active_floor)[0].id
     #current_user.active_home.active_room_id
     rooms_list = get_userlist(item_model='Room', parent_entry_id=parent_entry_id)
-    print(f'rooms_list: {rooms_list} entries: {rooms_list.entries}') 
+    logger.debug(f'rooms_list: {rooms_list} entries: {rooms_list.entries}') 
     rooms_list_ordered = iter(sorted(rooms_list.entries, key=lambda x: x.order))
-    print(f'rooms_list_ordered 1: {rooms_list_ordered}')
+    logger.debug(f'rooms_list_ordered 1: {rooms_list_ordered}')
     rooms_list_ordered = sorted(rooms_list.entries, key=lambda x: x.order)
-    print(f'rooms_list_ordered 2: {rooms_list_ordered}')
+    logger.debug(f'rooms_list_ordered 2: {rooms_list_ordered}')
     if not rooms_list_ordered:
         # handle the case where the list is empty
         raise Exception('No rooms in the list')
@@ -109,7 +112,7 @@ def walk_next(direction):
         if room == current_active_room_list_entry:
             next_room_index = (i + direction) % len(rooms_list_ordered)
             next_room = rooms_list_ordered[next_room_index]
-            print(f'next_room: {next_room}')
+            logger.debug(f'next_room: {next_room}')
             set_active_room(next_room.item_id)
             break
     view = 'rename'

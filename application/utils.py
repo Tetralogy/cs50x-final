@@ -1,8 +1,10 @@
 
+import logging
 from flask import Blueprint, flash, g, get_flashed_messages, render_template, request, session
-
+from logs.logging_config import ApplicationLogger
 
 utils = Blueprint('utils', __name__)
+logger = ApplicationLogger.get_logger(__name__)
 
 def apology(message, code=400):
     """Render message as an apology to user."""
@@ -37,7 +39,7 @@ def handle_error(error):
 @utils.route('/get-flash-messages')
 def get_flash_messages():
     messages = get_flashed_messages(with_categories=True)
-    print(f"Retrieved flash messages: {messages}")
+    logger.debug(f"Retrieved flash messages: {messages}")
     return render_template('base/parts/flash_messages.html.jinja' , messages=messages)
 
 @utils.route('/remove-flash')

@@ -1,10 +1,15 @@
+import logging
+import time
 from typing import List, Optional
-from flask import flash
+from flask import current_app, flash
 from flask_login import current_user
 from sqlalchemy import and_, select
-from application.database.models import Floor, Home, Photo, Room, RoomDefault, Task, UserList, UserListEntry
+import sqlalchemy
+from application.database.models import Floor, Home, Photo, Room, RoomDefault, Task, UserList, UserListEntry, Pin
 from application.extension import db
+from logs.logging_config import ApplicationLogger
 
+logger = ApplicationLogger.get_logger(__name__)
 
 def create_user_list(list_type: str, list_name: str, parent_entry_id: int = None) -> UserList:
     if not list_type:
@@ -25,20 +30,20 @@ def create_user_list(list_type: str, list_name: str, parent_entry_id: int = None
     if existing_list:
         return existing_list
     new_list = UserList(user_id=current_user.id, list_name=list_name, list_type=list_type, parent_entry_id=parent_entry_id)
-    print(f'create_user_list: new_list: {new_list}')
+    logger.debug(f'create_user_list: new_list: {new_list}')
     db.session.add(new_list)
     db.session.commit()
     return new_list
 def default_list_name(item_model, parent_entry_id: int=None, room_id: int=None):
     if not item_model:
         raise ValueError('item_model cannot be None')
-    print(f'default_list_name() A: item_model: {item_model}, parent_entry_id: {parent_entry_id}')
+    logger.debug(f'default_list_name() A: item_model: {item_model}, parent_entry_id: {parent_entry_id}')
     if not parent_entry_id:
         if not room_id:
             room_id = current_user.active_home.active_room_id
             if not room_id:
                 raise ValueError('No active room or parent_entry_id provided')
-        print(f'room_id: {room_id}')
+        logger.debug(f'room_id: {room_id}')
         room = db.get_or_404(Room, room_id)
         parent = room
         parent_entry_id = get_list_entries_for_item(room)[0].id
@@ -47,11 +52,11 @@ def default_list_name(item_model, parent_entry_id: int=None, room_id: int=None):
         parent = db.get_or_404(UserListEntry, parent_entry_id)
         item_name = parent.get_item().name
     list_name = f'{item_name} {item_model}s'
-    print(f'default_list_name() B: list_name: {list_name} parent_entry_id: {parent_entry_id}')
+    logger.debug(f'default_list_name() B: list_name: {list_name} parent_entry_id: {parent_entry_id}')
     return list_name, parent_entry_id
-def add_item_to_list(user_list_id: int, item_model: str, item_id: int = None, order: int = None, name: str = None, photo_url: str = None) -> UserListEntry:
+def add_item_to_list(user_list_id: int, item_model: str, item_id: int = None, order: int = None, name: str = None, photo_url: str = None, task_id: int = None) -> UserListEntry:
     list_obj = db.get_or_404(UserList, user_list_id)
-    print(f'add_item_to_list(): user_list_id: {user_list_id}, item_model: {item_model}, item_id: {item_id}, order: {order}, name: {name}')
+    logger.debug(f'add_item_to_list(): user_list_id: {user_list_id}, item_model: {item_model}, item_id: {item_id}, order: {order}, name: {name}')
     if not list_obj:
         raise ValueError(f'Unknown list id {user_list_id}')
     if item_model is None:
@@ -60,10 +65,10 @@ def add_item_to_list(user_list_id: int, item_model: str, item_id: int = None, or
     if not model_class or not issubclass(model_class, db.Model):
         raise ValueError(f'Unknown item type {item_model}')
     if item_id is None:
-        new_item = create_new_default(item_model, name, list_obj, photo_url=photo_url)
-        if not new_item:
+        new_list_entry = create_new_default(user_list_id,item_model, name, list_obj, photo_url=photo_url, task_id=task_id)
+        if not new_list_entry:
             return None
-        item_id = new_item.item_id
+        item_id = new_list_entry.item_id
     if order is None:
         order = db.session.scalars(db.select(db.func.count()).select_from(UserListEntry).where(UserListEntry.user_list_id == user_list_id)).one()
     elif order < 1:
@@ -79,13 +84,16 @@ def add_item_to_list(user_list_id: int, item_model: str, item_id: int = None, or
         for item in all_items:
             if item.order >= order:
                 item.order += 1
-    new_list_item = UserListEntry(user_list_id=user_list_id, item_model=item_model, item_id=item_id, order=order)
-    db.session.add(new_list_item)
+    if new_list_entry:
+        new_list_entry.order = order
+    else:
+        new_list_entry = UserListEntry(user_list_id=user_list_id, item_model=item_model, item_id=item_id, order=order)
+    db.session.add(new_list_entry)
     db.session.commit()
-    return new_list_item
+    return new_list_entry
 
-def create_new_default(item_model: str, name: str = None, list_obj: UserList = None, photo_url: str = None) -> UserListEntry:
-    print(f'create_new_default(): item_model: {item_model}, name: {name}')
+def create_new_default(user_list_id: int, item_model: str, name: str = None, pinlist_obj: UserList = None, photo_url: str = None, room_id: int = None, order: int = 0, task_id: int = None) -> UserListEntry:
+    logger.debug(f'create_new_default(): item_model: {item_model}, name: {name}')
     if item_model == 'Home':
         if not name:
             user_home_count = db.session.query(Home).filter_by(user_id=current_user.id).count()
@@ -93,9 +101,9 @@ def create_new_default(item_model: str, name: str = None, list_obj: UserList = N
         new_item = Home(user_id=current_user.id, name=name)
         db.session.add(new_item)
         db.session.commit()
-        return UserListEntry(item_model=item_model, item_id=new_item.id)
+        return UserListEntry(user_list_id=user_list_id, item_model=item_model, item_id=new_item.id)
     if item_model == 'Floor':
-        print(f'name (create_new_default):  {name}')
+        logger.debug(f'name (create_new_default):  {name}')
         current_home = current_user.active_home
         if not name:
             floor_name = set_default_floor_name()
@@ -110,21 +118,11 @@ def create_new_default(item_model: str, name: str = None, list_obj: UserList = N
                     if name in floor_name:
                         count += 1
                     floor_name = f'{name} {count + 1}'
-                    print(f'floor_name (create_new_default): {floor_name}')
+                    logger.debug(f'floor_name (create_new_default): {floor_name}')
         new_item = Floor(home_id=current_home.id, name=floor_name) #creates default floor
         db.session.add(new_item)
         db.session.commit()
-        return UserListEntry(item_model=item_model, item_id=new_item.id)
-    if item_model == 'Task':
-        if not name:
-            room_task_count = int(len(list_obj.entries))
-            print(f'room_task_count: {room_task_count}')
-            name = f"{current_user.active_home.active_room.name} {item_model} {room_task_count + 1}"
-            print(f'name (create_new_default): {name}')
-        new_item = Task(user_id=current_user.id, name=name)
-        db.session.add(new_item)
-        db.session.commit()
-        return UserListEntry(item_model=item_model, item_id=new_item.id)
+        return UserListEntry(user_list_id=user_list_id, item_model=item_model, item_id=new_item.id)
     if item_model == 'Room':
         if not name:
             name = item_model
@@ -134,14 +132,33 @@ def create_new_default(item_model: str, name: str = None, list_obj: UserList = N
             .select_from(Room)
             .where(and_(Room.home_id == current_user.active_home_id, Room.room_type == room_type))
         ).scalar() 
-        print(f'same_type_rooms_count: {same_type_rooms_count}')
+        logger.debug(f'same_type_rooms_count: {same_type_rooms_count}')
         
         newname = f'{room_type} {same_type_rooms_count + 1}'
-        print(f'room (create_new_default): {newname}')
-        new_item = Room(home_id=current_user.active_home_id, floor_id=current_user.active_home.active_floor_id, room_type=room_type, name=newname)
-        db.session.add(new_item) 
+        
+        logger.debug(f'room (create_new_default): {newname}')
+
+        if not photo_url:
+            photo_url = current_app.config['DEFAULT_ROOM_PHOTO_URL']
+        room_photos_list = create_user_list(list_type='Photo', list_name=f'{newname} Photos')
+        default_cover_image_entry = add_item_to_list(user_list_id=room_photos_list.id, item_model='Photo', name=f'{newname} default_cover_image', photo_url=photo_url)
+        new_item = Room(
+            home_id=current_user.active_home_id, 
+            floor_id=current_user.active_home.active_floor_id, 
+            room_type=room_type, 
+            name=newname, 
+            current_cover_photo_id=default_cover_image_entry.item_id,
+            photos_list_id=room_photos_list.id
+            )
+        db.session.add(new_item)
+        db.session.flush()
+        new_room_entry = UserListEntry(user_list_id=user_list_id, item_model=item_model, item_id=new_item.id, order=order)
+        db.session.add(new_room_entry)
+        db.session.flush()
+        room_photos_list.parent_entry_id = new_room_entry.id
         db.session.commit()
-        return UserListEntry(item_model=item_model, item_id=new_item.id)
+        logger.debug(f'ROOM new_entry: {new_room_entry}')
+        return new_room_entry
     if item_model == 'RoomDefault':
         if not name:
             raise ValueError('name for RoomDefault cannot be None')
@@ -153,39 +170,68 @@ def create_new_default(item_model: str, name: str = None, list_obj: UserList = N
         new_item = RoomDefault(user_id=current_user.id, name=name)
         db.session.add(new_item)
         db.session.commit()
-        return UserListEntry(item_model=item_model, item_id=new_item.id)
+        return UserListEntry(user_list_id=user_list_id, item_model=item_model, item_id=new_item.id)
+    if item_model == 'Task':
+        if not name:
+            room_task_count = int(len(pinlist_obj.entries))
+            logger.debug(f'room_task_count: {room_task_count}')
+            name = f"{current_user.active_home.active_room.name} {item_model} {room_task_count + 1}"
+            logger.debug(f'name (create_new_default): {name}')
+        new_item = Task(user_id=current_user.id, name=name)
+        db.session.add(new_item)
+        db.session.commit()
+        return UserListEntry(user_list_id=user_list_id, item_model=item_model, item_id=new_item.id)
     if item_model == 'Photo':
         if not name:
             raise ValueError('name for Photo cannot be None')
-            room_photo_count = int(len(list_obj.entries))
-            print(f'room_photo_count: {room_photo_count}')
+            room_photo_count = int(len(pinlist_obj.entries))
+            logger.debug(f'room_photo_count: {room_photo_count}')
             name = f"{filename} {current_user.active_home.active_room.name} {item_model} {room_photo_count + 1}"
-            print(f'name (create_new_default): {name}')
-
+            logger.debug(f'name (create_new_default): {name}')
         description = name 
-        print(f'photo_url: {photo_url}')
-        print(f'description: {description}')
-        
+        logger.debug(f'photo_url: {photo_url}')
+        logger.debug(f'description: {description}')
+        if not room_id:
+            room_id=current_user.active_home.active_room_id
+            if not room_id: #if no rooms created yet
+                room_id = 1
+        new_pinlist = create_user_list(list_type='Pin', list_name=f'{name} Pins')
         # Create a new Photo item for each uploaded file
         new_item = Photo(
             user_id=current_user.id, 
-            room_id=current_user.active_home.active_room_id, 
+            room_id=room_id, 
             name=name,
             description=description, 
-            photo_url=photo_url
+            photo_url=photo_url,
+            pins_list_id=new_pinlist.id
         )
         db.session.add(new_item)
-            
+        db.session.flush()
+        logger.debug(f'new_item: {new_item}')
+        new_photo_entry = UserListEntry(item_model=item_model, item_id=new_item.id, user_list_id=user_list_id, order=order)
+        db.session.add(new_photo_entry)
+        db.session.flush()
+        new_pinlist.parent_entry_id = new_photo_entry.id
         db.session.commit()
-        return UserListEntry(item_model=item_model, item_id=new_item.id)
-    #todo: photopin 
+        logger.debug(f'new_pinlist.parent_entry_id: {new_pinlist.parent_entry_id} new_entry.id: {new_photo_entry.id}')
+        logger.debug(f'ROOM new_entry: {new_photo_entry}')
+        return new_photo_entry
+    #todo: check if pin for task on photo already exists, if exists, only change the order 
     if item_model == 'Pin':
-        #xxx new_item = Pin(task_id= #BUG GET TASK ID for pin, photo_id= #BUG GET PHOTO ID for pin)
+        pinlist_obj = db.get_or_404(UserList, user_list_id)
+        photo_id = pinlist_obj.parent.item_id
+        if not photo_id:
+            raise ValueError(f'photo_id not found: {photo_id} pinlist_obj: {pinlist_obj}')
+        if not task_id or not photo_id:
+            raise ValueError('task_id and photo_id cannot be None')
+        new_item = Pin(task_id=task_id, photo_id=photo_id)
         db.session.add(new_item)
         db.session.commit()
-        return UserListEntry(item_model=item_model, item_id=new_item.id)
+        logger.debug(f'new default pin new_item: {new_item} photo_id: {photo_id} task_id: {task_id} pinlist_obj: {pinlist_obj}')
+        return UserListEntry(user_list_id=user_list_id, item_model=item_model, item_id=new_item.id)
     else:
         raise ValueError(f'Unknown item type {item_model}')
+    
 ''' uploaded_files 
 def get_user_list_items(user_list_id: int) -> List[dict]:
     items = UserListItem.query.filter_by(user_list_id=user_list_id).order_by(UserListItem.order).all()
@@ -210,15 +256,15 @@ def get_user_list_items(user_list_id: int) -> List[dict]:
 def get_userlists_by_parent(parent_entry_id: int) -> List[UserList]:
         lists = current_user.lists.filter_by(parent_entry_id=parent_entry_id).all()
         if lists:
-            print(f'get_userlists_by_parent: lists found (parent_entry_id){parent_entry_id}: {lists}')
+            logger.debug(f'get_userlists_by_parent: lists found (parent_entry_id){parent_entry_id}: {lists}')
         else:
-            print(f'get_userlists_by_parent: No lists found for parent_entry_id {parent_entry_id}')
+            logger.debug(f'get_userlists_by_parent: No lists found for parent_entry_id {parent_entry_id}')
         return lists
 
 def get_top_userlists_by_root_parent(root_parent_entry_id: int, model) -> List[UserList]:
         if not model:
             raise ValueError('model cannot be None')
-        print(f'input root_parent_entry_id: {root_parent_entry_id} model: {model}')
+        logger.debug(f'input root_parent_entry_id: {root_parent_entry_id} model: {model}')
         parent_entry_id=root_parent_entry_id
         parent_lists = get_userlists_by_parent(parent_entry_id=root_parent_entry_id) # -> List[UserList]:
         parent_lists_with_model = [userlist for userlist in parent_lists if userlist.list_type == model]
@@ -231,9 +277,9 @@ def get_top_userlists_by_root_parent(root_parent_entry_id: int, model) -> List[U
             parent_lists_with_model = [userlist for userlist in found_lists if userlist.list_type == model]
             parent_lists = found_lists
         if parent_lists_with_model:
-            print(f'get_top_userlists_by_root_parent: lists found (parent_entry_id){root_parent_entry_id}: {parent_lists_with_model}')
+            logger.debug(f'get_top_userlists_by_root_parent: lists found (parent_entry_id){root_parent_entry_id}: {parent_lists_with_model}')
         else:
-            print(f'get_top_userlists_by_root_parent: No {model} lists found for root_parent_entry_id {root_parent_entry_id}')
+            logger.debug(f'get_top_userlists_by_root_parent: No {model} lists found for root_parent_entry_id {root_parent_entry_id}')
         return parent_lists_with_model
 
 def get_immediate_child_lists(parent_lists: List[UserList]) -> List[UserList]:
@@ -247,49 +293,48 @@ def get_immediate_child_lists(parent_lists: List[UserList]) -> List[UserList]:
     return found_lists
 
 def get_userlist(item_model: str = None, list_name: str = None, parent_entry_id: int = None, combine: bool = False): #gets the primary list of a main model
-    print(f'get_userlist(): item_model: {item_model}, list_name: {list_name}, parent_entry_id: {parent_entry_id}')
+    logger.debug(f'get_userlist(): item_model: {item_model}, list_name: {list_name}, parent_entry_id: {parent_entry_id}')
     if not item_model and not parent_entry_id:
         raise ValueError("Must provide item_model or parent_entry_id argument")
     if all((item_model, list_name, parent_entry_id)):
         lists = current_user.lists.filter_by(list_type=item_model, list_name=list_name, parent_entry_id=parent_entry_id).all()
         combolist_name = f'Combo {item_model} {list_name} {parent_entry_id}'
-        print(f'lists found (All args): {lists}')
+        logger.debug(f'lists found (All args): {lists}')
     elif item_model and not list_name and not parent_entry_id:
         lists = current_user.lists.filter_by(list_type=item_model).all()
         combolist_name = f'Combo All {item_model}'
-        print(f'lists found (model): {lists}')
+        logger.debug(f'lists found (model): {lists}')
     elif item_model and not list_name and parent_entry_id:
         lists = current_user.lists.filter_by(list_type=item_model, parent_entry_id=parent_entry_id).all()
         combolist_name = f'Combo {item_model} {parent_entry_id}'
-        print(f'lists found (model, parent): {lists}')
+        logger.debug(f'lists found (model, parent): {lists}')
     elif item_model and list_name and not parent_entry_id:
         lists = current_user.lists.filter_by(list_type=item_model, list_name=list_name).all()
         combolist_name = f'Combo {item_model} {list_name}'
-        print(f'lists found (model, name): {lists}')
+        logger.debug(f'lists found (model, name): {lists}')
     else:
         lists = current_user.lists.filter_by(parent_entry_id=parent_entry_id).all()
         combolist_name = f'Combo {parent_entry_id}'
-        print(f'lists found (parent_entry_id): {lists}')
+        logger.debug(f'lists found (parent_entry_id): {lists}')
     
     if not lists:
-        print(f'No lists of type {item_model} found for user {current_user.id}')
+        logger.debug(f'No lists of type {item_model} found for user {current_user.id}')
         return None
     if len(lists) == 0:
-        print(f'len(lists) == 0: {list_name} {item_model} {parent_entry_id}')
+        logger.debug(f'len(lists) == 0: {list_name} {item_model} {parent_entry_id}')
         return None
         raise ValueError(f'No lists of type {item_model} found for user {current_user.id}')
     if len(lists) > 1:
-        print(f'len(lists) > 1: {lists}')
-        print(f'combine: {combine}')
+        logger.debug(f'len(lists) > 1: {lists}')
+        logger.debug(f'combine: {combine}')
         # combine the lists into a single UserList object
         if combine:
             userlist = combine_userlists(userlists = lists, combolist_name=combolist_name, parent_entry_id=parent_entry_id)
         else:
             userlist = lists[0]
-        
         return userlist
     else:
-        print(f'len(lists) == 1: {list_name} {item_model} {parent_entry_id}')
+        logger.debug(f'len(lists) == 1: {list_name} {item_model} {parent_entry_id}')
         list_id = lists[0].id
     if not isinstance(list_id, int):
         raise ValueError(f'No lists of type {item_model} found for user {current_user.id}')
@@ -299,33 +344,33 @@ def get_userlist(item_model: str = None, list_name: str = None, parent_entry_id:
             if len(lists) == 0:
                 raise ValueError(f'No lists of type {item_model} found for user {current_user.id}')
             if len(lists) > 1:
-                print('More than one list matches the string. Please select one:')
+                logger.debug('More than one list matches the string. Please select one:')
                 for i, lst in enumerate(lists):
-                    print(f'{i+1}. {lst.list_name}')
+                    logger.debug(f'{i+1}. {lst.list_name}')
                 selected_list_index = int(input('Enter the number of the list: '))
                 list_id = lists[selected_list_index-1].id
             else:
                 list_id = lists[0].id
     userlist =  db.get_or_404(UserList, list_id)
     newlist = []
-    print(f'userlist.entries: {userlist.entries} List type: {type(userlist.entries)}')
+    logger.debug(f'userlist.entries: {userlist.entries} List type: {type(userlist.entries)}')
     for entry in userlist.entries:
-        print(f'List: {entry.user_list.list_name}, Order: {entry.order}')
+        logger.debug(f'List: {entry.user_list.list_name}, Order: {entry.order}')
         #newlist.append(entry.get_item().as_list_item)
     return userlist
 
 def combine_userlists(userlists: List[UserList], combolist_name: str = None, parent_entry_id: int = None) -> UserList:
     # search all userlists in the list and see if they have the same list_type
     if all(userlist.list_type == userlists[0].list_type for userlist in userlists):
-        print("All userlists have the same list_type")
+        logger.debug("All userlists have the same list_type")
         list_type = userlists[0].list_type
     else:
-        print("Not all userlists have the same list_type")
+        logger.debug("Not all userlists have the same list_type")
         list_type = 'Mixed'
     list_type = f'{list_type} ComboList'
     if not combolist_name:
         combolist_name = list_type
-    print(f'list_name: {combolist_name}')
+    logger.debug(f'list_name: {combolist_name}')
     if not parent_entry_id:
         if all(userlist.parent_entry_id == userlists[0].parent_entry_id for userlist in userlists):
             parent_entry_id = userlists[0].parent_entry_id
@@ -333,18 +378,18 @@ def combine_userlists(userlists: List[UserList], combolist_name: str = None, par
             parent_entry_id = get_list_entries_for_item(current_user.active_home)[0].id
     combined_list = get_userlist(list_type, combolist_name, parent_entry_id=parent_entry_id)
     if not combined_list:
-        print(f'combined_list not found, creating new list')
+        logger.debug(f'combined_list not found, creating new list')
         combined_list = create_user_list(list_type, combolist_name, parent_entry_id=parent_entry_id)
-    print(f'combined_list?: {combined_list}')
+    logger.debug(f'combined_list?: {combined_list}')
     for userlist in userlists:
         for entry in userlist.entries:
-            print(f'entry: {entry}')
+            logger.debug(f'entry: {entry}')
             # check if item_id is already in combined_list
             if entry.item_id not in [item.item_id for item in combined_list.entries]:
                 #extract item_id from each entry
                 #add each item_id as a new entry to the new UserList combined list
                 new_list_item = add_item_to_list(user_list_id=combined_list.id, item_model=entry.item_model, item_id=entry.item_id, order=entry.order)
-                print(f'new_list_item: {new_list_item}')
+                logger.debug(f'new_list_item: {new_list_item}')
     return combined_list
 
 def get_list_entries_for_item(item: object, list_type: str = None, user_id: int = None) -> List[UserListEntry]:
@@ -355,9 +400,11 @@ def get_list_entries_for_item(item: object, list_type: str = None, user_id: int 
         words = input_string.strip("<>").split()
         item_model = words[0]
         item_id = int(words[1])
-        print(f'input_string: {input_string}, item_model: {item_model}, item_id: {item_id}')
+        logger.debug(f'input_string: {input_string}, item_model: {item_model}, item_id: {item_id}')
         model_class = globals().get(item_model)
         item = db.get_or_404(model_class, item_id) # Convert string to the original object
+    elif isinstance(item, int):
+        raise ValueError('item should be an object, not an integer')
     if not user_id:
         user_id = current_user.id
     if not list_type:
@@ -366,21 +413,21 @@ def get_list_entries_for_item(item: object, list_type: str = None, user_id: int 
     found_entries = UserListEntry.find_entries_for_item(item)
     if not found_entries:
         raise ValueError(f'No list entries found for item: {item}')
-    print(f'found_entries for {item}: {found_entries}')
+    logger.debug(f'found_entries for {item}: {found_entries}')
     # Now you can iterate through the list entries
     list_entries = []
     if user_id: # must belong to specified user, default to current_user
         for entry in found_entries:
             if not entry.user_list or not entry.user_list.user_id:
-                print(f'Entry without user: {entry}')
+                logger.debug(f'Entry without user: {entry}')
             elif entry.user_list.user_id == user_id and entry.user_list.list_type == list_type:
-                print(f'Entry: {entry}')
-                print(f"Item Model: {entry.item_model}, Item ID: {entry.item_id}")
-                print(f'User List ID: {entry.user_list.id} User List Name: {entry.user_list.list_name}')
-                print(f'user: {entry.user_list.user_id}')
+                logger.debug(f'Entry: {entry}')
+                logger.debug(f"Item Model: {entry.item_model}, Item ID: {entry.item_id}")
+                logger.debug(f'User List ID: {entry.user_list.id} User List Name: {entry.user_list.list_name}')
+                logger.debug(f'user: {entry.user_list.user_id}')
                 list_entries.append(entry)
             else:
-                print(f'Entry does not belong to current_user: {entry}')
+                logger.debug(f'Entry does not belong to current_user: {entry}')
     else: # belongs to any user if user_id is None
         list_entries = found_entries
     return list_entries
@@ -407,7 +454,7 @@ def build_hierarchy(parent_entry_id: int) -> dict: #[ ]: remove if unnecessary
     from collections import deque
     hierarchy = {}
     queue = deque([parent_entry_id])
-    print(f'queue: {queue}')
+    logger.debug(f'queue: {queue}')
     level_counter = 0
     while queue:
         current_entry_id = queue.popleft()
@@ -430,12 +477,12 @@ def build_hierarchy(parent_entry_id: int) -> dict: #[ ]: remove if unnecessary
                 # Add the entry to the list's children
                 hierarchy[user_list.id]['entries'].append(entry.id)
         level_counter += 1
-        #print(f'level_counter: {level_counter}')
-    print(f'level_counter at end: {level_counter}')
+        #logger.debug(f'level_counter: {level_counter}')
+    logger.debug(f'level_counter at end: {level_counter}')
     return hierarchy
 
 def print_hierarchy_iterative(hierarchy: dict, parent_entry_id: int = None): # [ ]: remove if unnecessary
-    print("print_hierarchy_iterative:")
+    logger.debug("print_hierarchy_iterative:")
     stack = [(parent_entry_id, 0)]  # Stack to track (current_parent_id, current_indent)
 
     while stack:
@@ -443,25 +490,33 @@ def print_hierarchy_iterative(hierarchy: dict, parent_entry_id: int = None): # [
 
         for user_list_id, user_list_data in hierarchy.items():
             if user_list_data['list'].parent_entry_id == current_parent_id:
-                print('  ' * indent + f"UserList {user_list_id}:")
-                print('  ' * indent + f"  Entries: {user_list_data['entries']}")
-                print()
+                logger.debug('  ' * indent + f"UserList {user_list_id}:")
+                logger.debug('  ' * indent + f"  Entries: {user_list_data['entries']}")
+                logger.debug()
                 # Add child lists to the stack with increased indentation
                 stack.append((user_list_id, indent + 1))
 def unpack_hierarchy(hierarchy: dict) -> List[dict]:
     raise NotImplementedError("unpack_hierarchy not yet implemented") # [ ]: remove if unnecessary
 def update_entry_order(user_list_entry_id: int, new_order: int) -> Optional[UserListEntry]:
-    print(f'user_list_entry_id: {user_list_entry_id}, new_order: {new_order}')
-    entry = db.session.scalars(db.select(UserListEntry).filter_by(id=user_list_entry_id)).one_or_none()
-    #entry = UserListEntry.query.get(user_list_entry_id)
-    print(f'entry A: {entry}')
-    if new_order is None:
-        return None
-    if entry:
-        entry.order = new_order
-        db.session.commit()
-        return entry
-    return None
+    max_retries = 3
+    retry_delay = 0.5  # 500ms
+
+    for attempt in range(max_retries):
+        try:
+            entry = db.session.scalars(db.select(UserListEntry).filter_by(id=user_list_entry_id)).one_or_none()
+            if new_order is None:
+                return None
+            if entry:
+                entry.order = new_order
+                db.session.commit()
+                return entry
+            return None
+        except sqlalchemy.exc.OperationalError as e:
+            if attempt < max_retries - 1:
+                time.sleep(retry_delay)
+                continue
+            else:
+                raise e
 
 def delete_entry_and_item(user_list_entry_id: int) -> bool:
     userlist_entry = UserListEntry.query.get(user_list_entry_id)
@@ -469,7 +524,7 @@ def delete_entry_and_item(user_list_entry_id: int) -> bool:
     if userlist_entry:
         item = userlist_entry.get_item()  # Use the get_item method to fetch the item
         if item is None:
-            print('Item to delete not found')
+            logger.debug('Item to delete not found')
             return False, 404
         db.session.delete(item)
         db.session.delete(userlist_entry)
@@ -485,7 +540,7 @@ def delete_entry_and_item(user_list_entry_id: int) -> bool:
 
 def set_default_floor_name():
     floor_count = current_user.active_home.floors.count()
-    print(f'floor_count: {floor_count}')
+    logger.debug(f'floor_count: {floor_count}')
     if floor_count == 0:
         return "Main Floor"
     if floor_count == 1:

@@ -1,33 +1,26 @@
-{# <li 
-    class="col img-thumbnail grabbable d-flex justify-content-center align-items-center"
+<li 
+    class="list-group-item pe-0 shadow grabbable {% if current_user.active_home.active_room_id == entry.item_id and entry.item_model == 'Room' %}selected{% endif %}"
     id="{{ entry.item_model }}list-{{ entry.id }}"
     data-id="{{ entry.id }}"
+    data-item_id="{{ entry.item_id }}"
     data-name="{{ entry.get_item().name }}"
     data-order="{{ entry.order }}"
     data-list_id="{{ entry.user_list_id }}"
     data-model="{{ entry.item_model }}"
-    style="min-height: 100px; min-width: 100px; background-image: url('https://picsum.photos/1920/1080?random={{ entry.id }}'); background-size: cover;"
-
-                data-bs-toggle="tooltip"
-                data-bs-html="true"
-                data-bs-placement="top"
-                data-bs-title="<u>Drag</u> to <span class='text-nowrap'><b>reorder</b> {{entry.item_model}}</span>"
+        data-bs-toggle="tooltip"
+        data-bs-html="true"
+        data-bs-placement="top"
+        data-bs-title="<u>Drag</u> to <span class='text-nowrap'><b>reorder</b> {{entry.item_model}}</span>"
 >  
-
-<div id="drag-outside-indicator" style="display: none; position: fixed; z-index: 1000;">🚫</div>
-<input type='hidden' name='items' value='{{ entry.id }}'/>
-
-{# <input required
-            class="form-check-input mt-0"
-            type="radio"
-            name="active_room"
-            id="radio-{{ entry.id }}"
-            value="{{ entry.item_id }}"
-        />
-
-{% include 'lists/name.html.jinja' %} #}
-    {#<p class="bg-dark">order: {{ entry.order }}</p>#}
-   {#{% include 'lists/sublist_loader.html.jinja' %}#}
-{# </li> #}
-
-{% include 'lists/model/generic_text.html.jinja' %}
+    <input type="hidden" name="items" value="{{ entry.id }}" />
+    {{ entry.get_item().name }}
+    {% include 'base/parts/debug/order.html.jinja' %}
+<div
+id="photo-loader"
+hx-get="/show_photo_entry/{{ entry.get_item().current_cover_photo_id }}"
+hx-trigger="load once"
+hx-swap="outerHTML"
+hx-indicator="#updating-indicator"
+>
+</div>
+</li>

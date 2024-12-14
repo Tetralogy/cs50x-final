@@ -1,7 +1,7 @@
 import enum
 from flask import Blueprint
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.orm import Mapped, mapped_column, relationship, column_property
+from sqlalchemy.orm import Mapped, mapped_column, relationship, column_property, attributes
 from sqlalchemy import Boolean, String, Integer, DateTime, UniqueConstraint, and_, func, ForeignKey, select, text, event, Enum
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.sql import func
@@ -53,9 +53,6 @@ class User(db.Model, UserMixin):
     room_defaults = relationship('RoomDefault', back_populates="user", lazy='dynamic')
     lists = relationship("UserList", back_populates="user", lazy='dynamic')
 
-
-
-
 class UserList(db.Model):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey('user.id'), nullable=False, index=True)
@@ -68,7 +65,6 @@ class UserList(db.Model):
     user = relationship("User", back_populates="lists")
     entries = relationship("UserListEntry", back_populates="user_list", lazy='joined', cascade="all, delete-orphan", foreign_keys="[UserListEntry.user_list_id]")
     parent = relationship("UserListEntry", foreign_keys=[parent_entry_id])
-
 
 class UserListEntry(db.Model):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
@@ -99,7 +95,7 @@ class UserListEntry(db.Model):
         :param item: The item object to search for
         :return: A list of UserListEntry objects associated with the item
         """
-        query = cls.query.filter_by(item_model=item.__class__.__name__, item_id=item.id)
+        query = cls.query.filter_by(item_model=item.__class__.__name__, item_id=item.id) #bug here when creating new room
         return query.limit(limit).all() if limit else query.all()
     
 
@@ -170,20 +166,16 @@ class Floor(db.Model):
         }'''
     
 
-class Room(db.Model): #[ ]: ROOM LEVEL AND LOCATION ON THE MAP
+class Room(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     home_id: Mapped[int] = mapped_column(ForeignKey('home.id'))
     floor_id: Mapped[int] = mapped_column(ForeignKey('floor.id'))
     room_type: Mapped[str] = mapped_column(default='Room')
-    '''@property
-    def same_type_rooms_count(self):
-        return db.session.execute(
-            select(db.func.count())
-            .select_from(Room.__table__)
-            .where(and_(Room.home_id == self.home_id, Room.room_type == self.room_type))
-        ).scalar()'''
-    
     name: Mapped[str] = mapped_column(default='New Room')
+    current_cover_photo_id: Mapped[int] = mapped_column(ForeignKey('photo.id'), nullable=False)
+    current_cover_photo = relationship("Photo", foreign_keys=[current_cover_photo_id])
+    photos_list_id: Mapped[int] = mapped_column(ForeignKey('user_list.id'), nullable=False)
+    photos_list = relationship("UserList", foreign_keys=[photos_list_id])
     # find room types and add 1 to the count and use that as the default room name
     #room_size: Mapped[float] = mapped_column(default=0.0)
     #room_function: Mapped[str] = mapped_column(default='')
@@ -211,9 +203,7 @@ class RoomDefault(db.Model):
     name: Mapped[str] = mapped_column(String(80), nullable=False, unique=True)
     user = relationship("User", back_populates="room_defaults")
     
-    
-
-class Zone(db.Model):
+class Zone(db.Model):#todo remove zones
     id: Mapped[int] = mapped_column(primary_key=True)
     room_id: Mapped[int] = mapped_column(ForeignKey('room.id'))
     surface_type: Mapped[str]
@@ -238,9 +228,13 @@ class Photo(db.Model):
     description: Mapped[str] = mapped_column(String, nullable=False)
     photo_url: Mapped[str]
     photo_timestamp: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=func.now())
+    is_cover_photo: Mapped[bool] = mapped_column(Boolean, default=False, server_default="0")
+    pins_list_id: Mapped[int] = mapped_column(ForeignKey('user_list.id'), nullable=False)
+    pins_list = relationship("UserList", foreign_keys=[pins_list_id])
     user = relationship("User", back_populates="photos")
+    room = relationship("Room", foreign_keys=[room_id])
     pins = relationship('Pin', back_populates="photo", lazy='dynamic')
-    
+
 class TaskStatus(enum.Enum):
     PENDING = "pending"
     IN_PROGRESS = "in_progress"
@@ -269,29 +263,20 @@ class Task(db.Model):
         self.status = TaskStatus.COMPLETED
         self.completed_at = datetime.now()
         db.session.commit()
-        print(f'{self.name} Completed at: {self.completed_at}')
         
     def mark_as_pending(self):
         self.status = TaskStatus.PENDING
         self.completed_at = None
         db.session.commit()
-
-@event.listens_for(Task, 'before_update')
-def receive_before_update(mapper, connection, target):
-    target.last_updated_at = func.now()
-    
-    # Check if the status is being set to COMPLETED
-    if target.status == TaskStatus.COMPLETED and target.completed_at is None:
-        target.completed_at = datetime.now()
-    
     
 class Pin(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     task_id: Mapped[int] = mapped_column(ForeignKey('task.id'))
     photo_id: Mapped[int] = mapped_column(ForeignKey('photo.id'))
+    __table_args__ = (UniqueConstraint('task_id', 'photo_id', name='_task_photo_uc'),)
     photo = relationship('Photo', foreign_keys=[photo_id])
     task = relationship('Task', foreign_keys=[task_id])
-    
+    #automatically make the name the same as the task
     @hybrid_property
     def name(self):
         return self.task.name if self.task else None
@@ -300,6 +285,7 @@ class Pin(db.Model):
     def name(cls):
         return select(Task.name).where(Task.id == cls.task_id).scalar_subquery()
 
+#------------------------------------------------------------------------------
 class TaskProgress(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     task_id: Mapped[int] = mapped_column(ForeignKey('task.id'))

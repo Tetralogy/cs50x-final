@@ -68,6 +68,14 @@
         >
             testgrid
         </button>
+                <button
+            hx-put="/walkthrough/steps"
+            hx-target="#walkthrough-steps"
+            hx-vals='{"view": "pingridtest"}'
+            class="btn btn-primary"
+        >
+            pingrid test
+        </button>
         {#
     <button
         hx-post="/walkthrough/steps"

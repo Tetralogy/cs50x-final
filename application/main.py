@@ -1,4 +1,5 @@
 from datetime import datetime
+import logging
 from flask import Flask, flash, get_flashed_messages, jsonify, redirect, render_template, request, session, url_for, Blueprint, current_app
 from functools import wraps
 from flask_login import current_user, login_required
@@ -10,8 +11,10 @@ from application.database.models import Home, Room, Task, User, UserStatus
 from .utils import handle_error, apology
 from .extension import db
 from .database.schemas import task_schema, user_schema  # Import other schemas as needed
+from logs.logging_config import ApplicationLogger
 
 main = Blueprint('main', __name__)
+logger = ApplicationLogger.get_logger(__name__)
 
 # Register the error handler
 main.errorhandler(Exception)(handle_error)
@@ -28,10 +31,10 @@ def inject_current_user():
 def index():
     #return redirect('/walkthrough/Dining Room 1/quicknote') #temporary for testing #xxx:remove when done
     #return redirect(url_for('homes.home_setup'))
-    return redirect(url_for('rooms.map'))
+    return redirect(url_for('map.home_map'))
     #return render_template('homes/create_home.html.jinja') #temporary
     #return render_template('dashboard/index.html.jinja', user=current_user, page=1)
-    '''print('index called')
+    '''logger.debug('index called')
     home_query = select(Home).where(Home.user_id == current_user.id)
     home_id = db.session.execute(home_query).scalars().first()
     if home_id is not None:
@@ -46,7 +49,7 @@ def index():
 def debug():
     current_user.debug = not current_user.debug
     db.session.commit()
-    print(f'debug toggled: {current_user.debug}')
+    logger.debug(f'debug toggled: {current_user.debug}')
     return '', 204
 
 

@@ -15,5 +15,6 @@ import * as sortables from './sortables/sortables.js';
         <script defer src="/static/js/Sortable.min.js"></script>
                 <script defer src="/static/js/sortables.js"></script>
                 // run webpack */
+                // how to run webpack
                 // todo cleanup comments on sortables
                 // todo cleanup comments on tooltips
