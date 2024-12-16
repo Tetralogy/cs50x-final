@@ -7,7 +7,7 @@ from marshmallow import ValidationError
 from sqlalchemy import select
 from sqlalchemy.orm import joinedload
 import time
-from application.database.models import Home, Room, Task, User, UserStatus
+from application.database.models import Home, Room, Task, User
 from .utils import handle_error, apology
 from .extension import db
 from .database.schemas import task_schema, user_schema  # Import other schemas as needed

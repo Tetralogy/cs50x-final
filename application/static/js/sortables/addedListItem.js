@@ -92,7 +92,7 @@ export function addedItem(evt, itemEl, newIndex, oldIndex, model, sortableElemen
                     order_index: newIndex,
                 },
                 target: itemEl,
-                swap: "outerHTML", // returns the new content //BUG: NOT SWAPPING onAdd
+                swap: "outerHTML", // returns the new content
             },
         );
     }

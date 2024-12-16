@@ -137,7 +137,6 @@ def create_new_default(user_list_id: int, item_model: str, name: str = None, pin
         newname = f'{room_type} {same_type_rooms_count + 1}'
         
         logger.debug(f'room (create_new_default): {newname}')
-
         if not photo_url:
             photo_url = current_app.config['DEFAULT_ROOM_PHOTO_URL']
         room_photos_list = create_user_list(list_type='Photo', list_name=f'{newname} Photos')
@@ -216,19 +215,25 @@ def create_new_default(user_list_id: int, item_model: str, name: str = None, pin
         logger.debug(f'new_pinlist.parent_entry_id: {new_pinlist.parent_entry_id} new_entry.id: {new_photo_entry.id}')
         logger.debug(f'ROOM new_entry: {new_photo_entry}')
         return new_photo_entry
-    #todo: check if pin for task on photo already exists, if exists, only change the order 
     if item_model == 'Pin':
         pinlist_obj = db.get_or_404(UserList, user_list_id)
         photo_id = pinlist_obj.parent.item_id
         if not task_id or not photo_id:
             logger.debug(f'item model: {item_model}: task_id: {task_id} photo_id: {photo_id}')
             return None
-            raise ValueError('task_id and photo_id cannot be None') #BUG: need to disallow dragging from non-tasklist
-        new_item = Pin(task_id=task_id, photo_id=photo_id)
-        db.session.add(new_item)
-        db.session.commit()
-        logger.debug(f'new default pin new_item: {new_item} photo_id: {photo_id} task_id: {task_id} pinlist_obj: {pinlist_obj}')
-        return UserListEntry(user_list_id=user_list_id, item_model=item_model, item_id=new_item.id)
+            raise ValueError('task_id and photo_id cannot be None')
+        existing_pin_query = select(Pin).filter_by(task_id=task_id, photo_id=photo_id).limit(1)
+        existing_pin = db.session.execute(existing_pin_query).scalars().first()
+        if existing_pin:
+            logger.debug(f'Pin with task_id {task_id} and photo_id {photo_id} already exists, skipping')
+            pin_entry = get_list_entries_for_item(existing_pin)[0]
+        else:
+            new_item = Pin(task_id=task_id, photo_id=photo_id)
+            db.session.add(new_item)
+            db.session.commit()
+            logger.debug(f'new default pin new_item: {new_item} photo_id: {photo_id} task_id: {task_id} pinlist_obj: {pinlist_obj}')
+            pin_entry = UserListEntry(user_list_id=user_list_id, item_model=item_model, item_id=new_item.id)
+        return pin_entry
     else:
         raise ValueError(f'Unknown item type {item_model}')
     

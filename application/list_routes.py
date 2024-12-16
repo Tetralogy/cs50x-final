@@ -71,11 +71,11 @@ def create_item_and_entry(item_model, list_id, item_id: int=None, retrieve: str=
     if from_model == 'Task':
         task_id = request.form.get('task_id')
         task = db.get_or_404(Task, task_id)
+    new_item = add_item_to_list(list_id, item_model, item_id, order_index, name, task_id=task_id)
     if retrieve == 'list':
         userlist = db.get_or_404(UserList, list_id)
         logger.debug(f'retrieve: {retrieve}')
         return userlist
-    new_item = add_item_to_list(list_id, item_model, item_id, order_index, name, task_id=task_id)
     if not new_item:
         logger.debug(f'Item NOT added to list: {item_model} {item_id}')
         return None, 404
@@ -266,11 +266,11 @@ def show_list(list_id: int = None):
                 if not parent_entry_id and not combine: 
                     parent_entry_id = get_list_entries_for_item(current_user.active_home.active_room)[0].id   
                 #logger.debug(f'show_list: Task list parent_entry_id C: {parent_entry_id}')
-            elif list_model == 'Photo': #todo make pingrid work
+            elif list_model == 'Photo':
                 if not parent_entry_id and not combine: 
                     parent_entry_id = get_list_entries_for_item(current_user.active_home.active_room)[0].id
             elif list_model == 'Pin':
-                raise ValueError(f'Pin list should be given by the parent photo')
+                raise ValueError(f'Pin list should be served by the parent photo')
                 '''if not parent_entry_id and not combine: 
                     parent_entry_id = get_list_entries_for_item(current_user.active_home.active_room.)[0].id'''
             else:

@@ -41,13 +41,13 @@ class User(db.Model, UserMixin):
     last_login: Mapped[datetime] = mapped_column(DateTime, nullable=True)
     debug: Mapped[bool] = mapped_column(Boolean, server_default="0")
     # Define relationships
-    abilities = relationship('UserAbility', back_populates="user", lazy='dynamic')
-    preferences = relationship('UserPreference', back_populates="user", lazy='dynamic')
+    #abilities = relationship('UserAbility', back_populates="user", lazy='dynamic')
+    #preferences = relationship('UserPreference', back_populates="user", lazy='dynamic')
     homes = relationship('Home', back_populates="user", lazy='dynamic', foreign_keys='Home.user_id')
     photos = relationship('Photo', back_populates="user", lazy='dynamic')
     tasks = relationship('Task', back_populates="user", lazy='dynamic')
-    supply = relationship('Supply', back_populates="user", lazy='dynamic')
-    status = relationship('UserStatus', back_populates="user", lazy='dynamic')
+    #supply = relationship('Supply', back_populates="user", lazy='dynamic')
+    #status = relationship('UserStatus', back_populates="user", lazy='dynamic')
     active_home_id: Mapped[int] = mapped_column(ForeignKey('home.id'), nullable=True)
     active_home = relationship("Home", foreign_keys=[active_home_id])
     room_defaults = relationship('RoomDefault', back_populates="user", lazy='dynamic')
@@ -61,7 +61,6 @@ class UserList(db.Model):
     parent_entry_id: Mapped[int] = mapped_column(ForeignKey('user_list_entry.id'), nullable=True, index=True)
     __table_args__ = (UniqueConstraint('user_id', 'list_name', name='unique_list_name'),)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=func.now())
-
     user = relationship("User", back_populates="lists")
     entries = relationship("UserListEntry", back_populates="user_list", lazy='joined', cascade="all, delete-orphan", foreign_keys="[UserListEntry.user_list_id]")
     parent = relationship("UserListEntry", foreign_keys=[parent_entry_id])
@@ -72,10 +71,7 @@ class UserListEntry(db.Model):
     item_model: Mapped[str] = mapped_column(String, nullable=False)  # Store the model name as a string
     item_id: Mapped[int] = mapped_column(Integer, nullable=False)
     order: Mapped[int] = mapped_column(Integer, nullable=False, index=True)
-
     user_list = relationship("UserList", back_populates="entries", foreign_keys=[user_list_id])
-    
-
     __table_args__ = (
         UniqueConstraint('user_list_id', 'item_model', 'item_id', name='uq_user_list_item'),
     )
@@ -86,43 +82,16 @@ class UserListEntry(db.Model):
             raise ValueError(f"Model '{self.item_model}' not found.")
         return model_class.query.get(self.item_id) 
     #if model_class is Floor and you want the name of the floor: {{ entry.get_item().name }} 
-    
     @classmethod
     def find_entries_for_item(cls, item, limit=None):
         """
         Find all list entries associated with a given item.
-        
         :param item: The item object to search for
         :return: A list of UserListEntry objects associated with the item
         """
         query = cls.query.filter_by(item_model=item.__class__.__name__, item_id=item.id)
         return query.limit(limit).all() if limit else query.all()
     
-
-class UserAbility(db.Model): # User's ability to do something, disabilities to account for
-    id: Mapped[int] = mapped_column(primary_key=True)
-    user_id: Mapped[int] = mapped_column(ForeignKey('user.id'))
-    ability_type: Mapped[str]
-    description: Mapped[str]
-    user = relationship("User", back_populates="abilities")
-    
-class UserStatus(db.Model):
-    id: Mapped[int] = mapped_column(primary_key=True)
-    user_id: Mapped[int] = mapped_column(ForeignKey('user.id'))
-    current_room_id: Mapped[int] = mapped_column(ForeignKey('room.id'))
-    focus: Mapped[str]
-    mood: Mapped[str]
-    energy_level: Mapped[int]
-    last_updated: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=func.now())
-    user = relationship("User", back_populates="status")
-    
-class UserPreference(db.Model):
-    id: Mapped[int] = mapped_column(ForeignKey('user.id'), primary_key=True)
-    measurement_unit: Mapped[str] = mapped_column(default='metric')
-    notification_frequency: Mapped[str] = mapped_column(default='daily')
-    theme: Mapped[str] = mapped_column(default='light')
-    user = relationship("User", back_populates="preferences")
-
 class Home(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey('user.id'))
@@ -146,8 +115,6 @@ class Home(db.Model):
     def get_room_count(self):
         return self.rooms.count()
 
-
-
 class Floor(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     home_id: Mapped[int] = mapped_column(ForeignKey('home.id'))
@@ -165,7 +132,6 @@ class Floor(db.Model):
             'additional_info': f"Home: {self.home.name}"
         }'''
     
-
 class Room(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     home_id: Mapped[int] = mapped_column(ForeignKey('home.id'))
@@ -186,8 +152,8 @@ class Room(db.Model):
     #room_tools_supplies_required: Mapped[str] = mapped_column(default='')
     homes = relationship("Home", back_populates="rooms", foreign_keys=[home_id])
     floors = relationship("Floor", back_populates="rooms", foreign_keys=[floor_id])
-    zones = relationship('Zone', back_populates="rooms", lazy='dynamic')
-    supply = relationship('Supply', back_populates="rooms", lazy='dynamic')
+    #zones = relationship('Zone', back_populates="rooms", lazy='dynamic')
+    #supply = relationship('Supply', back_populates="rooms", lazy='dynamic')
     '''@property
     def as_list_item(self):
         return {
@@ -202,23 +168,6 @@ class RoomDefault(db.Model):
     user_id: Mapped[int] = mapped_column(ForeignKey('user.id'))
     name: Mapped[str] = mapped_column(String(80), nullable=False, unique=True)
     user = relationship("User", back_populates="room_defaults")
-    
-class Zone(db.Model):#todo remove zones
-    id: Mapped[int] = mapped_column(primary_key=True)
-    room_id: Mapped[int] = mapped_column(ForeignKey('room.id'))
-    surface_type: Mapped[str]
-    usage_frequency: Mapped[str]
-    importance: Mapped[int]
-    dirtiness_score: Mapped[int]
-    effort_required: Mapped[int]
-    rooms = relationship('Room', back_populates="zones")
-    appliances = relationship('Appliance', back_populates="zones", lazy='dynamic')
-    
-class Appliance(db.Model):
-    id: Mapped[int] = mapped_column(primary_key=True)
-    zone_id: Mapped[int] = mapped_column(ForeignKey('zone.id'))
-    appliance: Mapped[str]
-    zones = relationship('Zone', back_populates="appliances")
     
 class Photo(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
@@ -256,7 +205,7 @@ class Task(db.Model):
     completed_at: Mapped[Optional[datetime]] = mapped_column(nullable=True)
     archived: Mapped[bool] = mapped_column(Boolean, server_default="0")
     user = relationship("User", back_populates="tasks")
-    progress = relationship('TaskProgress', back_populates="tasks")
+    #progress = relationship('TaskProgress', back_populates="tasks")
     pins = relationship("Pin", back_populates="task")
     
     def mark_as_completed(self):
@@ -280,20 +229,60 @@ class Pin(db.Model):
     @hybrid_property
     def name(self):
         return self.task.name if self.task else None
-    
     @name.expression
     def name(cls):
         return select(Task.name).where(Task.id == cls.task_id).scalar_subquery()
 
 #------------------------------------------------------------------------------
-class TaskProgress(db.Model):
+
+'''class Appliance(db.Model):
+    id: Mapped[int] = mapped_column(primary_key=True)
+    zone_id: Mapped[int] = mapped_column(ForeignKey('zone.id'))
+    appliance: Mapped[str]
+    zones = relationship('Zone', back_populates="appliances")'''
+    
+'''class UserAbility(db.Model): # User's ability to do something, disabilities to account for
+    id: Mapped[int] = mapped_column(primary_key=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey('user.id'))
+    ability_type: Mapped[str]
+    description: Mapped[str]
+    user = relationship("User", back_populates="abilities")
+    
+class UserStatus(db.Model):
+    id: Mapped[int] = mapped_column(primary_key=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey('user.id'))
+    current_room_id: Mapped[int] = mapped_column(ForeignKey('room.id'))
+    focus: Mapped[str]
+    mood: Mapped[str]
+    energy_level: Mapped[int]
+    last_updated: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=func.now())
+    user = relationship("User", back_populates="status")
+    
+class UserPreference(db.Model):
+    id: Mapped[int] = mapped_column(ForeignKey('user.id'), primary_key=True)
+    measurement_unit: Mapped[str] = mapped_column(default='metric')
+    notification_frequency: Mapped[str] = mapped_column(default='daily')
+    theme: Mapped[str] = mapped_column(default='light')
+    user = relationship("User", back_populates="preferences")'''
+    
+'''class Zone(db.Model):
+    id: Mapped[int] = mapped_column(primary_key=True)
+    room_id: Mapped[int] = mapped_column(ForeignKey('room.id'))
+    surface_type: Mapped[str]
+    usage_frequency: Mapped[str]
+    importance: Mapped[int]
+    dirtiness_score: Mapped[int]
+    effort_required: Mapped[int]
+    rooms = relationship('Room', back_populates="zones")
+    appliances = relationship('Appliance', back_populates="zones", lazy='dynamic')'''
+'''class TaskProgress(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     task_id: Mapped[int] = mapped_column(ForeignKey('task.id'))
     progress_photo_url: Mapped[str]
     progress_timestamp: Mapped[datetime]
     progress_description: Mapped[str]
     completion_percentage: Mapped[float]
-    tasks = relationship('Task', back_populates="progress")
+    tasks = relationship('Task', back_populates="progress")'''
     
 '''class TaskCompletionHistory(db.Model):
     completion_id: Mapped[int] = mapped_column(primary_key=True)
@@ -318,7 +307,7 @@ class TaskProgress(db.Model):
     notification_status: Mapped[str]
     reminder_time: Mapped[datetime]'''
 
-class Supply(db.Model):
+'''class Supply(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     room_id: Mapped[int] = mapped_column(ForeignKey('room.id')) #room where the item is stored
     user_id: Mapped[int] = mapped_column(ForeignKey('user.id'))
@@ -334,7 +323,7 @@ class Supply(db.Model):
             'type': 'supply',
             'name': self.item_name,
             'additional_info': f"Quantity: {self.quantity}"
-        }
+        }'''
 
 '''class UserSchedule(db.Model):
     schedule_id: Mapped[int] = mapped_column(primary_key=True)
