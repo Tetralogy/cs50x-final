@@ -65,7 +65,7 @@ def upload_photo(item_model):
                 logger.debug(f"Error saving file: {e}")
                 
             logger.debug(f'File saved: {filename}')
-            photo_url = url_for('lists.uploaded_file', filename=filename)
+            photo_url = url_for('upload.uploaded_file', filename=filename)
             logger.debug(f'Photo URL: {photo_url}')
             flash(f'{filename} uploaded', 'success')
             

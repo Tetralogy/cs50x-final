@@ -5,9 +5,17 @@ import { addedItem } from "./addedListItem.js";
 import { getSelectedActive } from './getSelected.js';
 import { tasktoPin } from './tasktoPin.js';
 
+// Create a global map to track Sortable instances
+const sortableInstances = new Map();
+
 export function initializeSortableLists() {
     const sortableElements = document.querySelectorAll(".sortable");
     sortableElements.forEach(function (sortableElement) {
+                // First, destroy any existing instance for this element
+                if (sortableInstances.has(sortableElement)) {
+                    const existingInstance = sortableInstances.get(sortableElement);
+                    existingInstance.destroy();
+                }
         if (sortableElement !== null) {
             const model = sortableElement.dataset.model;
             const parent_entry_id = sortableElement.dataset.parent_entry_id;
@@ -25,7 +33,7 @@ export function initializeSortableLists() {
                 //draggable: "li",
                 multiDrag: true, // Enable multi-drag
                 selectedClass: "selected", // The class applied to the selected items
-                fallbackTolerance: 3, // So that we can select items on mobile #[ ] select doesn't work on mobile
+                fallbackTolerance: 3, // So that we can select items on mobile
                 // Prevent dragging on specific elements
                 filter: ".htmx-indicator, .rename", //.listname, .accordion-header, .accordion-button, .accordion",
                 ghostClass: "ghost",
@@ -321,8 +329,10 @@ export function initializeSortableLists() {
             else if (sortableElement.classList.contains("floors")) { }
 
 
-
+            
             const instance = new Sortable(sortableElement, sortableOptions);
+            // Store the instance in the map
+            sortableInstances.set(sortableElement, instance);
         }
     });
 }
