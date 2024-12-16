@@ -71,12 +71,15 @@ def create_item_and_entry(item_model, list_id, item_id: int=None, retrieve: str=
     if from_model == 'Task':
         task_id = request.form.get('task_id')
         task = db.get_or_404(Task, task_id)
-    new_item = add_item_to_list(list_id, item_model, item_id, order_index, name, task_id=task_id)
-    logger.debug(f'Item added to list: {new_item.item_model} {new_item.item_id}')
     if retrieve == 'list':
         userlist = db.get_or_404(UserList, list_id)
         logger.debug(f'retrieve: {retrieve}')
         return userlist
+    new_item = add_item_to_list(list_id, item_model, item_id, order_index, name, task_id=task_id)
+    if not new_item:
+        logger.debug(f'Item NOT added to list: {item_model} {item_id}')
+        return None, 404
+    logger.debug(f'Item added to list: {new_item.item_model} {new_item.item_id}')
     #return render_template('lists/model/pin.html.jinja', entry=new_item)
     return render_template('lists/model/' + new_item.item_model.lower() + '.html.jinja', entry=new_item, child_lists=None) #redirect(url_for('lists.update_list_order', list_id=list_id))
 

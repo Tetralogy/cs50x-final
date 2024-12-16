@@ -220,10 +220,10 @@ def create_new_default(user_list_id: int, item_model: str, name: str = None, pin
     if item_model == 'Pin':
         pinlist_obj = db.get_or_404(UserList, user_list_id)
         photo_id = pinlist_obj.parent.item_id
-        if not photo_id:
-            raise ValueError(f'photo_id not found: {photo_id} pinlist_obj: {pinlist_obj}')
         if not task_id or not photo_id:
-            raise ValueError('task_id and photo_id cannot be None')
+            logger.debug(f'item model: {item_model}: task_id: {task_id} photo_id: {photo_id}')
+            return None
+            raise ValueError('task_id and photo_id cannot be None') #BUG: need to disallow dragging from non-tasklist
         new_item = Pin(task_id=task_id, photo_id=photo_id)
         db.session.add(new_item)
         db.session.commit()

@@ -95,7 +95,7 @@ class UserListEntry(db.Model):
         :param item: The item object to search for
         :return: A list of UserListEntry objects associated with the item
         """
-        query = cls.query.filter_by(item_model=item.__class__.__name__, item_id=item.id) #bug here when creating new room
+        query = cls.query.filter_by(item_model=item.__class__.__name__, item_id=item.id)
         return query.limit(limit).all() if limit else query.all()
     
 

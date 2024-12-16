@@ -246,8 +246,8 @@ export function initializeSortableLists() {
             else if (sortableElement.classList.contains("pingrid")) {
                 sortableOptions.group = {
                     name: "pingrid",
-                    pull: false, //todo: only allow pull to other pingrid
-                    put: true, //todo: change this to only from other pingrid or tasklist
+                    pull: false,
+                    put: "Task",
                 };
                 sortableOptions.animation = 0;
                 sortableOptions.filter += ", .replaceableitem";
@@ -263,7 +263,7 @@ export function initializeSortableLists() {
                     };
                 })(sortableOptions.onStart);
                 //modify onChange for pingrid
-                sortableOptions.onChange = (function (originalFunction) { //todo: test if this is needed
+                sortableOptions.onChange = (function (originalFunction) {
                     return function (evt, originalEvent) {
                         if (evt.from !== evt.to) {
                             //console.log("onChange from other list");
