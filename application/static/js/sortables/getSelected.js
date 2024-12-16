@@ -72,3 +72,15 @@ function GetRoomCoverEntryId(parent_entry_id) {
             console.error("Fetch request failed:", error);
         });
 }
+
+export function singleSelect(itemEl, evt) {
+    document.querySelectorAll(`.selected`).forEach(item => {
+        if (item.id != itemEl.id) {
+            item.classList.remove("selected");
+        }
+    });
+    //only allow one selected item at a time
+    if (evt.items.length > 1) {
+        Sortable.utils.deselect(evt.items[0]);
+    }
+}

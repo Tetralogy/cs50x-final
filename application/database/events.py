@@ -10,14 +10,16 @@ from logs.logging_config import ApplicationLogger
 
 logger = ApplicationLogger.get_logger(__name__)
 
+'''
 @event.listens_for(Room, 'before_update')
 def duplicate_pins_for_new_cover_photo(mapper, connection, target):
+    logger.debug(f'duplicate_pins_for_new_cover_photo called for room: {target}')
     # Check if current_cover_photo_id has actually changed
     if attributes.get_history(target, 'current_cover_photo_id').has_changes():
         # Get the previous value of current_cover_photo_id
         previous_cover_photo_id = attributes.get_history(target, 'current_cover_photo_id').deleted[0]
         # Find all pins associated with the previous cover photo
-        pins_to_duplicate = connection.session.query(Pin).filter(Pin.photo_id == previous_cover_photo_id).all()
+        pins_to_duplicate = db.session.query(Pin).filter(Pin.photo_id == previous_cover_photo_id).all()
         # Create new pins for the new cover photo
         for original_pin in pins_to_duplicate:
             # Create a new pin with the same attributes, but with the new photo ID
@@ -32,7 +34,7 @@ def duplicate_pins_for_new_cover_photo(mapper, connection, target):
                 photo_id=target.current_cover_photo_id
             )
             # Add the new pin to the session
-            connection.session.add(new_pin)
+            db.session.add(new_pin)
             found_pin_entry = UserListEntry.find_entries_for_item(original_pin)[0]
             #get the userlist for the new cover photo to attach the duplicate pin entries
             found_photo_entry = UserListEntry.find_entries_for_item(target.current_cover_photo_id)[0],
@@ -48,14 +50,15 @@ def duplicate_pins_for_new_cover_photo(mapper, connection, target):
                 item_id = new_pin.id
             )
             # Add the new entry to the session
-            connection.session.add(new_pin_entry)
+            db.session.add(new_pin_entry)
         # Set the new cover photo to is_cover_photo=True
-        connection.execute(
+        db.execute(
             Photo.__table__.update().where(Photo.id == target.current_cover_photo_id).values(is_cover_photo=True)
         )
         logger.debug(f'duplicate_pins_for_new_cover_photo called for room: {target}')
         # Commit the new pins
-        connection.session.commit()
+        db.session.commit()
+        '''
 
 @event.listens_for(Pin, 'before_insert')
 def remove_old_pin_and_entry_if_duplicate_task_on_photo(mapper, connection, target):

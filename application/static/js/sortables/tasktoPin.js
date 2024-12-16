@@ -17,7 +17,7 @@ export function tasktoPin(evt, itemEl, newIndex, oldIndex, clonedNode) {
                         }console.log(`onAdd swap: ${this.options.swap}`); */
 
                         // if targetitem is a task, move itemEl to next empty index so it doesn't move other pins
-                        while (targetItem.dataset.model === itemEl.dataset.model) { //todo: test if broken
+                        while (targetItem.dataset.model === itemEl.dataset.model) { 
                             console.log(`onAdd modelmatch targetItem: ${targetItem.textContent}`);
                             if ((targetItem.dataset.item_id === itemEl.dataset.item_id) && (targetItem.dataset.model === itemEl.dataset.model)) {
                                 break;

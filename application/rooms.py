@@ -129,11 +129,12 @@ def get_active_room_entry_id():
 
 @rooms.route('/set_room_cover_photo/<int:photo_id>', methods=['PUT'])
 @login_required
-def set_room_cover_photo(photo_id): #todo:test
+def set_room_cover_photo(photo_id):
     photo = db.get_or_404(Photo, photo_id)
     photo.room.current_cover_photo_id = photo_id
     photo.is_cover_photo = True
     db.session.commit()
+    logger.debug(f'photo: {photo} photo.name: {photo.name}, photo.room: {photo.room}, photo.room.current_cover_photo_id: {photo.room.current_cover_photo_id}')
     return ('', 204)
 
 '''@rooms.route('/room_cover_photo_entry_id/<int:room_id>', methods=['GET'])

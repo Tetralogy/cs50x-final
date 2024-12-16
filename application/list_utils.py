@@ -151,6 +151,8 @@ def create_new_default(user_list_id: int, item_model: str, name: str = None, pin
             )
         db.session.add(new_item)
         db.session.flush()
+        default_cover_photo = db.get_or_404(Photo, default_cover_image_entry.item_id)
+        default_cover_photo.room_id = new_item.id #link default cover image to new room instead of previous active room
         new_room_entry = UserListEntry(user_list_id=user_list_id, item_model=item_model, item_id=new_item.id, order=order)
         db.session.add(new_room_entry)
         db.session.flush()
@@ -187,6 +189,10 @@ def create_new_default(user_list_id: int, item_model: str, name: str = None, pin
             logger.debug(f'room_photo_count: {room_photo_count}')
             name = f"{filename} {current_user.active_home.active_room.name} {item_model} {room_photo_count + 1}"
             logger.debug(f'name (create_new_default): {name}')
+        if photo_url == current_app.config['DEFAULT_ROOM_PHOTO_URL'] or 'default_cover_image' in name:
+            is_cover_photo = True
+        else:
+            is_cover_photo = False
         description = name 
         logger.debug(f'photo_url: {photo_url}')
         logger.debug(f'description: {description}')
@@ -202,7 +208,8 @@ def create_new_default(user_list_id: int, item_model: str, name: str = None, pin
             name=name,
             description=description, 
             photo_url=photo_url,
-            pins_list_id=new_pinlist.id
+            pins_list_id=new_pinlist.id,
+            is_cover_photo=is_cover_photo
         )
         db.session.add(new_item)
         db.session.flush()

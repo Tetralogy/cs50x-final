@@ -2,7 +2,7 @@ import Sortable from 'sortablejs/modular/sortable.complete.esm.js';
 import { getIsDragging, setIsDragging } from "./isDragging.js";
 import { updateDropzones } from "./dropzones.js";
 import { addedItem } from "./addedListItem.js";
-import { getSelectedActive } from './getSelected.js';
+import { getSelectedActive, singleSelect } from './getSelected.js';
 import { tasktoPin } from './tasktoPin.js';
 
 // Create a global map to track Sortable instances
@@ -64,15 +64,7 @@ export function initializeSortableLists() {
                     console.log("onSelect evt.newIndicies " + evt.newIndicies);
                     console.log(evt.newIndicies.map(newIndex => newIndex)); */
                     if (itemEl.dataset.model === "Room") {
-                        document.querySelectorAll(`.selected`).forEach(item => {
-                            if (item.id != itemEl.id) {
-                                item.classList.remove("selected");
-                            }
-                        });
-                        //only allow one selected item at a time
-                        if (evt.items.length > 1) {
-                            Sortable.utils.deselect(evt.items[0]);
-                        }
+                        singleSelect(itemEl, evt);
                         // update active room as current selected
                         htmx.ajax(
                             "PUT",
@@ -84,17 +76,9 @@ export function initializeSortableLists() {
                         );
                         console.log("PUT: select active room");
                     }
-                    else if (itemEl.dataset.model === "Photo") {
-                        document.querySelectorAll(`.selected`).forEach(item => {
-                            if (item.id != itemEl.id) {
-                                item.classList.remove("selected");
-                            }
-                        });
-                        //only allow one selected item at a time
-                        if (evt.items.length > 1) {
-                            Sortable.utils.deselect(evt.items[0]);
-                        }
-                        // update active room as current selected
+                    else if (itemEl.dataset.model === "Photo") { console.log("onSelect Photo");
+                        singleSelect(itemEl, evt);
+                        // update active cover photo as current selected
                         htmx.ajax( //todo add confirm dialog and reverting back to previous photo selection
                             "PUT",
                             `/set_room_cover_photo/${itemEl.dataset.item_id}`,
@@ -333,7 +317,12 @@ export function initializeSortableLists() {
             const instance = new Sortable(sortableElement, sortableOptions);
             // Store the instance in the map
             sortableInstances.set(sortableElement, instance);
+            
+            //console.log("instance: " + instance);
+            //console.dir(instance);
         }
     });
 }
+
+
 //[ ] cleanup unused code and comments

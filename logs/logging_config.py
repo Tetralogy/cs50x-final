@@ -1,8 +1,11 @@
+from datetime import datetime
 import logging
 import logging.handlers
 import sys
 import os
 from typing import Optional, Union, Dict, Any
+import glob
+
 
 LOGGING_LEVEL = logging.DEBUG
 class LoggerFactory:
@@ -10,7 +13,22 @@ class LoggerFactory:
     A professional-grade logging configuration factory that follows Python's 
     recommended logging practices.
     """
-    
+    @staticmethod
+    def generate_log_file_name(base_name: str, log_dir: str) -> str:
+        """
+        Generate a unique log file name using the current timestamp.
+        
+        Args:
+            base_name (str): Base name for the log file.
+            log_dir (str): Directory where the log file will be stored.
+        
+        Returns:
+            str: Full path of the generated log file.
+        """
+        timestamp = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
+        log_file_name = f"{base_name}_{timestamp}.log"
+        return os.path.join(log_dir, log_file_name)
+
     @staticmethod
     def create_logger(
         name: str,
@@ -18,7 +36,7 @@ class LoggerFactory:
         log_file: Optional[str] = None,
         console: bool = True,
         format_string: Optional[str] = None,
-        max_file_bytes: int = 1 * 1024 * 1024,  # 1 MB
+        max_file_bytes: int = 10 * 1024 * 1024,  # 10 MB
         backup_count: int = 5
     ) -> logging.Logger:
         """
@@ -60,7 +78,10 @@ class LoggerFactory:
             # File handler with rotation
             if log_file:
                 # Ensure log directory exists
-                os.makedirs(os.path.dirname(log_file), exist_ok=True)
+                log_dir = os.path.dirname(log_file)
+                base_name = os.path.basename(log_file).replace('.log', '')
+                os.makedirs(log_dir, exist_ok=True)
+                log_file = LoggerFactory.generate_log_file_name(base_name, log_dir)
                 
                 file_handler = logging.handlers.RotatingFileHandler(
                     log_file,
@@ -147,16 +168,20 @@ class ApplicationLogger:
 
 def configure_logging(app):
     # Configure application-wide logging
+    log_dir = 'logs'
+    base_name = 'application'
     ApplicationLogger.configure(
         default_level=LOGGING_LEVEL,
-        log_file='logs/application.log'
+        log_file=f'{log_dir}/{base_name}.log'
     )
     logger = ApplicationLogger.get_logger(__name__)
     logger.debug("Application logging configured")
         # Get the logger for list_utils.py
     #isolated_module_logger = ApplicationLogger.get_logger('application.list_utils')
     #isolated_module_logger.setLevel(logging.DEBUG)  # Set the logging level to DEBUG for list_utils.py
-
+    # Cleanup old logs, keeping only the latest 10
+    cleanup_old_logs(log_dir, base_name, max_logs=10)
+    
     try:
         # Log application startup
         logger.info(f"Application started in {os.environ.get('FLASK_ENV')} environment")
@@ -182,6 +207,26 @@ def perform_critical_operation():
     logger.info("Performing critical operation")
     # Some business logic here
     return "Success"
+
+
+
+
+def cleanup_old_logs(log_dir: str, base_name: str, max_logs: int):
+    """
+    Remove older logs if the total exceeds the max_logs limit.
+    
+    Args:
+        log_dir (str): Directory where log files are stored.
+        base_name (str): Base name of log files (e.g., 'app').
+        max_logs (int): Maximum number of log files to retain.
+    """
+    log_files = sorted(
+        glob.glob(os.path.join(log_dir, f"{base_name}_*.log")),
+        key=os.path.getmtime
+    )
+    if len(log_files) > max_logs:
+        for old_log in log_files[:-max_logs]:
+            os.remove(old_log)
 
 """ if __name__ == '__main__':
     main() """

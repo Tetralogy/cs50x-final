@@ -94,7 +94,7 @@ def create_app(config_filename=None):
     from .main import main
     from .auth import auth
     from .database.models import Base, models, User
-    from .database.events import duplicate_pins_for_new_cover_photo, set_timestamp_on_completion#, remove_old_pin_and_entry_if_duplicate_task_on_photo
+    from .database.events import set_timestamp_on_completion#, duplicate_pins_for_new_cover_photo, remove_old_pin_and_entry_if_duplicate_task_on_photo
     from .utils import utils
     from .upload import upload
     from .annotate import annotate
