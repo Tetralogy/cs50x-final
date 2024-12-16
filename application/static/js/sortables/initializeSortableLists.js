@@ -3,6 +3,7 @@ import { getIsDragging, setIsDragging } from "./isDragging.js";
 import { updateDropzones } from "./dropzones.js";
 import { addedItem } from "./addedListItem.js";
 import { getSelectedActive } from './getSelected.js';
+import { tasktoPin } from './tasktoPin.js';
 
 export function initializeSortableLists() {
     const sortableElements = document.querySelectorAll(".sortable");
@@ -278,69 +279,32 @@ export function initializeSortableLists() {
                     return function (evt) {
                         document.querySelectorAll('.none-ghost').forEach(element => element.classList.remove('none-ghost'));
                         console.log(`onAdd evt.from: ${evt.from}, evt.to: ${evt.to}, evt.item: ${evt.item}`);
-                        const itemEl = evt.item; // dragged HTMLElement
-                        const clonedNode = evt.item.cloneNode(true);
-                        const originalParent = evt.from;
-                        const newParent = evt.to;
-                        const oldIndex = evt.oldIndex;
-                        let newIndex = evt.newIndex;
-                        //if from tasklist, replace target item with cloned item
-                        let targetItem = evt.to.children[(evt.newIndex + 1)]; // The item at the new index
-                        console.log(`onAdd targetItem: ${targetItem.textContent}`);
-
-                        /* if (targetItem.dataset.model === itemEl.dataset.model){
-                            this.options.swap = false;
-                        }else {
-                            this.options.swap = true;
-                        }console.log(`onAdd swap: ${this.options.swap}`); */
-
-                        // if targetitem is a task, move itemEl to next empty index so it doesn't move other pins
-                        while (targetItem.dataset.model === itemEl.dataset.model) { //todo: test if broken
-                            console.log(`onAdd modelmatch targetItem: ${targetItem.textContent}`);
-                            if ((targetItem.dataset.item_id === itemEl.dataset.item_id) && (targetItem.dataset.model === itemEl.dataset.model)) {
-                                break;
-                            }
-                            newIndex += 1;
-                            targetItem = evt.to.children[(newIndex)];
-                        }
-                        if (originalParent !== newParent) { //if from other list
-                            // check if dragged task matches a task already in gridtest
-                            const matchingDuplicate = Array.from(newParent.children).filter((item) => {
-                                return (item.dataset.task_id === itemEl.dataset.task_id);
-                            });
-                            if (matchingDuplicate.length > 1) {
-                                matchingDuplicate.forEach((item) => { //remove the existing pin and accept clone in the new position
-                                    let dupindex = Array.from(newParent.children).indexOf(item)
-                                    if (dupindex !== newIndex) {
-                                        newParent.insertBefore(targetItem, newParent.children[dupindex])
-                                        item.remove();
-                                    }
-                                })
-                            } else {
-                                targetItem.remove(); //replace the blank
-                            }
-                        }
-                        // behave like a cloned item and put dragged item back in original position after clone
-                        newParent.insertBefore(clonedNode, newParent.children[newIndex])
-                        originalParent.insertBefore(itemEl, originalParent.children[oldIndex]);
-                        //bug 1: tweak and fix this to save pin marker lists on photos
                         //originalFunction(evt); //continue with original function
-                        if (evt.items.length > 1) { //for multi-drag//todo: modify as needed
+                        if (evt.items.length > 1) { //for multi-drag
                             evt.items.forEach((item, index) => {
-                                setTimeout(() => {
+                                setTimeout(() => { 
                                     // Get the corresponding new and old indices
                                     console.log("item: " + item);
                                     console.log("foreach more than 1 item");
                                     console.log("item.dataset.name: " + item.dataset.name);
                                     const itemEl = item; // dragged HTMLElement
-                                    const newIndex = evt.newIndicies[index].index;
+                                    const clonedNode = itemEl.cloneNode(true);
+                                    console.log(`clonedNode: ${clonedNode}`);
+                                    let newIndex = evt.newIndicies[index].index;
                                     console.log("newIndex: " + newIndex);
                                     const oldIndex = evt.oldIndicies[index].index;
                                     console.log("oldIndex: " + oldIndex);
-                                    addedItem(evt, itemEl, newIndex, oldIndex, model, sortableElement);
+                                    tasktoPin(evt, itemEl, newIndex, oldIndex, clonedNode);
+                                    addedItem(evt, clonedNode, newIndex, oldIndex, model, sortableElement);
                                 }, index * 100); // Add a delay for each request so it works
                             })
                         } else { 
+                            const itemEl = evt.item; // dragged HTMLElement
+                            const clonedNode = itemEl.cloneNode(true);
+                            const oldIndex = evt.oldIndex;
+                            let newIndex = evt.newIndex;
+                            tasktoPin(evt, itemEl, newIndex, oldIndex, clonedNode);
+                            console.log(`evt.items.length ${evt.items.length}`)
                             addedItem(evt, clonedNode, newIndex, oldIndex, model, sortableElement);
                         }
                         //addedItem(evt, itemEl, newIndex, oldIndex, model, sortableElement);

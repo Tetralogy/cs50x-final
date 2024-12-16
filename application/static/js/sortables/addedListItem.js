@@ -72,13 +72,13 @@ export function addedItem(evt, itemEl, newIndex, oldIndex, model, sortableElemen
     } else //if moving between lists of different types (roomtype to room) (task to pin)
     {
         console.log(
-            "POST" +
+            "POST " +
             "addedNewEntry: " +
             addedNewEntry_name +
-            "new index: " +
+            " new index: " +
             newIndex +
-            "task_id: " + itemEl.dataset.task_id +
-            "from_model: " + itemEl.dataset.model,
+            " task_id: " + itemEl.dataset.task_id +
+            " from_model: " + itemEl.dataset.model,
         );
         // Make an htmx AJAX request to the server to create a new room
         htmx.ajax(

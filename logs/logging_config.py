@@ -18,7 +18,7 @@ class LoggerFactory:
         log_file: Optional[str] = None,
         console: bool = True,
         format_string: Optional[str] = None,
-        max_file_bytes: int = 10 * 1024 * 1024,  # 10 MB
+        max_file_bytes: int = 1 * 1024 * 1024,  # 1 MB
         backup_count: int = 5
     ) -> logging.Logger:
         """
