@@ -1,5 +1,5 @@
-<li 
-    class="col pe-0 shadow grabbable {% if current_user.active_home.active_room_id == entry.item_id and entry.item_model == 'Room' %}selected{% endif %}"
+<div
+    class="col g-0 grabbable {% if current_user.active_home.active_room_id == entry.item_id and entry.item_model == 'Room' %}selected{% endif %}"
     id="{{ entry.item_model }}list-{{ entry.id }}"
     data-id="{{ entry.id }}"
     data-item_id="{{ entry.item_id }}"
@@ -7,24 +7,25 @@
     data-order="{{ entry.order }}"
     data-list_id="{{ entry.user_list_id }}"
     data-model="{{ entry.item_model }}"
-        data-bs-toggle="tooltip"
-        data-bs-html="true"
-        data-bs-placement="top"
-        data-bs-title="<u>Drag</u> to <span class='text-nowrap'><b>reorder</b> {{entry.item_model}}</span>"
->  
+    data-bs-toggle="tooltip"
+    data-bs-html="true"
+    data-bs-placement="top"
+    data-bs-title="<u>Drag</u> to <span class='text-nowrap'><b>reorder</b> {{ entry.item_model }}</span>"
+>
     <input type="hidden" name="items" value="{{ entry.id }}" />
     {% include 'base/parts/debug/order.html.jinja' %}
     <div class="position-relative">
-<div
-id="photo-loader"
-hx-get="/show_photo_entry/{{ entry.get_item().current_cover_photo_id }}"
-hx-trigger="load once"
-hx-swap="outerHTML"
-hx-indicator="#updating-indicator"
->
+        <div
+            id="photo-loader"
+            hx-get="/show_photo_entry/{{ entry.get_item().current_cover_photo_id }}"
+            hx-trigger="load once"
+            hx-swap="outerHTML"
+            hx-indicator="#updating-indicator"
+        ></div>
+        <div
+            class="position-absolute top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center row g-0 scalename"
+        >
+            {{ entry.get_item().name }}
+        </div>
+    </div>
 </div>
-    <div class="position-absolute top-0 start-0 w-100 h-100 row g-0 ">
-    {{ entry.get_item().name }}
-    </div>
-    </div>
-</li>

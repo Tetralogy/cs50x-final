@@ -1,0 +1,20 @@
+    {% if view == "text-hierarchy" %}
+        {% include 'lists/generic_hierarchy.html.jinja' %}
+    {% else %}
+        {% if reversed %}
+            {% for entry in list_obj.entries | sort(attribute='order')| reverse %}
+                {% include 'lists/model/' + entry.item_model.lower() + '.html.jinja' %}
+            {% endfor %}
+        {% else %}
+            {% for entry in list_obj.entries | sort(attribute='order') %}
+                {% include 'lists/model/' + entry.item_model.lower() + '.html.jinja' %}
+            {% endfor %}
+        {% endif %}
+        {% if not list_obj %}
+            {% if view == "quicknote" %}
+                {% include 'lists/model/task_placeholder.html.jinja' %}
+            {% else %}
+                <h1>Failed to load list</h1>
+            {% endif %}
+        {% endif %}
+    {% endif %}

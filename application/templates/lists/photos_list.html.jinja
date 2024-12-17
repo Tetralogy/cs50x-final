@@ -1,0 +1,14 @@
+<div
+    id="list-updater-{{ list_obj.id }}"
+    class="row row-cols-4 g-0 photos sortable"
+    hx-put="/update_list_order/{{ list_obj.id }}"
+    hx-include="[name='items']"
+    hx-trigger="end delay:1s, remove delay:1s, add delay:1s"
+    hx-indicator="#updating-indicator"
+    data-model="{{ list_obj.list_type }}"
+    data-is-list="true"
+    data-list_id="{{ list_obj.id }}"
+    data-parent_entry_id="{{ list_obj.parent_entry_id }}"
+>
+{% include 'lists/list_entry_loader.html.jinja' %}
+</div>

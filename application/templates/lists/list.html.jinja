@@ -51,6 +51,10 @@
 
 {% if list_obj.list_type == "Pin" %}
 {% include 'lists/pingrid.html.jinja' %}
+{% elif list_obj.list_type == "Room" %}
+{% include 'lists/rooms_list.html.jinja' %}
+{% elif list_obj.list_type == "Photo" %}
+{% include 'lists/photos_list.html.jinja' %}
 {% else %}
         <ul
             id="list-updater-{{ list_obj.id }}"
@@ -63,11 +67,6 @@
                 {% elif list_obj.list_type == "RoomDefault" %}
                     class="list-group list-group-horizontal d-flex flex-wrap border border-primary border-5
                     rounded-4 p-1 sortable roomdefaults typeslist"
-                {% elif list_obj.list_type == "Room" %}
-                    class="row row-cols-2 container-fluid border
-                    border-primary border-5 rounded-4 p-1 rooms sortable"
-                {% elif list_obj.list_type == "Photo" %}
-                    class="row row-cols-4 g-0 photos sortable"
                 {% else %}
                     class="list-group row g-0 row-cols-1 border border-primary border-5
                     rounded-4 sortable"
@@ -82,26 +81,7 @@
             data-list_id="{{ list_obj.id }}"
             data-parent_entry_id="{{ list_obj.parent_entry_id }}"
         >
-            {% if view == "text-hierarchy" %}
-                {% include 'lists/generic_hierarchy.html.jinja' %}
-            {% else %}
-                {% if reversed %}
-                    {% for entry in list_obj.entries | sort(attribute='order')| reverse %}
-                        {% include 'lists/model/' + entry.item_model.lower() + '.html.jinja' %}
-                    {% endfor %}
-                {% else %}
-                    {% for entry in list_obj.entries | sort(attribute='order') %}
-                        {% include 'lists/model/' + entry.item_model.lower() + '.html.jinja' %}
-                    {% endfor %}
-                {% endif %}
-                {% if not list_obj %}
-                    {% if view == "quicknote" %}
-                        {% include 'lists/model/task_placeholder.html.jinja' %}
-                    {% else %}
-                        <h1>Failed to load list</h1>
-                    {% endif %}
-                {% endif %}
-            {% endif %}
+            {% include 'lists/list_entry_loader.html.jinja' %}
         </ul>
 {% endif %}
     {% if sublevel == 0 and sublevel_limit > 0 %}
