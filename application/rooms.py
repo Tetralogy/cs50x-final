@@ -137,7 +137,7 @@ def set_room_cover_photo(photo_id):
     logger.debug(f'photo: {photo} photo.name: {photo.name}, photo.room: {photo.room}, photo.room.current_cover_photo_id: {photo.room.current_cover_photo_id}')
     return ('', 204)
 
-'''@rooms.route('/room_cover_photo_entry_id/<int:room_id>', methods=['GET'])
+@rooms.route('/room_cover_photo_entry_id/<int:parent_entry_id>', methods=['GET'])
 @login_required
 def get_room_cover_photo_entry_id(parent_entry_id):
     if parent_entry_id:
@@ -148,7 +148,7 @@ def get_room_cover_photo_entry_id(parent_entry_id):
         room = db.get_or_404(Room, room_id)
     cover_photo_entry_id = get_list_entries_for_item(room.current_cover_photo, 'Photo', current_user.id)[0].id
     logger.debug(f'get_cover_photo_entry_id called {cover_photo_entry_id}')
-    return str(cover_photo_entry_id), 200'''
+    return str(cover_photo_entry_id), 200
 
 def floor_room_check(current_floor_id):
     has_rooms = True

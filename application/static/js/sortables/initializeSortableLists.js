@@ -77,16 +77,23 @@ export function initializeSortableLists() {
                         console.log("PUT: select active room");
                     }
                     else if (itemEl.dataset.model === "Photo") { console.log("onSelect Photo");
-                        singleSelect(itemEl, evt);
+                        if (
+                            confirm(
+                                "Are you sure you want to select this item? " +
+                                evt.item.dataset.name +
+                                " This cannot be undone.",
+                            )
+                        )
+                        {singleSelect(itemEl, evt);
                         // update active cover photo as current selected
-                        htmx.ajax( //todo add confirm dialog and reverting back to previous photo selection
+                        htmx.ajax(
                             "PUT",
                             `/set_room_cover_photo/${itemEl.dataset.item_id}`,
                             {
                                 swap: "none",
                                 target: itemEl,
                             },
-                        );
+                        );}
                     }
                 },
                 onDeselect: function (evt) {

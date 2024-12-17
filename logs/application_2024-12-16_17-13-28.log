@@ -1,0 +1,1016 @@
+2024-12-16 17:13:28,284 - logs.logging_config - DEBUG - configure_logging [logging_config.py:178] - Application logging configured
+2024-12-16 17:13:28,285 - logs.logging_config - INFO - configure_logging [logging_config.py:187] - Application started in production environment
+2024-12-16 17:13:28,285 - application - DEBUG - create_app [__init__.py:28] - test2
+2024-12-16 17:13:29,082 - application - DEBUG - after_request_time [__init__.py:42] - Request to / took 0.007271766662597656 seconds
+2024-12-16 17:13:29,082 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): map
+2024-12-16 17:13:29,083 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:13:29,113 - application.map - DEBUG - home_map [map.py:24] - map called with floor_id: 5
+2024-12-16 17:13:29,124 - application.rooms - DEBUG - floor_room_check [rooms.py:165] - inside floor_room_check A: floor_id: 5, has_rooms: True
+2024-12-16 17:13:29,128 - application.rooms - DEBUG - check_each_floor_for_rooms [rooms.py:172] - floor.rooms.count() <Floor 1> = 4
+2024-12-16 17:13:29,133 - application.rooms - DEBUG - check_each_floor_for_rooms [rooms.py:172] - floor.rooms.count() <Floor 2> = 7
+2024-12-16 17:13:29,138 - application.rooms - DEBUG - check_each_floor_for_rooms [rooms.py:172] - floor.rooms.count() <Floor 3> = 12
+2024-12-16 17:13:29,141 - application.rooms - DEBUG - check_each_floor_for_rooms [rooms.py:172] - floor.rooms.count() <Floor 4> = 4
+2024-12-16 17:13:29,144 - application.rooms - DEBUG - check_each_floor_for_rooms [rooms.py:172] - floor.rooms.count() <Floor 5> = 2
+2024-12-16 17:13:29,146 - application.rooms - DEBUG - floor_room_check [rooms.py:167] - inside floor_room_check B: floor_id: 5, has_rooms: True
+2024-12-16 17:13:29,147 - application.map - DEBUG - home_map [map.py:27] - room check: floor_id: 5, has_rooms: True
+2024-12-16 17:13:29,147 - application.floors - DEBUG - set_active_floor [floors.py:41] - set_active_floor called with floor_id: 5
+2024-12-16 17:13:29,158 - application.floors - DEBUG - set_active_floor [floors.py:52] - current_user.active_home.active_floor: <Floor 5>
+2024-12-16 17:13:29,162 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:428] - found_entries for <Home 1>: [<UserListEntry 1>]
+2024-12-16 17:13:29,169 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:436] - Entry: <UserListEntry 1>
+2024-12-16 17:13:29,169 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:437] - Item Model: Home, Item ID: 1
+2024-12-16 17:13:29,170 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:438] - User List ID: 1 User List Name: bob Homes
+2024-12-16 17:13:29,170 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:439] - user: 1
+2024-12-16 17:13:29,170 - application.list_utils - DEBUG - get_userlist [list_utils.py:308] - get_userlist(): item_model: Floor, list_name: testy Floors, parent_entry_id: 1
+2024-12-16 17:13:29,177 - application.list_utils - DEBUG - get_userlist [list_utils.py:314] - lists found (All args): [<UserList 2>]
+2024-12-16 17:13:29,178 - application.list_utils - DEBUG - get_userlist [list_utils.py:349] - len(lists) == 1: testy Floors Floor 1
+2024-12-16 17:13:29,179 - application.list_utils - DEBUG - get_userlist [list_utils.py:368] - userlist.entries: [<UserListEntry 2>, <UserListEntry 3>, <UserListEntry 121>, <UserListEntry 256>, <UserListEntry 281>] List type: <class 'sqlalchemy.orm.collections.InstrumentedList'>
+2024-12-16 17:13:29,179 - application.list_utils - DEBUG - get_userlist [list_utils.py:370] - List: testy Floors, Order: 4
+2024-12-16 17:13:29,179 - application.list_utils - DEBUG - get_userlist [list_utils.py:370] - List: testy Floors, Order: 3
+2024-12-16 17:13:29,180 - application.list_utils - DEBUG - get_userlist [list_utils.py:370] - List: testy Floors, Order: 2
+2024-12-16 17:13:29,180 - application.list_utils - DEBUG - get_userlist [list_utils.py:370] - List: testy Floors, Order: 1
+2024-12-16 17:13:29,180 - application.list_utils - DEBUG - get_userlist [list_utils.py:370] - List: testy Floors, Order: 0
+2024-12-16 17:13:29,180 - application.rooms - DEBUG - get_room_list [rooms.py:42] - floor_list: <UserList 2> (type: <class 'application.database.models.UserList'>)
+2024-12-16 17:13:29,180 - application.rooms - DEBUG - get_room_list [rooms.py:43] - floor_list entries count: 5
+2024-12-16 17:13:29,181 - application.rooms - DEBUG - get_room_list [rooms.py:50] - floor list get floor_entry.id: 2
+2024-12-16 17:13:29,182 - application.rooms - DEBUG - get_room_list [rooms.py:51] - floor list get floor_entry.get_item().name: Main Floor
+2024-12-16 17:13:29,191 - application.rooms - DEBUG - get_room_list [rooms.py:56] - room_list: <UserList 3> (type: <class 'application.database.models.UserList'>) parent: Main Floor
+2024-12-16 17:13:29,191 - application.rooms - DEBUG - get_room_list [rooms.py:50] - floor list get floor_entry.id: 3
+2024-12-16 17:13:29,192 - application.rooms - DEBUG - get_room_list [rooms.py:51] - floor list get floor_entry.get_item().name: 2nd Floor
+2024-12-16 17:13:29,194 - application.rooms - DEBUG - get_room_list [rooms.py:56] - room_list: <UserList 4> (type: <class 'application.database.models.UserList'>) parent: 2nd Floor
+2024-12-16 17:13:29,194 - application.rooms - DEBUG - get_room_list [rooms.py:50] - floor list get floor_entry.id: 121
+2024-12-16 17:13:29,196 - application.rooms - DEBUG - get_room_list [rooms.py:51] - floor list get floor_entry.get_item().name: 3rd Floor
+2024-12-16 17:13:29,200 - application.rooms - DEBUG - get_room_list [rooms.py:56] - room_list: <UserList 39> (type: <class 'application.database.models.UserList'>) parent: 3rd Floor
+2024-12-16 17:13:29,201 - application.rooms - DEBUG - get_room_list [rooms.py:50] - floor list get floor_entry.id: 256
+2024-12-16 17:13:29,202 - application.rooms - DEBUG - get_room_list [rooms.py:51] - floor list get floor_entry.get_item().name: 4th Floor
+2024-12-16 17:13:29,206 - application.rooms - DEBUG - get_room_list [rooms.py:56] - room_list: <UserList 76> (type: <class 'application.database.models.UserList'>) parent: 4th Floor
+2024-12-16 17:13:29,206 - application.rooms - DEBUG - get_room_list [rooms.py:50] - floor list get floor_entry.id: 281
+2024-12-16 17:13:29,207 - application.rooms - DEBUG - get_room_list [rooms.py:51] - floor list get floor_entry.get_item().name: 5th Floor
+2024-12-16 17:13:29,211 - application.rooms - DEBUG - get_room_list [rooms.py:56] - room_list: <UserList 93> (type: <class 'application.database.models.UserList'>) parent: 5th Floor
+2024-12-16 17:13:29,214 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:428] - found_entries for <Home 1>: [<UserListEntry 1>]
+2024-12-16 17:13:29,215 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:436] - Entry: <UserListEntry 1>
+2024-12-16 17:13:29,216 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:437] - Item Model: Home, Item ID: 1
+2024-12-16 17:13:29,216 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:438] - User List ID: 1 User List Name: bob Homes
+2024-12-16 17:13:29,216 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:439] - user: 1
+2024-12-16 17:13:29,217 - application.rooms - DEBUG - get_room_list [rooms.py:57] - get_userlist(Room, current_user.active_home.name:testy current_user.active_home.active_floor.name:5th Floor Rooms, get_list_entries_for_item(current_user.active_home)[0].id:1
+2024-12-16 17:13:29,218 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:428] - found_entries for <Floor 5>: [<UserListEntry 281>]
+2024-12-16 17:13:29,218 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:436] - Entry: <UserListEntry 281>
+2024-12-16 17:13:29,219 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:437] - Item Model: Floor, Item ID: 5
+2024-12-16 17:13:29,219 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:438] - User List ID: 2 User List Name: testy Floors
+2024-12-16 17:13:29,219 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:439] - user: 1
+2024-12-16 17:13:29,220 - application.list_utils - DEBUG - get_userlist [list_utils.py:308] - get_userlist(): item_model: Room, list_name: None, parent_entry_id: 281
+2024-12-16 17:13:29,229 - application.list_utils - DEBUG - get_userlist [list_utils.py:322] - lists found (model, parent): [<UserList 93>]
+2024-12-16 17:13:29,230 - application.list_utils - DEBUG - get_userlist [list_utils.py:349] - len(lists) == 1: None Room 281
+2024-12-16 17:13:29,230 - application.list_utils - DEBUG - get_userlist [list_utils.py:368] - userlist.entries: [<UserListEntry 283>, <UserListEntry 285>] List type: <class 'sqlalchemy.orm.collections.InstrumentedList'>
+2024-12-16 17:13:29,231 - application.list_utils - DEBUG - get_userlist [list_utils.py:370] - List: testy 5th Floor Rooms, Order: 2
+2024-12-16 17:13:29,232 - application.list_utils - DEBUG - get_userlist [list_utils.py:370] - List: testy 5th Floor Rooms, Order: 0
+2024-12-16 17:13:29,233 - application.map - DEBUG - home_map [map.py:34] - floor_list MAP: <UserList 2>
+2024-12-16 17:13:29,327 - application - DEBUG - after_request_time [__init__.py:42] - Request to /map/ took 0.2210979461669922 seconds
+2024-12-16 17:13:29,327 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): map
+2024-12-16 17:13:29,327 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): map/index.html.jinja
+2024-12-16 17:13:29,421 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/style.css took 0.013360023498535156 seconds
+2024-12-16 17:13:29,422 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): map
+2024-12-16 17:13:29,423 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/js/bundle.js took 0.00820612907409668 seconds
+2024-12-16 17:13:29,423 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:13:29,423 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): map
+2024-12-16 17:13:29,424 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:13:29,434 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/person-circle.svg took 0.0013301372528076172 seconds
+2024-12-16 17:13:29,434 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): map
+2024-12-16 17:13:29,435 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:13:29,525 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:428] - found_entries for <Floor 5>: [<UserListEntry 281>]
+2024-12-16 17:13:29,526 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:436] - Entry: <UserListEntry 281>
+2024-12-16 17:13:29,526 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:437] - Item Model: Floor, Item ID: 5
+2024-12-16 17:13:29,527 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:438] - User List ID: 2 User List Name: testy Floors
+2024-12-16 17:13:29,527 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:439] - user: 1
+2024-12-16 17:13:29,527 - application.list_utils - DEBUG - get_userlist [list_utils.py:308] - get_userlist(): item_model: Room, list_name: None, parent_entry_id: 281
+2024-12-16 17:13:29,528 - application.list_utils - DEBUG - get_userlist [list_utils.py:322] - lists found (model, parent): [<UserList 93>]
+2024-12-16 17:13:29,529 - application.list_utils - DEBUG - get_userlist [list_utils.py:349] - len(lists) == 1: None Room 281
+2024-12-16 17:13:29,529 - application.list_utils - DEBUG - get_userlist [list_utils.py:368] - userlist.entries: [<UserListEntry 283>, <UserListEntry 285>] List type: <class 'sqlalchemy.orm.collections.InstrumentedList'>
+2024-12-16 17:13:29,529 - application.list_utils - DEBUG - get_userlist [list_utils.py:370] - List: testy 5th Floor Rooms, Order: 2
+2024-12-16 17:13:29,529 - application.list_utils - DEBUG - get_userlist [list_utils.py:370] - List: testy 5th Floor Rooms, Order: 0
+2024-12-16 17:13:29,532 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:271] - get_userlists_by_parent: lists found (parent_entry_id)283: [<UserList 94>]
+2024-12-16 17:13:29,533 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:271] - get_userlists_by_parent: lists found (parent_entry_id)285: [<UserList 96>]
+2024-12-16 17:13:29,669 - application - DEBUG - after_request_time [__init__.py:42] - Request to /show_list/ took 0.14869928359985352 seconds
+2024-12-16 17:13:29,670 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): map
+2024-12-16 17:13:29,670 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/list.html.jinja
+2024-12-16 17:13:29,715 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:428] - found_entries for <Photo 38>: [<UserListEntry 287>]
+2024-12-16 17:13:29,716 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:428] - found_entries for <Photo 35>: [<UserListEntry 282>]
+2024-12-16 17:13:29,717 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:436] - Entry: <UserListEntry 282>
+2024-12-16 17:13:29,718 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:436] - Entry: <UserListEntry 287>
+2024-12-16 17:13:29,718 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:437] - Item Model: Photo, Item ID: 35
+2024-12-16 17:13:29,718 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:437] - Item Model: Photo, Item ID: 38
+2024-12-16 17:13:29,719 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:438] - User List ID: 94 User List Name: Gym 3 Photos
+2024-12-16 17:13:29,719 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:438] - User List ID: 96 User List Name: Basement 2 Photos
+2024-12-16 17:13:29,719 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:439] - user: 1
+2024-12-16 17:13:29,720 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:439] - user: 1
+2024-12-16 17:13:29,746 - application - DEBUG - after_request_time [__init__.py:42] - Request to /show_photo_entry/35 took 0.035262107849121094 seconds
+2024-12-16 17:13:29,747 - application - DEBUG - after_request_time [__init__.py:42] - Request to /show_photo_entry/38 took 0.03719282150268555 seconds
+2024-12-16 17:13:29,747 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): map
+2024-12-16 17:13:29,747 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): map
+2024-12-16 17:13:29,747 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/model/photo.html.jinja
+2024-12-16 17:13:29,748 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/model/photo.html.jinja
+2024-12-16 17:13:29,768 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/defaults/generic_room.jpg took 0.0010797977447509766 seconds
+2024-12-16 17:13:29,768 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): map
+2024-12-16 17:13:29,768 - application.upload - DEBUG - uploaded_file [upload.py:97] - files in /Users/kyle/Documents/Repos/cs50/cs50x-final/media/uploads: ['1_1732676059_image.jpg', '2_1729876600_IMG_7979.jpeg', '3_1729880451_Screen_Shot_2024-10-15_at_8.49.55_PM.png', '2_1729793180_IMG_7939.jpeg', '2_1729876732_image.jpg', 'IMG_7540_3.jpeg', '1_1734385972_image.jpg', 'Screen_Shot_2024-06-17_at_9.19.26_PM_1.png', '1_1732593853_image.jpg', '1_1732676397_image.jpg', '3_1729880474_Screen_Shot_2024-06-17_at_9.19.26_PM.png', '3_1729880474_Screen_Shot_2023-05-13_at_4.10.32_PM.png', '2_1729793457_IMG_7927.jpeg', '.DS_Store', '1_1734387080_image.jpg', '2_1729878736_IMG_6398.jpeg', '2_1729793259_IMG_7971.jpeg', 'IMG_7540_2.jpeg', '3_1729880431_Screen_Shot_2024-10-15_at_8.49.55_PM.png', '2_1729788694_IMG_7978.jpeg', '2_1729793180_IMG_7938.jpeg', '1_1732676358_image.jpg', '2_1729806527_IMG_7971.jpeg', '3_1729880431_Screen_Shot_2024-06-17_at_9.19.26_PM.png', '2_1729878723_IMG_7979.jpeg', '1_1732313937_image.jpg', '1_1732571764_image.jpg', '1_1732308837_image.jpg', '1_1734387020_image.jpg', '2_1729806527_IMG_7940.png', '2_1729790952_IMG_7939.jpeg', '2_1729793457_IMG_7920.jpeg', '1_1732676382_image.jpg', '2_1729806423_IMG_7926.jpeg', 'IMG_7540_5.jpeg', '2_1729806390_image.jpg', '1_1732313904_image.jpg', '3_1729880431_Screen_Shot_2024-09-16_at_4.22.17_PM.png', '2_1729790270_image.jpg', '2_1729788660_IMG_7972.jpeg', '2_1729789401_IMG_7978.jpeg', 'IMG_7540_4.jpeg', '2_1729787915_image.jpg', '2_1729806527_IMG_7936.jpeg', '1_1732676354_image.jpg', '2_1729793457_IMG_7917.jpeg', '1_1732571776_image.jpg', '1_1732676066_image.jpg', '2_1729790297_IMG_7939.jpeg', '1_1732308852_image.jpg', '1_1734387117_image.jpg', '3_1729880474_Screen_Shot_2024-09-16_at_4.22.17_PM.png', '2_1729790967_image.jpg', 'image_2.jpg', '2_1729790846_IMG_7897.jpeg', '2_1729806527_IMG_7975.png', '1_1734389779_image.jpg', '1_1734387023_image.jpg', '2_1729787672_image.jpg', '2_1729806527_IMG_7974.png', '2_1729878723_IMG_7982.jpeg', '2_1729806527_IMG_7939.jpeg', 'image_3.jpg', '2_1729806500_image.jpg', 'image_1.jpg', '2_1729806527_IMG_7976.png', '1_1734371648_image.jpg', '2_1729876600_IMG_7984.jpeg', '2_1729806527_IMG_7977.png', '2_1729806527_IMG_7935.jpeg', '2_1729790259_image.jpg', '2_1729876586_image.jpg', '3_1729880431_Screen_Shot_2024-09-16_at_4.22.10_PM.png', '2_1729790568_IMG_7928.jpeg', 'image_4.jpg', '2_1729806527_IMG_7934.jpeg', '2_1729806527_IMG_7973.png', '1_1732571789_image.jpg', 'Screen_Shot_2024-06-17_at_9.19.26_PM.png', 'IMG_7540_6.jpeg', 'image_5.jpg', '1_1734385976_image.jpg', '2_1729789538_image.jpg', '2_1729789387_image.jpg', '1_1734389804_image.jpg', '2_1729806527_IMG_7938.jpeg', '1_1732676387_image.jpg', '2_1729790282_image.jpg', '2_1729806423_IMG_7913.jpeg', 'IMG_7540.jpeg', '2_1729793259_IMG_7973.png', 'IMG_7540_1.jpeg', '2_1729876600_IMG_7982.jpeg', '2_1729806527_IMG_7933.jpeg', '2_1729806527_IMG_7972.jpeg', '2_1729877408_image.jpg', '2_1729806423_IMG_7919.png', '3_1729880431_IMG_7540.jpeg', '2_1729788645_IMG_7977.png', '2_1729878714_image.jpg', '2_1729878744_image.jpg', '2_1729793180_IMG_7936.jpeg', '3_1729880451_IMG_7540.jpeg', '2_1729793259_IMG_7976.png', '1_1732676392_image.jpg', 'image.jpg', '1_1732636778_image.jpg', '1_1734371564_image.jpg', '2_1729876600_IMG_7983.jpeg', '2_1729793162_image.jpg', '1_1732636784_image.jpg']
+2024-12-16 17:13:29,769 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:13:29,770 - application - DEBUG - after_request_time [__init__.py:42] - Request to /media/uploads/1_1734389804_image.jpg took 0.004490852355957031 seconds
+2024-12-16 17:13:29,771 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): map
+2024-12-16 17:13:29,771 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:13:36,935 - application.rooms - DEBUG - set_active_room [rooms.py:118] - current_user.active_home.active_room: <Room 29>
+2024-12-16 17:13:36,936 - application - DEBUG - after_request_time [__init__.py:42] - Request to /home/room/29/active took 0.00772404670715332 seconds
+2024-12-16 17:13:36,936 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): map
+2024-12-16 17:13:36,936 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:13:39,208 - application.walkthrough - DEBUG - walk_start [walkthrough.py:43] - post room_name: None
+2024-12-16 17:13:39,209 - application.walkthrough - DEBUG - walk_start [walkthrough.py:44] - post view: None
+2024-12-16 17:13:39,214 - application.rooms - DEBUG - set_active_room [rooms.py:118] - current_user.active_home.active_room: <Room 29>
+2024-12-16 17:13:39,214 - application.walkthrough - DEBUG - walk_start [walkthrough.py:47] - active_room: <Room 29>
+2024-12-16 17:13:39,214 - application.walkthrough - DEBUG - walk_start [walkthrough.py:50] - view: rename
+2024-12-16 17:13:39,215 - application - DEBUG - after_request_time [__init__.py:42] - Request to /walkthrough/start took 0.007383823394775391 seconds
+2024-12-16 17:13:39,215 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): rename
+2024-12-16 17:13:39,215 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:13:39,227 - application.walkthrough - DEBUG - views [walkthrough.py:68] - view?: rename
+2024-12-16 17:13:39,227 - application.walkthrough - DEBUG - views [walkthrough.py:71] - File exists!: walkthrough/parts/rename.html.jinja
+2024-12-16 17:13:39,242 - application - DEBUG - after_request_time [__init__.py:42] - Request to /walkthrough/steps took 0.016740083694458008 seconds
+2024-12-16 17:13:39,243 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): rename
+2024-12-16 17:13:39,243 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): walkthrough/index.html.jinja
+2024-12-16 17:13:39,292 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/style.css took 0.0012578964233398438 seconds
+2024-12-16 17:13:39,297 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/js/bundle.js took 0.0015401840209960938 seconds
+2024-12-16 17:13:39,297 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): rename
+2024-12-16 17:13:39,298 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): rename
+2024-12-16 17:13:39,298 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:13:39,298 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:13:39,320 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/person-circle.svg took 0.0009570121765136719 seconds
+2024-12-16 17:13:39,320 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): rename
+2024-12-16 17:13:39,321 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:13:39,372 - application.walkthrough - DEBUG - views [walkthrough.py:68] - view?: rename
+2024-12-16 17:13:39,372 - application.walkthrough - DEBUG - views [walkthrough.py:71] - File exists!: walkthrough/parts/rename.html.jinja
+2024-12-16 17:13:39,408 - application - DEBUG - after_request_time [__init__.py:42] - Request to /walkthrough/steps took 0.037554025650024414 seconds
+2024-12-16 17:13:39,408 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): rename
+2024-12-16 17:13:39,408 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): walkthrough/parts/rename.html.jinja
+2024-12-16 17:13:42,683 - application.walkthrough - DEBUG - views [walkthrough.py:66] - view: sortphotos
+2024-12-16 17:13:42,683 - application.walkthrough - DEBUG - views [walkthrough.py:68] - view?: sortphotos
+2024-12-16 17:13:42,684 - application.walkthrough - DEBUG - views [walkthrough.py:71] - File exists!: walkthrough/parts/sortphotos.html.jinja
+2024-12-16 17:13:42,695 - application - DEBUG - after_request_time [__init__.py:42] - Request to /walkthrough/steps took 0.013178110122680664 seconds
+2024-12-16 17:13:42,695 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:13:42,696 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): walkthrough/parts/sortphotos.html.jinja
+2024-12-16 17:13:42,760 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:428] - found_entries for <Photo 38>: [<UserListEntry 287>]
+2024-12-16 17:13:42,761 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:428] - found_entries for <Room 29>: [<UserListEntry 285>]
+2024-12-16 17:13:42,762 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:436] - Entry: <UserListEntry 287>
+2024-12-16 17:13:42,763 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:436] - Entry: <UserListEntry 285>
+2024-12-16 17:13:42,763 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:437] - Item Model: Photo, Item ID: 38
+2024-12-16 17:13:42,763 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:437] - Item Model: Room, Item ID: 29
+2024-12-16 17:13:42,763 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:438] - User List ID: 96 User List Name: Basement 2 Photos
+2024-12-16 17:13:42,763 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:438] - User List ID: 93 User List Name: testy 5th Floor Rooms
+2024-12-16 17:13:42,764 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:439] - user: 1
+2024-12-16 17:13:42,764 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:439] - user: 1
+2024-12-16 17:13:42,765 - application - DEBUG - after_request_time [__init__.py:42] - Request to /show_photo_entry/38 took 0.008949041366577148 seconds
+2024-12-16 17:13:42,765 - application.list_utils - DEBUG - get_userlist [list_utils.py:308] - get_userlist(): item_model: Photo, list_name: None, parent_entry_id: 285
+2024-12-16 17:13:42,765 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:13:42,766 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/model/photo.html.jinja
+2024-12-16 17:13:42,767 - application.list_utils - DEBUG - get_userlist [list_utils.py:322] - lists found (model, parent): [<UserList 96>]
+2024-12-16 17:13:42,768 - application.list_utils - DEBUG - get_userlist [list_utils.py:349] - len(lists) == 1: None Photo 285
+2024-12-16 17:13:42,768 - application.list_utils - DEBUG - get_userlist [list_utils.py:368] - userlist.entries: [<UserListEntry 284>, <UserListEntry 287>] List type: <class 'sqlalchemy.orm.collections.InstrumentedList'>
+2024-12-16 17:13:42,769 - application.list_utils - DEBUG - get_userlist [list_utils.py:370] - List: Basement 2 Photos, Order: 1
+2024-12-16 17:13:42,769 - application.list_utils - DEBUG - get_userlist [list_utils.py:370] - List: Basement 2 Photos, Order: 2
+2024-12-16 17:13:42,773 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:271] - get_userlists_by_parent: lists found (parent_entry_id)284: [<UserList 97>]
+2024-12-16 17:13:42,774 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:271] - get_userlists_by_parent: lists found (parent_entry_id)287: [<UserList 99>]
+2024-12-16 17:13:42,782 - application - DEBUG - after_request_time [__init__.py:42] - Request to /show_list/ took 0.02486109733581543 seconds
+2024-12-16 17:13:42,782 - application.upload - DEBUG - uploaded_file [upload.py:97] - files in /Users/kyle/Documents/Repos/cs50/cs50x-final/media/uploads: ['1_1732676059_image.jpg', '2_1729876600_IMG_7979.jpeg', '3_1729880451_Screen_Shot_2024-10-15_at_8.49.55_PM.png', '2_1729793180_IMG_7939.jpeg', '2_1729876732_image.jpg', 'IMG_7540_3.jpeg', '1_1734385972_image.jpg', 'Screen_Shot_2024-06-17_at_9.19.26_PM_1.png', '1_1732593853_image.jpg', '1_1732676397_image.jpg', '3_1729880474_Screen_Shot_2024-06-17_at_9.19.26_PM.png', '3_1729880474_Screen_Shot_2023-05-13_at_4.10.32_PM.png', '2_1729793457_IMG_7927.jpeg', '.DS_Store', '1_1734387080_image.jpg', '2_1729878736_IMG_6398.jpeg', '2_1729793259_IMG_7971.jpeg', 'IMG_7540_2.jpeg', '3_1729880431_Screen_Shot_2024-10-15_at_8.49.55_PM.png', '2_1729788694_IMG_7978.jpeg', '2_1729793180_IMG_7938.jpeg', '1_1732676358_image.jpg', '2_1729806527_IMG_7971.jpeg', '3_1729880431_Screen_Shot_2024-06-17_at_9.19.26_PM.png', '2_1729878723_IMG_7979.jpeg', '1_1732313937_image.jpg', '1_1732571764_image.jpg', '1_1732308837_image.jpg', '1_1734387020_image.jpg', '2_1729806527_IMG_7940.png', '2_1729790952_IMG_7939.jpeg', '2_1729793457_IMG_7920.jpeg', '1_1732676382_image.jpg', '2_1729806423_IMG_7926.jpeg', 'IMG_7540_5.jpeg', '2_1729806390_image.jpg', '1_1732313904_image.jpg', '3_1729880431_Screen_Shot_2024-09-16_at_4.22.17_PM.png', '2_1729790270_image.jpg', '2_1729788660_IMG_7972.jpeg', '2_1729789401_IMG_7978.jpeg', 'IMG_7540_4.jpeg', '2_1729787915_image.jpg', '2_1729806527_IMG_7936.jpeg', '1_1732676354_image.jpg', '2_1729793457_IMG_7917.jpeg', '1_1732571776_image.jpg', '1_1732676066_image.jpg', '2_1729790297_IMG_7939.jpeg', '1_1732308852_image.jpg', '1_1734387117_image.jpg', '3_1729880474_Screen_Shot_2024-09-16_at_4.22.17_PM.png', '2_1729790967_image.jpg', 'image_2.jpg', '2_1729790846_IMG_7897.jpeg', '2_1729806527_IMG_7975.png', '1_1734389779_image.jpg', '1_1734387023_image.jpg', '2_1729787672_image.jpg', '2_1729806527_IMG_7974.png', '2_1729878723_IMG_7982.jpeg', '2_1729806527_IMG_7939.jpeg', 'image_3.jpg', '2_1729806500_image.jpg', 'image_1.jpg', '2_1729806527_IMG_7976.png', '1_1734371648_image.jpg', '2_1729876600_IMG_7984.jpeg', '2_1729806527_IMG_7977.png', '2_1729806527_IMG_7935.jpeg', '2_1729790259_image.jpg', '2_1729876586_image.jpg', '3_1729880431_Screen_Shot_2024-09-16_at_4.22.10_PM.png', '2_1729790568_IMG_7928.jpeg', 'image_4.jpg', '2_1729806527_IMG_7934.jpeg', '2_1729806527_IMG_7973.png', '1_1732571789_image.jpg', 'Screen_Shot_2024-06-17_at_9.19.26_PM.png', 'IMG_7540_6.jpeg', 'image_5.jpg', '1_1734385976_image.jpg', '2_1729789538_image.jpg', '2_1729789387_image.jpg', '1_1734389804_image.jpg', '2_1729806527_IMG_7938.jpeg', '1_1732676387_image.jpg', '2_1729790282_image.jpg', '2_1729806423_IMG_7913.jpeg', 'IMG_7540.jpeg', '2_1729793259_IMG_7973.png', 'IMG_7540_1.jpeg', '2_1729876600_IMG_7982.jpeg', '2_1729806527_IMG_7933.jpeg', '2_1729806527_IMG_7972.jpeg', '2_1729877408_image.jpg', '2_1729806423_IMG_7919.png', '3_1729880431_IMG_7540.jpeg', '2_1729788645_IMG_7977.png', '2_1729878714_image.jpg', '2_1729878744_image.jpg', '2_1729793180_IMG_7936.jpeg', '3_1729880451_IMG_7540.jpeg', '2_1729793259_IMG_7976.png', '1_1732676392_image.jpg', 'image.jpg', '1_1732636778_image.jpg', '1_1734371564_image.jpg', '2_1729876600_IMG_7983.jpeg', '2_1729793162_image.jpg', '1_1732636784_image.jpg']
+2024-12-16 17:13:42,782 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:13:42,783 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/list.html.jinja
+2024-12-16 17:13:42,783 - application - DEBUG - after_request_time [__init__.py:42] - Request to /media/uploads/1_1734389804_image.jpg took 0.0032401084899902344 seconds
+2024-12-16 17:13:42,784 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:13:42,785 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:13:42,797 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/defaults/generic_room.jpg took 0.0007898807525634766 seconds
+2024-12-16 17:13:42,798 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:13:42,798 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:13:48,134 - application.walkthrough - DEBUG - walk_start [walkthrough.py:30] - get room_name: Basement 2
+2024-12-16 17:13:48,134 - application.walkthrough - DEBUG - walk_start [walkthrough.py:31] - get view: sortphotos
+2024-12-16 17:13:48,136 - application.walkthrough - DEBUG - walk_start [walkthrough.py:35] - room: (<Room 29>,) room_name: Basement 2 room name name: Basement 2
+2024-12-16 17:13:48,141 - application.rooms - DEBUG - set_active_room [rooms.py:118] - current_user.active_home.active_room: <Room 29>
+2024-12-16 17:13:48,142 - application.walkthrough - DEBUG - walk_start [walkthrough.py:50] - view: sortphotos
+2024-12-16 17:13:48,142 - application - DEBUG - after_request_time [__init__.py:42] - Request to /walkthrough/Basement 2/sortphotos took 0.009298324584960938 seconds
+2024-12-16 17:13:48,142 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:13:48,143 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:13:48,154 - application.walkthrough - DEBUG - views [walkthrough.py:68] - view?: sortphotos
+2024-12-16 17:13:48,155 - application.walkthrough - DEBUG - views [walkthrough.py:71] - File exists!: walkthrough/parts/sortphotos.html.jinja
+2024-12-16 17:13:48,157 - application - DEBUG - after_request_time [__init__.py:42] - Request to /walkthrough/steps took 0.0034897327423095703 seconds
+2024-12-16 17:13:48,157 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:13:48,157 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): walkthrough/index.html.jinja
+2024-12-16 17:13:48,223 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/js/bundle.js took 0.001024007797241211 seconds
+2024-12-16 17:13:48,224 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:13:48,224 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:13:48,228 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/style.css took 0.0011589527130126953 seconds
+2024-12-16 17:13:48,229 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:13:48,230 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:13:48,249 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/person-circle.svg took 0.0009777545928955078 seconds
+2024-12-16 17:13:48,250 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:13:48,250 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:13:48,287 - application.walkthrough - DEBUG - views [walkthrough.py:68] - view?: sortphotos
+2024-12-16 17:13:48,287 - application.walkthrough - DEBUG - views [walkthrough.py:71] - File exists!: walkthrough/parts/sortphotos.html.jinja
+2024-12-16 17:13:48,290 - application - DEBUG - after_request_time [__init__.py:42] - Request to /walkthrough/steps took 0.0038962364196777344 seconds
+2024-12-16 17:13:48,290 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:13:48,290 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): walkthrough/parts/sortphotos.html.jinja
+2024-12-16 17:13:48,353 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:428] - found_entries for <Room 29>: [<UserListEntry 285>]
+2024-12-16 17:13:48,353 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:428] - found_entries for <Photo 38>: [<UserListEntry 287>]
+2024-12-16 17:13:48,355 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:436] - Entry: <UserListEntry 285>
+2024-12-16 17:13:48,355 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:437] - Item Model: Room, Item ID: 29
+2024-12-16 17:13:48,356 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:436] - Entry: <UserListEntry 287>
+2024-12-16 17:13:48,356 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:438] - User List ID: 93 User List Name: testy 5th Floor Rooms
+2024-12-16 17:13:48,356 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:437] - Item Model: Photo, Item ID: 38
+2024-12-16 17:13:48,356 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:439] - user: 1
+2024-12-16 17:13:48,357 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:438] - User List ID: 96 User List Name: Basement 2 Photos
+2024-12-16 17:13:48,357 - application.list_utils - DEBUG - get_userlist [list_utils.py:308] - get_userlist(): item_model: Photo, list_name: None, parent_entry_id: 285
+2024-12-16 17:13:48,357 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:439] - user: 1
+2024-12-16 17:13:48,358 - application.list_utils - DEBUG - get_userlist [list_utils.py:322] - lists found (model, parent): [<UserList 96>]
+2024-12-16 17:13:48,359 - application - DEBUG - after_request_time [__init__.py:42] - Request to /show_photo_entry/38 took 0.010393142700195312 seconds
+2024-12-16 17:13:48,360 - application.list_utils - DEBUG - get_userlist [list_utils.py:349] - len(lists) == 1: None Photo 285
+2024-12-16 17:13:48,360 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:13:48,360 - application.list_utils - DEBUG - get_userlist [list_utils.py:368] - userlist.entries: [<UserListEntry 284>, <UserListEntry 287>] List type: <class 'sqlalchemy.orm.collections.InstrumentedList'>
+2024-12-16 17:13:48,360 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/model/photo.html.jinja
+2024-12-16 17:13:48,361 - application.list_utils - DEBUG - get_userlist [list_utils.py:370] - List: Basement 2 Photos, Order: 1
+2024-12-16 17:13:48,362 - application.list_utils - DEBUG - get_userlist [list_utils.py:370] - List: Basement 2 Photos, Order: 2
+2024-12-16 17:13:48,363 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:271] - get_userlists_by_parent: lists found (parent_entry_id)284: [<UserList 97>]
+2024-12-16 17:13:48,368 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:271] - get_userlists_by_parent: lists found (parent_entry_id)287: [<UserList 99>]
+2024-12-16 17:13:48,374 - application - DEBUG - after_request_time [__init__.py:42] - Request to /show_list/ took 0.03253507614135742 seconds
+2024-12-16 17:13:48,375 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:13:48,375 - application.upload - DEBUG - uploaded_file [upload.py:97] - files in /Users/kyle/Documents/Repos/cs50/cs50x-final/media/uploads: ['1_1732676059_image.jpg', '2_1729876600_IMG_7979.jpeg', '3_1729880451_Screen_Shot_2024-10-15_at_8.49.55_PM.png', '2_1729793180_IMG_7939.jpeg', '2_1729876732_image.jpg', 'IMG_7540_3.jpeg', '1_1734385972_image.jpg', 'Screen_Shot_2024-06-17_at_9.19.26_PM_1.png', '1_1732593853_image.jpg', '1_1732676397_image.jpg', '3_1729880474_Screen_Shot_2024-06-17_at_9.19.26_PM.png', '3_1729880474_Screen_Shot_2023-05-13_at_4.10.32_PM.png', '2_1729793457_IMG_7927.jpeg', '.DS_Store', '1_1734387080_image.jpg', '2_1729878736_IMG_6398.jpeg', '2_1729793259_IMG_7971.jpeg', 'IMG_7540_2.jpeg', '3_1729880431_Screen_Shot_2024-10-15_at_8.49.55_PM.png', '2_1729788694_IMG_7978.jpeg', '2_1729793180_IMG_7938.jpeg', '1_1732676358_image.jpg', '2_1729806527_IMG_7971.jpeg', '3_1729880431_Screen_Shot_2024-06-17_at_9.19.26_PM.png', '2_1729878723_IMG_7979.jpeg', '1_1732313937_image.jpg', '1_1732571764_image.jpg', '1_1732308837_image.jpg', '1_1734387020_image.jpg', '2_1729806527_IMG_7940.png', '2_1729790952_IMG_7939.jpeg', '2_1729793457_IMG_7920.jpeg', '1_1732676382_image.jpg', '2_1729806423_IMG_7926.jpeg', 'IMG_7540_5.jpeg', '2_1729806390_image.jpg', '1_1732313904_image.jpg', '3_1729880431_Screen_Shot_2024-09-16_at_4.22.17_PM.png', '2_1729790270_image.jpg', '2_1729788660_IMG_7972.jpeg', '2_1729789401_IMG_7978.jpeg', 'IMG_7540_4.jpeg', '2_1729787915_image.jpg', '2_1729806527_IMG_7936.jpeg', '1_1732676354_image.jpg', '2_1729793457_IMG_7917.jpeg', '1_1732571776_image.jpg', '1_1732676066_image.jpg', '2_1729790297_IMG_7939.jpeg', '1_1732308852_image.jpg', '1_1734387117_image.jpg', '3_1729880474_Screen_Shot_2024-09-16_at_4.22.17_PM.png', '2_1729790967_image.jpg', 'image_2.jpg', '2_1729790846_IMG_7897.jpeg', '2_1729806527_IMG_7975.png', '1_1734389779_image.jpg', '1_1734387023_image.jpg', '2_1729787672_image.jpg', '2_1729806527_IMG_7974.png', '2_1729878723_IMG_7982.jpeg', '2_1729806527_IMG_7939.jpeg', 'image_3.jpg', '2_1729806500_image.jpg', 'image_1.jpg', '2_1729806527_IMG_7976.png', '1_1734371648_image.jpg', '2_1729876600_IMG_7984.jpeg', '2_1729806527_IMG_7977.png', '2_1729806527_IMG_7935.jpeg', '2_1729790259_image.jpg', '2_1729876586_image.jpg', '3_1729880431_Screen_Shot_2024-09-16_at_4.22.10_PM.png', '2_1729790568_IMG_7928.jpeg', 'image_4.jpg', '2_1729806527_IMG_7934.jpeg', '2_1729806527_IMG_7973.png', '1_1732571789_image.jpg', 'Screen_Shot_2024-06-17_at_9.19.26_PM.png', 'IMG_7540_6.jpeg', 'image_5.jpg', '1_1734385976_image.jpg', '2_1729789538_image.jpg', '2_1729789387_image.jpg', '1_1734389804_image.jpg', '2_1729806527_IMG_7938.jpeg', '1_1732676387_image.jpg', '2_1729790282_image.jpg', '2_1729806423_IMG_7913.jpeg', 'IMG_7540.jpeg', '2_1729793259_IMG_7973.png', 'IMG_7540_1.jpeg', '2_1729876600_IMG_7982.jpeg', '2_1729806527_IMG_7933.jpeg', '2_1729806527_IMG_7972.jpeg', '2_1729877408_image.jpg', '2_1729806423_IMG_7919.png', '3_1729880431_IMG_7540.jpeg', '2_1729788645_IMG_7977.png', '2_1729878714_image.jpg', '2_1729878744_image.jpg', '2_1729793180_IMG_7936.jpeg', '3_1729880451_IMG_7540.jpeg', '2_1729793259_IMG_7976.png', '1_1732676392_image.jpg', 'image.jpg', '1_1732636778_image.jpg', '1_1734371564_image.jpg', '2_1729876600_IMG_7983.jpeg', '2_1729793162_image.jpg', '1_1732636784_image.jpg']
+2024-12-16 17:13:48,375 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/list.html.jinja
+2024-12-16 17:13:48,376 - application - DEBUG - after_request_time [__init__.py:42] - Request to /media/uploads/1_1734389804_image.jpg took 0.002473115921020508 seconds
+2024-12-16 17:13:48,377 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:13:48,377 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:13:48,391 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/defaults/generic_room.jpg took 0.0009570121765136719 seconds
+2024-12-16 17:13:48,391 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:13:48,392 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:13:51,038 - application.rooms - DEBUG - set_room_cover_photo [rooms.py:137] - photo: <Photo 38> photo.name: 1_1734389804_image.jpg Basement 2 Photo 2, photo.room: <Room 29>, photo.room.current_cover_photo_id: 38
+2024-12-16 17:13:51,038 - application - DEBUG - after_request_time [__init__.py:42] - Request to /set_room_cover_photo/38 took 0.0059719085693359375 seconds
+2024-12-16 17:13:51,038 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:13:51,039 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:13:52,795 - application.walkthrough - DEBUG - walk_start [walkthrough.py:30] - get room_name: Basement 2
+2024-12-16 17:13:52,795 - application.walkthrough - DEBUG - walk_start [walkthrough.py:31] - get view: sortphotos
+2024-12-16 17:13:52,796 - application.walkthrough - DEBUG - walk_start [walkthrough.py:35] - room: (<Room 29>,) room_name: Basement 2 room name name: Basement 2
+2024-12-16 17:13:52,799 - application.rooms - DEBUG - set_active_room [rooms.py:118] - current_user.active_home.active_room: <Room 29>
+2024-12-16 17:13:52,799 - application.walkthrough - DEBUG - walk_start [walkthrough.py:50] - view: sortphotos
+2024-12-16 17:13:52,800 - application - DEBUG - after_request_time [__init__.py:42] - Request to /walkthrough/Basement 2/sortphotos took 0.006227970123291016 seconds
+2024-12-16 17:13:52,800 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:13:52,801 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:13:52,813 - application.walkthrough - DEBUG - views [walkthrough.py:68] - view?: sortphotos
+2024-12-16 17:13:52,813 - application.walkthrough - DEBUG - views [walkthrough.py:71] - File exists!: walkthrough/parts/sortphotos.html.jinja
+2024-12-16 17:13:52,815 - application - DEBUG - after_request_time [__init__.py:42] - Request to /walkthrough/steps took 0.0035278797149658203 seconds
+2024-12-16 17:13:52,816 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:13:52,816 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): walkthrough/index.html.jinja
+2024-12-16 17:13:52,870 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/style.css took 0.0014450550079345703 seconds
+2024-12-16 17:13:52,872 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/js/bundle.js took 0.00464320182800293 seconds
+2024-12-16 17:13:52,872 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:13:52,872 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:13:52,873 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:13:52,874 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:13:52,888 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/person-circle.svg took 0.0014109611511230469 seconds
+2024-12-16 17:13:52,889 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:13:52,890 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:13:52,944 - application.walkthrough - DEBUG - views [walkthrough.py:68] - view?: sortphotos
+2024-12-16 17:13:52,945 - application.walkthrough - DEBUG - views [walkthrough.py:71] - File exists!: walkthrough/parts/sortphotos.html.jinja
+2024-12-16 17:13:52,947 - application - DEBUG - after_request_time [__init__.py:42] - Request to /walkthrough/steps took 0.0037169456481933594 seconds
+2024-12-16 17:13:52,947 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:13:52,947 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): walkthrough/parts/sortphotos.html.jinja
+2024-12-16 17:13:53,006 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:428] - found_entries for <Photo 38>: [<UserListEntry 287>]
+2024-12-16 17:13:53,006 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:428] - found_entries for <Room 29>: [<UserListEntry 285>]
+2024-12-16 17:13:53,008 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:436] - Entry: <UserListEntry 287>
+2024-12-16 17:13:53,008 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:436] - Entry: <UserListEntry 285>
+2024-12-16 17:13:53,008 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:437] - Item Model: Photo, Item ID: 38
+2024-12-16 17:13:53,008 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:437] - Item Model: Room, Item ID: 29
+2024-12-16 17:13:53,009 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:438] - User List ID: 96 User List Name: Basement 2 Photos
+2024-12-16 17:13:53,009 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:438] - User List ID: 93 User List Name: testy 5th Floor Rooms
+2024-12-16 17:13:53,009 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:439] - user: 1
+2024-12-16 17:13:53,011 - application - DEBUG - after_request_time [__init__.py:42] - Request to /show_photo_entry/38 took 0.00974893569946289 seconds
+2024-12-16 17:13:53,009 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:439] - user: 1
+2024-12-16 17:13:53,011 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:13:53,011 - application.list_utils - DEBUG - get_userlist [list_utils.py:308] - get_userlist(): item_model: Photo, list_name: None, parent_entry_id: 285
+2024-12-16 17:13:53,012 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/model/photo.html.jinja
+2024-12-16 17:13:53,013 - application.list_utils - DEBUG - get_userlist [list_utils.py:322] - lists found (model, parent): [<UserList 96>]
+2024-12-16 17:13:53,014 - application.list_utils - DEBUG - get_userlist [list_utils.py:349] - len(lists) == 1: None Photo 285
+2024-12-16 17:13:53,014 - application.list_utils - DEBUG - get_userlist [list_utils.py:368] - userlist.entries: [<UserListEntry 284>, <UserListEntry 287>] List type: <class 'sqlalchemy.orm.collections.InstrumentedList'>
+2024-12-16 17:13:53,015 - application.list_utils - DEBUG - get_userlist [list_utils.py:370] - List: Basement 2 Photos, Order: 1
+2024-12-16 17:13:53,015 - application.list_utils - DEBUG - get_userlist [list_utils.py:370] - List: Basement 2 Photos, Order: 2
+2024-12-16 17:13:53,017 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:271] - get_userlists_by_parent: lists found (parent_entry_id)284: [<UserList 97>]
+2024-12-16 17:13:53,018 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:271] - get_userlists_by_parent: lists found (parent_entry_id)287: [<UserList 99>]
+2024-12-16 17:13:53,027 - application - DEBUG - after_request_time [__init__.py:42] - Request to /show_list/ took 0.0306549072265625 seconds
+2024-12-16 17:13:53,028 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:13:53,028 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/list.html.jinja
+2024-12-16 17:13:53,028 - application.upload - DEBUG - uploaded_file [upload.py:97] - files in /Users/kyle/Documents/Repos/cs50/cs50x-final/media/uploads: ['1_1732676059_image.jpg', '2_1729876600_IMG_7979.jpeg', '3_1729880451_Screen_Shot_2024-10-15_at_8.49.55_PM.png', '2_1729793180_IMG_7939.jpeg', '2_1729876732_image.jpg', 'IMG_7540_3.jpeg', '1_1734385972_image.jpg', 'Screen_Shot_2024-06-17_at_9.19.26_PM_1.png', '1_1732593853_image.jpg', '1_1732676397_image.jpg', '3_1729880474_Screen_Shot_2024-06-17_at_9.19.26_PM.png', '3_1729880474_Screen_Shot_2023-05-13_at_4.10.32_PM.png', '2_1729793457_IMG_7927.jpeg', '.DS_Store', '1_1734387080_image.jpg', '2_1729878736_IMG_6398.jpeg', '2_1729793259_IMG_7971.jpeg', 'IMG_7540_2.jpeg', '3_1729880431_Screen_Shot_2024-10-15_at_8.49.55_PM.png', '2_1729788694_IMG_7978.jpeg', '2_1729793180_IMG_7938.jpeg', '1_1732676358_image.jpg', '2_1729806527_IMG_7971.jpeg', '3_1729880431_Screen_Shot_2024-06-17_at_9.19.26_PM.png', '2_1729878723_IMG_7979.jpeg', '1_1732313937_image.jpg', '1_1732571764_image.jpg', '1_1732308837_image.jpg', '1_1734387020_image.jpg', '2_1729806527_IMG_7940.png', '2_1729790952_IMG_7939.jpeg', '2_1729793457_IMG_7920.jpeg', '1_1732676382_image.jpg', '2_1729806423_IMG_7926.jpeg', 'IMG_7540_5.jpeg', '2_1729806390_image.jpg', '1_1732313904_image.jpg', '3_1729880431_Screen_Shot_2024-09-16_at_4.22.17_PM.png', '2_1729790270_image.jpg', '2_1729788660_IMG_7972.jpeg', '2_1729789401_IMG_7978.jpeg', 'IMG_7540_4.jpeg', '2_1729787915_image.jpg', '2_1729806527_IMG_7936.jpeg', '1_1732676354_image.jpg', '2_1729793457_IMG_7917.jpeg', '1_1732571776_image.jpg', '1_1732676066_image.jpg', '2_1729790297_IMG_7939.jpeg', '1_1732308852_image.jpg', '1_1734387117_image.jpg', '3_1729880474_Screen_Shot_2024-09-16_at_4.22.17_PM.png', '2_1729790967_image.jpg', 'image_2.jpg', '2_1729790846_IMG_7897.jpeg', '2_1729806527_IMG_7975.png', '1_1734389779_image.jpg', '1_1734387023_image.jpg', '2_1729787672_image.jpg', '2_1729806527_IMG_7974.png', '2_1729878723_IMG_7982.jpeg', '2_1729806527_IMG_7939.jpeg', 'image_3.jpg', '2_1729806500_image.jpg', 'image_1.jpg', '2_1729806527_IMG_7976.png', '1_1734371648_image.jpg', '2_1729876600_IMG_7984.jpeg', '2_1729806527_IMG_7977.png', '2_1729806527_IMG_7935.jpeg', '2_1729790259_image.jpg', '2_1729876586_image.jpg', '3_1729880431_Screen_Shot_2024-09-16_at_4.22.10_PM.png', '2_1729790568_IMG_7928.jpeg', 'image_4.jpg', '2_1729806527_IMG_7934.jpeg', '2_1729806527_IMG_7973.png', '1_1732571789_image.jpg', 'Screen_Shot_2024-06-17_at_9.19.26_PM.png', 'IMG_7540_6.jpeg', 'image_5.jpg', '1_1734385976_image.jpg', '2_1729789538_image.jpg', '2_1729789387_image.jpg', '1_1734389804_image.jpg', '2_1729806527_IMG_7938.jpeg', '1_1732676387_image.jpg', '2_1729790282_image.jpg', '2_1729806423_IMG_7913.jpeg', 'IMG_7540.jpeg', '2_1729793259_IMG_7973.png', 'IMG_7540_1.jpeg', '2_1729876600_IMG_7982.jpeg', '2_1729806527_IMG_7933.jpeg', '2_1729806527_IMG_7972.jpeg', '2_1729877408_image.jpg', '2_1729806423_IMG_7919.png', '3_1729880431_IMG_7540.jpeg', '2_1729788645_IMG_7977.png', '2_1729878714_image.jpg', '2_1729878744_image.jpg', '2_1729793180_IMG_7936.jpeg', '3_1729880451_IMG_7540.jpeg', '2_1729793259_IMG_7976.png', '1_1732676392_image.jpg', 'image.jpg', '1_1732636778_image.jpg', '1_1734371564_image.jpg', '2_1729876600_IMG_7983.jpeg', '2_1729793162_image.jpg', '1_1732636784_image.jpg']
+2024-12-16 17:13:53,030 - application - DEBUG - after_request_time [__init__.py:42] - Request to /media/uploads/1_1734389804_image.jpg took 0.003670930862426758 seconds
+2024-12-16 17:13:53,031 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:13:53,032 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:13:53,044 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/defaults/generic_room.jpg took 0.0013132095336914062 seconds
+2024-12-16 17:13:53,044 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:13:53,045 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:14:56,395 - application.walkthrough - DEBUG - walk_start [walkthrough.py:30] - get room_name: Basement 2
+2024-12-16 17:14:56,396 - application.walkthrough - DEBUG - walk_start [walkthrough.py:31] - get view: sortphotos
+2024-12-16 17:14:56,396 - application.walkthrough - DEBUG - walk_start [walkthrough.py:35] - room: (<Room 29>,) room_name: Basement 2 room name name: Basement 2
+2024-12-16 17:14:56,401 - application.rooms - DEBUG - set_active_room [rooms.py:118] - current_user.active_home.active_room: <Room 29>
+2024-12-16 17:14:56,401 - application.walkthrough - DEBUG - walk_start [walkthrough.py:50] - view: sortphotos
+2024-12-16 17:14:56,402 - application - DEBUG - after_request_time [__init__.py:42] - Request to /walkthrough/Basement 2/sortphotos took 0.006675004959106445 seconds
+2024-12-16 17:14:56,402 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:14:56,402 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:14:56,430 - application.walkthrough - DEBUG - views [walkthrough.py:68] - view?: sortphotos
+2024-12-16 17:14:56,430 - application.walkthrough - DEBUG - views [walkthrough.py:71] - File exists!: walkthrough/parts/sortphotos.html.jinja
+2024-12-16 17:14:56,435 - application - DEBUG - after_request_time [__init__.py:42] - Request to /walkthrough/steps took 0.006000995635986328 seconds
+2024-12-16 17:14:56,435 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:14:56,436 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): walkthrough/index.html.jinja
+2024-12-16 17:14:56,514 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/js/bundle.js took 0.001130819320678711 seconds
+2024-12-16 17:14:56,517 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/style.css took 0.0012772083282470703 seconds
+2024-12-16 17:14:56,518 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:14:56,518 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:14:56,519 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:14:56,519 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:14:56,547 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/person-circle.svg took 0.0013430118560791016 seconds
+2024-12-16 17:14:56,548 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:14:56,548 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:14:56,598 - application.walkthrough - DEBUG - views [walkthrough.py:68] - view?: sortphotos
+2024-12-16 17:14:56,599 - application.walkthrough - DEBUG - views [walkthrough.py:71] - File exists!: walkthrough/parts/sortphotos.html.jinja
+2024-12-16 17:14:56,600 - application - DEBUG - after_request_time [__init__.py:42] - Request to /walkthrough/steps took 0.003787994384765625 seconds
+2024-12-16 17:14:56,601 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:14:56,601 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): walkthrough/parts/sortphotos.html.jinja
+2024-12-16 17:14:56,676 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:428] - found_entries for <Room 29>: [<UserListEntry 285>]
+2024-12-16 17:14:56,676 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:428] - found_entries for <Photo 38>: [<UserListEntry 287>]
+2024-12-16 17:14:56,677 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:436] - Entry: <UserListEntry 285>
+2024-12-16 17:14:56,678 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:437] - Item Model: Room, Item ID: 29
+2024-12-16 17:14:56,678 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:436] - Entry: <UserListEntry 287>
+2024-12-16 17:14:56,678 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:438] - User List ID: 93 User List Name: testy 5th Floor Rooms
+2024-12-16 17:14:56,679 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:437] - Item Model: Photo, Item ID: 38
+2024-12-16 17:14:56,679 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:439] - user: 1
+2024-12-16 17:14:56,679 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:438] - User List ID: 96 User List Name: Basement 2 Photos
+2024-12-16 17:14:56,679 - application.list_utils - DEBUG - get_userlist [list_utils.py:308] - get_userlist(): item_model: Photo, list_name: None, parent_entry_id: 285
+2024-12-16 17:14:56,679 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:439] - user: 1
+2024-12-16 17:14:56,682 - application - DEBUG - after_request_time [__init__.py:42] - Request to /show_photo_entry/38 took 0.009489297866821289 seconds
+2024-12-16 17:14:56,682 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:14:56,683 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/model/photo.html.jinja
+2024-12-16 17:14:56,683 - application.list_utils - DEBUG - get_userlist [list_utils.py:322] - lists found (model, parent): [<UserList 96>]
+2024-12-16 17:14:56,685 - application.list_utils - DEBUG - get_userlist [list_utils.py:349] - len(lists) == 1: None Photo 285
+2024-12-16 17:14:56,687 - application.list_utils - DEBUG - get_userlist [list_utils.py:368] - userlist.entries: [<UserListEntry 284>, <UserListEntry 287>] List type: <class 'sqlalchemy.orm.collections.InstrumentedList'>
+2024-12-16 17:14:56,688 - application.list_utils - DEBUG - get_userlist [list_utils.py:370] - List: Basement 2 Photos, Order: 1
+2024-12-16 17:14:56,689 - application.list_utils - DEBUG - get_userlist [list_utils.py:370] - List: Basement 2 Photos, Order: 2
+2024-12-16 17:14:56,694 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:271] - get_userlists_by_parent: lists found (parent_entry_id)284: [<UserList 97>]
+2024-12-16 17:14:56,696 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:271] - get_userlists_by_parent: lists found (parent_entry_id)287: [<UserList 99>]
+2024-12-16 17:14:56,708 - application - DEBUG - after_request_time [__init__.py:42] - Request to /show_list/ took 0.03964638710021973 seconds
+2024-12-16 17:14:56,708 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:14:56,709 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/list.html.jinja
+2024-12-16 17:14:56,709 - application.upload - DEBUG - uploaded_file [upload.py:97] - files in /Users/kyle/Documents/Repos/cs50/cs50x-final/media/uploads: ['1_1732676059_image.jpg', '2_1729876600_IMG_7979.jpeg', '3_1729880451_Screen_Shot_2024-10-15_at_8.49.55_PM.png', '2_1729793180_IMG_7939.jpeg', '2_1729876732_image.jpg', 'IMG_7540_3.jpeg', '1_1734385972_image.jpg', 'Screen_Shot_2024-06-17_at_9.19.26_PM_1.png', '1_1732593853_image.jpg', '1_1732676397_image.jpg', '3_1729880474_Screen_Shot_2024-06-17_at_9.19.26_PM.png', '3_1729880474_Screen_Shot_2023-05-13_at_4.10.32_PM.png', '2_1729793457_IMG_7927.jpeg', '.DS_Store', '1_1734387080_image.jpg', '2_1729878736_IMG_6398.jpeg', '2_1729793259_IMG_7971.jpeg', 'IMG_7540_2.jpeg', '3_1729880431_Screen_Shot_2024-10-15_at_8.49.55_PM.png', '2_1729788694_IMG_7978.jpeg', '2_1729793180_IMG_7938.jpeg', '1_1732676358_image.jpg', '2_1729806527_IMG_7971.jpeg', '3_1729880431_Screen_Shot_2024-06-17_at_9.19.26_PM.png', '2_1729878723_IMG_7979.jpeg', '1_1732313937_image.jpg', '1_1732571764_image.jpg', '1_1732308837_image.jpg', '1_1734387020_image.jpg', '2_1729806527_IMG_7940.png', '2_1729790952_IMG_7939.jpeg', '2_1729793457_IMG_7920.jpeg', '1_1732676382_image.jpg', '2_1729806423_IMG_7926.jpeg', 'IMG_7540_5.jpeg', '2_1729806390_image.jpg', '1_1732313904_image.jpg', '3_1729880431_Screen_Shot_2024-09-16_at_4.22.17_PM.png', '2_1729790270_image.jpg', '2_1729788660_IMG_7972.jpeg', '2_1729789401_IMG_7978.jpeg', 'IMG_7540_4.jpeg', '2_1729787915_image.jpg', '2_1729806527_IMG_7936.jpeg', '1_1732676354_image.jpg', '2_1729793457_IMG_7917.jpeg', '1_1732571776_image.jpg', '1_1732676066_image.jpg', '2_1729790297_IMG_7939.jpeg', '1_1732308852_image.jpg', '1_1734387117_image.jpg', '3_1729880474_Screen_Shot_2024-09-16_at_4.22.17_PM.png', '2_1729790967_image.jpg', 'image_2.jpg', '2_1729790846_IMG_7897.jpeg', '2_1729806527_IMG_7975.png', '1_1734389779_image.jpg', '1_1734387023_image.jpg', '2_1729787672_image.jpg', '2_1729806527_IMG_7974.png', '2_1729878723_IMG_7982.jpeg', '2_1729806527_IMG_7939.jpeg', 'image_3.jpg', '2_1729806500_image.jpg', 'image_1.jpg', '2_1729806527_IMG_7976.png', '1_1734371648_image.jpg', '2_1729876600_IMG_7984.jpeg', '2_1729806527_IMG_7977.png', '2_1729806527_IMG_7935.jpeg', '2_1729790259_image.jpg', '2_1729876586_image.jpg', '3_1729880431_Screen_Shot_2024-09-16_at_4.22.10_PM.png', '2_1729790568_IMG_7928.jpeg', 'image_4.jpg', '2_1729806527_IMG_7934.jpeg', '2_1729806527_IMG_7973.png', '1_1732571789_image.jpg', 'Screen_Shot_2024-06-17_at_9.19.26_PM.png', 'IMG_7540_6.jpeg', 'image_5.jpg', '1_1734385976_image.jpg', '2_1729789538_image.jpg', '2_1729789387_image.jpg', '1_1734389804_image.jpg', '2_1729806527_IMG_7938.jpeg', '1_1732676387_image.jpg', '2_1729790282_image.jpg', '2_1729806423_IMG_7913.jpeg', 'IMG_7540.jpeg', '2_1729793259_IMG_7973.png', 'IMG_7540_1.jpeg', '2_1729876600_IMG_7982.jpeg', '2_1729806527_IMG_7933.jpeg', '2_1729806527_IMG_7972.jpeg', '2_1729877408_image.jpg', '2_1729806423_IMG_7919.png', '3_1729880431_IMG_7540.jpeg', '2_1729788645_IMG_7977.png', '2_1729878714_image.jpg', '2_1729878744_image.jpg', '2_1729793180_IMG_7936.jpeg', '3_1729880451_IMG_7540.jpeg', '2_1729793259_IMG_7976.png', '1_1732676392_image.jpg', 'image.jpg', '1_1732636778_image.jpg', '1_1734371564_image.jpg', '2_1729876600_IMG_7983.jpeg', '2_1729793162_image.jpg', '1_1732636784_image.jpg']
+2024-12-16 17:14:56,711 - application - DEBUG - after_request_time [__init__.py:42] - Request to /media/uploads/1_1734389804_image.jpg took 0.0040318965911865234 seconds
+2024-12-16 17:14:56,712 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:14:56,712 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:14:56,730 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/defaults/generic_room.jpg took 0.0008919239044189453 seconds
+2024-12-16 17:14:56,730 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:14:56,731 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:15:03,948 - application.rooms - DEBUG - set_room_cover_photo [rooms.py:137] - photo: <Photo 38> photo.name: 1_1734389804_image.jpg Basement 2 Photo 2, photo.room: <Room 29>, photo.room.current_cover_photo_id: 38
+2024-12-16 17:15:03,949 - application - DEBUG - after_request_time [__init__.py:42] - Request to /set_room_cover_photo/38 took 0.0038933753967285156 seconds
+2024-12-16 17:15:03,949 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:15:03,949 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:15:05,684 - application.walkthrough - DEBUG - walk_start [walkthrough.py:30] - get room_name: Basement 2
+2024-12-16 17:15:05,685 - application.walkthrough - DEBUG - walk_start [walkthrough.py:31] - get view: sortphotos
+2024-12-16 17:15:05,685 - application.walkthrough - DEBUG - walk_start [walkthrough.py:35] - room: (<Room 29>,) room_name: Basement 2 room name name: Basement 2
+2024-12-16 17:15:05,688 - application.rooms - DEBUG - set_active_room [rooms.py:118] - current_user.active_home.active_room: <Room 29>
+2024-12-16 17:15:05,688 - application.walkthrough - DEBUG - walk_start [walkthrough.py:50] - view: sortphotos
+2024-12-16 17:15:05,689 - application - DEBUG - after_request_time [__init__.py:42] - Request to /walkthrough/Basement 2/sortphotos took 0.005548954010009766 seconds
+2024-12-16 17:15:05,689 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:15:05,690 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:15:05,704 - application.walkthrough - DEBUG - views [walkthrough.py:68] - view?: sortphotos
+2024-12-16 17:15:05,705 - application.walkthrough - DEBUG - views [walkthrough.py:71] - File exists!: walkthrough/parts/sortphotos.html.jinja
+2024-12-16 17:15:05,707 - application - DEBUG - after_request_time [__init__.py:42] - Request to /walkthrough/steps took 0.003042936325073242 seconds
+2024-12-16 17:15:05,707 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:15:05,707 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): walkthrough/index.html.jinja
+2024-12-16 17:15:05,766 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/js/bundle.js took 0.0037870407104492188 seconds
+2024-12-16 17:15:05,767 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:15:05,767 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/style.css took 0.002505779266357422 seconds
+2024-12-16 17:15:05,768 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:15:05,768 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:15:05,771 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:15:05,795 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/person-circle.svg took 0.0010328292846679688 seconds
+2024-12-16 17:15:05,796 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:15:05,796 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:15:05,842 - application.walkthrough - DEBUG - views [walkthrough.py:68] - view?: sortphotos
+2024-12-16 17:15:05,842 - application.walkthrough - DEBUG - views [walkthrough.py:71] - File exists!: walkthrough/parts/sortphotos.html.jinja
+2024-12-16 17:15:05,845 - application - DEBUG - after_request_time [__init__.py:42] - Request to /walkthrough/steps took 0.004202127456665039 seconds
+2024-12-16 17:15:05,845 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:15:05,845 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): walkthrough/parts/sortphotos.html.jinja
+2024-12-16 17:15:05,914 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:428] - found_entries for <Photo 38>: [<UserListEntry 287>]
+2024-12-16 17:15:05,915 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:428] - found_entries for <Room 29>: [<UserListEntry 285>]
+2024-12-16 17:15:05,916 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:436] - Entry: <UserListEntry 287>
+2024-12-16 17:15:05,917 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:436] - Entry: <UserListEntry 285>
+2024-12-16 17:15:05,917 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:437] - Item Model: Photo, Item ID: 38
+2024-12-16 17:15:05,917 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:437] - Item Model: Room, Item ID: 29
+2024-12-16 17:15:05,917 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:438] - User List ID: 96 User List Name: Basement 2 Photos
+2024-12-16 17:15:05,918 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:438] - User List ID: 93 User List Name: testy 5th Floor Rooms
+2024-12-16 17:15:05,918 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:439] - user: 1
+2024-12-16 17:15:05,919 - application - DEBUG - after_request_time [__init__.py:42] - Request to /show_photo_entry/38 took 0.010816097259521484 seconds
+2024-12-16 17:15:05,918 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:439] - user: 1
+2024-12-16 17:15:05,919 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:15:05,920 - application.list_utils - DEBUG - get_userlist [list_utils.py:308] - get_userlist(): item_model: Photo, list_name: None, parent_entry_id: 285
+2024-12-16 17:15:05,920 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/model/photo.html.jinja
+2024-12-16 17:15:05,922 - application.list_utils - DEBUG - get_userlist [list_utils.py:322] - lists found (model, parent): [<UserList 96>]
+2024-12-16 17:15:05,923 - application.list_utils - DEBUG - get_userlist [list_utils.py:349] - len(lists) == 1: None Photo 285
+2024-12-16 17:15:05,923 - application.list_utils - DEBUG - get_userlist [list_utils.py:368] - userlist.entries: [<UserListEntry 284>, <UserListEntry 287>] List type: <class 'sqlalchemy.orm.collections.InstrumentedList'>
+2024-12-16 17:15:05,924 - application.list_utils - DEBUG - get_userlist [list_utils.py:370] - List: Basement 2 Photos, Order: 1
+2024-12-16 17:15:05,924 - application.list_utils - DEBUG - get_userlist [list_utils.py:370] - List: Basement 2 Photos, Order: 2
+2024-12-16 17:15:05,927 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:271] - get_userlists_by_parent: lists found (parent_entry_id)284: [<UserList 97>]
+2024-12-16 17:15:05,929 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:271] - get_userlists_by_parent: lists found (parent_entry_id)287: [<UserList 99>]
+2024-12-16 17:15:05,935 - application - DEBUG - after_request_time [__init__.py:42] - Request to /show_list/ took 0.02412700653076172 seconds
+2024-12-16 17:15:05,938 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:15:05,938 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/list.html.jinja
+2024-12-16 17:15:05,939 - application.upload - DEBUG - uploaded_file [upload.py:97] - files in /Users/kyle/Documents/Repos/cs50/cs50x-final/media/uploads: ['1_1732676059_image.jpg', '2_1729876600_IMG_7979.jpeg', '3_1729880451_Screen_Shot_2024-10-15_at_8.49.55_PM.png', '2_1729793180_IMG_7939.jpeg', '2_1729876732_image.jpg', 'IMG_7540_3.jpeg', '1_1734385972_image.jpg', 'Screen_Shot_2024-06-17_at_9.19.26_PM_1.png', '1_1732593853_image.jpg', '1_1732676397_image.jpg', '3_1729880474_Screen_Shot_2024-06-17_at_9.19.26_PM.png', '3_1729880474_Screen_Shot_2023-05-13_at_4.10.32_PM.png', '2_1729793457_IMG_7927.jpeg', '.DS_Store', '1_1734387080_image.jpg', '2_1729878736_IMG_6398.jpeg', '2_1729793259_IMG_7971.jpeg', 'IMG_7540_2.jpeg', '3_1729880431_Screen_Shot_2024-10-15_at_8.49.55_PM.png', '2_1729788694_IMG_7978.jpeg', '2_1729793180_IMG_7938.jpeg', '1_1732676358_image.jpg', '2_1729806527_IMG_7971.jpeg', '3_1729880431_Screen_Shot_2024-06-17_at_9.19.26_PM.png', '2_1729878723_IMG_7979.jpeg', '1_1732313937_image.jpg', '1_1732571764_image.jpg', '1_1732308837_image.jpg', '1_1734387020_image.jpg', '2_1729806527_IMG_7940.png', '2_1729790952_IMG_7939.jpeg', '2_1729793457_IMG_7920.jpeg', '1_1732676382_image.jpg', '2_1729806423_IMG_7926.jpeg', 'IMG_7540_5.jpeg', '2_1729806390_image.jpg', '1_1732313904_image.jpg', '3_1729880431_Screen_Shot_2024-09-16_at_4.22.17_PM.png', '2_1729790270_image.jpg', '2_1729788660_IMG_7972.jpeg', '2_1729789401_IMG_7978.jpeg', 'IMG_7540_4.jpeg', '2_1729787915_image.jpg', '2_1729806527_IMG_7936.jpeg', '1_1732676354_image.jpg', '2_1729793457_IMG_7917.jpeg', '1_1732571776_image.jpg', '1_1732676066_image.jpg', '2_1729790297_IMG_7939.jpeg', '1_1732308852_image.jpg', '1_1734387117_image.jpg', '3_1729880474_Screen_Shot_2024-09-16_at_4.22.17_PM.png', '2_1729790967_image.jpg', 'image_2.jpg', '2_1729790846_IMG_7897.jpeg', '2_1729806527_IMG_7975.png', '1_1734389779_image.jpg', '1_1734387023_image.jpg', '2_1729787672_image.jpg', '2_1729806527_IMG_7974.png', '2_1729878723_IMG_7982.jpeg', '2_1729806527_IMG_7939.jpeg', 'image_3.jpg', '2_1729806500_image.jpg', 'image_1.jpg', '2_1729806527_IMG_7976.png', '1_1734371648_image.jpg', '2_1729876600_IMG_7984.jpeg', '2_1729806527_IMG_7977.png', '2_1729806527_IMG_7935.jpeg', '2_1729790259_image.jpg', '2_1729876586_image.jpg', '3_1729880431_Screen_Shot_2024-09-16_at_4.22.10_PM.png', '2_1729790568_IMG_7928.jpeg', 'image_4.jpg', '2_1729806527_IMG_7934.jpeg', '2_1729806527_IMG_7973.png', '1_1732571789_image.jpg', 'Screen_Shot_2024-06-17_at_9.19.26_PM.png', 'IMG_7540_6.jpeg', 'image_5.jpg', '1_1734385976_image.jpg', '2_1729789538_image.jpg', '2_1729789387_image.jpg', '1_1734389804_image.jpg', '2_1729806527_IMG_7938.jpeg', '1_1732676387_image.jpg', '2_1729790282_image.jpg', '2_1729806423_IMG_7913.jpeg', 'IMG_7540.jpeg', '2_1729793259_IMG_7973.png', 'IMG_7540_1.jpeg', '2_1729876600_IMG_7982.jpeg', '2_1729806527_IMG_7933.jpeg', '2_1729806527_IMG_7972.jpeg', '2_1729877408_image.jpg', '2_1729806423_IMG_7919.png', '3_1729880431_IMG_7540.jpeg', '2_1729788645_IMG_7977.png', '2_1729878714_image.jpg', '2_1729878744_image.jpg', '2_1729793180_IMG_7936.jpeg', '3_1729880451_IMG_7540.jpeg', '2_1729793259_IMG_7976.png', '1_1732676392_image.jpg', 'image.jpg', '1_1732636778_image.jpg', '1_1734371564_image.jpg', '2_1729876600_IMG_7983.jpeg', '2_1729793162_image.jpg', '1_1732636784_image.jpg']
+2024-12-16 17:15:05,941 - application - DEBUG - after_request_time [__init__.py:42] - Request to /media/uploads/1_1734389804_image.jpg took 0.0026319026947021484 seconds
+2024-12-16 17:15:05,942 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:15:05,943 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:15:05,957 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/defaults/generic_room.jpg took 0.0010251998901367188 seconds
+2024-12-16 17:15:05,957 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:15:05,957 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:15:17,703 - application.rooms - DEBUG - set_room_cover_photo [rooms.py:137] - photo: <Photo 38> photo.name: 1_1734389804_image.jpg Basement 2 Photo 2, photo.room: <Room 29>, photo.room.current_cover_photo_id: 38
+2024-12-16 17:15:17,703 - application - DEBUG - after_request_time [__init__.py:42] - Request to /set_room_cover_photo/38 took 0.004144191741943359 seconds
+2024-12-16 17:15:17,704 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:15:17,704 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:15:21,231 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:428] - found_entries for <Photo 38>: [<UserListEntry 287>]
+2024-12-16 17:15:21,232 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:436] - Entry: <UserListEntry 287>
+2024-12-16 17:15:21,232 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:437] - Item Model: Photo, Item ID: 38
+2024-12-16 17:15:21,233 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:438] - User List ID: 96 User List Name: Basement 2 Photos
+2024-12-16 17:15:21,233 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:439] - user: 1
+2024-12-16 17:15:21,233 - application.rooms - DEBUG - get_room_cover_photo_entry_id [rooms.py:150] - get_cover_photo_entry_id called 287
+2024-12-16 17:15:21,233 - application - DEBUG - after_request_time [__init__.py:42] - Request to /room_cover_photo_entry_id/285 took 0.0071239471435546875 seconds
+2024-12-16 17:15:21,233 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:15:21,234 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:15:25,226 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:428] - found_entries for <Photo 38>: [<UserListEntry 287>]
+2024-12-16 17:15:25,229 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:436] - Entry: <UserListEntry 287>
+2024-12-16 17:15:25,230 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:437] - Item Model: Photo, Item ID: 38
+2024-12-16 17:15:25,230 - application.rooms - DEBUG - set_room_cover_photo [rooms.py:137] - photo: <Photo 36> photo.name: Basement 2 default_cover_image, photo.room: <Room 29>, photo.room.current_cover_photo_id: 36
+2024-12-16 17:15:25,230 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:438] - User List ID: 96 User List Name: Basement 2 Photos
+2024-12-16 17:15:25,231 - application - DEBUG - after_request_time [__init__.py:42] - Request to /set_room_cover_photo/36 took 0.012104988098144531 seconds
+2024-12-16 17:15:25,231 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:439] - user: 1
+2024-12-16 17:15:25,231 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:15:25,232 - application.rooms - DEBUG - get_room_cover_photo_entry_id [rooms.py:150] - get_cover_photo_entry_id called 287
+2024-12-16 17:15:25,232 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:15:25,232 - application - DEBUG - after_request_time [__init__.py:42] - Request to /room_cover_photo_entry_id/285 took 0.01038813591003418 seconds
+2024-12-16 17:15:25,234 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:15:25,234 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:15:26,222 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:428] - found_entries for <Photo 36>: [<UserListEntry 284>]
+2024-12-16 17:15:26,223 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:436] - Entry: <UserListEntry 284>
+2024-12-16 17:15:26,223 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:437] - Item Model: Photo, Item ID: 36
+2024-12-16 17:15:26,223 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:438] - User List ID: 96 User List Name: Basement 2 Photos
+2024-12-16 17:15:26,224 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:439] - user: 1
+2024-12-16 17:15:26,224 - application.rooms - DEBUG - get_room_cover_photo_entry_id [rooms.py:150] - get_cover_photo_entry_id called 284
+2024-12-16 17:15:26,224 - application - DEBUG - after_request_time [__init__.py:42] - Request to /room_cover_photo_entry_id/285 took 0.0058062076568603516 seconds
+2024-12-16 17:15:26,225 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:15:26,225 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:15:28,973 - application.rooms - DEBUG - set_room_cover_photo [rooms.py:137] - photo: <Photo 38> photo.name: 1_1734389804_image.jpg Basement 2 Photo 2, photo.room: <Room 29>, photo.room.current_cover_photo_id: 38
+2024-12-16 17:15:28,973 - application - DEBUG - after_request_time [__init__.py:42] - Request to /set_room_cover_photo/38 took 0.005629062652587891 seconds
+2024-12-16 17:15:28,974 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:15:28,974 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:15:29,902 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:428] - found_entries for <Photo 38>: [<UserListEntry 287>]
+2024-12-16 17:15:29,903 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:436] - Entry: <UserListEntry 287>
+2024-12-16 17:15:29,903 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:437] - Item Model: Photo, Item ID: 38
+2024-12-16 17:15:29,904 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:438] - User List ID: 96 User List Name: Basement 2 Photos
+2024-12-16 17:15:29,904 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:439] - user: 1
+2024-12-16 17:15:29,904 - application.rooms - DEBUG - get_room_cover_photo_entry_id [rooms.py:150] - get_cover_photo_entry_id called 287
+2024-12-16 17:15:29,904 - application - DEBUG - after_request_time [__init__.py:42] - Request to /room_cover_photo_entry_id/285 took 0.0051441192626953125 seconds
+2024-12-16 17:15:29,905 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:15:29,905 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:15:31,947 - application.rooms - DEBUG - set_room_cover_photo [rooms.py:137] - photo: <Photo 36> photo.name: Basement 2 default_cover_image, photo.room: <Room 29>, photo.room.current_cover_photo_id: 36
+2024-12-16 17:15:31,948 - application - DEBUG - after_request_time [__init__.py:42] - Request to /set_room_cover_photo/36 took 0.005444765090942383 seconds
+2024-12-16 17:15:31,948 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:15:31,948 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:15:35,094 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:428] - found_entries for <Photo 36>: [<UserListEntry 284>]
+2024-12-16 17:15:35,095 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:436] - Entry: <UserListEntry 284>
+2024-12-16 17:15:35,095 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:437] - Item Model: Photo, Item ID: 36
+2024-12-16 17:15:35,095 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:438] - User List ID: 96 User List Name: Basement 2 Photos
+2024-12-16 17:15:35,095 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:439] - user: 1
+2024-12-16 17:15:35,096 - application.rooms - DEBUG - get_room_cover_photo_entry_id [rooms.py:150] - get_cover_photo_entry_id called 284
+2024-12-16 17:15:35,096 - application - DEBUG - after_request_time [__init__.py:42] - Request to /room_cover_photo_entry_id/285 took 0.004812002182006836 seconds
+2024-12-16 17:15:35,097 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:15:35,097 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:15:37,996 - application.rooms - DEBUG - set_room_cover_photo [rooms.py:137] - photo: <Photo 38> photo.name: 1_1734389804_image.jpg Basement 2 Photo 2, photo.room: <Room 29>, photo.room.current_cover_photo_id: 38
+2024-12-16 17:15:37,997 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:428] - found_entries for <Photo 36>: [<UserListEntry 284>]
+2024-12-16 17:15:37,997 - application - DEBUG - after_request_time [__init__.py:42] - Request to /set_room_cover_photo/38 took 0.012635946273803711 seconds
+2024-12-16 17:15:37,998 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:15:37,998 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:436] - Entry: <UserListEntry 284>
+2024-12-16 17:15:37,999 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:15:37,999 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:437] - Item Model: Photo, Item ID: 36
+2024-12-16 17:15:38,000 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:438] - User List ID: 96 User List Name: Basement 2 Photos
+2024-12-16 17:15:38,000 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:439] - user: 1
+2024-12-16 17:15:38,001 - application.rooms - DEBUG - get_room_cover_photo_entry_id [rooms.py:150] - get_cover_photo_entry_id called 284
+2024-12-16 17:15:38,001 - application - DEBUG - after_request_time [__init__.py:42] - Request to /room_cover_photo_entry_id/285 took 0.013207197189331055 seconds
+2024-12-16 17:15:38,001 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:15:38,002 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:15:38,991 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:428] - found_entries for <Photo 38>: [<UserListEntry 287>]
+2024-12-16 17:15:38,992 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:436] - Entry: <UserListEntry 287>
+2024-12-16 17:15:38,992 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:437] - Item Model: Photo, Item ID: 38
+2024-12-16 17:15:38,992 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:438] - User List ID: 96 User List Name: Basement 2 Photos
+2024-12-16 17:15:38,992 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:439] - user: 1
+2024-12-16 17:15:38,992 - application.rooms - DEBUG - get_room_cover_photo_entry_id [rooms.py:150] - get_cover_photo_entry_id called 287
+2024-12-16 17:15:38,993 - application - DEBUG - after_request_time [__init__.py:42] - Request to /room_cover_photo_entry_id/285 took 0.0049059391021728516 seconds
+2024-12-16 17:15:38,993 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:15:38,993 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:15:41,598 - application.walkthrough - DEBUG - walk_start [walkthrough.py:30] - get room_name: Basement 2
+2024-12-16 17:15:41,599 - application.walkthrough - DEBUG - walk_start [walkthrough.py:31] - get view: sortphotos
+2024-12-16 17:15:41,600 - application.walkthrough - DEBUG - walk_start [walkthrough.py:35] - room: (<Room 29>,) room_name: Basement 2 room name name: Basement 2
+2024-12-16 17:15:41,603 - application.rooms - DEBUG - set_active_room [rooms.py:118] - current_user.active_home.active_room: <Room 29>
+2024-12-16 17:15:41,603 - application.walkthrough - DEBUG - walk_start [walkthrough.py:50] - view: sortphotos
+2024-12-16 17:15:41,604 - application - DEBUG - after_request_time [__init__.py:42] - Request to /walkthrough/Basement 2/sortphotos took 0.007756948471069336 seconds
+2024-12-16 17:15:41,605 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:15:41,605 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:15:41,621 - application.walkthrough - DEBUG - views [walkthrough.py:68] - view?: sortphotos
+2024-12-16 17:15:41,621 - application.walkthrough - DEBUG - views [walkthrough.py:71] - File exists!: walkthrough/parts/sortphotos.html.jinja
+2024-12-16 17:15:41,625 - application - DEBUG - after_request_time [__init__.py:42] - Request to /walkthrough/steps took 0.004873037338256836 seconds
+2024-12-16 17:15:41,626 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:15:41,626 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): walkthrough/index.html.jinja
+2024-12-16 17:15:41,703 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/style.css took 0.0032148361206054688 seconds
+2024-12-16 17:15:41,705 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/js/bundle.js took 0.0013730525970458984 seconds
+2024-12-16 17:15:41,705 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:15:41,706 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:15:41,706 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:15:41,706 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:15:41,729 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/person-circle.svg took 0.0012478828430175781 seconds
+2024-12-16 17:15:41,730 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:15:41,730 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:15:41,776 - application.walkthrough - DEBUG - views [walkthrough.py:68] - view?: sortphotos
+2024-12-16 17:15:41,776 - application.walkthrough - DEBUG - views [walkthrough.py:71] - File exists!: walkthrough/parts/sortphotos.html.jinja
+2024-12-16 17:15:41,778 - application - DEBUG - after_request_time [__init__.py:42] - Request to /walkthrough/steps took 0.003367185592651367 seconds
+2024-12-16 17:15:41,778 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:15:41,778 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): walkthrough/parts/sortphotos.html.jinja
+2024-12-16 17:15:41,844 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:428] - found_entries for <Photo 38>: [<UserListEntry 287>]
+2024-12-16 17:15:41,845 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:428] - found_entries for <Room 29>: [<UserListEntry 285>]
+2024-12-16 17:15:41,846 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:436] - Entry: <UserListEntry 287>
+2024-12-16 17:15:41,846 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:436] - Entry: <UserListEntry 285>
+2024-12-16 17:15:41,846 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:437] - Item Model: Photo, Item ID: 38
+2024-12-16 17:15:41,847 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:437] - Item Model: Room, Item ID: 29
+2024-12-16 17:15:41,847 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:438] - User List ID: 96 User List Name: Basement 2 Photos
+2024-12-16 17:15:41,848 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:438] - User List ID: 93 User List Name: testy 5th Floor Rooms
+2024-12-16 17:15:41,848 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:439] - user: 1
+2024-12-16 17:15:41,848 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:439] - user: 1
+2024-12-16 17:15:41,850 - application - DEBUG - after_request_time [__init__.py:42] - Request to /show_photo_entry/38 took 0.009327888488769531 seconds
+2024-12-16 17:15:41,850 - application.list_utils - DEBUG - get_userlist [list_utils.py:308] - get_userlist(): item_model: Photo, list_name: None, parent_entry_id: 285
+2024-12-16 17:15:41,851 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:15:41,853 - application.list_utils - DEBUG - get_userlist [list_utils.py:322] - lists found (model, parent): [<UserList 96>]
+2024-12-16 17:15:41,852 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/model/photo.html.jinja
+2024-12-16 17:15:41,853 - application.list_utils - DEBUG - get_userlist [list_utils.py:349] - len(lists) == 1: None Photo 285
+2024-12-16 17:15:41,854 - application.list_utils - DEBUG - get_userlist [list_utils.py:368] - userlist.entries: [<UserListEntry 284>, <UserListEntry 287>] List type: <class 'sqlalchemy.orm.collections.InstrumentedList'>
+2024-12-16 17:15:41,855 - application.list_utils - DEBUG - get_userlist [list_utils.py:370] - List: Basement 2 Photos, Order: 1
+2024-12-16 17:15:41,856 - application.list_utils - DEBUG - get_userlist [list_utils.py:370] - List: Basement 2 Photos, Order: 2
+2024-12-16 17:15:41,859 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:271] - get_userlists_by_parent: lists found (parent_entry_id)284: [<UserList 97>]
+2024-12-16 17:15:41,861 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:271] - get_userlists_by_parent: lists found (parent_entry_id)287: [<UserList 99>]
+2024-12-16 17:15:41,868 - application.upload - DEBUG - uploaded_file [upload.py:97] - files in /Users/kyle/Documents/Repos/cs50/cs50x-final/media/uploads: ['1_1732676059_image.jpg', '2_1729876600_IMG_7979.jpeg', '3_1729880451_Screen_Shot_2024-10-15_at_8.49.55_PM.png', '2_1729793180_IMG_7939.jpeg', '2_1729876732_image.jpg', 'IMG_7540_3.jpeg', '1_1734385972_image.jpg', 'Screen_Shot_2024-06-17_at_9.19.26_PM_1.png', '1_1732593853_image.jpg', '1_1732676397_image.jpg', '3_1729880474_Screen_Shot_2024-06-17_at_9.19.26_PM.png', '3_1729880474_Screen_Shot_2023-05-13_at_4.10.32_PM.png', '2_1729793457_IMG_7927.jpeg', '.DS_Store', '1_1734387080_image.jpg', '2_1729878736_IMG_6398.jpeg', '2_1729793259_IMG_7971.jpeg', 'IMG_7540_2.jpeg', '3_1729880431_Screen_Shot_2024-10-15_at_8.49.55_PM.png', '2_1729788694_IMG_7978.jpeg', '2_1729793180_IMG_7938.jpeg', '1_1732676358_image.jpg', '2_1729806527_IMG_7971.jpeg', '3_1729880431_Screen_Shot_2024-06-17_at_9.19.26_PM.png', '2_1729878723_IMG_7979.jpeg', '1_1732313937_image.jpg', '1_1732571764_image.jpg', '1_1732308837_image.jpg', '1_1734387020_image.jpg', '2_1729806527_IMG_7940.png', '2_1729790952_IMG_7939.jpeg', '2_1729793457_IMG_7920.jpeg', '1_1732676382_image.jpg', '2_1729806423_IMG_7926.jpeg', 'IMG_7540_5.jpeg', '2_1729806390_image.jpg', '1_1732313904_image.jpg', '3_1729880431_Screen_Shot_2024-09-16_at_4.22.17_PM.png', '2_1729790270_image.jpg', '2_1729788660_IMG_7972.jpeg', '2_1729789401_IMG_7978.jpeg', 'IMG_7540_4.jpeg', '2_1729787915_image.jpg', '2_1729806527_IMG_7936.jpeg', '1_1732676354_image.jpg', '2_1729793457_IMG_7917.jpeg', '1_1732571776_image.jpg', '1_1732676066_image.jpg', '2_1729790297_IMG_7939.jpeg', '1_1732308852_image.jpg', '1_1734387117_image.jpg', '3_1729880474_Screen_Shot_2024-09-16_at_4.22.17_PM.png', '2_1729790967_image.jpg', 'image_2.jpg', '2_1729790846_IMG_7897.jpeg', '2_1729806527_IMG_7975.png', '1_1734389779_image.jpg', '1_1734387023_image.jpg', '2_1729787672_image.jpg', '2_1729806527_IMG_7974.png', '2_1729878723_IMG_7982.jpeg', '2_1729806527_IMG_7939.jpeg', 'image_3.jpg', '2_1729806500_image.jpg', 'image_1.jpg', '2_1729806527_IMG_7976.png', '1_1734371648_image.jpg', '2_1729876600_IMG_7984.jpeg', '2_1729806527_IMG_7977.png', '2_1729806527_IMG_7935.jpeg', '2_1729790259_image.jpg', '2_1729876586_image.jpg', '3_1729880431_Screen_Shot_2024-09-16_at_4.22.10_PM.png', '2_1729790568_IMG_7928.jpeg', 'image_4.jpg', '2_1729806527_IMG_7934.jpeg', '2_1729806527_IMG_7973.png', '1_1732571789_image.jpg', 'Screen_Shot_2024-06-17_at_9.19.26_PM.png', 'IMG_7540_6.jpeg', 'image_5.jpg', '1_1734385976_image.jpg', '2_1729789538_image.jpg', '2_1729789387_image.jpg', '1_1734389804_image.jpg', '2_1729806527_IMG_7938.jpeg', '1_1732676387_image.jpg', '2_1729790282_image.jpg', '2_1729806423_IMG_7913.jpeg', 'IMG_7540.jpeg', '2_1729793259_IMG_7973.png', 'IMG_7540_1.jpeg', '2_1729876600_IMG_7982.jpeg', '2_1729806527_IMG_7933.jpeg', '2_1729806527_IMG_7972.jpeg', '2_1729877408_image.jpg', '2_1729806423_IMG_7919.png', '3_1729880431_IMG_7540.jpeg', '2_1729788645_IMG_7977.png', '2_1729878714_image.jpg', '2_1729878744_image.jpg', '2_1729793180_IMG_7936.jpeg', '3_1729880451_IMG_7540.jpeg', '2_1729793259_IMG_7976.png', '1_1732676392_image.jpg', 'image.jpg', '1_1732636778_image.jpg', '1_1734371564_image.jpg', '2_1729876600_IMG_7983.jpeg', '2_1729793162_image.jpg', '1_1732636784_image.jpg']
+2024-12-16 17:15:41,869 - application - DEBUG - after_request_time [__init__.py:42] - Request to /show_list/ took 0.03156900405883789 seconds
+2024-12-16 17:15:41,869 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:15:41,870 - application - DEBUG - after_request_time [__init__.py:42] - Request to /media/uploads/1_1734389804_image.jpg took 0.0028281211853027344 seconds
+2024-12-16 17:15:41,870 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/list.html.jinja
+2024-12-16 17:15:41,870 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:15:41,872 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:15:41,888 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/defaults/generic_room.jpg took 0.0009980201721191406 seconds
+2024-12-16 17:15:41,888 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:15:41,888 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:15:50,517 - application - DEBUG - after_request_time [__init__.py:42] - Request to /walkthrough/steps took 0.0007882118225097656 seconds
+2024-12-16 17:15:50,517 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): None
+2024-12-16 17:15:50,518 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:15:50,555 - application - DEBUG - after_request_time [__init__.py:42] - Request to /login took 0.004904985427856445 seconds
+2024-12-16 17:15:50,555 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): None
+2024-12-16 17:15:50,555 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): auth/login.html
+2024-12-16 17:15:54,341 - application.rooms - DEBUG - set_room_cover_photo [rooms.py:137] - photo: <Photo 38> photo.name: 1_1734389804_image.jpg Basement 2 Photo 2, photo.room: <Room 29>, photo.room.current_cover_photo_id: 38
+2024-12-16 17:15:54,342 - application - DEBUG - after_request_time [__init__.py:42] - Request to /set_room_cover_photo/38 took 0.00468134880065918 seconds
+2024-12-16 17:15:54,342 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:15:54,343 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:15:56,610 - application.walkthrough - DEBUG - walk_start [walkthrough.py:30] - get room_name: Basement 2
+2024-12-16 17:15:56,611 - application.walkthrough - DEBUG - walk_start [walkthrough.py:31] - get view: sortphotos
+2024-12-16 17:15:56,612 - application.walkthrough - DEBUG - walk_start [walkthrough.py:35] - room: (<Room 29>,) room_name: Basement 2 room name name: Basement 2
+2024-12-16 17:15:56,615 - application.rooms - DEBUG - set_active_room [rooms.py:118] - current_user.active_home.active_room: <Room 29>
+2024-12-16 17:15:56,615 - application.walkthrough - DEBUG - walk_start [walkthrough.py:50] - view: sortphotos
+2024-12-16 17:15:56,616 - application - DEBUG - after_request_time [__init__.py:42] - Request to /walkthrough/Basement 2/sortphotos took 0.006549835205078125 seconds
+2024-12-16 17:15:56,616 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:15:56,617 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:15:56,629 - application.walkthrough - DEBUG - views [walkthrough.py:68] - view?: sortphotos
+2024-12-16 17:15:56,629 - application.walkthrough - DEBUG - views [walkthrough.py:71] - File exists!: walkthrough/parts/sortphotos.html.jinja
+2024-12-16 17:15:56,631 - application - DEBUG - after_request_time [__init__.py:42] - Request to /walkthrough/steps took 0.003198862075805664 seconds
+2024-12-16 17:15:56,632 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:15:56,632 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): walkthrough/index.html.jinja
+2024-12-16 17:15:56,737 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/style.css took 0.0016961097717285156 seconds
+2024-12-16 17:15:56,738 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/js/bundle.js took 0.002346038818359375 seconds
+2024-12-16 17:15:56,738 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:15:56,738 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:15:56,739 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:15:56,739 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:15:56,820 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/person-circle.svg took 0.0009427070617675781 seconds
+2024-12-16 17:15:56,820 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:15:56,821 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:15:56,919 - application.walkthrough - DEBUG - views [walkthrough.py:68] - view?: sortphotos
+2024-12-16 17:15:56,919 - application.walkthrough - DEBUG - views [walkthrough.py:71] - File exists!: walkthrough/parts/sortphotos.html.jinja
+2024-12-16 17:15:56,921 - application - DEBUG - after_request_time [__init__.py:42] - Request to /walkthrough/steps took 0.0036268234252929688 seconds
+2024-12-16 17:15:56,922 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:15:56,922 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): walkthrough/parts/sortphotos.html.jinja
+2024-12-16 17:15:57,214 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:428] - found_entries for <Photo 38>: [<UserListEntry 287>]
+2024-12-16 17:15:57,214 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:428] - found_entries for <Room 29>: [<UserListEntry 285>]
+2024-12-16 17:15:57,216 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:436] - Entry: <UserListEntry 287>
+2024-12-16 17:15:57,217 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:436] - Entry: <UserListEntry 285>
+2024-12-16 17:15:57,217 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:437] - Item Model: Photo, Item ID: 38
+2024-12-16 17:15:57,218 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:437] - Item Model: Room, Item ID: 29
+2024-12-16 17:15:57,218 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:438] - User List ID: 96 User List Name: Basement 2 Photos
+2024-12-16 17:15:57,218 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:438] - User List ID: 93 User List Name: testy 5th Floor Rooms
+2024-12-16 17:15:57,219 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:439] - user: 1
+2024-12-16 17:15:57,222 - application - DEBUG - after_request_time [__init__.py:42] - Request to /show_photo_entry/38 took 0.012341022491455078 seconds
+2024-12-16 17:15:57,220 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:439] - user: 1
+2024-12-16 17:15:57,223 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:15:57,224 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/model/photo.html.jinja
+2024-12-16 17:15:57,223 - application.list_utils - DEBUG - get_userlist [list_utils.py:308] - get_userlist(): item_model: Photo, list_name: None, parent_entry_id: 285
+2024-12-16 17:15:57,229 - application.list_utils - DEBUG - get_userlist [list_utils.py:322] - lists found (model, parent): [<UserList 96>]
+2024-12-16 17:15:57,229 - application.list_utils - DEBUG - get_userlist [list_utils.py:349] - len(lists) == 1: None Photo 285
+2024-12-16 17:15:57,229 - application.list_utils - DEBUG - get_userlist [list_utils.py:368] - userlist.entries: [<UserListEntry 284>, <UserListEntry 287>] List type: <class 'sqlalchemy.orm.collections.InstrumentedList'>
+2024-12-16 17:15:57,230 - application.list_utils - DEBUG - get_userlist [list_utils.py:370] - List: Basement 2 Photos, Order: 1
+2024-12-16 17:15:57,230 - application.list_utils - DEBUG - get_userlist [list_utils.py:370] - List: Basement 2 Photos, Order: 2
+2024-12-16 17:15:57,233 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:271] - get_userlists_by_parent: lists found (parent_entry_id)284: [<UserList 97>]
+2024-12-16 17:15:57,235 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:271] - get_userlists_by_parent: lists found (parent_entry_id)287: [<UserList 99>]
+2024-12-16 17:15:57,243 - application - DEBUG - after_request_time [__init__.py:42] - Request to /show_list/ took 0.039795875549316406 seconds
+2024-12-16 17:15:57,243 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:15:57,243 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/list.html.jinja
+2024-12-16 17:15:57,399 - application.upload - DEBUG - uploaded_file [upload.py:97] - files in /Users/kyle/Documents/Repos/cs50/cs50x-final/media/uploads: ['1_1732676059_image.jpg', '2_1729876600_IMG_7979.jpeg', '3_1729880451_Screen_Shot_2024-10-15_at_8.49.55_PM.png', '2_1729793180_IMG_7939.jpeg', '2_1729876732_image.jpg', 'IMG_7540_3.jpeg', '1_1734385972_image.jpg', 'Screen_Shot_2024-06-17_at_9.19.26_PM_1.png', '1_1732593853_image.jpg', '1_1732676397_image.jpg', '3_1729880474_Screen_Shot_2024-06-17_at_9.19.26_PM.png', '3_1729880474_Screen_Shot_2023-05-13_at_4.10.32_PM.png', '2_1729793457_IMG_7927.jpeg', '.DS_Store', '1_1734387080_image.jpg', '2_1729878736_IMG_6398.jpeg', '2_1729793259_IMG_7971.jpeg', 'IMG_7540_2.jpeg', '3_1729880431_Screen_Shot_2024-10-15_at_8.49.55_PM.png', '2_1729788694_IMG_7978.jpeg', '2_1729793180_IMG_7938.jpeg', '1_1732676358_image.jpg', '2_1729806527_IMG_7971.jpeg', '3_1729880431_Screen_Shot_2024-06-17_at_9.19.26_PM.png', '2_1729878723_IMG_7979.jpeg', '1_1732313937_image.jpg', '1_1732571764_image.jpg', '1_1732308837_image.jpg', '1_1734387020_image.jpg', '2_1729806527_IMG_7940.png', '2_1729790952_IMG_7939.jpeg', '2_1729793457_IMG_7920.jpeg', '1_1732676382_image.jpg', '2_1729806423_IMG_7926.jpeg', 'IMG_7540_5.jpeg', '2_1729806390_image.jpg', '1_1732313904_image.jpg', '3_1729880431_Screen_Shot_2024-09-16_at_4.22.17_PM.png', '2_1729790270_image.jpg', '2_1729788660_IMG_7972.jpeg', '2_1729789401_IMG_7978.jpeg', 'IMG_7540_4.jpeg', '2_1729787915_image.jpg', '2_1729806527_IMG_7936.jpeg', '1_1732676354_image.jpg', '2_1729793457_IMG_7917.jpeg', '1_1732571776_image.jpg', '1_1732676066_image.jpg', '2_1729790297_IMG_7939.jpeg', '1_1732308852_image.jpg', '1_1734387117_image.jpg', '3_1729880474_Screen_Shot_2024-09-16_at_4.22.17_PM.png', '2_1729790967_image.jpg', 'image_2.jpg', '2_1729790846_IMG_7897.jpeg', '2_1729806527_IMG_7975.png', '1_1734389779_image.jpg', '1_1734387023_image.jpg', '2_1729787672_image.jpg', '2_1729806527_IMG_7974.png', '2_1729878723_IMG_7982.jpeg', '2_1729806527_IMG_7939.jpeg', 'image_3.jpg', '2_1729806500_image.jpg', 'image_1.jpg', '2_1729806527_IMG_7976.png', '1_1734371648_image.jpg', '2_1729876600_IMG_7984.jpeg', '2_1729806527_IMG_7977.png', '2_1729806527_IMG_7935.jpeg', '2_1729790259_image.jpg', '2_1729876586_image.jpg', '3_1729880431_Screen_Shot_2024-09-16_at_4.22.10_PM.png', '2_1729790568_IMG_7928.jpeg', 'image_4.jpg', '2_1729806527_IMG_7934.jpeg', '2_1729806527_IMG_7973.png', '1_1732571789_image.jpg', 'Screen_Shot_2024-06-17_at_9.19.26_PM.png', 'IMG_7540_6.jpeg', 'image_5.jpg', '1_1734385976_image.jpg', '2_1729789538_image.jpg', '2_1729789387_image.jpg', '1_1734389804_image.jpg', '2_1729806527_IMG_7938.jpeg', '1_1732676387_image.jpg', '2_1729790282_image.jpg', '2_1729806423_IMG_7913.jpeg', 'IMG_7540.jpeg', '2_1729793259_IMG_7973.png', 'IMG_7540_1.jpeg', '2_1729876600_IMG_7982.jpeg', '2_1729806527_IMG_7933.jpeg', '2_1729806527_IMG_7972.jpeg', '2_1729877408_image.jpg', '2_1729806423_IMG_7919.png', '3_1729880431_IMG_7540.jpeg', '2_1729788645_IMG_7977.png', '2_1729878714_image.jpg', '2_1729878744_image.jpg', '2_1729793180_IMG_7936.jpeg', '3_1729880451_IMG_7540.jpeg', '2_1729793259_IMG_7976.png', '1_1732676392_image.jpg', 'image.jpg', '1_1732636778_image.jpg', '1_1734371564_image.jpg', '2_1729876600_IMG_7983.jpeg', '2_1729793162_image.jpg', '1_1732636784_image.jpg']
+2024-12-16 17:15:57,405 - application - DEBUG - after_request_time [__init__.py:42] - Request to /media/uploads/1_1734389804_image.jpg took 0.006287097930908203 seconds
+2024-12-16 17:15:57,405 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:15:57,406 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:15:57,411 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/defaults/generic_room.jpg took 0.0076138973236083984 seconds
+2024-12-16 17:15:57,412 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:15:57,412 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:16:00,713 - application.rooms - DEBUG - set_room_cover_photo [rooms.py:137] - photo: <Photo 36> photo.name: Basement 2 default_cover_image, photo.room: <Room 29>, photo.room.current_cover_photo_id: 36
+2024-12-16 17:16:00,713 - application - DEBUG - after_request_time [__init__.py:42] - Request to /set_room_cover_photo/36 took 0.006906747817993164 seconds
+2024-12-16 17:16:00,713 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:16:00,714 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:16:02,039 - application.walkthrough - DEBUG - walk_start [walkthrough.py:30] - get room_name: Basement 2
+2024-12-16 17:16:02,039 - application.walkthrough - DEBUG - walk_start [walkthrough.py:31] - get view: sortphotos
+2024-12-16 17:16:02,040 - application.walkthrough - DEBUG - walk_start [walkthrough.py:35] - room: (<Room 29>,) room_name: Basement 2 room name name: Basement 2
+2024-12-16 17:16:02,043 - application.rooms - DEBUG - set_active_room [rooms.py:118] - current_user.active_home.active_room: <Room 29>
+2024-12-16 17:16:02,043 - application.walkthrough - DEBUG - walk_start [walkthrough.py:50] - view: sortphotos
+2024-12-16 17:16:02,043 - application - DEBUG - after_request_time [__init__.py:42] - Request to /walkthrough/Basement 2/sortphotos took 0.005413055419921875 seconds
+2024-12-16 17:16:02,044 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:16:02,044 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:16:02,064 - application.walkthrough - DEBUG - views [walkthrough.py:68] - view?: sortphotos
+2024-12-16 17:16:02,064 - application.walkthrough - DEBUG - views [walkthrough.py:71] - File exists!: walkthrough/parts/sortphotos.html.jinja
+2024-12-16 17:16:02,066 - application - DEBUG - after_request_time [__init__.py:42] - Request to /walkthrough/steps took 0.0037848949432373047 seconds
+2024-12-16 17:16:02,067 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:16:02,067 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): walkthrough/index.html.jinja
+2024-12-16 17:16:02,176 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/style.css took 0.001294851303100586 seconds
+2024-12-16 17:16:02,177 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:16:02,177 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:16:02,184 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/js/bundle.js took 0.0011839866638183594 seconds
+2024-12-16 17:16:02,184 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:16:02,185 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:16:02,203 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/person-circle.svg took 0.0007939338684082031 seconds
+2024-12-16 17:16:02,203 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:16:02,204 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:16:02,314 - application.walkthrough - DEBUG - views [walkthrough.py:68] - view?: sortphotos
+2024-12-16 17:16:02,314 - application.walkthrough - DEBUG - views [walkthrough.py:71] - File exists!: walkthrough/parts/sortphotos.html.jinja
+2024-12-16 17:16:02,317 - application - DEBUG - after_request_time [__init__.py:42] - Request to /walkthrough/steps took 0.004392147064208984 seconds
+2024-12-16 17:16:02,317 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:16:02,317 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): walkthrough/parts/sortphotos.html.jinja
+2024-12-16 17:16:02,542 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:428] - found_entries for <Photo 36>: [<UserListEntry 284>]
+2024-12-16 17:16:02,544 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:428] - found_entries for <Room 29>: [<UserListEntry 285>]
+2024-12-16 17:16:02,544 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:436] - Entry: <UserListEntry 284>
+2024-12-16 17:16:02,545 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:437] - Item Model: Photo, Item ID: 36
+2024-12-16 17:16:02,546 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:436] - Entry: <UserListEntry 285>
+2024-12-16 17:16:02,546 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:438] - User List ID: 96 User List Name: Basement 2 Photos
+2024-12-16 17:16:02,546 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:437] - Item Model: Room, Item ID: 29
+2024-12-16 17:16:02,547 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:439] - user: 1
+2024-12-16 17:16:02,548 - application - DEBUG - after_request_time [__init__.py:42] - Request to /show_photo_entry/36 took 0.011250972747802734 seconds
+2024-12-16 17:16:02,547 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:438] - User List ID: 93 User List Name: testy 5th Floor Rooms
+2024-12-16 17:16:02,549 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:16:02,549 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:439] - user: 1
+2024-12-16 17:16:02,550 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/model/photo.html.jinja
+2024-12-16 17:16:02,550 - application.list_utils - DEBUG - get_userlist [list_utils.py:308] - get_userlist(): item_model: Photo, list_name: None, parent_entry_id: 285
+2024-12-16 17:16:02,553 - application.list_utils - DEBUG - get_userlist [list_utils.py:322] - lists found (model, parent): [<UserList 96>]
+2024-12-16 17:16:02,553 - application.list_utils - DEBUG - get_userlist [list_utils.py:349] - len(lists) == 1: None Photo 285
+2024-12-16 17:16:02,553 - application.list_utils - DEBUG - get_userlist [list_utils.py:368] - userlist.entries: [<UserListEntry 284>, <UserListEntry 287>] List type: <class 'sqlalchemy.orm.collections.InstrumentedList'>
+2024-12-16 17:16:02,554 - application.list_utils - DEBUG - get_userlist [list_utils.py:370] - List: Basement 2 Photos, Order: 1
+2024-12-16 17:16:02,554 - application.list_utils - DEBUG - get_userlist [list_utils.py:370] - List: Basement 2 Photos, Order: 2
+2024-12-16 17:16:02,556 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:271] - get_userlists_by_parent: lists found (parent_entry_id)284: [<UserList 97>]
+2024-12-16 17:16:02,557 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:271] - get_userlists_by_parent: lists found (parent_entry_id)287: [<UserList 99>]
+2024-12-16 17:16:02,565 - application - DEBUG - after_request_time [__init__.py:42] - Request to /show_list/ took 0.028887033462524414 seconds
+2024-12-16 17:16:02,565 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:16:02,565 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/list.html.jinja
+2024-12-16 17:16:02,677 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/defaults/generic_room.jpg took 0.00140380859375 seconds
+2024-12-16 17:16:02,680 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:16:02,681 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:16:02,681 - application.upload - DEBUG - uploaded_file [upload.py:97] - files in /Users/kyle/Documents/Repos/cs50/cs50x-final/media/uploads: ['1_1732676059_image.jpg', '2_1729876600_IMG_7979.jpeg', '3_1729880451_Screen_Shot_2024-10-15_at_8.49.55_PM.png', '2_1729793180_IMG_7939.jpeg', '2_1729876732_image.jpg', 'IMG_7540_3.jpeg', '1_1734385972_image.jpg', 'Screen_Shot_2024-06-17_at_9.19.26_PM_1.png', '1_1732593853_image.jpg', '1_1732676397_image.jpg', '3_1729880474_Screen_Shot_2024-06-17_at_9.19.26_PM.png', '3_1729880474_Screen_Shot_2023-05-13_at_4.10.32_PM.png', '2_1729793457_IMG_7927.jpeg', '.DS_Store', '1_1734387080_image.jpg', '2_1729878736_IMG_6398.jpeg', '2_1729793259_IMG_7971.jpeg', 'IMG_7540_2.jpeg', '3_1729880431_Screen_Shot_2024-10-15_at_8.49.55_PM.png', '2_1729788694_IMG_7978.jpeg', '2_1729793180_IMG_7938.jpeg', '1_1732676358_image.jpg', '2_1729806527_IMG_7971.jpeg', '3_1729880431_Screen_Shot_2024-06-17_at_9.19.26_PM.png', '2_1729878723_IMG_7979.jpeg', '1_1732313937_image.jpg', '1_1732571764_image.jpg', '1_1732308837_image.jpg', '1_1734387020_image.jpg', '2_1729806527_IMG_7940.png', '2_1729790952_IMG_7939.jpeg', '2_1729793457_IMG_7920.jpeg', '1_1732676382_image.jpg', '2_1729806423_IMG_7926.jpeg', 'IMG_7540_5.jpeg', '2_1729806390_image.jpg', '1_1732313904_image.jpg', '3_1729880431_Screen_Shot_2024-09-16_at_4.22.17_PM.png', '2_1729790270_image.jpg', '2_1729788660_IMG_7972.jpeg', '2_1729789401_IMG_7978.jpeg', 'IMG_7540_4.jpeg', '2_1729787915_image.jpg', '2_1729806527_IMG_7936.jpeg', '1_1732676354_image.jpg', '2_1729793457_IMG_7917.jpeg', '1_1732571776_image.jpg', '1_1732676066_image.jpg', '2_1729790297_IMG_7939.jpeg', '1_1732308852_image.jpg', '1_1734387117_image.jpg', '3_1729880474_Screen_Shot_2024-09-16_at_4.22.17_PM.png', '2_1729790967_image.jpg', 'image_2.jpg', '2_1729790846_IMG_7897.jpeg', '2_1729806527_IMG_7975.png', '1_1734389779_image.jpg', '1_1734387023_image.jpg', '2_1729787672_image.jpg', '2_1729806527_IMG_7974.png', '2_1729878723_IMG_7982.jpeg', '2_1729806527_IMG_7939.jpeg', 'image_3.jpg', '2_1729806500_image.jpg', 'image_1.jpg', '2_1729806527_IMG_7976.png', '1_1734371648_image.jpg', '2_1729876600_IMG_7984.jpeg', '2_1729806527_IMG_7977.png', '2_1729806527_IMG_7935.jpeg', '2_1729790259_image.jpg', '2_1729876586_image.jpg', '3_1729880431_Screen_Shot_2024-09-16_at_4.22.10_PM.png', '2_1729790568_IMG_7928.jpeg', 'image_4.jpg', '2_1729806527_IMG_7934.jpeg', '2_1729806527_IMG_7973.png', '1_1732571789_image.jpg', 'Screen_Shot_2024-06-17_at_9.19.26_PM.png', 'IMG_7540_6.jpeg', 'image_5.jpg', '1_1734385976_image.jpg', '2_1729789538_image.jpg', '2_1729789387_image.jpg', '1_1734389804_image.jpg', '2_1729806527_IMG_7938.jpeg', '1_1732676387_image.jpg', '2_1729790282_image.jpg', '2_1729806423_IMG_7913.jpeg', 'IMG_7540.jpeg', '2_1729793259_IMG_7973.png', 'IMG_7540_1.jpeg', '2_1729876600_IMG_7982.jpeg', '2_1729806527_IMG_7933.jpeg', '2_1729806527_IMG_7972.jpeg', '2_1729877408_image.jpg', '2_1729806423_IMG_7919.png', '3_1729880431_IMG_7540.jpeg', '2_1729788645_IMG_7977.png', '2_1729878714_image.jpg', '2_1729878744_image.jpg', '2_1729793180_IMG_7936.jpeg', '3_1729880451_IMG_7540.jpeg', '2_1729793259_IMG_7976.png', '1_1732676392_image.jpg', 'image.jpg', '1_1732636778_image.jpg', '1_1734371564_image.jpg', '2_1729876600_IMG_7983.jpeg', '2_1729793162_image.jpg', '1_1732636784_image.jpg']
+2024-12-16 17:16:02,684 - application - DEBUG - after_request_time [__init__.py:42] - Request to /media/uploads/1_1734389804_image.jpg took 0.003391265869140625 seconds
+2024-12-16 17:16:02,685 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:16:02,685 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:16:06,287 - application.rooms - DEBUG - set_room_cover_photo [rooms.py:137] - photo: <Photo 38> photo.name: 1_1734389804_image.jpg Basement 2 Photo 2, photo.room: <Room 29>, photo.room.current_cover_photo_id: 38
+2024-12-16 17:16:06,288 - application - DEBUG - after_request_time [__init__.py:42] - Request to /set_room_cover_photo/38 took 0.00820779800415039 seconds
+2024-12-16 17:16:06,288 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:16:06,288 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:16:08,133 - application.walkthrough - DEBUG - walk_start [walkthrough.py:30] - get room_name: Basement 2
+2024-12-16 17:16:08,133 - application.walkthrough - DEBUG - walk_start [walkthrough.py:31] - get view: sortphotos
+2024-12-16 17:16:08,134 - application.walkthrough - DEBUG - walk_start [walkthrough.py:35] - room: (<Room 29>,) room_name: Basement 2 room name name: Basement 2
+2024-12-16 17:16:08,137 - application.rooms - DEBUG - set_active_room [rooms.py:118] - current_user.active_home.active_room: <Room 29>
+2024-12-16 17:16:08,137 - application.walkthrough - DEBUG - walk_start [walkthrough.py:50] - view: sortphotos
+2024-12-16 17:16:08,138 - application - DEBUG - after_request_time [__init__.py:42] - Request to /walkthrough/Basement 2/sortphotos took 0.0055849552154541016 seconds
+2024-12-16 17:16:08,138 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:16:08,139 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:16:08,152 - application.walkthrough - DEBUG - views [walkthrough.py:68] - view?: sortphotos
+2024-12-16 17:16:08,152 - application.walkthrough - DEBUG - views [walkthrough.py:71] - File exists!: walkthrough/parts/sortphotos.html.jinja
+2024-12-16 17:16:08,156 - application - DEBUG - after_request_time [__init__.py:42] - Request to /walkthrough/steps took 0.005059242248535156 seconds
+2024-12-16 17:16:08,156 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:16:08,156 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): walkthrough/index.html.jinja
+2024-12-16 17:16:08,254 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/style.css took 0.0010709762573242188 seconds
+2024-12-16 17:16:08,255 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:16:08,255 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:16:08,261 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/js/bundle.js took 0.0019991397857666016 seconds
+2024-12-16 17:16:08,262 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:16:08,262 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:16:08,278 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/person-circle.svg took 0.0025839805603027344 seconds
+2024-12-16 17:16:08,278 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:16:08,279 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:16:08,405 - application.walkthrough - DEBUG - views [walkthrough.py:68] - view?: sortphotos
+2024-12-16 17:16:08,405 - application.walkthrough - DEBUG - views [walkthrough.py:71] - File exists!: walkthrough/parts/sortphotos.html.jinja
+2024-12-16 17:16:08,407 - application - DEBUG - after_request_time [__init__.py:42] - Request to /walkthrough/steps took 0.003679037094116211 seconds
+2024-12-16 17:16:08,407 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:16:08,408 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): walkthrough/parts/sortphotos.html.jinja
+2024-12-16 17:16:08,579 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:428] - found_entries for <Photo 38>: [<UserListEntry 287>]
+2024-12-16 17:16:08,580 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:428] - found_entries for <Room 29>: [<UserListEntry 285>]
+2024-12-16 17:16:08,581 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:436] - Entry: <UserListEntry 287>
+2024-12-16 17:16:08,581 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:436] - Entry: <UserListEntry 285>
+2024-12-16 17:16:08,582 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:437] - Item Model: Photo, Item ID: 38
+2024-12-16 17:16:08,582 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:437] - Item Model: Room, Item ID: 29
+2024-12-16 17:16:08,582 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:438] - User List ID: 96 User List Name: Basement 2 Photos
+2024-12-16 17:16:08,582 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:438] - User List ID: 93 User List Name: testy 5th Floor Rooms
+2024-12-16 17:16:08,583 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:439] - user: 1
+2024-12-16 17:16:08,584 - application - DEBUG - after_request_time [__init__.py:42] - Request to /show_photo_entry/38 took 0.0070629119873046875 seconds
+2024-12-16 17:16:08,585 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:16:08,583 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:439] - user: 1
+2024-12-16 17:16:08,586 - application.list_utils - DEBUG - get_userlist [list_utils.py:308] - get_userlist(): item_model: Photo, list_name: None, parent_entry_id: 285
+2024-12-16 17:16:08,586 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/model/photo.html.jinja
+2024-12-16 17:16:08,590 - application.list_utils - DEBUG - get_userlist [list_utils.py:322] - lists found (model, parent): [<UserList 96>]
+2024-12-16 17:16:08,591 - application.list_utils - DEBUG - get_userlist [list_utils.py:349] - len(lists) == 1: None Photo 285
+2024-12-16 17:16:08,593 - application.list_utils - DEBUG - get_userlist [list_utils.py:368] - userlist.entries: [<UserListEntry 284>, <UserListEntry 287>] List type: <class 'sqlalchemy.orm.collections.InstrumentedList'>
+2024-12-16 17:16:08,593 - application.list_utils - DEBUG - get_userlist [list_utils.py:370] - List: Basement 2 Photos, Order: 1
+2024-12-16 17:16:08,594 - application.list_utils - DEBUG - get_userlist [list_utils.py:370] - List: Basement 2 Photos, Order: 2
+2024-12-16 17:16:08,597 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:271] - get_userlists_by_parent: lists found (parent_entry_id)284: [<UserList 97>]
+2024-12-16 17:16:08,599 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:271] - get_userlists_by_parent: lists found (parent_entry_id)287: [<UserList 99>]
+2024-12-16 17:16:08,606 - application - DEBUG - after_request_time [__init__.py:42] - Request to /show_list/ took 0.03170013427734375 seconds
+2024-12-16 17:16:08,607 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:16:08,607 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/list.html.jinja
+2024-12-16 17:16:08,726 - application.upload - DEBUG - uploaded_file [upload.py:97] - files in /Users/kyle/Documents/Repos/cs50/cs50x-final/media/uploads: ['1_1732676059_image.jpg', '2_1729876600_IMG_7979.jpeg', '3_1729880451_Screen_Shot_2024-10-15_at_8.49.55_PM.png', '2_1729793180_IMG_7939.jpeg', '2_1729876732_image.jpg', 'IMG_7540_3.jpeg', '1_1734385972_image.jpg', 'Screen_Shot_2024-06-17_at_9.19.26_PM_1.png', '1_1732593853_image.jpg', '1_1732676397_image.jpg', '3_1729880474_Screen_Shot_2024-06-17_at_9.19.26_PM.png', '3_1729880474_Screen_Shot_2023-05-13_at_4.10.32_PM.png', '2_1729793457_IMG_7927.jpeg', '.DS_Store', '1_1734387080_image.jpg', '2_1729878736_IMG_6398.jpeg', '2_1729793259_IMG_7971.jpeg', 'IMG_7540_2.jpeg', '3_1729880431_Screen_Shot_2024-10-15_at_8.49.55_PM.png', '2_1729788694_IMG_7978.jpeg', '2_1729793180_IMG_7938.jpeg', '1_1732676358_image.jpg', '2_1729806527_IMG_7971.jpeg', '3_1729880431_Screen_Shot_2024-06-17_at_9.19.26_PM.png', '2_1729878723_IMG_7979.jpeg', '1_1732313937_image.jpg', '1_1732571764_image.jpg', '1_1732308837_image.jpg', '1_1734387020_image.jpg', '2_1729806527_IMG_7940.png', '2_1729790952_IMG_7939.jpeg', '2_1729793457_IMG_7920.jpeg', '1_1732676382_image.jpg', '2_1729806423_IMG_7926.jpeg', 'IMG_7540_5.jpeg', '2_1729806390_image.jpg', '1_1732313904_image.jpg', '3_1729880431_Screen_Shot_2024-09-16_at_4.22.17_PM.png', '2_1729790270_image.jpg', '2_1729788660_IMG_7972.jpeg', '2_1729789401_IMG_7978.jpeg', 'IMG_7540_4.jpeg', '2_1729787915_image.jpg', '2_1729806527_IMG_7936.jpeg', '1_1732676354_image.jpg', '2_1729793457_IMG_7917.jpeg', '1_1732571776_image.jpg', '1_1732676066_image.jpg', '2_1729790297_IMG_7939.jpeg', '1_1732308852_image.jpg', '1_1734387117_image.jpg', '3_1729880474_Screen_Shot_2024-09-16_at_4.22.17_PM.png', '2_1729790967_image.jpg', 'image_2.jpg', '2_1729790846_IMG_7897.jpeg', '2_1729806527_IMG_7975.png', '1_1734389779_image.jpg', '1_1734387023_image.jpg', '2_1729787672_image.jpg', '2_1729806527_IMG_7974.png', '2_1729878723_IMG_7982.jpeg', '2_1729806527_IMG_7939.jpeg', 'image_3.jpg', '2_1729806500_image.jpg', 'image_1.jpg', '2_1729806527_IMG_7976.png', '1_1734371648_image.jpg', '2_1729876600_IMG_7984.jpeg', '2_1729806527_IMG_7977.png', '2_1729806527_IMG_7935.jpeg', '2_1729790259_image.jpg', '2_1729876586_image.jpg', '3_1729880431_Screen_Shot_2024-09-16_at_4.22.10_PM.png', '2_1729790568_IMG_7928.jpeg', 'image_4.jpg', '2_1729806527_IMG_7934.jpeg', '2_1729806527_IMG_7973.png', '1_1732571789_image.jpg', 'Screen_Shot_2024-06-17_at_9.19.26_PM.png', 'IMG_7540_6.jpeg', 'image_5.jpg', '1_1734385976_image.jpg', '2_1729789538_image.jpg', '2_1729789387_image.jpg', '1_1734389804_image.jpg', '2_1729806527_IMG_7938.jpeg', '1_1732676387_image.jpg', '2_1729790282_image.jpg', '2_1729806423_IMG_7913.jpeg', 'IMG_7540.jpeg', '2_1729793259_IMG_7973.png', 'IMG_7540_1.jpeg', '2_1729876600_IMG_7982.jpeg', '2_1729806527_IMG_7933.jpeg', '2_1729806527_IMG_7972.jpeg', '2_1729877408_image.jpg', '2_1729806423_IMG_7919.png', '3_1729880431_IMG_7540.jpeg', '2_1729788645_IMG_7977.png', '2_1729878714_image.jpg', '2_1729878744_image.jpg', '2_1729793180_IMG_7936.jpeg', '3_1729880451_IMG_7540.jpeg', '2_1729793259_IMG_7976.png', '1_1732676392_image.jpg', 'image.jpg', '1_1732636778_image.jpg', '1_1734371564_image.jpg', '2_1729876600_IMG_7983.jpeg', '2_1729793162_image.jpg', '1_1732636784_image.jpg']
+2024-12-16 17:16:08,733 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/defaults/generic_room.jpg took 0.001135110855102539 seconds
+2024-12-16 17:16:08,733 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:16:08,735 - application - DEBUG - after_request_time [__init__.py:42] - Request to /media/uploads/1_1734389804_image.jpg took 0.009497880935668945 seconds
+2024-12-16 17:16:08,736 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:16:08,736 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:16:08,738 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:17:20,224 - application.walkthrough - DEBUG - walk_start [walkthrough.py:30] - get room_name: Basement 2
+2024-12-16 17:17:20,225 - application.walkthrough - DEBUG - walk_start [walkthrough.py:31] - get view: sortphotos
+2024-12-16 17:17:20,226 - application.walkthrough - DEBUG - walk_start [walkthrough.py:35] - room: (<Room 29>,) room_name: Basement 2 room name name: Basement 2
+2024-12-16 17:17:20,230 - application.rooms - DEBUG - set_active_room [rooms.py:118] - current_user.active_home.active_room: <Room 29>
+2024-12-16 17:17:20,230 - application.walkthrough - DEBUG - walk_start [walkthrough.py:50] - view: sortphotos
+2024-12-16 17:17:20,230 - application - DEBUG - after_request_time [__init__.py:42] - Request to /walkthrough/Basement 2/sortphotos took 0.007061004638671875 seconds
+2024-12-16 17:17:20,231 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:17:20,231 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:17:20,252 - application.walkthrough - DEBUG - views [walkthrough.py:68] - view?: sortphotos
+2024-12-16 17:17:20,253 - application.walkthrough - DEBUG - views [walkthrough.py:71] - File exists!: walkthrough/parts/sortphotos.html.jinja
+2024-12-16 17:17:20,256 - application - DEBUG - after_request_time [__init__.py:42] - Request to /walkthrough/steps took 0.0044040679931640625 seconds
+2024-12-16 17:17:20,257 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:17:20,257 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): walkthrough/index.html.jinja
+2024-12-16 17:17:20,392 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/style.css took 0.0017731189727783203 seconds
+2024-12-16 17:17:20,393 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/js/bundle.js took 0.0017008781433105469 seconds
+2024-12-16 17:17:20,393 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:17:20,394 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:17:20,394 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:17:20,394 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:17:20,406 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/person-circle.svg took 0.0013270378112792969 seconds
+2024-12-16 17:17:20,407 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:17:20,408 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:17:20,478 - application.walkthrough - DEBUG - views [walkthrough.py:68] - view?: sortphotos
+2024-12-16 17:17:20,479 - application.walkthrough - DEBUG - views [walkthrough.py:71] - File exists!: walkthrough/parts/sortphotos.html.jinja
+2024-12-16 17:17:20,481 - application - DEBUG - after_request_time [__init__.py:42] - Request to /walkthrough/steps took 0.0037279129028320312 seconds
+2024-12-16 17:17:20,481 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:17:20,481 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): walkthrough/parts/sortphotos.html.jinja
+2024-12-16 17:17:20,726 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:428] - found_entries for <Photo 38>: [<UserListEntry 287>]
+2024-12-16 17:17:20,727 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:428] - found_entries for <Room 29>: [<UserListEntry 285>]
+2024-12-16 17:17:20,728 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:436] - Entry: <UserListEntry 287>
+2024-12-16 17:17:20,728 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:436] - Entry: <UserListEntry 285>
+2024-12-16 17:17:20,729 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:437] - Item Model: Photo, Item ID: 38
+2024-12-16 17:17:20,729 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:437] - Item Model: Room, Item ID: 29
+2024-12-16 17:17:20,729 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:438] - User List ID: 96 User List Name: Basement 2 Photos
+2024-12-16 17:17:20,729 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:438] - User List ID: 93 User List Name: testy 5th Floor Rooms
+2024-12-16 17:17:20,730 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:439] - user: 1
+2024-12-16 17:17:20,732 - application - DEBUG - after_request_time [__init__.py:42] - Request to /show_photo_entry/38 took 0.009557962417602539 seconds
+2024-12-16 17:17:20,730 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:439] - user: 1
+2024-12-16 17:17:20,732 - application.list_utils - DEBUG - get_userlist [list_utils.py:308] - get_userlist(): item_model: Photo, list_name: None, parent_entry_id: 285
+2024-12-16 17:17:20,732 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:17:20,734 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/model/photo.html.jinja
+2024-12-16 17:17:20,734 - application.list_utils - DEBUG - get_userlist [list_utils.py:322] - lists found (model, parent): [<UserList 96>]
+2024-12-16 17:17:20,735 - application.list_utils - DEBUG - get_userlist [list_utils.py:349] - len(lists) == 1: None Photo 285
+2024-12-16 17:17:20,735 - application.list_utils - DEBUG - get_userlist [list_utils.py:368] - userlist.entries: [<UserListEntry 284>, <UserListEntry 287>] List type: <class 'sqlalchemy.orm.collections.InstrumentedList'>
+2024-12-16 17:17:20,736 - application.list_utils - DEBUG - get_userlist [list_utils.py:370] - List: Basement 2 Photos, Order: 1
+2024-12-16 17:17:20,736 - application.list_utils - DEBUG - get_userlist [list_utils.py:370] - List: Basement 2 Photos, Order: 2
+2024-12-16 17:17:20,738 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:271] - get_userlists_by_parent: lists found (parent_entry_id)284: [<UserList 97>]
+2024-12-16 17:17:20,743 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:271] - get_userlists_by_parent: lists found (parent_entry_id)287: [<UserList 99>]
+2024-12-16 17:17:20,749 - application - DEBUG - after_request_time [__init__.py:42] - Request to /show_list/ took 0.030562877655029297 seconds
+2024-12-16 17:17:20,749 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:17:20,749 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/list.html.jinja
+2024-12-16 17:17:20,800 - application.upload - DEBUG - uploaded_file [upload.py:97] - files in /Users/kyle/Documents/Repos/cs50/cs50x-final/media/uploads: ['1_1732676059_image.jpg', '2_1729876600_IMG_7979.jpeg', '3_1729880451_Screen_Shot_2024-10-15_at_8.49.55_PM.png', '2_1729793180_IMG_7939.jpeg', '2_1729876732_image.jpg', 'IMG_7540_3.jpeg', '1_1734385972_image.jpg', 'Screen_Shot_2024-06-17_at_9.19.26_PM_1.png', '1_1732593853_image.jpg', '1_1732676397_image.jpg', '3_1729880474_Screen_Shot_2024-06-17_at_9.19.26_PM.png', '3_1729880474_Screen_Shot_2023-05-13_at_4.10.32_PM.png', '2_1729793457_IMG_7927.jpeg', '.DS_Store', '1_1734387080_image.jpg', '2_1729878736_IMG_6398.jpeg', '2_1729793259_IMG_7971.jpeg', 'IMG_7540_2.jpeg', '3_1729880431_Screen_Shot_2024-10-15_at_8.49.55_PM.png', '2_1729788694_IMG_7978.jpeg', '2_1729793180_IMG_7938.jpeg', '1_1732676358_image.jpg', '2_1729806527_IMG_7971.jpeg', '3_1729880431_Screen_Shot_2024-06-17_at_9.19.26_PM.png', '2_1729878723_IMG_7979.jpeg', '1_1732313937_image.jpg', '1_1732571764_image.jpg', '1_1732308837_image.jpg', '1_1734387020_image.jpg', '2_1729806527_IMG_7940.png', '2_1729790952_IMG_7939.jpeg', '2_1729793457_IMG_7920.jpeg', '1_1732676382_image.jpg', '2_1729806423_IMG_7926.jpeg', 'IMG_7540_5.jpeg', '2_1729806390_image.jpg', '1_1732313904_image.jpg', '3_1729880431_Screen_Shot_2024-09-16_at_4.22.17_PM.png', '2_1729790270_image.jpg', '2_1729788660_IMG_7972.jpeg', '2_1729789401_IMG_7978.jpeg', 'IMG_7540_4.jpeg', '2_1729787915_image.jpg', '2_1729806527_IMG_7936.jpeg', '1_1732676354_image.jpg', '2_1729793457_IMG_7917.jpeg', '1_1732571776_image.jpg', '1_1732676066_image.jpg', '2_1729790297_IMG_7939.jpeg', '1_1732308852_image.jpg', '1_1734387117_image.jpg', '3_1729880474_Screen_Shot_2024-09-16_at_4.22.17_PM.png', '2_1729790967_image.jpg', 'image_2.jpg', '2_1729790846_IMG_7897.jpeg', '2_1729806527_IMG_7975.png', '1_1734389779_image.jpg', '1_1734387023_image.jpg', '2_1729787672_image.jpg', '2_1729806527_IMG_7974.png', '2_1729878723_IMG_7982.jpeg', '2_1729806527_IMG_7939.jpeg', 'image_3.jpg', '2_1729806500_image.jpg', 'image_1.jpg', '2_1729806527_IMG_7976.png', '1_1734371648_image.jpg', '2_1729876600_IMG_7984.jpeg', '2_1729806527_IMG_7977.png', '2_1729806527_IMG_7935.jpeg', '2_1729790259_image.jpg', '2_1729876586_image.jpg', '3_1729880431_Screen_Shot_2024-09-16_at_4.22.10_PM.png', '2_1729790568_IMG_7928.jpeg', 'image_4.jpg', '2_1729806527_IMG_7934.jpeg', '2_1729806527_IMG_7973.png', '1_1732571789_image.jpg', 'Screen_Shot_2024-06-17_at_9.19.26_PM.png', 'IMG_7540_6.jpeg', 'image_5.jpg', '1_1734385976_image.jpg', '2_1729789538_image.jpg', '2_1729789387_image.jpg', '1_1734389804_image.jpg', '2_1729806527_IMG_7938.jpeg', '1_1732676387_image.jpg', '2_1729790282_image.jpg', '2_1729806423_IMG_7913.jpeg', 'IMG_7540.jpeg', '2_1729793259_IMG_7973.png', 'IMG_7540_1.jpeg', '2_1729876600_IMG_7982.jpeg', '2_1729806527_IMG_7933.jpeg', '2_1729806527_IMG_7972.jpeg', '2_1729877408_image.jpg', '2_1729806423_IMG_7919.png', '3_1729880431_IMG_7540.jpeg', '2_1729788645_IMG_7977.png', '2_1729878714_image.jpg', '2_1729878744_image.jpg', '2_1729793180_IMG_7936.jpeg', '3_1729880451_IMG_7540.jpeg', '2_1729793259_IMG_7976.png', '1_1732676392_image.jpg', 'image.jpg', '1_1732636778_image.jpg', '1_1734371564_image.jpg', '2_1729876600_IMG_7983.jpeg', '2_1729793162_image.jpg', '1_1732636784_image.jpg']
+2024-12-16 17:17:20,802 - application - DEBUG - after_request_time [__init__.py:42] - Request to /media/uploads/1_1734389804_image.jpg took 0.0017118453979492188 seconds
+2024-12-16 17:17:20,802 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:17:20,802 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:17:20,898 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/defaults/generic_room.jpg took 0.0010480880737304688 seconds
+2024-12-16 17:17:20,898 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:17:20,899 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:22:15,841 - application.walkthrough - DEBUG - walk_start [walkthrough.py:30] - get room_name: Basement 2
+2024-12-16 17:22:15,841 - application.walkthrough - DEBUG - walk_start [walkthrough.py:31] - get view: sortphotos
+2024-12-16 17:22:15,843 - application.walkthrough - DEBUG - walk_start [walkthrough.py:35] - room: (<Room 29>,) room_name: Basement 2 room name name: Basement 2
+2024-12-16 17:22:15,847 - application.rooms - DEBUG - set_active_room [rooms.py:118] - current_user.active_home.active_room: <Room 29>
+2024-12-16 17:22:15,848 - application.walkthrough - DEBUG - walk_start [walkthrough.py:50] - view: sortphotos
+2024-12-16 17:22:15,848 - application - DEBUG - after_request_time [__init__.py:42] - Request to /walkthrough/Basement 2/sortphotos took 0.009101152420043945 seconds
+2024-12-16 17:22:15,849 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:22:15,849 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:22:15,872 - application.walkthrough - DEBUG - views [walkthrough.py:68] - view?: sortphotos
+2024-12-16 17:22:15,873 - application.walkthrough - DEBUG - views [walkthrough.py:71] - File exists!: walkthrough/parts/sortphotos.html.jinja
+2024-12-16 17:22:15,876 - application - DEBUG - after_request_time [__init__.py:42] - Request to /walkthrough/steps took 0.004745006561279297 seconds
+2024-12-16 17:22:15,876 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:22:15,876 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): walkthrough/index.html.jinja
+2024-12-16 17:22:16,005 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/style.css took 0.0009229183197021484 seconds
+2024-12-16 17:22:16,006 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:22:16,006 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:22:16,011 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/js/bundle.js took 0.000946044921875 seconds
+2024-12-16 17:22:16,012 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:22:16,012 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:22:16,034 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/person-circle.svg took 0.0008721351623535156 seconds
+2024-12-16 17:22:16,034 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:22:16,034 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:22:16,101 - application.walkthrough - DEBUG - views [walkthrough.py:68] - view?: sortphotos
+2024-12-16 17:22:16,101 - application.walkthrough - DEBUG - views [walkthrough.py:71] - File exists!: walkthrough/parts/sortphotos.html.jinja
+2024-12-16 17:22:16,103 - application - DEBUG - after_request_time [__init__.py:42] - Request to /walkthrough/steps took 0.004283905029296875 seconds
+2024-12-16 17:22:16,104 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:22:16,104 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): walkthrough/parts/sortphotos.html.jinja
+2024-12-16 17:22:16,325 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:428] - found_entries for <Room 29>: [<UserListEntry 285>]
+2024-12-16 17:22:16,326 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:428] - found_entries for <Photo 38>: [<UserListEntry 287>]
+2024-12-16 17:22:16,328 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:436] - Entry: <UserListEntry 285>
+2024-12-16 17:22:16,328 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:436] - Entry: <UserListEntry 287>
+2024-12-16 17:22:16,328 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:437] - Item Model: Room, Item ID: 29
+2024-12-16 17:22:16,329 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:437] - Item Model: Photo, Item ID: 38
+2024-12-16 17:22:16,329 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:438] - User List ID: 93 User List Name: testy 5th Floor Rooms
+2024-12-16 17:22:16,329 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:438] - User List ID: 96 User List Name: Basement 2 Photos
+2024-12-16 17:22:16,330 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:439] - user: 1
+2024-12-16 17:22:16,330 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:439] - user: 1
+2024-12-16 17:22:16,330 - application.list_utils - DEBUG - get_userlist [list_utils.py:308] - get_userlist(): item_model: Photo, list_name: None, parent_entry_id: 285
+2024-12-16 17:22:16,355 - application.list_utils - DEBUG - get_userlist [list_utils.py:322] - lists found (model, parent): [<UserList 96>]
+2024-12-16 17:22:16,362 - application.list_utils - DEBUG - get_userlist [list_utils.py:349] - len(lists) == 1: None Photo 285
+2024-12-16 17:22:16,363 - application - DEBUG - after_request_time [__init__.py:42] - Request to /show_photo_entry/38 took 0.043245792388916016 seconds
+2024-12-16 17:22:16,363 - application.list_utils - DEBUG - get_userlist [list_utils.py:368] - userlist.entries: [<UserListEntry 284>, <UserListEntry 287>] List type: <class 'sqlalchemy.orm.collections.InstrumentedList'>
+2024-12-16 17:22:16,363 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:22:16,364 - application.list_utils - DEBUG - get_userlist [list_utils.py:370] - List: Basement 2 Photos, Order: 1
+2024-12-16 17:22:16,364 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/model/photo.html.jinja
+2024-12-16 17:22:16,364 - application.list_utils - DEBUG - get_userlist [list_utils.py:370] - List: Basement 2 Photos, Order: 2
+2024-12-16 17:22:16,366 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:271] - get_userlists_by_parent: lists found (parent_entry_id)284: [<UserList 97>]
+2024-12-16 17:22:16,371 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:271] - get_userlists_by_parent: lists found (parent_entry_id)287: [<UserList 99>]
+2024-12-16 17:22:16,379 - application - DEBUG - after_request_time [__init__.py:42] - Request to /show_list/ took 0.06073904037475586 seconds
+2024-12-16 17:22:16,379 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:22:16,380 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/list.html.jinja
+2024-12-16 17:22:16,397 - application.upload - DEBUG - uploaded_file [upload.py:97] - files in /Users/kyle/Documents/Repos/cs50/cs50x-final/media/uploads: ['1_1732676059_image.jpg', '2_1729876600_IMG_7979.jpeg', '3_1729880451_Screen_Shot_2024-10-15_at_8.49.55_PM.png', '2_1729793180_IMG_7939.jpeg', '2_1729876732_image.jpg', 'IMG_7540_3.jpeg', '1_1734385972_image.jpg', 'Screen_Shot_2024-06-17_at_9.19.26_PM_1.png', '1_1732593853_image.jpg', '1_1732676397_image.jpg', '3_1729880474_Screen_Shot_2024-06-17_at_9.19.26_PM.png', '3_1729880474_Screen_Shot_2023-05-13_at_4.10.32_PM.png', '2_1729793457_IMG_7927.jpeg', '.DS_Store', '1_1734387080_image.jpg', '2_1729878736_IMG_6398.jpeg', '2_1729793259_IMG_7971.jpeg', 'IMG_7540_2.jpeg', '3_1729880431_Screen_Shot_2024-10-15_at_8.49.55_PM.png', '2_1729788694_IMG_7978.jpeg', '2_1729793180_IMG_7938.jpeg', '1_1732676358_image.jpg', '2_1729806527_IMG_7971.jpeg', '3_1729880431_Screen_Shot_2024-06-17_at_9.19.26_PM.png', '2_1729878723_IMG_7979.jpeg', '1_1732313937_image.jpg', '1_1732571764_image.jpg', '1_1732308837_image.jpg', '1_1734387020_image.jpg', '2_1729806527_IMG_7940.png', '2_1729790952_IMG_7939.jpeg', '2_1729793457_IMG_7920.jpeg', '1_1732676382_image.jpg', '2_1729806423_IMG_7926.jpeg', 'IMG_7540_5.jpeg', '2_1729806390_image.jpg', '1_1732313904_image.jpg', '3_1729880431_Screen_Shot_2024-09-16_at_4.22.17_PM.png', '2_1729790270_image.jpg', '2_1729788660_IMG_7972.jpeg', '2_1729789401_IMG_7978.jpeg', 'IMG_7540_4.jpeg', '2_1729787915_image.jpg', '2_1729806527_IMG_7936.jpeg', '1_1732676354_image.jpg', '2_1729793457_IMG_7917.jpeg', '1_1732571776_image.jpg', '1_1732676066_image.jpg', '2_1729790297_IMG_7939.jpeg', '1_1732308852_image.jpg', '1_1734387117_image.jpg', '3_1729880474_Screen_Shot_2024-09-16_at_4.22.17_PM.png', '2_1729790967_image.jpg', 'image_2.jpg', '2_1729790846_IMG_7897.jpeg', '2_1729806527_IMG_7975.png', '1_1734389779_image.jpg', '1_1734387023_image.jpg', '2_1729787672_image.jpg', '2_1729806527_IMG_7974.png', '2_1729878723_IMG_7982.jpeg', '2_1729806527_IMG_7939.jpeg', 'image_3.jpg', '2_1729806500_image.jpg', 'image_1.jpg', '2_1729806527_IMG_7976.png', '1_1734371648_image.jpg', '2_1729876600_IMG_7984.jpeg', '2_1729806527_IMG_7977.png', '2_1729806527_IMG_7935.jpeg', '2_1729790259_image.jpg', '2_1729876586_image.jpg', '3_1729880431_Screen_Shot_2024-09-16_at_4.22.10_PM.png', '2_1729790568_IMG_7928.jpeg', 'image_4.jpg', '2_1729806527_IMG_7934.jpeg', '2_1729806527_IMG_7973.png', '1_1732571789_image.jpg', 'Screen_Shot_2024-06-17_at_9.19.26_PM.png', 'IMG_7540_6.jpeg', 'image_5.jpg', '1_1734385976_image.jpg', '2_1729789538_image.jpg', '2_1729789387_image.jpg', '1_1734389804_image.jpg', '2_1729806527_IMG_7938.jpeg', '1_1732676387_image.jpg', '2_1729790282_image.jpg', '2_1729806423_IMG_7913.jpeg', 'IMG_7540.jpeg', '2_1729793259_IMG_7973.png', 'IMG_7540_1.jpeg', '2_1729876600_IMG_7982.jpeg', '2_1729806527_IMG_7933.jpeg', '2_1729806527_IMG_7972.jpeg', '2_1729877408_image.jpg', '2_1729806423_IMG_7919.png', '3_1729880431_IMG_7540.jpeg', '2_1729788645_IMG_7977.png', '2_1729878714_image.jpg', '2_1729878744_image.jpg', '2_1729793180_IMG_7936.jpeg', '3_1729880451_IMG_7540.jpeg', '2_1729793259_IMG_7976.png', '1_1732676392_image.jpg', 'image.jpg', '1_1732636778_image.jpg', '1_1734371564_image.jpg', '2_1729876600_IMG_7983.jpeg', '2_1729793162_image.jpg', '1_1732636784_image.jpg']
+2024-12-16 17:22:16,399 - application - DEBUG - after_request_time [__init__.py:42] - Request to /media/uploads/1_1734389804_image.jpg took 0.0022988319396972656 seconds
+2024-12-16 17:22:16,400 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:22:16,401 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:22:16,591 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/defaults/generic_room.jpg took 0.0011420249938964844 seconds
+2024-12-16 17:22:16,592 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:22:16,592 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:22:22,061 - application.rooms - DEBUG - set_room_cover_photo [rooms.py:137] - photo: <Photo 36> photo.name: Basement 2 default_cover_image, photo.room: <Room 29>, photo.room.current_cover_photo_id: 36
+2024-12-16 17:22:22,062 - application - DEBUG - after_request_time [__init__.py:42] - Request to /set_room_cover_photo/36 took 0.00556492805480957 seconds
+2024-12-16 17:22:22,062 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:22:22,062 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:22:24,331 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:428] - found_entries for <Photo 36>: [<UserListEntry 284>]
+2024-12-16 17:22:24,332 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:436] - Entry: <UserListEntry 284>
+2024-12-16 17:22:24,332 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:437] - Item Model: Photo, Item ID: 36
+2024-12-16 17:22:24,333 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:438] - User List ID: 96 User List Name: Basement 2 Photos
+2024-12-16 17:22:24,333 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:439] - user: 1
+2024-12-16 17:22:24,333 - application.rooms - DEBUG - get_room_cover_photo_entry_id [rooms.py:150] - get_cover_photo_entry_id called 284
+2024-12-16 17:22:24,333 - application - DEBUG - after_request_time [__init__.py:42] - Request to /room_cover_photo_entry_id/285 took 0.0044939517974853516 seconds
+2024-12-16 17:22:24,333 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:22:24,334 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:22:25,743 - application.walkthrough - DEBUG - walk_start [walkthrough.py:30] - get room_name: Basement 2
+2024-12-16 17:22:25,744 - application.walkthrough - DEBUG - walk_start [walkthrough.py:31] - get view: sortphotos
+2024-12-16 17:22:25,745 - application.walkthrough - DEBUG - walk_start [walkthrough.py:35] - room: (<Room 29>,) room_name: Basement 2 room name name: Basement 2
+2024-12-16 17:22:25,748 - application.rooms - DEBUG - set_active_room [rooms.py:118] - current_user.active_home.active_room: <Room 29>
+2024-12-16 17:22:25,748 - application.walkthrough - DEBUG - walk_start [walkthrough.py:50] - view: sortphotos
+2024-12-16 17:22:25,749 - application - DEBUG - after_request_time [__init__.py:42] - Request to /walkthrough/Basement 2/sortphotos took 0.00648808479309082 seconds
+2024-12-16 17:22:25,749 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:22:25,750 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:22:25,760 - application.walkthrough - DEBUG - views [walkthrough.py:68] - view?: sortphotos
+2024-12-16 17:22:25,761 - application.walkthrough - DEBUG - views [walkthrough.py:71] - File exists!: walkthrough/parts/sortphotos.html.jinja
+2024-12-16 17:22:25,763 - application - DEBUG - after_request_time [__init__.py:42] - Request to /walkthrough/steps took 0.0032951831817626953 seconds
+2024-12-16 17:22:25,763 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:22:25,763 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): walkthrough/index.html.jinja
+2024-12-16 17:22:25,841 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/style.css took 0.001439809799194336 seconds
+2024-12-16 17:22:25,842 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:22:25,846 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:22:25,848 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/js/bundle.js took 0.0027780532836914062 seconds
+2024-12-16 17:22:25,850 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:22:25,851 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:22:25,884 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/person-circle.svg took 0.001415252685546875 seconds
+2024-12-16 17:22:25,885 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:22:25,885 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:22:25,957 - application.walkthrough - DEBUG - views [walkthrough.py:68] - view?: sortphotos
+2024-12-16 17:22:25,957 - application.walkthrough - DEBUG - views [walkthrough.py:71] - File exists!: walkthrough/parts/sortphotos.html.jinja
+2024-12-16 17:22:25,959 - application - DEBUG - after_request_time [__init__.py:42] - Request to /walkthrough/steps took 0.0027070045471191406 seconds
+2024-12-16 17:22:25,959 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:22:25,959 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): walkthrough/parts/sortphotos.html.jinja
+2024-12-16 17:22:26,139 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:428] - found_entries for <Photo 36>: [<UserListEntry 284>]
+2024-12-16 17:22:26,140 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:428] - found_entries for <Room 29>: [<UserListEntry 285>]
+2024-12-16 17:22:26,142 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:436] - Entry: <UserListEntry 284>
+2024-12-16 17:22:26,143 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:436] - Entry: <UserListEntry 285>
+2024-12-16 17:22:26,143 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:437] - Item Model: Photo, Item ID: 36
+2024-12-16 17:22:26,143 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:437] - Item Model: Room, Item ID: 29
+2024-12-16 17:22:26,144 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:438] - User List ID: 96 User List Name: Basement 2 Photos
+2024-12-16 17:22:26,144 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:438] - User List ID: 93 User List Name: testy 5th Floor Rooms
+2024-12-16 17:22:26,145 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:439] - user: 1
+2024-12-16 17:22:26,145 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:439] - user: 1
+2024-12-16 17:22:26,147 - application.list_utils - DEBUG - get_userlist [list_utils.py:308] - get_userlist(): item_model: Photo, list_name: None, parent_entry_id: 285
+2024-12-16 17:22:26,150 - application.list_utils - DEBUG - get_userlist [list_utils.py:322] - lists found (model, parent): [<UserList 96>]
+2024-12-16 17:22:26,150 - application.list_utils - DEBUG - get_userlist [list_utils.py:349] - len(lists) == 1: None Photo 285
+2024-12-16 17:22:26,150 - application.list_utils - DEBUG - get_userlist [list_utils.py:368] - userlist.entries: [<UserListEntry 284>, <UserListEntry 287>] List type: <class 'sqlalchemy.orm.collections.InstrumentedList'>
+2024-12-16 17:22:26,151 - application.list_utils - DEBUG - get_userlist [list_utils.py:370] - List: Basement 2 Photos, Order: 1
+2024-12-16 17:22:26,148 - application - DEBUG - after_request_time [__init__.py:42] - Request to /show_photo_entry/36 took 0.014599084854125977 seconds
+2024-12-16 17:22:26,152 - application.list_utils - DEBUG - get_userlist [list_utils.py:370] - List: Basement 2 Photos, Order: 2
+2024-12-16 17:22:26,153 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:22:26,153 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/model/photo.html.jinja
+2024-12-16 17:22:26,155 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:271] - get_userlists_by_parent: lists found (parent_entry_id)284: [<UserList 97>]
+2024-12-16 17:22:26,157 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:271] - get_userlists_by_parent: lists found (parent_entry_id)287: [<UserList 99>]
+2024-12-16 17:22:26,165 - application - DEBUG - after_request_time [__init__.py:42] - Request to /show_list/ took 0.029883146286010742 seconds
+2024-12-16 17:22:26,165 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:22:26,166 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/list.html.jinja
+2024-12-16 17:22:26,276 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/defaults/generic_room.jpg took 0.0015380382537841797 seconds
+2024-12-16 17:22:26,276 - application.upload - DEBUG - uploaded_file [upload.py:97] - files in /Users/kyle/Documents/Repos/cs50/cs50x-final/media/uploads: ['1_1732676059_image.jpg', '2_1729876600_IMG_7979.jpeg', '3_1729880451_Screen_Shot_2024-10-15_at_8.49.55_PM.png', '2_1729793180_IMG_7939.jpeg', '2_1729876732_image.jpg', 'IMG_7540_3.jpeg', '1_1734385972_image.jpg', 'Screen_Shot_2024-06-17_at_9.19.26_PM_1.png', '1_1732593853_image.jpg', '1_1732676397_image.jpg', '3_1729880474_Screen_Shot_2024-06-17_at_9.19.26_PM.png', '3_1729880474_Screen_Shot_2023-05-13_at_4.10.32_PM.png', '2_1729793457_IMG_7927.jpeg', '.DS_Store', '1_1734387080_image.jpg', '2_1729878736_IMG_6398.jpeg', '2_1729793259_IMG_7971.jpeg', 'IMG_7540_2.jpeg', '3_1729880431_Screen_Shot_2024-10-15_at_8.49.55_PM.png', '2_1729788694_IMG_7978.jpeg', '2_1729793180_IMG_7938.jpeg', '1_1732676358_image.jpg', '2_1729806527_IMG_7971.jpeg', '3_1729880431_Screen_Shot_2024-06-17_at_9.19.26_PM.png', '2_1729878723_IMG_7979.jpeg', '1_1732313937_image.jpg', '1_1732571764_image.jpg', '1_1732308837_image.jpg', '1_1734387020_image.jpg', '2_1729806527_IMG_7940.png', '2_1729790952_IMG_7939.jpeg', '2_1729793457_IMG_7920.jpeg', '1_1732676382_image.jpg', '2_1729806423_IMG_7926.jpeg', 'IMG_7540_5.jpeg', '2_1729806390_image.jpg', '1_1732313904_image.jpg', '3_1729880431_Screen_Shot_2024-09-16_at_4.22.17_PM.png', '2_1729790270_image.jpg', '2_1729788660_IMG_7972.jpeg', '2_1729789401_IMG_7978.jpeg', 'IMG_7540_4.jpeg', '2_1729787915_image.jpg', '2_1729806527_IMG_7936.jpeg', '1_1732676354_image.jpg', '2_1729793457_IMG_7917.jpeg', '1_1732571776_image.jpg', '1_1732676066_image.jpg', '2_1729790297_IMG_7939.jpeg', '1_1732308852_image.jpg', '1_1734387117_image.jpg', '3_1729880474_Screen_Shot_2024-09-16_at_4.22.17_PM.png', '2_1729790967_image.jpg', 'image_2.jpg', '2_1729790846_IMG_7897.jpeg', '2_1729806527_IMG_7975.png', '1_1734389779_image.jpg', '1_1734387023_image.jpg', '2_1729787672_image.jpg', '2_1729806527_IMG_7974.png', '2_1729878723_IMG_7982.jpeg', '2_1729806527_IMG_7939.jpeg', 'image_3.jpg', '2_1729806500_image.jpg', 'image_1.jpg', '2_1729806527_IMG_7976.png', '1_1734371648_image.jpg', '2_1729876600_IMG_7984.jpeg', '2_1729806527_IMG_7977.png', '2_1729806527_IMG_7935.jpeg', '2_1729790259_image.jpg', '2_1729876586_image.jpg', '3_1729880431_Screen_Shot_2024-09-16_at_4.22.10_PM.png', '2_1729790568_IMG_7928.jpeg', 'image_4.jpg', '2_1729806527_IMG_7934.jpeg', '2_1729806527_IMG_7973.png', '1_1732571789_image.jpg', 'Screen_Shot_2024-06-17_at_9.19.26_PM.png', 'IMG_7540_6.jpeg', 'image_5.jpg', '1_1734385976_image.jpg', '2_1729789538_image.jpg', '2_1729789387_image.jpg', '1_1734389804_image.jpg', '2_1729806527_IMG_7938.jpeg', '1_1732676387_image.jpg', '2_1729790282_image.jpg', '2_1729806423_IMG_7913.jpeg', 'IMG_7540.jpeg', '2_1729793259_IMG_7973.png', 'IMG_7540_1.jpeg', '2_1729876600_IMG_7982.jpeg', '2_1729806527_IMG_7933.jpeg', '2_1729806527_IMG_7972.jpeg', '2_1729877408_image.jpg', '2_1729806423_IMG_7919.png', '3_1729880431_IMG_7540.jpeg', '2_1729788645_IMG_7977.png', '2_1729878714_image.jpg', '2_1729878744_image.jpg', '2_1729793180_IMG_7936.jpeg', '3_1729880451_IMG_7540.jpeg', '2_1729793259_IMG_7976.png', '1_1732676392_image.jpg', 'image.jpg', '1_1732636778_image.jpg', '1_1734371564_image.jpg', '2_1729876600_IMG_7983.jpeg', '2_1729793162_image.jpg', '1_1732636784_image.jpg']
+2024-12-16 17:22:26,277 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:22:26,277 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:22:26,278 - application - DEBUG - after_request_time [__init__.py:42] - Request to /media/uploads/1_1734389804_image.jpg took 0.002810955047607422 seconds
+2024-12-16 17:22:26,279 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:22:26,280 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:22:32,178 - application.rooms - DEBUG - set_room_cover_photo [rooms.py:137] - photo: <Photo 38> photo.name: 1_1734389804_image.jpg Basement 2 Photo 2, photo.room: <Room 29>, photo.room.current_cover_photo_id: 38
+2024-12-16 17:22:32,178 - application - DEBUG - after_request_time [__init__.py:42] - Request to /set_room_cover_photo/38 took 0.005453824996948242 seconds
+2024-12-16 17:22:32,178 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:22:32,179 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:22:32,922 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:428] - found_entries for <Photo 38>: [<UserListEntry 287>]
+2024-12-16 17:22:32,923 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:436] - Entry: <UserListEntry 287>
+2024-12-16 17:22:32,923 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:437] - Item Model: Photo, Item ID: 38
+2024-12-16 17:22:32,923 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:438] - User List ID: 96 User List Name: Basement 2 Photos
+2024-12-16 17:22:32,924 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:439] - user: 1
+2024-12-16 17:22:32,924 - application.rooms - DEBUG - get_room_cover_photo_entry_id [rooms.py:150] - get_cover_photo_entry_id called 287
+2024-12-16 17:22:32,924 - application - DEBUG - after_request_time [__init__.py:42] - Request to /room_cover_photo_entry_id/285 took 0.005010843276977539 seconds
+2024-12-16 17:22:32,925 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:22:32,925 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:22:39,104 - application.walkthrough - DEBUG - walk_start [walkthrough.py:30] - get room_name: Basement 2
+2024-12-16 17:22:39,104 - application.walkthrough - DEBUG - walk_start [walkthrough.py:31] - get view: sortphotos
+2024-12-16 17:22:39,105 - application.walkthrough - DEBUG - walk_start [walkthrough.py:35] - room: (<Room 29>,) room_name: Basement 2 room name name: Basement 2
+2024-12-16 17:22:39,109 - application.rooms - DEBUG - set_active_room [rooms.py:118] - current_user.active_home.active_room: <Room 29>
+2024-12-16 17:22:39,109 - application.walkthrough - DEBUG - walk_start [walkthrough.py:50] - view: sortphotos
+2024-12-16 17:22:39,110 - application - DEBUG - after_request_time [__init__.py:42] - Request to /walkthrough/Basement 2/sortphotos took 0.007539987564086914 seconds
+2024-12-16 17:22:39,110 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:22:39,111 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:22:39,124 - application.walkthrough - DEBUG - views [walkthrough.py:68] - view?: sortphotos
+2024-12-16 17:22:39,124 - application.walkthrough - DEBUG - views [walkthrough.py:71] - File exists!: walkthrough/parts/sortphotos.html.jinja
+2024-12-16 17:22:39,126 - application - DEBUG - after_request_time [__init__.py:42] - Request to /walkthrough/steps took 0.003409147262573242 seconds
+2024-12-16 17:22:39,126 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:22:39,127 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): walkthrough/index.html.jinja
+2024-12-16 17:22:39,324 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/js/bundle.js took 0.0010581016540527344 seconds
+2024-12-16 17:22:39,324 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:22:39,327 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/style.css took 0.0006210803985595703 seconds
+2024-12-16 17:22:39,328 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:22:39,328 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:22:39,330 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:22:39,377 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/person-circle.svg took 0.0009188652038574219 seconds
+2024-12-16 17:22:39,378 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:22:39,378 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:22:39,459 - application.walkthrough - DEBUG - views [walkthrough.py:68] - view?: sortphotos
+2024-12-16 17:22:39,460 - application.walkthrough - DEBUG - views [walkthrough.py:71] - File exists!: walkthrough/parts/sortphotos.html.jinja
+2024-12-16 17:22:39,462 - application - DEBUG - after_request_time [__init__.py:42] - Request to /walkthrough/steps took 0.0037322044372558594 seconds
+2024-12-16 17:22:39,462 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:22:39,462 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): walkthrough/parts/sortphotos.html.jinja
+2024-12-16 17:22:39,669 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:428] - found_entries for <Photo 38>: [<UserListEntry 287>]
+2024-12-16 17:22:39,671 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:436] - Entry: <UserListEntry 287>
+2024-12-16 17:22:39,672 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:437] - Item Model: Photo, Item ID: 38
+2024-12-16 17:22:39,674 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:438] - User List ID: 96 User List Name: Basement 2 Photos
+2024-12-16 17:22:39,674 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:428] - found_entries for <Room 29>: [<UserListEntry 285>]
+2024-12-16 17:22:39,676 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:439] - user: 1
+2024-12-16 17:22:39,678 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:436] - Entry: <UserListEntry 285>
+2024-12-16 17:22:39,679 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:437] - Item Model: Room, Item ID: 29
+2024-12-16 17:22:39,681 - application - DEBUG - after_request_time [__init__.py:42] - Request to /show_photo_entry/38 took 0.019572019577026367 seconds
+2024-12-16 17:22:39,681 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:438] - User List ID: 93 User List Name: testy 5th Floor Rooms
+2024-12-16 17:22:39,681 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:22:39,681 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:439] - user: 1
+2024-12-16 17:22:39,682 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/model/photo.html.jinja
+2024-12-16 17:22:39,682 - application.list_utils - DEBUG - get_userlist [list_utils.py:308] - get_userlist(): item_model: Photo, list_name: None, parent_entry_id: 285
+2024-12-16 17:22:39,685 - application.list_utils - DEBUG - get_userlist [list_utils.py:322] - lists found (model, parent): [<UserList 96>]
+2024-12-16 17:22:39,685 - application.list_utils - DEBUG - get_userlist [list_utils.py:349] - len(lists) == 1: None Photo 285
+2024-12-16 17:22:39,686 - application.list_utils - DEBUG - get_userlist [list_utils.py:368] - userlist.entries: [<UserListEntry 284>, <UserListEntry 287>] List type: <class 'sqlalchemy.orm.collections.InstrumentedList'>
+2024-12-16 17:22:39,686 - application.list_utils - DEBUG - get_userlist [list_utils.py:370] - List: Basement 2 Photos, Order: 1
+2024-12-16 17:22:39,688 - application.list_utils - DEBUG - get_userlist [list_utils.py:370] - List: Basement 2 Photos, Order: 2
+2024-12-16 17:22:39,690 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:271] - get_userlists_by_parent: lists found (parent_entry_id)284: [<UserList 97>]
+2024-12-16 17:22:39,691 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:271] - get_userlists_by_parent: lists found (parent_entry_id)287: [<UserList 99>]
+2024-12-16 17:22:39,696 - application - DEBUG - after_request_time [__init__.py:42] - Request to /show_list/ took 0.030154943466186523 seconds
+2024-12-16 17:22:39,696 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:22:39,696 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/list.html.jinja
+2024-12-16 17:22:39,812 - application.upload - DEBUG - uploaded_file [upload.py:97] - files in /Users/kyle/Documents/Repos/cs50/cs50x-final/media/uploads: ['1_1732676059_image.jpg', '2_1729876600_IMG_7979.jpeg', '3_1729880451_Screen_Shot_2024-10-15_at_8.49.55_PM.png', '2_1729793180_IMG_7939.jpeg', '2_1729876732_image.jpg', 'IMG_7540_3.jpeg', '1_1734385972_image.jpg', 'Screen_Shot_2024-06-17_at_9.19.26_PM_1.png', '1_1732593853_image.jpg', '1_1732676397_image.jpg', '3_1729880474_Screen_Shot_2024-06-17_at_9.19.26_PM.png', '3_1729880474_Screen_Shot_2023-05-13_at_4.10.32_PM.png', '2_1729793457_IMG_7927.jpeg', '.DS_Store', '1_1734387080_image.jpg', '2_1729878736_IMG_6398.jpeg', '2_1729793259_IMG_7971.jpeg', 'IMG_7540_2.jpeg', '3_1729880431_Screen_Shot_2024-10-15_at_8.49.55_PM.png', '2_1729788694_IMG_7978.jpeg', '2_1729793180_IMG_7938.jpeg', '1_1732676358_image.jpg', '2_1729806527_IMG_7971.jpeg', '3_1729880431_Screen_Shot_2024-06-17_at_9.19.26_PM.png', '2_1729878723_IMG_7979.jpeg', '1_1732313937_image.jpg', '1_1732571764_image.jpg', '1_1732308837_image.jpg', '1_1734387020_image.jpg', '2_1729806527_IMG_7940.png', '2_1729790952_IMG_7939.jpeg', '2_1729793457_IMG_7920.jpeg', '1_1732676382_image.jpg', '2_1729806423_IMG_7926.jpeg', 'IMG_7540_5.jpeg', '2_1729806390_image.jpg', '1_1732313904_image.jpg', '3_1729880431_Screen_Shot_2024-09-16_at_4.22.17_PM.png', '2_1729790270_image.jpg', '2_1729788660_IMG_7972.jpeg', '2_1729789401_IMG_7978.jpeg', 'IMG_7540_4.jpeg', '2_1729787915_image.jpg', '2_1729806527_IMG_7936.jpeg', '1_1732676354_image.jpg', '2_1729793457_IMG_7917.jpeg', '1_1732571776_image.jpg', '1_1732676066_image.jpg', '2_1729790297_IMG_7939.jpeg', '1_1732308852_image.jpg', '1_1734387117_image.jpg', '3_1729880474_Screen_Shot_2024-09-16_at_4.22.17_PM.png', '2_1729790967_image.jpg', 'image_2.jpg', '2_1729790846_IMG_7897.jpeg', '2_1729806527_IMG_7975.png', '1_1734389779_image.jpg', '1_1734387023_image.jpg', '2_1729787672_image.jpg', '2_1729806527_IMG_7974.png', '2_1729878723_IMG_7982.jpeg', '2_1729806527_IMG_7939.jpeg', 'image_3.jpg', '2_1729806500_image.jpg', 'image_1.jpg', '2_1729806527_IMG_7976.png', '1_1734371648_image.jpg', '2_1729876600_IMG_7984.jpeg', '2_1729806527_IMG_7977.png', '2_1729806527_IMG_7935.jpeg', '2_1729790259_image.jpg', '2_1729876586_image.jpg', '3_1729880431_Screen_Shot_2024-09-16_at_4.22.10_PM.png', '2_1729790568_IMG_7928.jpeg', 'image_4.jpg', '2_1729806527_IMG_7934.jpeg', '2_1729806527_IMG_7973.png', '1_1732571789_image.jpg', 'Screen_Shot_2024-06-17_at_9.19.26_PM.png', 'IMG_7540_6.jpeg', 'image_5.jpg', '1_1734385976_image.jpg', '2_1729789538_image.jpg', '2_1729789387_image.jpg', '1_1734389804_image.jpg', '2_1729806527_IMG_7938.jpeg', '1_1732676387_image.jpg', '2_1729790282_image.jpg', '2_1729806423_IMG_7913.jpeg', 'IMG_7540.jpeg', '2_1729793259_IMG_7973.png', 'IMG_7540_1.jpeg', '2_1729876600_IMG_7982.jpeg', '2_1729806527_IMG_7933.jpeg', '2_1729806527_IMG_7972.jpeg', '2_1729877408_image.jpg', '2_1729806423_IMG_7919.png', '3_1729880431_IMG_7540.jpeg', '2_1729788645_IMG_7977.png', '2_1729878714_image.jpg', '2_1729878744_image.jpg', '2_1729793180_IMG_7936.jpeg', '3_1729880451_IMG_7540.jpeg', '2_1729793259_IMG_7976.png', '1_1732676392_image.jpg', 'image.jpg', '1_1732636778_image.jpg', '1_1734371564_image.jpg', '2_1729876600_IMG_7983.jpeg', '2_1729793162_image.jpg', '1_1732636784_image.jpg']
+2024-12-16 17:22:39,814 - application - DEBUG - after_request_time [__init__.py:42] - Request to /media/uploads/1_1734389804_image.jpg took 0.0021300315856933594 seconds
+2024-12-16 17:22:39,815 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:22:39,816 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-16 17:22:39,817 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/defaults/generic_room.jpg took 0.001093149185180664 seconds
+2024-12-16 17:22:39,819 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): sortphotos
+2024-12-16 17:22:39,821 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
