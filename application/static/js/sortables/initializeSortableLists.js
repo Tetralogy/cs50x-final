@@ -11,11 +11,11 @@ const sortableInstances = new Map();
 export function initializeSortableLists() {
     const sortableElements = document.querySelectorAll(".sortable");
     sortableElements.forEach(function (sortableElement) {
-                // First, destroy any existing instance for this element
-                if (sortableInstances.has(sortableElement)) {
-                    const existingInstance = sortableInstances.get(sortableElement);
-                    existingInstance.destroy();
-                }
+            // First, destroy any existing instance for this element
+        if (sortableInstances.has(sortableElement)) {
+                const existingInstance = sortableInstances.get(sortableElement);
+                existingInstance.destroy();
+            }
         if (sortableElement !== null) {
             const model = sortableElement.dataset.model;
             const parent_entry_id = sortableElement.dataset.parent_entry_id;
@@ -37,7 +37,7 @@ export function initializeSortableLists() {
                 // Prevent dragging on specific elements
                 filter: ".htmx-indicator, .rename", //.listname, .accordion-header, .accordion-button, .accordion",
                 ghostClass: "ghost",
-                dragClass: "ghost-red", //todo test if this is needed
+                dragClass: "ghost-red", //[ ] test if this is needed
                 chosenClass: "ghost-red",
                 //removeOnSpill: true,
                 revertOnSpill: true, //needs to be revert to work with the confirm dialog
@@ -77,6 +77,7 @@ export function initializeSortableLists() {
                         console.log("PUT: select active room");
                     }
                     else if (itemEl.dataset.model === "Photo") { console.log("onSelect Photo");
+                        singleSelect(itemEl, evt);
                         if (
                             confirm(
                                 "Are you sure you want to select this item? " +
@@ -84,7 +85,7 @@ export function initializeSortableLists() {
                                 " This cannot be undone.",
                             )
                         )
-                        {singleSelect(itemEl, evt);
+                        {
                         // update active cover photo as current selected
                         htmx.ajax(
                             "PUT",
@@ -207,27 +208,6 @@ export function initializeSortableLists() {
 
                 },
             };
-
-            /*  // Listen for HTMX response errors
-             document.body.addEventListener( //todo test if needed
-                    "htmx:responseError",
-                    function (event) {
-                        if (event.detail.xhr.status === 404) {
-                            // Handle 404 error
-                            console.log("404 Not Found error?");
-                            draggedItem.classList.add(
-                                "revert-animation",
-                            ); //[ ] animation does not work
-                            fromList.appendChild(draggedItem);
-                            fromList.insertBefore(
-                                draggedItem,
-                                fromList.children[originalIndex],
-                            );
-                            return;
-                        }
-                    },
-             ); */
-
 
             if (sortableElement.classList.contains("tasks")) {
             }

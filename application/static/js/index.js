@@ -16,5 +16,5 @@ import * as sortables from './sortables/sortables.js';
                 <script defer src="/static/js/sortables.js"></script>
                 // run webpack */
                 // how to run webpack: npx webpack --watch
-                // todo cleanup comments on sortables
-                // todo cleanup comments on tooltips
+                // [ ] cleanup comments on sortables
+                // [ ] cleanup comments on tooltips

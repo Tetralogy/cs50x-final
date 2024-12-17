@@ -19,7 +19,7 @@
             <img src="{{ entry.get_item().photo_url }}" class="img-fluid">
             test
             <!-- Overlay Grid -->
-                {# <div
+                <div
                     class="row g-0 row-cols-4 container-fluid bg-dark border border-success border-5 rounded-bottom-4 p-1"
                     id="pingrid-list-loader"
                     hx-get="/show_list/{{ entry.get_item().pins_list_id }}"
@@ -29,7 +29,7 @@
                     hx-indicator="#updating-indicator"
                 >
                     <input id="dummy-placeholder" type="hidden" name="items" />
-                </div> #}
+                </div>
         </div>
     </div>
 </li>

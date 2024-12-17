@@ -1,3 +1,4 @@
+import Sortable from 'sortablejs/modular/sortable.complete.esm.js';
 import { throttle } from "../throttle.js";
 
 const throttledHtmxGetActiveRoomEntryId = throttle(htmxGetActiveRoomEntryId);
@@ -74,7 +75,7 @@ function GetRoomCoverEntryId(parent_entry_id) {
 }
 
 export function singleSelect(itemEl, evt) {
-    document.querySelectorAll(`.selected`).forEach(item => {
+    evt.from.querySelectorAll(`.selected`).forEach(item => {
         if (item.id != itemEl.id) {
             item.classList.remove("selected");
         }

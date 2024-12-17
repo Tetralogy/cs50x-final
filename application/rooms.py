@@ -191,7 +191,7 @@ def room_dashboard(list_id: int):
         return render_template('walkthrough/index.html.jinja') #temporary
     else: #probably a home list
         return redirect(url_for('map.home_map')) #temporary
-    #todo: add room dashboard
+    #hack: add room dashboard
     #return render_template('room/index.html.jinja')
 
 
