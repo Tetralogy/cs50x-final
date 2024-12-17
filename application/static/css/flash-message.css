@@ -1,0 +1,39 @@
+.flash-container {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1050;
+    width: 50%;
+    max-width: 500px;
+    overflow-y: auto;
+    max-height: 200px;
+    scrollbar-width: thin;
+    scrollbar-color: #ccc #fff;
+}
+.flash-message.htmx-added {
+    opacity: 0;
+}
+
+.flash-message {
+    opacity: 1;
+    transition: opacity 0.25s ease-out;
+    margin-bottom: 10px;
+}
+.fade-out {
+    opacity: 0;
+}
+
+.fade-in {
+    opacity: 0;
+    transition: opacity 0.5s ease-in;
+}
+
+.fade-in.show {
+    opacity: 1;
+}
+
+.flash-message.htmx-swapping {
+    opacity: 0;
+    transition: opacity 1s ease-out;
+}

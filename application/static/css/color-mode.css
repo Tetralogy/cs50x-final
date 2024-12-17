@@ -1,0 +1,22 @@
+/* Default light mode styles */
+@media (prefers-color-scheme: light) {
+    body {
+        background-color: rgb(212, 212, 212);
+        color: black;
+    }
+}
+
+/* Dark mode styles */
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: rgb(70, 70, 70);
+        color: rgb(255, 255, 255);
+    }
+}
+
+nav {
+    color: #cc0000;
+}
+.form-floating {
+    color: black;
+}

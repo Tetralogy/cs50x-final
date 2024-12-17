@@ -1,0 +1,21 @@
+.editabletext {
+    cursor: text;
+}
+
+/* scale titles */
+.scalename {
+    font-size: 4vw;
+    font-weight: bold;
+    text-align: center;
+    color: white !important;
+    text-shadow: 0 0 3px #000;
+}
+
+.rename {
+    background-color: transparent !important;
+}
+
+.debug-info {
+    color: red;
+    font-size: .75em !important;
+}

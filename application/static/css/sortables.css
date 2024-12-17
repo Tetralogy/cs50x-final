@@ -1,0 +1,74 @@
+.grabbable {
+    cursor: move; /* fallback if grab cursor is unsupported */
+    cursor: grab;
+    cursor: -moz-grab;
+    cursor: -webkit-grab;
+}
+/* (Optional) Apply a "closed-hand" cursor during drag operation. */
+.grabbable:active {
+    cursor: grabbing;
+    cursor: -moz-grabbing;
+    cursor: -webkit-grabbing;
+}
+
+/* ghostClass */
+.ghost {
+    opacity: 0.5;
+    background: #c8ebfb;
+}
+
+.ghost-red {
+    opacity: 0.5;
+    background: #ff0000;
+}
+
+.none-ghost {
+    display: none !important;
+    opacity: 0.5;
+    background: #05f5f5;
+    /* height: auto; */
+    
+}
+/* Style the static ghost to look like the original item */
+.static-ghost {
+    /* display: none !important; */
+    
+    background: #ff00e6;
+    opacity: 0.5;          /* Make it semi-transparent */
+    /* pointer-events: none; */  /* Disable interactions */
+    /* height: auto; */
+    /* position: relative; */    /* Ensure it stays in the flow */
+}
+
+
+.test-fallback {
+    display: block !important;
+    opacity: 0.5;
+    background: #ff00e6;
+}
+.selected {
+    opacity: 0.5;
+    background: #99ff00;
+}
+
+.dropzone {
+    display: inline-block;
+    background: rgb(108, 99, 255);
+    align-items: center;
+    justify-content: end;
+    min-width: 50px;
+    min-height: 50px;
+    border: 5px dashed;
+    transition: all 0.3s;
+}
+
+
+.dropzone.hover {
+    min-width: 100px;
+    min-height: 100px;
+
+    background-image: url("plus-square-dotted.svg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+}

@@ -1,25 +1,3 @@
-{#  <div 
-    class="col grabbable"
-    id="{{ entry.item_model }}list-{{ entry.id }}"
-    data-id="{{ entry.id }}"
-    data-name="{{ entry.get_item().name }}"
-    data-model="{{ entry.item_model }}"
->
-    <div class="input-group flex-nowrap mb-0"
-    >
-        <span class="input-group-text glyphicon-move"
-            data-bs-toggle="tooltip"
-            data-bs-html="true"
-            data-bs-title="<u>Drag</u> to <b>create</b> {{ entry.get_item().name }}"
-        >{{ entry.get_item().name }}
-    
-        </span> #}
-    
-    
-        {#<span class="input-group-text glyphicon-move">({{ entry.order }})</span>#}
-{#     </div>
-</div> #}
-
 <li
     class="list-group-item flex-fill grabbable"
     id="{{ entry.item_model }}list-{{ entry.id }}"
