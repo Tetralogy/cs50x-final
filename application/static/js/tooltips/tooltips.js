@@ -9,7 +9,7 @@
             //        }
             window.activeTooltip = null;
             console.log("tooltips.js loaded");
-todo modularize this
+todo modularize tooltips
 function clearAndInitializeTooltips() {
     // Dispose of any existing tooltips to prevent conflicts
     document

@@ -54,6 +54,7 @@ export function initializeSortableLists() {
                     updateDropzones(evt);
                 },
                 onSelect: function (evt) {
+                    //BUG: SELECT MULTIPLE TASKS BROKEN ON MOBILE //FIXME: edit the select class for tasks
                     const itemEl = evt.item;
                     /* console.log("onSelect evt.item " + evt.item.dataset.name);
                     console.log("onSelect evt.items " + evt.items);
@@ -66,15 +67,17 @@ export function initializeSortableLists() {
                     if (itemEl.dataset.model === "Room") {
                         singleSelect(itemEl, evt);
                         // update active room as current selected
-                        htmx.ajax(
+                        const room_id = itemEl.dataset.item_id;
+                        /* htmx.ajax(
                             "PUT",
-                            `/home/room/${itemEl.dataset.item_id}/active`,
+                            `/set_active_room/${room_id}`,
                             {
                                 swap: "none",
                                 target: itemEl,
                             },
-                        );
+                        ); */
                         console.log("PUT: select active room");
+                        window.location = `/walkthrough/${room_id}`;
                     }
                     else if (itemEl.dataset.model === "Photo") { console.log("onSelect Photo");
                         singleSelect(itemEl, evt);

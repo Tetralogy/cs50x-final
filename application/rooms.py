@@ -97,7 +97,7 @@ def new_room_type_default():
     default_list_item = add_item_to_list(defaults_list.id, 'RoomDefault', name=f'{custom_type}')
     return default_list_item
     
-@rooms.route('/home/room/<int:room_id>/active', methods=['PUT'])
+@rooms.route('/set_active_room/<int:room_id>', methods=['PUT'])
 @login_required
 def set_active_room(room_id):
     if not room_id:

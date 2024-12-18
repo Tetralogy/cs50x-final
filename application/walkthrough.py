@@ -21,11 +21,14 @@ def walkthrough_setup():
     return render_template('map/index.html.jinja', floor_list=floor_list)
 
 @walkthrough.route('/walkthrough/', methods=['GET'])
+@walkthrough.route('/walkthrough/<int:room_id>', methods=['GET'])
 @walkthrough.route('/walkthrough/<room_name>/', methods=['GET'])
 @walkthrough.route('/walkthrough/<room_name>/<view>', methods=['GET'])
 @walkthrough.route('/walkthrough/start', methods=['GET', 'POST'])
 @login_required
-def walk_start(room_name: str = None, view: str = None):
+def walk_start(room_id: int = None, room_name: str = None, view: str = None):
+    if room_id:
+        set_active_room(room_id)
     if request.method == 'GET':
         logger.debug(f'get room_name: {room_name}')
         logger.debug(f'get view: {view}')
@@ -37,8 +40,6 @@ def walk_start(room_name: str = None, view: str = None):
                 set_active_room(room_id)
                 if not view:
                     view = 'rename'
-                
-        
     if request.method == 'POST':
         logger.debug(f'post room_name: {room_name}')
         logger.debug(f'post view: {view}')
@@ -91,9 +92,11 @@ def views():
 @login_required
 def walk_next(direction):
     if direction == 'next' or direction == 'nextroom':
-        direction = +1
+        direcint = +1
     elif direction == 'prev' or direction == 'prevroom':
-        direction = -1
+        direcint = -1
+    else:
+        raise ValueError(f'Invalid direction: {direction}')  # Handle unexpected direction values
     current_active_room_list_entry = get_list_entries_for_item(current_user.active_home.active_room)[0]
     if not current_user.active_home.active_room:  
         return 'No active room', 400
@@ -110,7 +113,7 @@ def walk_next(direction):
         raise Exception('No rooms in the list')
     for i, room in enumerate(rooms_list_ordered):
         if room == current_active_room_list_entry:
-            next_room_index = (i + direction) % len(rooms_list_ordered)
+            next_room_index = (i + direcint) % len(rooms_list_ordered)
             next_room = rooms_list_ordered[next_room_index]
             logger.debug(f'next_room: {next_room}')
             set_active_room(next_room.item_id)
