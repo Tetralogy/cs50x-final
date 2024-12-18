@@ -27,30 +27,56 @@
     opacity: 0.5;
     background: #05f5f5;
     /* height: auto; */
-    
 }
 /* Style the static ghost to look like the original item */
 .static-ghost {
     /* display: none !important; */
-    
-    background: #ff00e6;
-    opacity: 0.5;          /* Make it semi-transparent */
-    /* pointer-events: none; */  /* Disable interactions */
-    /* height: auto; */
-    /* position: relative; */    /* Ensure it stays in the flow */
-}
 
+    background: #ff00e6;
+    opacity: 0.5; /* Make it semi-transparent */
+    /* pointer-events: none; */ /* Disable interactions */
+    /* height: auto; */
+    /* position: relative; */ /* Ensure it stays in the flow */
+}
 
 .test-fallback {
     display: block !important;
     opacity: 0.5;
     background: #ff00e6;
 }
-.selected {
-    opacity: 0.5;
+/* .selected {
+    opacity: .5;
     background: #99ff00;
-}
+} */
 
+.selected {
+    position: relative;
+}
+.selected::after {
+    content: "Selected";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    /* background-color: rgba(0, 255, 55, 0.25); */
+    font-size: 2vw;
+    font-weight: bold;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.5) !important;
+    text-shadow: 0 0 .2 #000000;
+    /* padding: 0 !important; */
+    line-height: 1;
+    display: inline-block;
+    cursor: pointer;
+    border: .5vw solid rgba(255, 255, 0, 0.25);
+    /* box-shadow: inset 0 0 0 1vw yellow; */ /* Simulates an inside outline */
+}
+.selected:hover::after {
+    content: "Enter Room";
+    border: 2vw solid rgba(255, 255, 0, 0.25);
+    background-color: rgba(0, 255, 55, 0.5);
+}
 .dropzone {
     display: inline-block;
     background: rgb(108, 99, 255);
@@ -61,7 +87,6 @@
     border: 5px dashed;
     transition: all 0.3s;
 }
-
 
 .dropzone.hover {
     min-width: 100px;
