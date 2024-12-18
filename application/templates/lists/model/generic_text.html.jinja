@@ -53,7 +53,6 @@ has_children 1: {{ ns.has_children }}
                             {% include 'base/parts/debug/listname.html.jinja' %}
                         </button>
                     
-            
                     <div class="flex-grow-1">
                         <input type="hidden" name="items" value="{{ entry.id }}" />
                         {{ entry.get_item().name }}

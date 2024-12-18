@@ -36,7 +36,6 @@
                 </div>
             </div>
         
-
         
             <button type="submit" class="btn btn-success">
                 Start Walkthrough
@@ -48,5 +47,8 @@
         
 </form>
 
-#BUG: Show task list below list of rooms on floor map page
+
+<div class="container">
+{% include 'tasks/all_tasks_loader.html.jinja' %}
+</div>
 {% endblock %}
