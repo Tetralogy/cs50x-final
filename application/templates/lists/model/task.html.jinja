@@ -1,4 +1,4 @@
-{#todo: redesign todo items#}
+{#fixme: redesign todo items#}
 <li title="{{ entry.get_item().name }}" 
     class="task list-group-item pe-0 shadow grabbable {% if current_user.active_home.active_room_id == entry.item_id and entry.item_model == 'Room' %}selected{% endif %}"
     id="{{ entry.item_model }}list-{{ entry.id }}"

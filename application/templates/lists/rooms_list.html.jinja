@@ -1,6 +1,6 @@
 <div
     id="list-updater-{{ list_obj.id }}"
-    class="row row-cols-2 container rooms sortable"
+    class="row g-0 row-cols-2 container rooms sortable"
     hx-put="/update_list_order/{{ list_obj.id }}"
     hx-include="[name='items']"
     hx-trigger="end delay:1s, remove delay:1s, add delay:1s"
