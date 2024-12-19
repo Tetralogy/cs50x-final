@@ -17,6 +17,42 @@ export function initializeSortableLists() {
                 existingInstance.destroy();
             }
         if (sortableElement !== null) {
+            function handlePointerDown(evt) {
+                if (evt.pointerType === 'mouse') {
+                    evt.preventDefault();
+                    //evt.stopPropagation();
+                    console.log("Direct pointerdown event:", evt);
+                }
+            }
+        
+            function handlePointerUp(evt) {
+                if (evt.pointerType === 'mouse') {
+                    evt.preventDefault();
+                    //evt.stopPropagation();
+                    console.log("Direct pointerup event:", evt);
+                }
+            }
+        
+            function handleTouchStart(evt) {
+                evt.preventDefault();
+                //evt.stopPropagation();
+                console.log("Direct touchstart event:", evt);
+            }
+        
+            function handleTouchEnd(evt) {
+                evt.preventDefault();
+                //evt.stopPropagation();
+                console.log("Direct touchend event:", evt);
+            }
+        
+            // Add pointerdown and pointerup event listeners directly
+            //sortableElement.addEventListener('pointerdown', handlePointerDown);
+            //sortableElement.addEventListener('pointerup', handlePointerUp);
+        
+            // Add touchstart and touchend event listeners directly
+            sortableElement.addEventListener('touchstart', handleTouchStart);
+            //sortableElement.addEventListener('touchend', handleTouchEnd);
+
             const model = sortableElement.dataset.model;
             const parent_entry_id = sortableElement.dataset.parent_entry_id;
             let originalGhost = null;
@@ -36,6 +72,7 @@ export function initializeSortableLists() {
                 fallbackTolerance: 3, // So that we can select items on mobile
                 // Prevent dragging on specific elements
                 filter: ".htmx-indicator, .rename", //.listname, .accordion-header, .accordion-button, .accordion",
+                //handle: ".taskhandletest",
                 ghostClass: "ghost",
                 dragClass: "ghost-red", //[ ] test if this is needed
                 chosenClass: "ghost-red",
@@ -43,6 +80,12 @@ export function initializeSortableLists() {
                 revertOnSpill: true, //needs to be revert to work with the confirm dialog
                 sort: true,
                 onStart: function (evt) {
+                    //if (evt.type === 'pointerdown') {
+                    //    console.log("Sortable pointerdown event:", evt);
+                    //}
+                    if (evt.type === 'touchstart') {
+                        console.log("Touch event started:", evt);
+                    }
                     setIsDragging(true);
                     console.log("onStart isDragging " + getIsDragging());
                     //originalIndex = evt.oldIndex; // Store the original index
@@ -54,8 +97,8 @@ export function initializeSortableLists() {
                     updateDropzones(evt);
                 },
                 onSelect: function (evt) {
-                    //BUG: SELECT MULTIPLE TASKS BROKEN ON MOBILE //FIXME: edit the select class for tasks
                     const itemEl = evt.item;
+                    console.log(`onSelect itemEl ${itemEl.dataset.model}`);
                     /* console.log("onSelect evt.item " + evt.item.dataset.name);
                     console.log("onSelect evt.items " + evt.items);
                     console.log(evt.items.map(item => item.dataset.name));
@@ -77,7 +120,7 @@ export function initializeSortableLists() {
                             },
                         ); */
                         console.log("PUT: select active room");
-                        window.location = `/walkthrough/${room_id}`;
+                        window.location = `/walkthrough/${room_id}`; // also sets active room
                     }
                     else if (itemEl.dataset.model === "Photo") { console.log("onSelect Photo");
                         singleSelect(itemEl, evt);
@@ -101,6 +144,7 @@ export function initializeSortableLists() {
                     }
                 },
                 onDeselect: function (evt) {
+                    console.log(`onDeselect itemEl ${evt.item.dataset.model}`);
                     getSelectedActive(evt, parent_entry_id);
                 },
                 onSpill: function (/**Event*/ evt) {
@@ -172,6 +216,12 @@ export function initializeSortableLists() {
                     getSelectedActive(evt, parent_entry_id);
                 },
                 onEnd: function (evt) {
+                    /* if (evt.type === 'pointerup') {
+                        console.log("Sortable pointerup event:", evt);
+                    }
+                    if (evt.type === 'touchend') {
+                        console.log("Touch event ended:", evt);
+                    } */
                     console.log("onEnd event triggered");
                     if (originalGhost) {
                         originalGhost.remove();
@@ -202,14 +252,14 @@ export function initializeSortableLists() {
                             "No sublists found in target container.",
                         );
                     }
-                    evt.items.forEach(function (item) {
+                    evt.items.forEach(function (item) { console.log("onEnd deselect item: " + item);
                         Sortable.utils.deselect(item)
                     });
                     console.log("isDragging onEnd: " + getIsDragging());
                     updateDropzones(evt);
                     getSelectedActive(evt, parent_entry_id);
 
-                },
+                },       
             };
 
             if (sortableElement.classList.contains("tasks")) {
@@ -303,7 +353,6 @@ export function initializeSortableLists() {
             else if (sortableElement.classList.contains("floors")) { }
 
 
-            
             const instance = new Sortable(sortableElement, sortableOptions);
             // Store the instance in the map
             sortableInstances.set(sortableElement, instance);

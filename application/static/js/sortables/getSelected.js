@@ -74,7 +74,7 @@ function GetRoomCoverEntryId(parent_entry_id) {
         });
 }
 
-export function singleSelect(itemEl, evt) {
+export function singleSelect(itemEl, evt) { console.log("singleSelect triggered");
     evt.from.querySelectorAll(`.selected`).forEach(item => {
         if (item.id != itemEl.id) {
             item.classList.remove("selected");

@@ -1,5 +1,6 @@
+{#todo: redesign todo items#}
 <li title="{{ entry.get_item().name }}" 
-    class="list-group-item pe-0 shadow grabbable {% if current_user.active_home.active_room_id == entry.item_id and entry.item_model == 'Room' %}selected{% endif %}"
+    class="task list-group-item pe-0 shadow grabbable {% if current_user.active_home.active_room_id == entry.item_id and entry.item_model == 'Room' %}selected{% endif %}"
     id="{{ entry.item_model }}list-{{ entry.id }}"
     data-id="{{ entry.id }}"
     data-item_id="{{ entry.item_id }}"
@@ -29,15 +30,8 @@
             {% endfor %}
         {% endfor %}
     {% endif %}
-    {# {% if ns.has_children %}
-has_children 1: {{ ns.has_children }}
-                style="display: block;"
-            {% else %}
-            has_children 2: {{ ns.has_children }}
-                style="display: none;"
-            {% endif %} #}
 
-    <div class="hstack gap-3">
+    <div class="hstack gap-3"> 
         <div>
             <button
                 id="accordion-button-{{ entry.item_model }}list-{{ entry.id }}"
@@ -63,7 +57,7 @@ has_children 1: {{ ns.has_children }}
                     id="checkbox-{{ entry.item_model }}list-{{ entry.id }}"
                     {% if entry.get_item().status.value == "completed" %}checked{% endif %}
                 />
-                <label class="form-check-label" for="flexCheckDefault">
+                <label class="form-check-label " for="flexCheckDefault">
                     <input type="hidden" name="items" value="{{ entry.id }}" />
                     {{ entry.get_item().name }}
                     {{ entry.get_item().status }}
