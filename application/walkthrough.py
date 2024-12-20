@@ -7,6 +7,7 @@ from flask_login import current_user, login_required
 from sqlalchemy import select
 from application.extension import db
 from application.database.models import Room
+from application.floors import set_active_floor
 from application.list_utils import get_list_entries_for_item, get_userlist
 from application.rooms import set_active_room
 from logs.logging_config import ApplicationLogger
@@ -91,6 +92,25 @@ def views():
 @walkthrough.route('/walkthrough/<string:direction>', methods=['GET'])
 @login_required
 def walk_next(direction):
+    """ if direction == 'nextfloor':
+        direcint = +1
+    elif direction == 'prevfloor':
+        direcint = -1
+        
+        home_entry_id = get_list_entries_for_item(current_user.active_home)[0].id
+        floors_list = get_userlist('Floor', parent_entry_id=home_entry_id)
+        floors_list_ordered = sorted(floors_list.entries, key=lambda x: x.order)
+        if not floors_list_ordered:
+            # handle the case where the list is empty
+            raise Exception('No floors in the list')
+        current_active_floor_list_entry = get_list_entries_for_item(current_user.active_home.active_floor)[0]
+        for i, floor in enumerate(floors_list_ordered):
+            if floor == current_active_floor_list_entry:
+                next_floor_index = (i + direcint) % len(floors_list_ordered)
+                next_floor = floors_list_ordered[next_floor_index]
+                logger.debug(f'next_floor: {next_floor}')
+                set_active_floor(next_floor.item_id)
+                break """
     if direction == 'next' or direction == 'nextroom':
         direcint = +1
     elif direction == 'prev' or direction == 'prevroom':
@@ -104,8 +124,8 @@ def walk_next(direction):
     #current_user.active_home.active_room_id
     rooms_list = get_userlist(item_model='Room', parent_entry_id=parent_entry_id)
     logger.debug(f'rooms_list: {rooms_list} entries: {rooms_list.entries}') 
-    rooms_list_ordered = iter(sorted(rooms_list.entries, key=lambda x: x.order))
-    logger.debug(f'rooms_list_ordered 1: {rooms_list_ordered}')
+    #rooms_list_ordered = iter(sorted(rooms_list.entries, key=lambda x: x.order))
+    #logger.debug(f'rooms_list_ordered 1: {rooms_list_ordered}')
     rooms_list_ordered = sorted(rooms_list.entries, key=lambda x: x.order)
     logger.debug(f'rooms_list_ordered 2: {rooms_list_ordered}')
     if not rooms_list_ordered:

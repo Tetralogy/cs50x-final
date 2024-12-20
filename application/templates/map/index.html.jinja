@@ -21,22 +21,11 @@
 
 
 {# <div class="container-fluid"> #}
-            <ul class="sticky-top nav nav-tabs d-flex flex-nowrap text-nowrap overflow-x-auto bg-body"> #bug: convert this to standard list loader with this style
-                {% for navfloor in floor_list.entries | sort(attribute='order') | reverse %}
-                    <li class="nav-item">
-                        <a
-                            class="nav-link h-100 {% if navfloor.item_id == current_user.active_home.active_floor_id %}active bg-primary{% endif %}"
-                            href="/map/{{ navfloor.item_id }}"
-                        >
-                            {{ navfloor.get_item().name }}</a
-                        >
-                    </li>
-                {% endfor %}
-            </ul>
+
 <div class="row g-0 overflow-auto" style="height: 50vh;">
             <div class="col-11">
                 
-            <form method="POST" hx-boost="false" action="/walkthrough/start" id="walkthrough-form">
+            {# <form method="POST" hx-boost="false" action="/walkthrough/start" id="walkthrough-form"> #}
                         <div
                             class=""
                             id="room-list-loader"
@@ -61,9 +50,11 @@
                             Setup Walkthrough
                         </a> #}
                     
-            </form>
+            {# </form> #}
             </div>
-            <div class="col-1 bg-dark">
+            <div class="col-1 d-flex flex-column align-items-start bg-dark">
+            <a class="btn btn-info btn-sm mb-auto p-2" href="#scroll-end-rooms">↓</a>
+            <a class="btn btn-info btn-sm" href="#scroll-start-rooms">↑</a>
             </div>
 </div>
 

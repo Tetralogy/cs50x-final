@@ -16,7 +16,7 @@ def define_floors():
     if request.method == 'GET':
         multifloor = request.args.get('multifloor', '').lower() == 'true'
         if not current_user.active_home.floors.count(): # if home has no floors, 
-            new_list = create_user_list('Floor', f'{current_user.active_home.name} Floors', current_user.active_home_id) # create floors list
+            new_list = create_user_list('Floor', f'{current_user.active_home.name} Floors', get_list_entries_for_item(current_user.active_home)[0].id) # create floors list
             logger.debug(f'new_list: {new_list} (type: {type(new_list)})')
             new_floor = add_item_to_list(new_list.id, 'Floor') # create default floor and add to Floor userlist
             logger.debug(f'new_floor: {new_floor}')
@@ -57,7 +57,7 @@ def set_active_floor(floor_id):
     #[x] main floor/ground floor is set as the active floor by default
         #[x] user can change the active floor by clicking on it
     #[x] user confirms the home's list of floors/ continue to next step button
-    #[ ] user is taken to the home map of the active floor
+    #[X] user is taken to the home map of the active floor
     
 #@floors.route('/home/floor/ground', methods=['PUT'])
 #@login_required
