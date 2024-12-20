@@ -11,25 +11,25 @@ from logs.logging_config import ApplicationLogger
 
 logger = ApplicationLogger.get_logger(__name__)
 
-def create_user_list(list_type: str, list_name: str, parent_entry_id: int = None) -> UserList:
-    if not list_type:
-        raise ValueError('list_type argument is required')
+def create_user_list(list_model: str, list_name: str, parent_entry_id: int = None) -> UserList:
+    if not list_model:
+        raise ValueError('list_model argument is required')
     if not list_name:
-        list_name = default_list_name(list_type, parent_entry_id)
-    # Split the list_type if it contains ' ComboList'
-    if 'ComboList' in list_type:
-        base_list_type = list_type.replace(' ComboList', '')
+        list_name = default_list_name(list_model, parent_entry_id)
+    # Split the list_model if it contains ' ComboList'
+    if 'ComboList' in list_model:
+        base_list_type = list_model.replace(' ComboList', '')
         model_class = globals().get(base_list_type)
     else:
-        model_class = globals().get(list_type)
-    if not model_class or not issubclass(model_class, db.Model) and 'ComboList' not in list_type:
-        raise ValueError(f'Unknown list type {list_type}')
+        model_class = globals().get(list_model)
+    if not model_class or not issubclass(model_class, db.Model) and 'ComboList' not in list_model:
+        raise ValueError(f'Unknown list type {list_model}')
     existing_list = db.session.execute(
         select(UserList).filter_by(user_id=current_user.id, list_name=list_name)
     ).scalar()
     if existing_list:
         return existing_list
-    new_list = UserList(user_id=current_user.id, list_name=list_name, list_type=list_type, parent_entry_id=parent_entry_id)
+    new_list = UserList(user_id=current_user.id, list_name=list_name, list_model=list_model, parent_entry_id=parent_entry_id)
     logger.debug(f'create_user_list: new_list: {new_list}')
     db.session.add(new_list)
     db.session.commit()
@@ -139,7 +139,7 @@ def create_new_default(user_list_id: int, item_model: str, name: str = None, pin
         logger.debug(f'room (create_new_default): {newname}')
         if not photo_url:
             photo_url = current_app.config['DEFAULT_ROOM_PHOTO_URL']
-        room_photos_list = create_user_list(list_type='Photo', list_name=f'{newname} Photos')
+        room_photos_list = create_user_list(list_model='Photo', list_name=f'{newname} Photos')
         default_cover_image_entry = add_item_to_list(user_list_id=room_photos_list.id, item_model='Photo', name=f'{newname} default_cover_image', photo_url=photo_url)
         new_item = Room(
             home_id=current_user.active_home_id, 
@@ -200,7 +200,7 @@ def create_new_default(user_list_id: int, item_model: str, name: str = None, pin
             room_id=current_user.active_home.active_room_id
             if not room_id: #if no rooms created yet
                 room_id = 1
-        new_pinlist = create_user_list(list_type='Pin', list_name=f'{name} Pins')
+        new_pinlist = create_user_list(list_model='Pin', list_name=f'{name} Pins')
         # Create a new Photo item for each uploaded file
         new_item = Photo(
             user_id=current_user.id, 
@@ -279,14 +279,14 @@ def get_top_userlists_by_root_parent(root_parent_entry_id: int, model) -> List[U
         logger.debug(f'input root_parent_entry_id: {root_parent_entry_id} model: {model}')
         parent_entry_id=root_parent_entry_id
         parent_lists = get_userlists_by_parent(parent_entry_id=root_parent_entry_id) # -> List[UserList]:
-        parent_lists_with_model = [userlist for userlist in parent_lists if userlist.list_type == model]
+        parent_lists_with_model = [userlist for userlist in parent_lists if userlist.list_model == model]
         while not parent_lists_with_model and parent_lists:
             found_lists = []
             for userlist in parent_lists:
                 for entry in userlist.entries:
                     child_lists = get_userlists_by_parent(parent_entry_id=entry.id)
                     found_lists.extend(child_lists)
-            parent_lists_with_model = [userlist for userlist in found_lists if userlist.list_type == model]
+            parent_lists_with_model = [userlist for userlist in found_lists if userlist.list_model == model]
             parent_lists = found_lists
         if parent_lists_with_model:
             logger.debug(f'get_top_userlists_by_root_parent: lists found (parent_entry_id){root_parent_entry_id}: {parent_lists_with_model}')
@@ -309,19 +309,19 @@ def get_userlist(item_model: str = None, list_name: str = None, parent_entry_id:
     if not item_model and not parent_entry_id:
         raise ValueError("Must provide item_model or parent_entry_id argument")
     if all((item_model, list_name, parent_entry_id)):
-        lists = current_user.lists.filter_by(list_type=item_model, list_name=list_name, parent_entry_id=parent_entry_id).all()
+        lists = current_user.lists.filter_by(list_model=item_model, list_name=list_name, parent_entry_id=parent_entry_id).all()
         combolist_name = f'Combo {item_model} {list_name} {parent_entry_id}'
         logger.debug(f'lists found (All args): {lists}')
     elif item_model and not list_name and not parent_entry_id:
-        lists = current_user.lists.filter_by(list_type=item_model).all()
+        lists = current_user.lists.filter_by(list_model=item_model).all()
         combolist_name = f'Combo All {item_model}'
         logger.debug(f'lists found (model): {lists}')
     elif item_model and not list_name and parent_entry_id:
-        lists = current_user.lists.filter_by(list_type=item_model, parent_entry_id=parent_entry_id).all()
+        lists = current_user.lists.filter_by(list_model=item_model, parent_entry_id=parent_entry_id).all()
         combolist_name = f'Combo {item_model} {parent_entry_id}'
         logger.debug(f'lists found (model, parent): {lists}')
     elif item_model and list_name and not parent_entry_id:
-        lists = current_user.lists.filter_by(list_type=item_model, list_name=list_name).all()
+        lists = current_user.lists.filter_by(list_model=item_model, list_name=list_name).all()
         combolist_name = f'Combo {item_model} {list_name}'
         logger.debug(f'lists found (model, name): {lists}')
     else:
@@ -352,7 +352,7 @@ def get_userlist(item_model: str = None, list_name: str = None, parent_entry_id:
         raise ValueError(f'No lists of type {item_model} found for user {current_user.id}')
         if isinstance(list_id, str):
             item_model = list_id
-            lists = current_user.lists.filter_by(list_type=item_model).all()
+            lists = current_user.lists.filter_by(list_model=item_model).all()
             if len(lists) == 0:
                 raise ValueError(f'No lists of type {item_model} found for user {current_user.id}')
             if len(lists) > 1:
@@ -372,26 +372,26 @@ def get_userlist(item_model: str = None, list_name: str = None, parent_entry_id:
     return userlist
 
 def combine_userlists(userlists: List[UserList], combolist_name: str = None, parent_entry_id: int = None) -> UserList:
-    # search all userlists in the list and see if they have the same list_type
-    if all(userlist.list_type == userlists[0].list_type for userlist in userlists):
-        logger.debug("All userlists have the same list_type")
-        list_type = userlists[0].list_type
+    # search all userlists in the list and see if they have the same list_model
+    if all(userlist.list_model == userlists[0].list_model for userlist in userlists):
+        logger.debug("All userlists have the same list_model")
+        list_model = userlists[0].list_model
     else:
-        logger.debug("Not all userlists have the same list_type")
-        list_type = 'Mixed'
-    list_type = f'{list_type} ComboList'
+        logger.debug("Not all userlists have the same list_model")
+        list_model = 'Mixed'
+    list_model = f'{list_model} ComboList'
     if not combolist_name:
-        combolist_name = list_type
+        combolist_name = list_model
     logger.debug(f'list_name: {combolist_name}')
     if not parent_entry_id:
         if all(userlist.parent_entry_id == userlists[0].parent_entry_id for userlist in userlists):
             parent_entry_id = userlists[0].parent_entry_id
         else:
             parent_entry_id = get_list_entries_for_item(current_user.active_home)[0].id
-    combined_list = get_userlist(list_type, combolist_name, parent_entry_id=parent_entry_id)
+    combined_list = get_userlist(list_model, combolist_name, parent_entry_id=parent_entry_id)
     if not combined_list:
         logger.debug(f'combined_list not found, creating new list')
-        combined_list = create_user_list(list_type, combolist_name, parent_entry_id=parent_entry_id)
+        combined_list = create_user_list(list_model, combolist_name, parent_entry_id=parent_entry_id)
     logger.debug(f'combined_list?: {combined_list}')
     for userlist in userlists:
         for entry in userlist.entries:
@@ -404,7 +404,7 @@ def combine_userlists(userlists: List[UserList], combolist_name: str = None, par
                 logger.debug(f'new_list_item: {new_list_item}')
     return combined_list
 
-def get_list_entries_for_item(item: object, list_type: str = None, user_id: int = None) -> List[UserListEntry]:
+def get_list_entries_for_item(item: object, list_model: str = None, user_id: int = None) -> List[UserListEntry]:
     if not item:
         raise ValueError('item cannot be None')
     if isinstance(item, str):
@@ -419,8 +419,8 @@ def get_list_entries_for_item(item: object, list_type: str = None, user_id: int 
         raise ValueError('item should be an object, not an integer')
     if not user_id:
         user_id = current_user.id
-    if not list_type:
-        list_type = item.__class__.__name__
+    if not list_model:
+        list_model = item.__class__.__name__
     # Find all list entries associated with this task
     found_entries = UserListEntry.find_entries_for_item(item)
     if not found_entries:
@@ -432,7 +432,7 @@ def get_list_entries_for_item(item: object, list_type: str = None, user_id: int 
         for entry in found_entries:
             if not entry.user_list or not entry.user_list.user_id:
                 logger.debug(f'Entry without user: {entry}')
-            elif entry.user_list.user_id == user_id and entry.user_list.list_type == list_type:
+            elif entry.user_list.user_id == user_id and entry.user_list.list_model == list_model:
                 logger.debug(f'Entry: {entry}')
                 logger.debug(f"Item Model: {entry.item_model}, Item ID: {entry.item_id}")
                 logger.debug(f'User List ID: {entry.user_list.id} User List Name: {entry.user_list.list_name}')

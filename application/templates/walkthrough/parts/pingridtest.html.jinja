@@ -17,7 +17,7 @@ tasklist here:
                 class="row g-0 row-cols-4 container-fluid bg-dark border border-success border-5 rounded-bottom-4 p-1"
                 id="task-list-loader"
                 hx-get="/show_list/"
-                hx-vals='{"list_type": "Task", "view_override":"quicknote", "sublevel_limit": 3}'
+                hx-vals='{"list_model": "Task", "view_override":"quicknote", "sublevel_limit": 3}'
                 hx-trigger="load once"
                 hx-swap="outerHTML"
                 hx-indicator="#updating-indicator"

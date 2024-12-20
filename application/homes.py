@@ -84,7 +84,10 @@ def home_setup():
                 return redirect(url_for('rooms.define_rooms', floor_id=floor.id))
     return redirect(url_for('map.home_map'))
     
-    
+@homes.route('/home/rename', methods=['GET'])
+@login_required
+def rename_home():
+    return render_template('homes/rename_home.html.jinja')
 #________________________________________________________________________________#
     
     '''

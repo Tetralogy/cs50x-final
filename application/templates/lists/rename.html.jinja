@@ -1,14 +1,14 @@
-       <input
-            required
-            class="form-control rename scalename"
-            type="text"
-            id="input_{{ entry.item_model }}_name-{{ entry.item_id }}"
-            name="input_{{ entry.item_model }}_name-{{ entry.item_id }}"
-            placeholder="{{ entry.get_item().name }}"
-            hx-put="/rename/{{ entry.item_model }}/{{ entry.item_id }}"
-            hx-vals='{"placeholder": "{{ entry.get_item().name }}"}'
-            hx-trigger="blur, keyup[key=='Enter'] from:window, keyup changed delay:1s from:window, drag from:window"
-            hx-swap="outerHTML"
-            value="{{ entry.get_item().name }}"
-            hx-on::load="this.focus();"
-        />
+<input
+    required
+    class="form-control rename scalename"
+    type="text"
+    id="input_{{ entry.item_model }}_name-{{ entry.item_id }}"
+    name="input_{{ entry.item_model }}_name-{{ entry.item_id }}"
+    placeholder="{{ entry.get_item().name }}"
+    hx-put="/rename/{{ entry.item_model }}/{{ entry.item_id }}"
+    hx-vals='{"placeholder": "{{ entry.get_item().name }}"}'
+    hx-trigger="blur, keyup[key=='Enter'] from:window, keyup changed delay:1s from:window, drag from:window"
+    hx-swap="outerHTML"
+    value="{{ entry.get_item().name }}"
+    hx-on::load="this.focus();"
+/>

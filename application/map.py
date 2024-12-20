@@ -3,14 +3,14 @@ from flask import Blueprint, flash, redirect, render_template, session, url_for
 from flask_login import current_user, login_required
 
 from application.floors import set_active_floor
-from application.rooms import floor_room_check, get_room_list
+from application.rooms import floor_room_check, get_room_list, set_active_room
 from logs.logging_config import ApplicationLogger
 
 map = Blueprint('map', __name__)
 logger = ApplicationLogger.get_logger(__name__)
 
 @map.route('/map/', methods=['GET'])
-@map.route('/map/<int:floor_id>', methods=['GET'])
+@map.route('/map/Floor/<int:floor_id>', methods=['GET'])
 @login_required
 def home_map(floor_id: int=None):
     view = 'map'
@@ -34,3 +34,9 @@ def home_map(floor_id: int=None):
     logger.debug(f'floor_list MAP: {floor_list}')
     return render_template('map/index.html.jinja', floor_list=floor_list, view=view)
     raise NotImplementedError("map not yet implemented")
+
+@map.route('/map/Room/<int:room_id>', methods=['GET'])
+@login_required
+def room_redirect(room_id: int):
+    set_active_room(room_id)
+    return render_template('walkthrough/index.html.jinja')

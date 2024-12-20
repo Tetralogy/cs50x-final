@@ -10,7 +10,7 @@
                 <div class="accordion-body"> -->
 {% for list_obj in userlists %}
     {% if list_obj.entries | length < 1 %}
-        {% if list_obj.list_type == "Room" %}
+        {% if list_obj.list_model == "Room" %}
             <h1>Please add rooms to this floor</h1>
         {% endif %}
     {% endif %}
@@ -20,13 +20,13 @@
             <div class="d-flex">
                 <div
                     class="accordion"
-                    id="accordion-button-{{ list_obj.list_type }}list-{{ list_obj.id }}"
+                    id="accordion-button-{{ list_obj.list_model }}list-{{ list_obj.id }}"
                 >
                     <button
                         class="accordion-button p-2 rounded"
                         type="button"
                         data-bs-toggle="collapse"
-                        data-bs-target="#toplist-collapse-{{ list_obj.list_type }}list-{{ list_obj.id }}"
+                        data-bs-target="#toplist-collapse-{{ list_obj.list_model }}list-{{ list_obj.id }}"
                         aria-expanded="true"
                     >
                         {% include 'base/parts/debug/listname.html.jinja' %}
@@ -40,29 +40,31 @@
             </div>
             <div
                 class="accordion"
-                id="toplist-accordion-{{ list_obj.list_type }}list-{{ list_obj.id }}"
+                id="toplist-accordion-{{ list_obj.list_model }}list-{{ list_obj.id }}"
             >
                 <div class="accordion-item">
                     <div
                         class="accordion-collapse collapse show"
-                        id="toplist-collapse-{{ list_obj.list_type }}list-{{ list_obj.id }}"
+                        id="toplist-collapse-{{ list_obj.list_model }}list-{{ list_obj.id }}"
                     >
     {% endif %}
 
-{% if list_obj.list_type == "Pin" %}
+{% if view == "horiz-scroll" %}
+{% include 'lists/scrollnav.html.jinja' %}
+{% elif list_obj.list_model == "Pin" %}
 {% include 'lists/pingrid.html.jinja' %}
-{% elif list_obj.list_type == "Room" %}
+{% elif list_obj.list_model == "Room" %}
 {% include 'lists/rooms_list.html.jinja' %}
-{% elif list_obj.list_type == "Photo" %}
+{% elif list_obj.list_model == "Photo" %}
 {% include 'lists/photos_list.html.jinja' %}
 {% else %}
         <ul
             id="list-updater-{{ list_obj.id }}"
             
-                {% if list_obj.list_type == "Task" %}
+                {% if list_obj.list_model == "Task" %}
                     class="list-group row g-0 row-cols-1 border border-primary border-5
                     rounded-4 tasks sortable"
-                {% elif list_obj.list_type == "RoomDefault" %}
+                {% elif list_obj.list_model == "RoomDefault" %}
                     class="list-group list-group-horizontal d-flex flex-wrap border border-primary border-5
                     rounded-4 p-1 sortable roomdefaults typeslist"
                 {% else %}
@@ -74,7 +76,7 @@
             hx-include="[name='items']"
             hx-trigger="end delay:1s, remove delay:1s, add delay:1s"
             hx-indicator="#updating-indicator"
-            data-model="{{ list_obj.list_type }}"
+            data-model="{{ list_obj.list_model }}"
             data-is-list="true"
             data-list_id="{{ list_obj.id }}"
             data-parent_entry_id="{{ list_obj.parent_entry_id }}"

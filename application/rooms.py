@@ -35,7 +35,7 @@ def define_rooms(floor_id: int=None):
     return 'define rooms', 200
 
 def get_room_list():
-    floor_list = get_userlist('Floor', f'{current_user.active_home.name} Floors', get_list_entries_for_item(current_user.active_home)[0].id) # if home_id has floors, get list of floors from userlists
+    floor_list = get_userlist(item_model='Floor', parent_entry_id=get_list_entries_for_item(current_user.active_home)[0].id) # if home_id has floors, get list of floors from userlists
     if not floor_list:
         logger.debug('floor list is None')
         raise Exception('floor list is None')
@@ -73,7 +73,7 @@ def room_types():
         
 def load_default_room_types():
     defaults_list = db.session.execute(
-        select(UserList).filter_by(list_type='RoomDefault', list_name='Room Type Defaults')
+        select(UserList).filter_by(list_model='RoomDefault', list_name='Room Type Defaults')
     ).scalar() # check if defaults list exists
     logger.debug(f"defaults_list: {defaults_list}")
     if not defaults_list:

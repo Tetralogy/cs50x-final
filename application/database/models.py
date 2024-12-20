@@ -56,7 +56,7 @@ class User(db.Model, UserMixin):
 class UserList(db.Model):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey('user.id'), nullable=False, index=True)
-    list_type: Mapped[str] = mapped_column(String(50), nullable=False) # match model name
+    list_model: Mapped[str] = mapped_column(String(50), nullable=False) # match model name
     list_name: Mapped[str] = mapped_column(String(80), nullable=False) #[ ] potentially change to name instead of list_name
     parent_entry_id: Mapped[int] = mapped_column(ForeignKey('user_list_entry.id'), nullable=True, index=True)
     __table_args__ = (UniqueConstraint('user_id', 'list_name', name='unique_list_name'),)

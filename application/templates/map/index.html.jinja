@@ -4,8 +4,24 @@
 {% endblock %}
 
 {% block main %}
+<div
+    class=""
+    id="room-list-loader"
+    hx-get="/show_list/"
+    hx-vals='{"list_model": "Floor", "view_override":"horiz-scroll"}'
+    hx-trigger="load once"
+    hx-swap="outerHTML"
+    hx-indicator="#updating-indicator"
+>
+    <input id="dummy-placeholder" type="hidden" name="items" />
+    <div id="updating-indicator" class="htmx-indicator">
+        Updating...
+    </div>
+</div>
+
+
 {# <div class="container-fluid"> #}
-            <ul class="sticky-top nav nav-tabs d-flex flex-nowrap text-nowrap overflow-x-auto bg-body"> 
+            <ul class="sticky-top nav nav-tabs d-flex flex-nowrap text-nowrap overflow-x-auto bg-body"> #bug: convert this to standard list loader with this style
                 {% for navfloor in floor_list.entries | sort(attribute='order') | reverse %}
                     <li class="nav-item">
                         <a
@@ -22,10 +38,10 @@
                 
             <form method="POST" hx-boost="false" action="/walkthrough/start" id="walkthrough-form">
                         <div
-                            class="row g-0 row-cols-4 container-fluid bg-dark border border-success border-5 rounded-bottom-4 p-1"
+                            class=""
                             id="room-list-loader"
                             hx-get="/show_list/"
-                            hx-vals='{"list_type": "Room"}'
+                            hx-vals='{"list_model": "Room"}'
                             hx-trigger="load once"
                             hx-swap="outerHTML"
                             hx-indicator="#updating-indicator"

@@ -4,6 +4,34 @@
 {% endblock %}
 
 {% block main %}
+<div
+    class=""
+    id="floor-list-loader"
+    hx-get="/show_list/"
+    hx-vals='{"list_model": "Floor", "view_override":"horiz-scroll"}'
+    hx-trigger="load once"
+    hx-swap="outerHTML"
+    hx-indicator="#updating-indicator"
+>
+    <input id="dummy-placeholder" type="hidden" name="items" />
+    <div id="updating-indicator" class="htmx-indicator">
+        Updating...
+    </div>
+</div>
+<div
+    class=""
+    id="room-list-loader"
+    hx-get="/show_list/"
+    hx-vals='{"list_model": "Room", "view_override":"horiz-scroll"}'
+    hx-trigger="load once"
+    hx-swap="outerHTML"
+    hx-indicator="#updating-indicator"
+>
+    <input id="dummy-placeholder" type="hidden" name="items" />
+    <div id="updating-indicator" class="htmx-indicator">
+        Updating...
+    </div>
+</div>
     <h1>This is walkthrough/index.html.jinja</h1>
     <h1>onboarding Walkthrough</h1>
     <h2>
@@ -60,14 +88,14 @@
         >
             sortphotos
         </button>
-        <button
+        {# <button
             hx-put="/walkthrough/steps"
             hx-target="#walkthrough-steps"
             hx-vals='{"view": "testgrid"}'
             class="btn btn-primary"
         >
             testgrid
-        </button>
+        </button> #}
                 <button
             hx-put="/walkthrough/steps"
             hx-target="#walkthrough-steps"

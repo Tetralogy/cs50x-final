@@ -22,7 +22,7 @@ hx-vals='{"list\_type": "Task", "view\_override":"quicknote", "sublevel\_limit":
 
 List of all homes for the user:
 
-            hx-vals='{"list_type": "Home", 
+            hx-vals='{"list_model": "Home", 
 
 "sublevel\_limit": 1, "view\_override": "text-hierarchy"}'
 
@@ -58,7 +58,7 @@ List of all homes for the user:
 
             hx-get="/show_list/"
 
-            hx-vals='{"list_type": "Task", "parent": "{{ current_user.active_home }}", "sublevel_limit": 100}'
+            hx-vals='{"list_model": "Task", "parent": "{{ current_user.active_home }}", "sublevel_limit": 100}'
 
             hx-trigger="load once"
 
@@ -82,7 +82,7 @@ List of all homes for the user:
 
             hx-get="/show_list/"
 
-            hx-vals='{"list_type": "Home", "parent": "{{ current_user.active_home }}", "sublevel_limit": 100}'
+            hx-vals='{"list_model": "Home", "parent": "{{ current_user.active_home }}", "sublevel_limit": 100}'
 
             hx-trigger="load once"
 

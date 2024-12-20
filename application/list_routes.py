@@ -6,7 +6,7 @@ from werkzeug.utils import secure_filename
 from flask import Blueprint, current_app, flash, redirect, render_template, request, send_from_directory, session, url_for
 from flask_login import current_user, login_required
 
-from application.database.models import Photo, Room, Task, UserList, UserListEntry
+from application.database.models import Floor, Home, Photo, Room, Task, UserList, UserListEntry
 from application.list_utils import add_item_to_list, create_user_list, default_list_name, delete_entry_and_item, get_immediate_child_lists, get_list_entries_for_item, get_top_userlists_by_root_parent, get_userlist, get_userlists_by_parent, update_entry_order
 from application.extension import db
 from logs.logging_config import ApplicationLogger
@@ -117,7 +117,7 @@ def move_entry(moved_entry_id: int = None, list_id: int = None):
             #logger.debug(f'not new_list')
             new_list_name = f'{db.get_or_404(UserListEntry, recieving_entry_id).get_item().name} Sublist'
             #logger.debug(f'new_list_name: {new_list_name}')
-            new_list = create_user_list(list_type=recieving_item_model, list_name=new_list_name, parent_entry_id=recieving_entry_id)
+            new_list = create_user_list(list_model=recieving_item_model, list_name=new_list_name, parent_entry_id=recieving_entry_id)
             #logger.debug(f'new_list after create_user_list: {new_list}')
         #4. add the dropped task to the list by changing the dragged-task.user_list_id to the list.id
         moved_entry.user_list_id = new_list.id
@@ -245,7 +245,7 @@ def show_list(list_id: int = None):
             root_parent_entry_id = get_list_entries_for_item(root_parent)[0].id
             #logger.debug(f'root_parent_entry_id: {root_parent_entry_id}')
         #logger.debug(f'parent_entry_id B: {parent_entry_id}')
-        list_model = request.args.get('list_type')
+        list_model = request.args.get('list_model')
         #logger.debug(f'list_model: {list_model}')
         if not list_model and parent_entry_id:
             found_lists = get_userlists_by_parent(parent_entry_id)
@@ -260,6 +260,7 @@ def show_list(list_id: int = None):
             elif list_model == 'Floor':
                 if not parent_entry_id and not combine: 
                     parent_entry_id = get_list_entries_for_item(current_user.active_home)[0].id
+                
             elif list_model == 'Room':
                 if not parent_entry_id and not combine: 
                     parent_entry_id = get_list_entries_for_item(current_user.active_home.active_floor)[0].id 
@@ -297,7 +298,7 @@ def show_list(list_id: int = None):
 @login_required
 def show_photo_entry(photo_id):
     photo = db.get_or_404(Photo, photo_id)
-    entry_id = get_list_entries_for_item(photo, list_type='Photo')[0].id
+    entry_id = get_list_entries_for_item(photo, list_model='Photo')[0].id
     photo_entry = db.get_or_404(UserListEntry, entry_id)
     return render_template('lists/model/photo.html.jinja', entry=photo_entry)
 

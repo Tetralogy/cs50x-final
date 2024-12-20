@@ -57,7 +57,7 @@
 
 
         <div
-            class="row g-0 row-cols-4 container-fluid bg-dark border border-success border-5 rounded-bottom-4 p-1"
+            class="row g-0 row-cols-4 container-fluid bg-warning border border-success border-5 rounded-bottom-4 p-1"
             id="room-list-loader"
             hx-get="/show_list/{{ room_list.id }}"
             hx-trigger="load once"
@@ -249,7 +249,7 @@
         {% if has_rooms %}
             <a
                 class="btn btn-success"
-                href="/map/{{ current_user.active_home.active_floor_id }}"
+                href="/map/Floor/{{ current_user.active_home.active_floor_id }}"
             >
                 Map
             </a>
