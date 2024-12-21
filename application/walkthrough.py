@@ -91,7 +91,7 @@ def views():
 
 @walkthrough.route('/walkthrough/<string:direction>', methods=['GET'])
 @login_required
-def walk_next(direction):
+def walk_next(direction): #todo: get list of all rooms in order by floor
     """ if direction == 'nextfloor':
         direcint = +1
     elif direction == 'prevfloor':

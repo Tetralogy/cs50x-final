@@ -1,0 +1,46 @@
+2024-12-21 16:51:00,579 - logs.logging_config - DEBUG - configure_logging [logging_config.py:178] - Application logging configured
+2024-12-21 16:51:00,580 - logs.logging_config - INFO - configure_logging [logging_config.py:187] - Application started in production environment
+2024-12-21 16:51:00,581 - application - DEBUG - create_app [__init__.py:28] - test2
+2024-12-21 16:51:01,520 - application - DEBUG - after_request_time [__init__.py:42] - Request to / took 0.056123971939086914 seconds
+2024-12-21 16:51:01,520 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): map
+2024-12-21 16:51:01,521 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): homes/create_floors.html.jinja
+2024-12-21 16:51:01,591 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/css/main.css took 0.013410091400146484 seconds
+2024-12-21 16:51:01,591 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): map
+2024-12-21 16:51:01,592 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/js/bundle.js took 0.008529901504516602 seconds
+2024-12-21 16:51:01,592 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): map
+2024-12-21 16:51:01,593 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-21 16:51:01,594 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-21 16:51:01,620 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/css/color-mode.css took 0.0012443065643310547 seconds
+2024-12-21 16:51:01,620 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): map
+2024-12-21 16:51:01,621 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-21 16:51:01,627 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/css/flash-message.css took 0.0014400482177734375 seconds
+2024-12-21 16:51:01,629 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): map
+2024-12-21 16:51:01,636 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-21 16:51:01,638 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/css/typography.css took 0.002908945083618164 seconds
+2024-12-21 16:51:01,640 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): map
+2024-12-21 16:51:01,641 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/css/sortables.css took 0.003905773162841797 seconds
+2024-12-21 16:51:01,642 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-21 16:51:01,642 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): map
+2024-12-21 16:51:01,645 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-21 16:51:01,706 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:428] - found_entries for <Home 1>: [<UserListEntry 1>]
+2024-12-21 16:51:01,711 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:436] - Entry: <UserListEntry 1>
+2024-12-21 16:51:01,711 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:437] - Item Model: Home, Item ID: 1
+2024-12-21 16:51:01,711 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:438] - User List ID: 1 User List Name: bob Homes
+2024-12-21 16:51:01,711 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:439] - user: 1
+2024-12-21 16:51:01,712 - application.list_utils - DEBUG - get_userlist [list_utils.py:308] - get_userlist(): item_model: Floor, list_name: None, parent_entry_id: 1
+2024-12-21 16:51:01,720 - application.list_utils - DEBUG - get_userlist [list_utils.py:322] - lists found (model, parent): [<UserList 2>]
+2024-12-21 16:51:01,720 - application.list_utils - DEBUG - get_userlist [list_utils.py:349] - len(lists) == 1: None Floor 1
+2024-12-21 16:51:01,720 - application.list_utils - DEBUG - get_userlist [list_utils.py:368] - userlist.entries: [<UserListEntry 3>, <UserListEntry 4>, <UserListEntry 5>, <UserListEntry 6>, <UserListEntry 7>] List type: <class 'sqlalchemy.orm.collections.InstrumentedList'>
+2024-12-21 16:51:01,721 - application.list_utils - DEBUG - get_userlist [list_utils.py:370] - List: test Floors, Order: 1
+2024-12-21 16:51:01,721 - application.list_utils - DEBUG - get_userlist [list_utils.py:370] - List: test Floors, Order: 4
+2024-12-21 16:51:01,721 - application.list_utils - DEBUG - get_userlist [list_utils.py:370] - List: test Floors, Order: 3
+2024-12-21 16:51:01,721 - application.list_utils - DEBUG - get_userlist [list_utils.py:370] - List: test Floors, Order: 2
+2024-12-21 16:51:01,721 - application.list_utils - DEBUG - get_userlist [list_utils.py:370] - List: test Floors, Order: 0
+2024-12-21 16:51:01,762 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:271] - get_userlists_by_parent: lists found (parent_entry_id)3: [<UserList 3>]
+2024-12-21 16:51:01,763 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:273] - get_userlists_by_parent: No lists found for parent_entry_id 4
+2024-12-21 16:51:01,763 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:273] - get_userlists_by_parent: No lists found for parent_entry_id 5
+2024-12-21 16:51:01,764 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:273] - get_userlists_by_parent: No lists found for parent_entry_id 6
+2024-12-21 16:51:01,766 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:273] - get_userlists_by_parent: No lists found for parent_entry_id 7
+2024-12-21 16:51:01,915 - application - DEBUG - after_request_time [__init__.py:42] - Request to /show_list/ took 0.21338605880737305 seconds
+2024-12-21 16:51:01,915 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): map
+2024-12-21 16:51:01,915 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/list.html.jinja

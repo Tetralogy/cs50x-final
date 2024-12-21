@@ -7,7 +7,7 @@
     <h2>Floors</h2>
     <h3>Add New Floors and name them</h3>
     <h4>active floor #{{ current_user.active_home.active_floor_id }}</h4>
-    <h4>current floor_list_id #{{ floor_list.id }} {{ floor_list.name }}</h4>
+
     <h4>
         current ground floor #{{ current_user.active_home.ground_floor_id }}
         {{ current_user.active_home.ground_floor.name }}
@@ -88,16 +88,12 @@
     class="d-flex justify-content-center align-items-center input-group"
     style="min-width: 20em; max-width: 40em; display: block;"
     >Add Lower Floor</button>
-    <form
-        action="/home/floors/setup"
-        method="POST"
-        
-    >
+
         <div
             class="row g-0 row-cols-4 container-fluid bg-dark border border-success border-5 rounded-bottom-4 p-1"
             id="floor-list-loader"
-            hx-get="/show_list/{{ floor_list.id }}"
-            hx-vals='{"list_model": "Floor", }'
+            hx-get="/show_list/"
+            hx-vals='{"list_model": "Floor", "force_new_list": "true", "sublevel_limit": "0"}'
             hx-trigger="load once"
             hx-swap="outerHTML"
             hx-indicator="#updating-indicator"
@@ -110,59 +106,7 @@
 
     
                 <button class="btn btn-primary" id="submitButton" type="submit">
-                    Confirm Floors and go to create rooms
+                    Confirm Floors and go to create rooms #todo: show link after active floor is selected create rooms
                 </button>
-            
-        
-    </form>
-    <!-- prettier-ignore-start -->
-<script>
-//   function triggerUpdateOrder(evt) {
-//       const sortlist = document.getElementById("floor-list-container");
-//       const newOrder = Array.from(sortlist.children).map(
-//           (li) => li.dataset.id
-//       );
-//       console.log("newOrder: " + newOrder);
-//       htmx.ajax("PUT", "/update_list_order/{{ floor_list.id }}", {
-//           target: "#floor-list-container",
-//           swap: "innerHTML",
-//           values: { items: newOrder },
-//       });
-//   }
-//   document.addEventListener("htmx:load", function () {
-//       const sortlist = document.getElementById("floor-list-container");
-//       const sortableInstance = new Sortable(sortlist, {
-//           animation: 150,
-//           ghostClass: "blue-background-class",
-//           filter: ".htmx-indicator",
-//           handle: "#handle",
-//           removeOnSpill: true, // Enable plugin
-//           // Called when item is spilled
-//           onSpill: function (/**Event*/ evt) {
-//               evt.item; // The spilled item
-//               console.log("spill");
-//               console.log("delete evt.item.dataset.id: " + evt.item.dataset.id);
-//               htmx.ajax("DELETE", "/delete/" + {{ floor_list.id }} + "/" + evt.item.dataset.id, {
-//           target: "#floor-list-container",
-//           swap: "innerHTML",
-//       });
-//   },
-//       onStart: function () {
-//           const tooltipTriggerList = [].slice.call(
-//               document.querySelectorAll('[data-bs-toggle="tooltip"]'),
-//           );
-//           tooltipTriggerList.map(function (tooltipTriggerEl) {
-//               const tooltip =
-//                   bootstrap.Tooltip.getInstance(tooltipTriggerEl);
-//               if (tooltip) {
-//                   tooltip.dispose();
-//               }
-//           });
-//       },
-//       onEnd: triggerUpdateOrder
-//           });
-//       });
-//
-</script>
-<!-- prettier-ignore-end -->
+#Bug: make obvious selector for active floor
 {% endblock %}

@@ -1,3 +1,0 @@
-2024-12-21 14:41:02,357 - logs.logging_config - DEBUG - configure_logging [logging_config.py:178] - Application logging configured
-2024-12-21 14:41:02,359 - logs.logging_config - INFO - configure_logging [logging_config.py:187] - Application started in production environment
-2024-12-21 14:41:02,360 - application - DEBUG - create_app [__init__.py:28] - test2

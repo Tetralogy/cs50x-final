@@ -5,6 +5,7 @@ from sqlalchemy import asc, func, select
 from application.extension import db
 from application.database.models import Floor, UserList
 from application.list_utils import add_item_to_list, create_user_list, get_list_entries_for_item, get_userlist
+from application.utils import check_prerequisites
 from logs.logging_config import ApplicationLogger
 
 floors = Blueprint('floors', __name__)
@@ -12,6 +13,7 @@ logger = ApplicationLogger.get_logger(__name__)
 
 @floors.route('/home/floors/setup', methods=['GET', 'POST'])    # sends user to page to create a list of floors for the home
 @login_required
+@check_prerequisites
 def define_floors():
     if request.method == 'GET':
         multifloor = request.args.get('multifloor', '').lower() == 'true'

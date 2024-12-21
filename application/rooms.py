@@ -8,6 +8,7 @@ from application.extension import db
 from application.database.models import Floor, Photo, Room, UserList, UserListEntry
 from application.floors import set_active_floor
 from application.list_utils import add_item_to_list, create_user_list, get_list_entries_for_item, get_userlist
+from application.utils import check_prerequisites
 from logs.logging_config import ApplicationLogger
 
 rooms = Blueprint('rooms', __name__)
@@ -15,6 +16,7 @@ logger = ApplicationLogger.get_logger(__name__)
 
 @rooms.route('/home/rooms/setup/<int:floor_id>', methods=['GET'])    # sends user to page to create a list of rooms for the home
 @login_required
+@check_prerequisites
 def define_rooms(floor_id: int=None):
     view = 'rooms'
     session['view'] = view

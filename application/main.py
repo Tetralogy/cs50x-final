@@ -8,7 +8,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import joinedload
 import time
 from application.database.models import Home, Room, Task, User
-from .utils import handle_error, apology, prerequisites_met
+from .utils import check_prerequisites, handle_error, apology, prerequisites_met
 from .extension import db
 from .database.schemas import task_schema, user_schema  # Import other schemas as needed
 from logs.logging_config import ApplicationLogger
@@ -28,8 +28,8 @@ def inject_current_user():
 
 @main.route('/')
 @login_required
+@check_prerequisites
 def index():
-    prerequisites_met()
     #BUG: REFACTOR SETUP STEPS return redirect(url_for('map.home_map'))
     #return redirect('/walkthrough/Dining Room 1/quicknote') #temporary for testing #xxx:remove when done
     #return redirect(url_for('homes.home_setup'))

@@ -46,7 +46,11 @@ def create_list_and_item_and_entry(item_model, retrieve: str=None):
             order_index = int(order_index)
         item_id = None
         #logger.debug(f'item_model: {item_model}, list_id: {userlist.id}, item_id: {item_id}, order: {order_index}, name: {name}')
-        new_item = add_item_to_list(userlist.id, item_model, item_id, order_index, name)
+        new_item = add_item_to_list(user_list_id=userlist.id, item_model=item_model, item_id=item_id, order=order_index, name=name)
+        if retrieve == 'list':
+            userlist = db.get_or_404(UserList, userlist.id)
+            logger.debug(f'retrieve: {retrieve}')
+            return userlist
         flash(f'Item added to list: {new_item.item_model} {new_item.item_id}', 'success')
         return render_template('lists/model/' + new_item.item_model.lower() + '.html.jinja', entry=new_item)
     room_id = request.form.get('room_id')

@@ -1,4 +1,5 @@
 
+from functools import wraps
 import logging
 from flask import Blueprint, flash, g, get_flashed_messages, redirect, render_template, request, session, url_for
 from flask_login import current_user
@@ -65,3 +66,12 @@ def prerequisites_met():#BUG: REFACTOR
         return redirect(url_for('rooms.define_rooms', floor_id=current_user.active_home.active_floor_id))
     if has_home() and has_floors() and has_room():
         return True
+    
+def check_prerequisites(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        result = prerequisites_met()
+        if result is not True:
+            return result
+        return f(*args, **kwargs)
+    return decorated_function
