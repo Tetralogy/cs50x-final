@@ -114,6 +114,7 @@ class Home(db.Model):
         return self.floors.count()
     def get_room_count(self):
         return self.rooms.count()
+    
 
 class Floor(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
@@ -122,15 +123,7 @@ class Floor(db.Model):
     homes = relationship('Home', back_populates="floors", foreign_keys=[home_id])
     rooms = relationship('Room', back_populates="floors", lazy='dynamic', foreign_keys='Room.floor_id')
 
-    '''@property
-    def as_list_item(self):
 
-        return {
-            'id': self.id,
-            'type': 'floor',
-            'name': self.name,
-            'additional_info': f"Home: {self.home.name}"
-        }'''
     
 class Room(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)

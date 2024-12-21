@@ -32,7 +32,7 @@ def home_map(floor_id: int=None):
         return redirect(url_for('rooms.define_rooms', floor_id=floor_id))
     floor_list, room_list = get_room_list()
     logger.debug(f'floor_list MAP: {floor_list}')
-    return render_template('map/index.html.jinja', floor_list=floor_list, view=view)
+    return render_template('map/index.html.jinja', view=view)
     raise NotImplementedError("map not yet implemented")
 
 @map.route('/map/Room/<int:room_id>', methods=['GET'])

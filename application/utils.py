@@ -1,6 +1,7 @@
 
 import logging
-from flask import Blueprint, flash, g, get_flashed_messages, render_template, request, session
+from flask import Blueprint, flash, g, get_flashed_messages, redirect, render_template, request, session, url_for
+from flask_login import current_user
 from logs.logging_config import ApplicationLogger
 
 utils = Blueprint('utils', __name__)
@@ -46,3 +47,21 @@ def get_flash_messages():
 def remove_flash():
     return '', 200  # Return empty response
 
+def has_home():
+    return current_user.active_home_id is not None
+
+def has_floors(): 
+    return current_user.active_home.active_floor_id is not None
+
+def has_room():
+    return current_user.active_home.active_room_id is not None
+
+def prerequisites_met():#BUG: REFACTOR
+    if not has_home():
+        return render_template('homes/create_home.html.jinja')
+    if not has_floors():
+        return render_template('homes/create_floors.html.jinja')
+    if not has_room():
+        return redirect(url_for('rooms.define_rooms', floor_id=current_user.active_home.active_floor_id))
+    if has_home() and has_floors() and has_room():
+        return True

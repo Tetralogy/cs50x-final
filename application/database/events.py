@@ -1,9 +1,9 @@
 from datetime import datetime
 import logging
-from sqlalchemy.orm import Mapped, mapped_column, relationship, column_property, attributes
+from sqlalchemy.orm import Mapped, mapped_column, relationship, column_property, attributes, object_session
 from sqlalchemy import Boolean, String, Integer, DateTime, UniqueConstraint, and_, delete, func, ForeignKey, select, text, event, Enum
 
-from application.database.models import Photo, Pin, Room, Task, TaskStatus, UserListEntry
+from application.database.models import Home, Photo, Pin, Room, Task, TaskStatus, UserListEntry
 from application.list_utils import get_userlist
 from application.extension import db
 from logs.logging_config import ApplicationLogger
@@ -90,3 +90,13 @@ def set_timestamp_on_completion(mapper, connection, target):
     if target.status == TaskStatus.COMPLETED and target.completed_at is None:
         target.completed_at = datetime.now()
     logger.info(f'set_timestamp_on_completion called for task: {target}')
+    
+@event.listens_for(Home, 'before_update')
+def update_active_floor(mapper, connection, target):
+    session = object_session(target)
+    active_room_id_history = attributes.get_history(target, 'active_room_id')
+    # Check if the active_room_id has changed
+    if active_room_id_history.has_changes():
+        if target.active_room_id is not None:
+            room = session.query(Room).get(target.active_room_id)
+            target.active_floor_id = room.floor_id
