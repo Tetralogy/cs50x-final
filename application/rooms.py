@@ -16,7 +16,7 @@ logger = ApplicationLogger.get_logger(__name__)
 
 @rooms.route('/home/rooms/setup/<int:floor_id>', methods=['GET'])    # sends user to page to create a list of rooms for the home
 @login_required
-@check_prerequisites
+#@check_prerequisites
 def define_rooms(floor_id: int=None):
     view = 'rooms'
     session['view'] = view

@@ -13,7 +13,7 @@ logger = ApplicationLogger.get_logger(__name__)
 
 @floors.route('/home/floors/setup', methods=['GET', 'POST'])    # sends user to page to create a list of floors for the home
 @login_required
-@check_prerequisites
+#@check_prerequisites
 def define_floors():
     if request.method == 'GET':
         multifloor = request.args.get('multifloor', '').lower() == 'true'
@@ -23,12 +23,12 @@ def define_floors():
             new_floor = add_item_to_list(new_list.id, 'Floor') # create default floor and add to Floor userlist
             logger.debug(f'new_floor: {new_floor}')
             set_active_floor(new_floor.item_id) # set default floor as active
+            set_ground_floor(new_floor.item_id)
             if not multifloor: # check if there should be multiple floors
-                set_ground_floor(new_floor.item_id)
+                #set_ground_floor(new_floor.item_id)
                 logger.debug(f'multifloor not: {multifloor}')
                 return redirect(url_for('homes.home_setup'))
             return render_template('homes/create_floors.html.jinja', floor_list=new_list)
-
         floor_list = get_userlist('Floor') # if home_id has floors, get list of floors from userlists
         return render_template('homes/create_floors.html.jinja', floor_list=floor_list)
     if request.method == 'POST':
@@ -61,7 +61,7 @@ def set_active_floor(floor_id):
     #[x] user confirms the home's list of floors/ continue to next step button
     #[X] user is taken to the home map of the active floor
     
-#@floors.route('/home/floor/ground', methods=['PUT'])
+#@floors.route('/set_ground_floor/<int:floor_id>', methods=['PUT'])
 #@login_required
 def set_ground_floor(floor_id):
     if not floor_id:
@@ -72,8 +72,23 @@ def set_ground_floor(floor_id):
         db.session.commit()
         logger.debug(f'current_user.active_home.ground_floor: {current_user.active_home.ground_floor}')
         return floor #the object of the current ground floor
-    
-    
+
+@floors.route('/set_active_and_ground_floor/<int:floor_id>', methods=['PUT'])
+@login_required
+def set_active_and_ground_floor(floor_id):
+    floor = set_active_floor(floor_id)
+    floor = set_ground_floor(floor_id)
+    return floor
+
+@floors.route('/get_ground_floor_entry_id', methods=['GET'])
+@login_required
+def get_ground_floor_entry_id():
+    if not current_user.active_home.ground_floor:
+        #return '', 404
+        set_ground_floor(current_user.active_home.floors[0].id)
+    floor_entry_id = get_list_entries_for_item(current_user.active_home.ground_floor, 'Floor', current_user.id)[0].id
+    logger.debug(f'get_ground_floor_entry_id called {floor_entry_id}')
+    return str(floor_entry_id), 200
 
 '''@floors.route('/floor/create/upper', methods=['POST'])
 @login_required

@@ -13,11 +13,11 @@ logger = ApplicationLogger.get_logger(__name__)
 @map.route('/map/', methods=['GET'])
 @map.route('/map/Floor/<int:floor_id>', methods=['GET'])
 @login_required
-@check_prerequisites
+#@check_prerequisites
 def home_map(floor_id: int=None):
     view = 'map'
     session['view'] = view
-    """ if floor_id is None:
+    if floor_id is None:
         if not current_user.active_home:
             return redirect(url_for('homes.home_setup'))
         floor_id = current_user.active_home.active_floor_id
@@ -33,7 +33,7 @@ def home_map(floor_id: int=None):
         flash(f'Floor {floor.name} has no rooms, please add some' , category='danger')
         return redirect(url_for('rooms.define_rooms', floor_id=floor_id))
     floor_list, room_list = get_room_list()
-    logger.debug(f'floor_list MAP: {floor_list}') """
+    logger.debug(f'floor_list MAP: {floor_list}')
     return render_template('map/index.html.jinja', view=view)
     raise NotImplementedError("map not yet implemented")
 

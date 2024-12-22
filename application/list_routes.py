@@ -7,6 +7,7 @@ from flask import Blueprint, current_app, flash, redirect, render_template, requ
 from flask_login import current_user, login_required
 
 from application.database.models import Floor, Home, Photo, Room, Task, UserList, UserListEntry
+from application.floors import set_ground_floor
 from application.list_utils import add_item_to_list, create_user_list, default_list_name, delete_entry_and_item, get_immediate_child_lists, get_list_entries_for_item, get_top_userlists_by_root_parent, get_userlist, get_userlists_by_parent, update_entry_order
 from application.extension import db
 from logs.logging_config import ApplicationLogger
@@ -47,6 +48,9 @@ def create_list_and_item_and_entry(item_model, retrieve: str=None):
         item_id = None
         #logger.debug(f'item_model: {item_model}, list_id: {userlist.id}, item_id: {item_id}, order: {order_index}, name: {name}')
         new_item = add_item_to_list(user_list_id=userlist.id, item_model=item_model, item_id=item_id, order=order_index, name=name)
+        if not current_user.active_home.ground_floor:
+            raise ValueError('Ground floor not set')
+            set_ground_floor(current_user.active_home.floors[0].id)
         if retrieve == 'list':
             userlist = db.get_or_404(UserList, userlist.id)
             logger.debug(f'retrieve: {retrieve}')

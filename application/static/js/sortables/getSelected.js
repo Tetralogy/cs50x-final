@@ -3,6 +3,7 @@ import { throttle } from "../throttle.js";
 
 const throttledHtmxGetActiveRoomEntryId = throttle(htmxGetActiveRoomEntryId);
 const throttledGetRoomCoverEntryId = throttle((parent_entry_id) => GetRoomCoverEntryId(parent_entry_id));
+const throttledGetGroundFloorEntryId = throttle(GetGroundFloorEntryId);
 
 export function getSelectedActive(evt, parent_entry_id) {
     if (evt.item.dataset.model === "Room") {
@@ -10,6 +11,9 @@ export function getSelectedActive(evt, parent_entry_id) {
     }
     if (evt.item.dataset.model === "Photo") {
         throttledGetRoomCoverEntryId(parent_entry_id);
+    }
+    if (evt.item.dataset.model === "Floor") {
+        throttledGetGroundFloorEntryId();
     }
 }
 
@@ -62,6 +66,24 @@ function GetRoomCoverEntryId(parent_entry_id) {
         .then(responseText => {
             console.log("Response from server:", responseText);
             const elId = `Photolist-${responseText.trim()}`;
+            const element = document.getElementById(elId);
+            if (element) {
+                element.classList.add("selected");
+            } else {
+                console.error(`Element with ID ${elId} not found.`);
+            }
+        })
+        .catch(error => {
+            console.error("Fetch request failed:", error);
+        });
+}
+
+function GetGroundFloorEntryId() {
+    fetch(`/get_ground_floor_entry_id`)
+        .then(response => response.text())
+        .then(responseText => {
+            console.log("Response from server:", responseText);
+            const elId = `Floorlist-${responseText.trim()}`;
             const element = document.getElementById(elId);
             if (element) {
                 element.classList.add("selected");

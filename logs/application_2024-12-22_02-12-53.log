@@ -1,0 +1,45 @@
+2024-12-22 02:12:53,652 - logs.logging_config - DEBUG - configure_logging [logging_config.py:178] - Application logging configured
+2024-12-22 02:12:53,654 - logs.logging_config - INFO - configure_logging [logging_config.py:187] - Application started in production environment
+2024-12-22 02:12:53,654 - application - DEBUG - create_app [__init__.py:28] - test2
+2024-12-22 02:12:54,446 - application - DEBUG - after_request_time [__init__.py:42] - Request to / took 0.009058952331542969 seconds
+2024-12-22 02:12:54,446 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): None
+2024-12-22 02:12:54,447 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-22 02:12:54,754 - application - DEBUG - after_request_time [__init__.py:42] - Request to /home/rooms/setup/1 took 0.26041293144226074 seconds
+2024-12-22 02:12:54,755 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): rooms
+2024-12-22 02:12:54,755 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): homes/create_rooms.html.jinja
+2024-12-22 02:12:54,820 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/css/main.css took 0.007623910903930664 seconds
+2024-12-22 02:12:54,821 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/js/bundle.js took 0.010303020477294922 seconds
+2024-12-22 02:12:54,821 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): rooms
+2024-12-22 02:12:54,821 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): rooms
+2024-12-22 02:12:54,822 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-22 02:12:54,822 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-22 02:12:54,855 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/css/flash-message.css took 0.002292156219482422 seconds
+2024-12-22 02:12:54,856 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): rooms
+2024-12-22 02:12:54,858 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-22 02:12:54,858 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/css/color-mode.css took 0.0021440982818603516 seconds
+2024-12-22 02:12:54,861 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/css/typography.css took 0.0024399757385253906 seconds
+2024-12-22 02:12:54,861 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): rooms
+2024-12-22 02:12:54,863 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/css/sortables.css took 0.0025572776794433594 seconds
+2024-12-22 02:12:54,863 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): rooms
+2024-12-22 02:12:54,864 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-22 02:12:54,864 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): rooms
+2024-12-22 02:12:54,865 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-22 02:12:54,867 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-22 02:12:54,894 - application - DEBUG - after_request_time [__init__.py:42] - Request to /favicon.ico took 0.0006651878356933594 seconds
+2024-12-22 02:12:54,894 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): rooms
+2024-12-22 02:12:54,895 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-22 02:12:55,003 - application - DEBUG - after_request_time [__init__.py:42] - Request to /show_list/3 took 0.08546876907348633 seconds
+2024-12-22 02:12:55,003 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): rooms
+2024-12-22 02:12:55,004 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/list.html.jinja
+2024-12-22 02:12:55,058 - application - DEBUG - after_request_time [__init__.py:42] - Request to /show_list/ took 0.1442430019378662 seconds
+2024-12-22 02:12:55,059 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): rooms
+2024-12-22 02:12:55,060 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/list.html.jinja
+2024-12-22 02:12:55,095 - application - DEBUG - after_request_time [__init__.py:42] - Request to /show_list/5 took 0.17870211601257324 seconds
+2024-12-22 02:12:55,096 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): rooms
+2024-12-22 02:12:55,096 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/list.html.jinja
+2024-12-22 02:13:00,012 - application - DEBUG - after_request_time [__init__.py:42] - Request to /home/floors/setup took 0.020473718643188477 seconds
+2024-12-22 02:13:00,013 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): rooms
+2024-12-22 02:13:00,013 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): homes/create_floors.html.jinja
+2024-12-22 02:13:00,110 - application - DEBUG - after_request_time [__init__.py:42] - Request to /show_list/ took 0.03992033004760742 seconds
+2024-12-22 02:13:00,110 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): rooms
+2024-12-22 02:13:00,110 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/list.html.jinja

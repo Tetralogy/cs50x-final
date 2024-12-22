@@ -142,6 +142,26 @@ export function initializeSortableLists() {
                             },
                         );}
                     }
+                    else if (itemEl.dataset.model === "Floor") { console.log("onSelect Floor");
+                        singleSelect(itemEl, evt);
+                        if (
+                            confirm(
+                                "Are you sure you want to select this item? " +
+                                evt.item.dataset.name +
+                                " This cannot be undone.",
+                            )
+                        )
+                        {
+                        // update active ground floor as current selected
+                        htmx.ajax(
+                            "PUT",
+                            `/set_active_and_ground_floor/${itemEl.dataset.item_id}`,
+                            {
+                                swap: "none",
+                                target: itemEl,
+                            },
+                        );}
+                    }
                 },
                 onDeselect: function (evt) {
                     console.log(`onDeselect itemEl ${evt.item.dataset.model}`);

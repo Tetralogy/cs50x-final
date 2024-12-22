@@ -57,7 +57,7 @@ def has_floors():
 def has_room():
     return current_user.active_home.active_room_id is not None
 
-def prerequisites_met():#BUG: REFACTOR
+def prerequisites_met():
     if not has_home():
         return render_template('homes/create_home.html.jinja')
     if not has_floors():

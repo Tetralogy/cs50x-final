@@ -1,22 +1,20 @@
-            <div class="d-flex flex-nowrap">
-                <a class="btn btn-info btn-sm" href="#scroll-start-{{list_obj.id}}"><</a>
-                <ul class="sticky-top nav nav-tabs d-flex flex-nowrap text-nowrap overflow-x-auto bg-body">
-                <a id="scroll-start-{{list_obj.id}}"></a>
-                    {% for naventry in list_obj.entries | sort(attribute='order') %}
-                        <li class="nav-item">
-                            <a
-                                class="nav-link h-100 
-                                {% if naventry.item_model == 'Floor' and naventry.item_id == current_user.active_home.active_floor_id
-                                or naventry.item_model == 'Room' and naventry.item_id == current_user.active_home.active_room_id %}active bg-primary{% endif %}"
-                                href="/map/{{naventry.item_model}}/{{ naventry.item_id }}"
-                            >
-                                {{ naventry.get_item().name }}</a
-                            >
-                        </li>
-                    {% endfor %}
-                    <a id="scroll-end-{{list_obj.id}}"></a>
-                </ul>
-                <a class="btn btn-info btn-sm" href="#scroll-end-{{list_obj.id}}">></a>
-                
-    
-            </div>
+<div class="d-flex flex-nowrap">
+    <a class="btn btn-info btn-sm" href="#scroll-start-{{list_obj.id}}"><</a>
+    <ul class="sticky-top nav nav-tabs d-flex flex-nowrap text-nowrap overflow-x-auto bg-body">
+    <a id="scroll-start-{{list_obj.id}}"></a>
+        {% for naventry in list_obj.entries | sort(attribute='order') %}
+            <li class="nav-item">
+                <a
+                    class="nav-link h-100 
+                    {% if naventry.item_model == 'Floor' and naventry.item_id == current_user.active_home.active_floor_id
+                    or naventry.item_model == 'Room' and naventry.item_id == current_user.active_home.active_room_id %}active bg-primary{% endif %}"
+                    href="/map/{{naventry.item_model}}/{{ naventry.item_id }}"
+                >
+                    {{ naventry.get_item().name }}</a
+                >
+            </li>
+        {% endfor %}
+        <a id="scroll-end-{{list_obj.id}}"></a>
+    </ul>
+    <a class="btn btn-info btn-sm" href="#scroll-end-{{list_obj.id}}">></a>
+</div>

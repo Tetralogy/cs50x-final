@@ -1,0 +1,66 @@
+2024-12-22 02:13:23,904 - logs.logging_config - DEBUG - configure_logging [logging_config.py:178] - Application logging configured
+2024-12-22 02:13:23,906 - logs.logging_config - INFO - configure_logging [logging_config.py:187] - Application started in production environment
+2024-12-22 02:13:23,907 - application - DEBUG - create_app [__init__.py:28] - test2
+2024-12-22 02:13:24,818 - application - DEBUG - after_request_time [__init__.py:42] - Request to / took 0.0012249946594238281 seconds
+2024-12-22 02:13:24,818 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): None
+2024-12-22 02:13:24,819 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-22 02:13:24,905 - application - DEBUG - after_request_time [__init__.py:42] - Request to /login took 0.03428196907043457 seconds
+2024-12-22 02:13:24,905 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): None
+2024-12-22 02:13:24,906 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): auth/login.html
+2024-12-22 02:13:24,994 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/js/bundle.js took 0.014425039291381836 seconds
+2024-12-22 02:13:24,994 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): None
+2024-12-22 02:13:25,000 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-22 02:13:24,999 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/css/main.css took 0.012786865234375 seconds
+2024-12-22 02:13:25,004 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): None
+2024-12-22 02:13:25,004 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-22 02:13:25,062 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/css/color-mode.css took 0.00222015380859375 seconds
+2024-12-22 02:13:25,063 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/css/flash-message.css took 0.0028128623962402344 seconds
+2024-12-22 02:13:25,063 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): None
+2024-12-22 02:13:25,065 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): None
+2024-12-22 02:13:25,066 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-22 02:13:25,067 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/css/typography.css took 0.0019540786743164062 seconds
+2024-12-22 02:13:25,067 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/css/sortables.css took 0.0016009807586669922 seconds
+2024-12-22 02:13:25,068 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-22 02:13:25,069 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): None
+2024-12-22 02:13:25,070 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): None
+2024-12-22 02:13:25,072 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-22 02:13:25,073 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-22 02:13:25,104 - application - DEBUG - after_request_time [__init__.py:42] - Request to /favicon.ico took 0.0005388259887695312 seconds
+2024-12-22 02:13:25,104 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): None
+2024-12-22 02:13:25,105 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-22 02:13:27,576 - application - DEBUG - after_request_time [__init__.py:42] - Request to /register took 0.0033750534057617188 seconds
+2024-12-22 02:13:27,576 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): None
+2024-12-22 02:13:27,576 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): auth/register.html
+2024-12-22 02:13:39,002 - application - DEBUG - after_request_time [__init__.py:42] - Request to /register took 0.10399484634399414 seconds
+2024-12-22 02:13:39,002 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): None
+2024-12-22 02:13:39,003 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-22 02:13:39,019 - application - DEBUG - after_request_time [__init__.py:42] - Request to /login took 0.006440877914428711 seconds
+2024-12-22 02:13:39,020 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): None
+2024-12-22 02:13:39,020 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): auth/login.html
+2024-12-22 02:13:41,551 - application - DEBUG - after_request_time [__init__.py:42] - Request to /login took 0.08350992202758789 seconds
+2024-12-22 02:13:41,552 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): None
+2024-12-22 02:13:41,552 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-22 02:13:41,579 - application - DEBUG - after_request_time [__init__.py:42] - Request to / took 0.003999948501586914 seconds
+2024-12-22 02:13:41,579 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): None
+2024-12-22 02:13:41,579 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): homes/create_home.html.jinja
+2024-12-22 02:13:41,643 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/js/bundle.js took 0.001461029052734375 seconds
+2024-12-22 02:13:41,644 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): None
+2024-12-22 02:13:41,647 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/css/main.css took 0.0015881061553955078 seconds
+2024-12-22 02:13:41,648 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-22 02:13:41,649 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): None
+2024-12-22 02:13:41,652 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-22 02:13:41,689 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/css/color-mode.css took 0.0018010139465332031 seconds
+2024-12-22 02:13:41,733 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): None
+2024-12-22 02:13:41,735 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-22 02:13:41,736 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/css/flash-message.css took 0.0032300949096679688 seconds
+2024-12-22 02:13:41,737 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/css/sortables.css took 0.0020368099212646484 seconds
+2024-12-22 02:13:41,738 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): None
+2024-12-22 02:13:41,738 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): None
+2024-12-22 02:13:41,739 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-22 02:13:41,740 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/css/typography.css took 0.002485036849975586 seconds
+2024-12-22 02:13:41,741 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-22 02:13:41,743 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): None
+2024-12-22 02:13:41,746 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-22 02:13:48,610 - application - DEBUG - after_request_time [__init__.py:42] - Request to /validate/Home took 0.0071599483489990234 seconds
+2024-12-22 02:13:48,610 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): None
+2024-12-22 02:13:48,610 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): homes/validate.html.jinja

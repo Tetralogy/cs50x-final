@@ -1,70 +1,19 @@
-{#<div
-    class="input-group mb-0"
+<li
+title="{{ entry.get_item().name }}" 
+    class="floor list-group-item pe-0 shadow grabbable {% if current_user.active_home.ground_floor_id == entry.item_id and entry.item_model == 'Floor' %}selected{% endif %}"
     id="{{ entry.item_model }}list-{{ entry.id }}"
     data-id="{{ entry.id }}"
-        data-order="{{ entry.order }}"
+    data-item_id="{{ entry.item_id }}"
+    data-name="{{ entry.get_item().name }}"
+    data-order="{{ entry.order }}"
     data-list_id="{{ entry.user_list_id }}"
     data-model="{{ entry.item_model }}"
 ><input type='hidden' name='items' value='{{ entry.id }}'/>
+<div class="flex-grow-1">
+    <input type="hidden" name="items" value="{{ entry.id }}" />
+    {{ entry.get_item().name }}
+    {% include 'base/parts/debug/order.html.jinja' %}
+</div>
+</li>
 
-    <span id="handle" class="handle input-group-text ">↕️</span>
-
-    <span
-        data-bs-toggle="tooltip"
-        data-bs-html="true"
-        data-bs-title="<u>Click</u> to <b>rename</b> floor"
-    >
-        <input
-            required
-            class="input-group-text"
-            type="text"
-            id="input_{{ entry.item_model }}_name-{{ entry.item_id }}"
-            name="input_{{ entry.item_model }}_name-{{ entry.item_id }}"
-            placeholder="{{ entry.get_item().name }}"
-            hx-put="/rename/{{ entry.item_model }}/{{ entry.item_id }}"
-            hx-vals='{"placeholder": "{{ entry.get_item().name }}"}'
-            hx-target="this"
-            hx-trigger="change"
-            value="{{ entry.get_item().name }}"
-            onkeypress="if(event.key === 'Enter') this.blur()"
-        />
-    </span>
-#todo: style the floor setup
-    <span
-        class="input-group-text"
-        data-bs-toggle="tooltip"
-        data-bs-placement="right"
-        data-bs-html="true"
-        data-bs-title="<b>Set <em>{{ entry.get_item().name }}</em> as <u>Ground Floor</u></b>"
-    >
-        <input
-            required
-            class="form-check-input mt-0"
-            type="radio"
-            name="ground_floor"
-            id="radio-{{ entry.id }}"
-            value="{{ entry.item_id }}"
-            {% if entry.id == 1 and current_user.active_home.ground_floor_id == None %}
-                checked
-            {% elif current_user.active_home.ground_floor_id == entry.item_id %}
-                checked
-            {% endif %}
-        />
-    </span>
-    <span class="input-group-text">({{ entry.order }})</span>
-    <button
-        class="btn btn-danger"
-        hx-delete="/delete/entry/{{ entry.id }}"
-        hx-confirm="Are you sure you want to delete this floor? {{ entry.user_list_id }}/{{ entry.id }}"
-        hx-target="#{{ entry.item_model }}list-{{ entry.id }}"
-        hx-vals='{"code": 200}'
-        class="btn btn-danger"
-        type="button"
-    >
-        X
-    </button>
-    order {{ entry.order }}#}
-    {#{% include 'lists/sublist_loader.html.jinja' %}#}
-{#</div>#}
-
-{% include 'lists/model/generic_text.html.jinja' %}
+{# {% include 'lists/model/generic_text.html.jinja' %} #}

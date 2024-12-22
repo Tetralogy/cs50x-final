@@ -1,0 +1,31 @@
+2024-12-22 02:14:50,921 - application.list_utils - DEBUG - get_userlist [list_utils.py:308] - get_userlist(): item_model: Home, list_name: bob Homes, parent_entry_id: None
+2024-12-22 02:14:50,926 - application.list_utils - DEBUG - get_userlist [list_utils.py:326] - lists found (model, name): []
+2024-12-22 02:14:50,927 - application.list_utils - DEBUG - get_userlist [list_utils.py:333] - No lists of type Home found for user 1
+2024-12-22 02:14:50,933 - application.list_utils - DEBUG - create_user_list [list_utils.py:33] - create_user_list: new_list: <UserList (transient 4399064816)>
+2024-12-22 02:14:50,941 - application.list_utils - DEBUG - add_item_to_list [list_utils.py:59] - add_item_to_list(): user_list_id: 1, item_model: Home, item_id: None, order: None, name: test
+2024-12-22 02:14:50,941 - application.list_utils - DEBUG - create_new_default [list_utils.py:96] - create_new_default(): item_model: Home, name: test
+2024-12-22 02:14:51,014 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:428] - found_entries for <Home 1>: [<UserListEntry 1>]
+2024-12-22 02:14:51,016 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:436] - Entry: <UserListEntry 1>
+2024-12-22 02:14:51,016 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:437] - Item Model: Home, Item ID: 1
+2024-12-22 02:14:51,017 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:438] - User List ID: 1 User List Name: bob Homes
+2024-12-22 02:14:51,017 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:439] - user: 1
+2024-12-22 02:14:51,017 - application.list_utils - DEBUG - create_user_list [list_utils.py:33] - create_user_list: new_list: <UserList (transient 4399444288)>
+2024-12-22 02:14:51,020 - application.floors - DEBUG - define_floors [floors.py:22] - new_list: <UserList 2> (type: <class 'application.database.models.UserList'>)
+2024-12-22 02:14:51,021 - application.list_utils - DEBUG - add_item_to_list [list_utils.py:59] - add_item_to_list(): user_list_id: 2, item_model: Floor, item_id: None, order: None, name: None
+2024-12-22 02:14:51,021 - application.list_utils - DEBUG - create_new_default [list_utils.py:96] - create_new_default(): item_model: Floor, name: None
+2024-12-22 02:14:51,021 - application.list_utils - DEBUG - create_new_default [list_utils.py:106] - name (create_new_default):  None
+2024-12-22 02:14:51,023 - application.list_utils - DEBUG - set_default_floor_name [list_utils.py:555] - floor_count: 0
+2024-12-22 02:14:51,032 - application.floors - DEBUG - define_floors [floors.py:24] - new_floor: <UserListEntry 2>
+2024-12-22 02:14:51,033 - application.floors - DEBUG - set_active_floor [floors.py:42] - set_active_floor called with floor_id: 1
+2024-12-22 02:14:51,039 - application.floors - DEBUG - set_active_floor [floors.py:53] - current_user.active_home.active_floor: <Floor 1>
+2024-12-22 02:14:51,111 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:428] - found_entries for <Home 1>: [<UserListEntry 1>]
+2024-12-22 02:14:51,112 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:436] - Entry: <UserListEntry 1>
+2024-12-22 02:14:51,112 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:437] - Item Model: Home, Item ID: 1
+2024-12-22 02:14:51,112 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:438] - User List ID: 1 User List Name: bob Homes
+2024-12-22 02:14:51,112 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:439] - user: 1
+2024-12-22 02:14:51,112 - application.list_utils - DEBUG - get_userlist [list_utils.py:308] - get_userlist(): item_model: Floor, list_name: None, parent_entry_id: 1
+2024-12-22 02:14:51,115 - application.list_utils - DEBUG - get_userlist [list_utils.py:322] - lists found (model, parent): [<UserList 2>]
+2024-12-22 02:14:51,115 - application.list_utils - DEBUG - get_userlist [list_utils.py:349] - len(lists) == 1: None Floor 1
+2024-12-22 02:14:51,116 - application.list_utils - DEBUG - get_userlist [list_utils.py:368] - userlist.entries: [<UserListEntry 2>] List type: <class 'sqlalchemy.orm.collections.InstrumentedList'>
+2024-12-22 02:14:51,116 - application.list_utils - DEBUG - get_userlist [list_utils.py:370] - List: test Floors, Order: 0
+2024-12-22 02:14:51,119 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:273] - get_userlists_by_parent: No lists found for parent_entry_id 2
