@@ -93,8 +93,14 @@ export function initializeSortableLists() {
                     //fromList = evt.from; // Store the from list reference
                 },
                 onMove: function (evt) {
-                    console.log("onMove isDragging " + getIsDragging());
+                    //console.log("onMove isDragging " + getIsDragging());
                     updateDropzones(evt);
+                    //console.dir(evt.related);
+                    if (evt.related !== null) {
+                        if (evt.related.parentNode.classList.contains("pingrid")) {
+                            evt.related.parentNode.classList.add("hover");
+                        }
+                    }
                 },
                 onSelect: function (evt) {
                     const itemEl = evt.item;
@@ -279,7 +285,6 @@ export function initializeSortableLists() {
                     console.log("isDragging onEnd: " + getIsDragging());
                     updateDropzones(evt);
                     getSelectedActive(evt, parent_entry_id);
-
                 },       
             };
 

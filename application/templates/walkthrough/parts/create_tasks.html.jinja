@@ -1,7 +1,3 @@
-<p> 
-    Please quickly add task drafts for this room. You can add things that need
-    to be cleaned or organized or maintained or upgraded.
-</p>
 <div class="container-fluid">
     <div class="row justify-content-center">
 
@@ -15,9 +11,9 @@
     style="min-width: 20em; max-width: 40em; display: block;"
 >
 
-    <input class="form-control" type="text" name="name" placeholder="Task title" />
+    <input class="form-control" type="text" name="name" placeholder="What needs to be done?" />
     <input type="hidden" name="room_id" value="{{ current_user.active_home.active_room_id }}" />
-    <button type="submit" class="btn btn-primary">Add task draft</button>
+    <button type="submit" class="btn btn-primary">Add Task</button>
 </form>
 
     </div>

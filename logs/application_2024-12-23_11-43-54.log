@@ -1,0 +1,498 @@
+2024-12-23 11:43:54,605 - logs.logging_config - DEBUG - configure_logging [logging_config.py:178] - Application logging configured
+2024-12-23 11:43:54,607 - logs.logging_config - INFO - configure_logging [logging_config.py:187] - Application started in production environment
+2024-12-23 11:43:54,608 - application - DEBUG - create_app [__init__.py:28] - test2
+2024-12-23 11:43:55,436 - application - DEBUG - after_request_time [__init__.py:42] - Request to / took 0.011919260025024414 seconds
+2024-12-23 11:43:55,436 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:43:55,437 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:43:55,622 - application - DEBUG - after_request_time [__init__.py:42] - Request to /map/ took 0.13862013816833496 seconds
+2024-12-23 11:43:55,622 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): map
+2024-12-23 11:43:55,623 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): map/index.html.jinja
+2024-12-23 11:43:55,712 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/js/bundle.js took 0.009324073791503906 seconds
+2024-12-23 11:43:55,712 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): map
+2024-12-23 11:43:55,713 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/css/main.css took 0.013943910598754883 seconds
+2024-12-23 11:43:55,713 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:43:55,714 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): map
+2024-12-23 11:43:55,715 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:43:55,755 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/css/color-mode.css took 0.0030388832092285156 seconds
+2024-12-23 11:43:55,756 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): map
+2024-12-23 11:43:55,757 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:43:55,760 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/css/flash-message.css took 0.003464937210083008 seconds
+2024-12-23 11:43:55,765 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): map
+2024-12-23 11:43:55,768 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:43:55,768 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/css/typography.css took 0.0023970603942871094 seconds
+2024-12-23 11:43:55,769 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/css/sortables.css took 0.002695798873901367 seconds
+2024-12-23 11:43:55,771 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): map
+2024-12-23 11:43:55,773 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): map
+2024-12-23 11:43:55,775 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:43:55,777 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:43:55,818 - application - DEBUG - after_request_time [__init__.py:42] - Request to /favicon.ico took 0.0006330013275146484 seconds
+2024-12-23 11:43:55,818 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): map
+2024-12-23 11:43:55,818 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:43:56,036 - application - DEBUG - after_request_time [__init__.py:42] - Request to /show_list/ took 0.19855475425720215 seconds
+2024-12-23 11:43:56,048 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): map
+2024-12-23 11:43:56,049 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/list.html.jinja
+2024-12-23 11:43:56,061 - application - DEBUG - after_request_time [__init__.py:42] - Request to /show_list/ took 0.21961688995361328 seconds
+2024-12-23 11:43:56,064 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): map
+2024-12-23 11:43:56,064 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/list.html.jinja
+2024-12-23 11:43:56,257 - application - DEBUG - after_request_time [__init__.py:42] - Request to /show_photo_entry/8 took 0.10126590728759766 seconds
+2024-12-23 11:43:56,258 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): map
+2024-12-23 11:43:56,258 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/model/photo.html.jinja
+2024-12-23 11:43:56,281 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/defaults/generic_room.jpg took 0.0023260116577148438 seconds
+2024-12-23 11:43:56,282 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): map
+2024-12-23 11:43:56,284 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:43:56,420 - application - DEBUG - after_request_time [__init__.py:42] - Request to /show_list/ took 0.5773448944091797 seconds
+2024-12-23 11:43:56,422 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): map
+2024-12-23 11:43:56,424 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/list.html.jinja
+2024-12-23 11:43:56,461 - application - DEBUG - after_request_time [__init__.py:42] - Request to /show_list/21 took 0.15883374214172363 seconds
+2024-12-23 11:43:56,461 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): map
+2024-12-23 11:43:56,461 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/list.html.jinja
+2024-12-23 11:43:58,433 - application - DEBUG - after_request_time [__init__.py:42] - Request to /walkthrough/Bedroom 1/room took 0.008260250091552734 seconds
+2024-12-23 11:43:58,433 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:43:58,433 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:43:58,453 - application - DEBUG - after_request_time [__init__.py:42] - Request to /walkthrough/steps took 0.004889011383056641 seconds
+2024-12-23 11:43:58,453 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:43:58,453 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): walkthrough/index.html.jinja
+2024-12-23 11:43:58,615 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/js/bundle.js took 0.0008599758148193359 seconds
+2024-12-23 11:43:58,615 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:43:58,616 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:43:58,627 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/css/main.css took 0.0008361339569091797 seconds
+2024-12-23 11:43:58,628 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:43:58,628 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:43:58,694 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/css/color-mode.css took 0.003920078277587891 seconds
+2024-12-23 11:43:58,696 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:43:58,697 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/css/flash-message.css took 0.004157066345214844 seconds
+2024-12-23 11:43:58,698 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/css/typography.css took 0.0034029483795166016 seconds
+2024-12-23 11:43:58,699 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:43:58,700 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/css/sortables.css took 0.0014069080352783203 seconds
+2024-12-23 11:43:58,700 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:43:58,700 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:43:58,701 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:43:58,702 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:43:58,702 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:43:58,702 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:43:59,008 - application - DEBUG - after_request_time [__init__.py:42] - Request to /walkthrough/steps took 0.02823781967163086 seconds
+2024-12-23 11:43:59,008 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:43:59,009 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): walkthrough/parts/room.html.jinja
+2024-12-23 11:43:59,027 - application - DEBUG - after_request_time [__init__.py:42] - Request to /show_list/ took 0.05062103271484375 seconds
+2024-12-23 11:43:59,027 - application - DEBUG - after_request_time [__init__.py:42] - Request to /show_list/ took 0.055069923400878906 seconds
+2024-12-23 11:43:59,028 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:43:59,028 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:43:59,028 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/list.html.jinja
+2024-12-23 11:43:59,029 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/list.html.jinja
+2024-12-23 11:43:59,135 - application - DEBUG - after_request_time [__init__.py:42] - Request to /show_photo_entry/8 took 0.017632007598876953 seconds
+2024-12-23 11:43:59,135 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:43:59,136 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/model/photo.html.jinja
+2024-12-23 11:43:59,155 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/defaults/generic_room.jpg took 0.0019559860229492188 seconds
+2024-12-23 11:43:59,155 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:43:59,155 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:43:59,180 - application - DEBUG - after_request_time [__init__.py:42] - Request to /show_list/ took 0.058351993560791016 seconds
+2024-12-23 11:43:59,181 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:43:59,181 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/list.html.jinja
+2024-12-23 11:43:59,233 - application - DEBUG - after_request_time [__init__.py:42] - Request to /show_list/21 took 0.03268623352050781 seconds
+2024-12-23 11:43:59,233 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:43:59,233 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/list.html.jinja
+2024-12-23 11:44:08,144 - application - DEBUG - after_request_time [__init__.py:42] - Request to /create/Pin/21 took 0.025828123092651367 seconds
+2024-12-23 11:44:08,144 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:44:08,144 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/model/pin.html.jinja
+2024-12-23 11:44:09,232 - application - DEBUG - after_request_time [__init__.py:42] - Request to /update_list_order/21 took 0.11469483375549316 seconds
+2024-12-23 11:44:09,232 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:44:09,232 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:44:09,239 - application - DEBUG - after_request_time [__init__.py:42] - Request to /update_list_order/41 took 0.11383390426635742 seconds
+2024-12-23 11:44:09,239 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:44:09,239 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:44:11,123 - application - DEBUG - after_request_time [__init__.py:42] - Request to /create/Pin/21 took 0.020097970962524414 seconds
+2024-12-23 11:44:11,124 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:44:11,124 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/model/pin.html.jinja
+2024-12-23 11:44:12,218 - application - DEBUG - after_request_time [__init__.py:42] - Request to /update_list_order/21 took 0.11581110954284668 seconds
+2024-12-23 11:44:12,219 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:44:12,222 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:44:12,224 - application - DEBUG - after_request_time [__init__.py:42] - Request to /update_list_order/41 took 0.11629700660705566 seconds
+2024-12-23 11:44:12,225 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:44:12,226 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:44:13,241 - application - DEBUG - after_request_time [__init__.py:42] - Request to /create/Task took 0.026166200637817383 seconds
+2024-12-23 11:44:13,242 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:44:13,242 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/model/task.html.jinja
+2024-12-23 11:44:18,298 - application - DEBUG - after_request_time [__init__.py:42] - Request to /create/Pin/21 took 0.018823862075805664 seconds
+2024-12-23 11:44:18,298 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:44:18,298 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/model/pin.html.jinja
+2024-12-23 11:44:19,417 - application - DEBUG - after_request_time [__init__.py:42] - Request to /update_list_order/21 took 0.113983154296875 seconds
+2024-12-23 11:44:19,418 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:44:19,418 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:44:19,418 - application - DEBUG - after_request_time [__init__.py:42] - Request to /update_list_order/41 took 0.10908722877502441 seconds
+2024-12-23 11:44:19,419 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:44:19,420 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:44:32,517 - application - DEBUG - after_request_time [__init__.py:42] - Request to /update_list_order/41 took 0.04787397384643555 seconds
+2024-12-23 11:44:32,518 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:44:32,518 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:44:35,452 - application - DEBUG - after_request_time [__init__.py:42] - Request to /create/Pin/21 took 0.014899015426635742 seconds
+2024-12-23 11:44:35,452 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:44:35,452 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/model/pin.html.jinja
+2024-12-23 11:44:36,599 - application - DEBUG - after_request_time [__init__.py:42] - Request to /update_list_order/21 took 0.10569596290588379 seconds
+2024-12-23 11:44:36,602 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:44:36,603 - application - DEBUG - after_request_time [__init__.py:42] - Request to /update_list_order/41 took 0.10468196868896484 seconds
+2024-12-23 11:44:36,603 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:44:36,603 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:44:36,605 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:44:40,592 - application - DEBUG - after_request_time [__init__.py:42] - Request to /create/Pin/21 took 0.014394760131835938 seconds
+2024-12-23 11:44:40,592 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:44:40,593 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/model/pin.html.jinja
+2024-12-23 11:44:41,699 - application - DEBUG - after_request_time [__init__.py:42] - Request to /update_list_order/41 took 0.10999870300292969 seconds
+2024-12-23 11:44:41,701 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:44:41,703 - application - DEBUG - after_request_time [__init__.py:42] - Request to /update_list_order/21 took 0.11800003051757812 seconds
+2024-12-23 11:44:41,703 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:44:41,703 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:44:41,705 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:44:44,649 - application - DEBUG - after_request_time [__init__.py:42] - Request to /create/Pin/21 took 0.015717267990112305 seconds
+2024-12-23 11:44:44,649 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:44:44,649 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/model/pin.html.jinja
+2024-12-23 11:44:45,780 - application - DEBUG - after_request_time [__init__.py:42] - Request to /update_list_order/21 took 0.11154508590698242 seconds
+2024-12-23 11:44:45,782 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:44:45,784 - application - DEBUG - after_request_time [__init__.py:42] - Request to /update_list_order/41 took 0.11010527610778809 seconds
+2024-12-23 11:44:45,784 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:44:45,784 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:44:45,786 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:44:47,176 - application - DEBUG - after_request_time [__init__.py:42] - Request to /create/Task took 0.022655010223388672 seconds
+2024-12-23 11:44:47,177 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:44:47,177 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/model/task.html.jinja
+2024-12-23 11:44:52,264 - application - DEBUG - after_request_time [__init__.py:42] - Request to /create/Pin/21 took 0.016834020614624023 seconds
+2024-12-23 11:44:52,265 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:44:52,265 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/model/pin.html.jinja
+2024-12-23 11:44:53,374 - application - DEBUG - after_request_time [__init__.py:42] - Request to /update_list_order/21 took 0.12621808052062988 seconds
+2024-12-23 11:44:53,374 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:44:53,375 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:44:53,378 - application - DEBUG - after_request_time [__init__.py:42] - Request to /update_list_order/41 took 0.1250300407409668 seconds
+2024-12-23 11:44:53,378 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:44:53,379 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:45:44,855 - application - DEBUG - after_request_time [__init__.py:42] - Request to /walkthrough/Bedroom 1/room took 0.008177757263183594 seconds
+2024-12-23 11:45:44,856 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:45:44,856 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:45:44,877 - application - DEBUG - after_request_time [__init__.py:42] - Request to /walkthrough/steps took 0.0033600330352783203 seconds
+2024-12-23 11:45:44,877 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:45:44,877 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): walkthrough/index.html.jinja
+2024-12-23 11:45:45,065 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/css/main.css took 0.0010209083557128906 seconds
+2024-12-23 11:45:45,065 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:45:45,065 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:45:45,072 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/js/bundle.js took 0.0010769367218017578 seconds
+2024-12-23 11:45:45,072 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:45:45,073 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:45:45,151 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/css/color-mode.css took 0.005353212356567383 seconds
+2024-12-23 11:45:45,153 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/css/flash-message.css took 0.003796815872192383 seconds
+2024-12-23 11:45:45,154 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/css/typography.css took 0.004086017608642578 seconds
+2024-12-23 11:45:45,155 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/css/sortables.css took 0.0006940364837646484 seconds
+2024-12-23 11:45:45,155 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:45:45,156 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:45:45,156 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:45:45,156 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:45:45,157 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:45:45,157 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:45:45,157 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:45:45,158 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:45:45,412 - application - DEBUG - after_request_time [__init__.py:42] - Request to /walkthrough/steps took 0.008466958999633789 seconds
+2024-12-23 11:45:45,413 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:45:45,415 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): walkthrough/parts/room.html.jinja
+2024-12-23 11:45:45,436 - application - DEBUG - after_request_time [__init__.py:42] - Request to /show_list/ took 0.04433894157409668 seconds
+2024-12-23 11:45:45,437 - application - DEBUG - after_request_time [__init__.py:42] - Request to /show_list/ took 0.034906864166259766 seconds
+2024-12-23 11:45:45,438 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:45:45,438 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:45:45,438 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/list.html.jinja
+2024-12-23 11:45:45,439 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/list.html.jinja
+2024-12-23 11:45:45,652 - application - DEBUG - after_request_time [__init__.py:42] - Request to /show_photo_entry/8 took 0.01884293556213379 seconds
+2024-12-23 11:45:45,653 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:45:45,654 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/model/photo.html.jinja
+2024-12-23 11:45:45,704 - application - DEBUG - after_request_time [__init__.py:42] - Request to /show_list/ took 0.07016611099243164 seconds
+2024-12-23 11:45:45,705 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:45:45,705 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/list.html.jinja
+2024-12-23 11:45:45,716 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/defaults/generic_room.jpg took 0.0032930374145507812 seconds
+2024-12-23 11:45:45,719 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:45:45,721 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:45:45,808 - application - DEBUG - after_request_time [__init__.py:42] - Request to /show_list/21 took 0.09166502952575684 seconds
+2024-12-23 11:45:45,809 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:45:45,809 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/list.html.jinja
+2024-12-23 11:45:50,444 - application - DEBUG - after_request_time [__init__.py:42] - Request to /create/Pin/21 took 0.017495155334472656 seconds
+2024-12-23 11:45:50,444 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:45:50,445 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/model/pin.html.jinja
+2024-12-23 11:45:51,562 - application - DEBUG - after_request_time [__init__.py:42] - Request to /update_list_order/41 took 0.12873601913452148 seconds
+2024-12-23 11:45:51,563 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:45:51,564 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:45:51,576 - application - DEBUG - after_request_time [__init__.py:42] - Request to /update_list_order/21 took 0.14032697677612305 seconds
+2024-12-23 11:45:51,576 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:45:51,577 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:45:51,951 - application - DEBUG - after_request_time [__init__.py:42] - Request to /walkthrough/Bedroom 1/room took 0.007441997528076172 seconds
+2024-12-23 11:45:51,951 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:45:51,952 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:45:51,969 - application - DEBUG - after_request_time [__init__.py:42] - Request to /walkthrough/steps took 0.003425121307373047 seconds
+2024-12-23 11:45:51,970 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:45:51,970 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): walkthrough/index.html.jinja
+2024-12-23 11:45:52,127 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/css/main.css took 0.0011827945709228516 seconds
+2024-12-23 11:45:52,127 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:45:52,127 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:45:52,136 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/js/bundle.js took 0.0012700557708740234 seconds
+2024-12-23 11:45:52,136 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:45:52,137 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:45:52,222 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/css/flash-message.css took 0.002023935317993164 seconds
+2024-12-23 11:45:52,226 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/css/color-mode.css took 0.007234096527099609 seconds
+2024-12-23 11:45:52,226 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:45:52,226 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/css/typography.css took 0.0024251937866210938 seconds
+2024-12-23 11:45:52,227 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/css/sortables.css took 0.0021619796752929688 seconds
+2024-12-23 11:45:52,227 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:45:52,228 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:45:52,229 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:45:52,229 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:45:52,230 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:45:52,233 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:45:52,234 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:45:52,514 - application - DEBUG - after_request_time [__init__.py:42] - Request to /walkthrough/steps took 0.011762857437133789 seconds
+2024-12-23 11:45:52,516 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:45:52,517 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): walkthrough/parts/room.html.jinja
+2024-12-23 11:45:52,536 - application - DEBUG - after_request_time [__init__.py:42] - Request to /show_list/ took 0.037518978118896484 seconds
+2024-12-23 11:45:52,537 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:45:52,538 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/list.html.jinja
+2024-12-23 11:45:52,541 - application - DEBUG - after_request_time [__init__.py:42] - Request to /show_list/ took 0.044733285903930664 seconds
+2024-12-23 11:45:52,542 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:45:52,543 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/list.html.jinja
+2024-12-23 11:45:52,717 - application - DEBUG - after_request_time [__init__.py:42] - Request to /show_photo_entry/8 took 0.019687175750732422 seconds
+2024-12-23 11:45:52,719 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:45:52,719 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/model/photo.html.jinja
+2024-12-23 11:45:52,766 - application - DEBUG - after_request_time [__init__.py:42] - Request to /show_list/ took 0.06481218338012695 seconds
+2024-12-23 11:45:52,767 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:45:52,767 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/list.html.jinja
+2024-12-23 11:45:52,796 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/defaults/generic_room.jpg took 0.0006711483001708984 seconds
+2024-12-23 11:45:52,797 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:45:52,797 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:45:52,872 - application - DEBUG - after_request_time [__init__.py:42] - Request to /show_list/21 took 0.04630589485168457 seconds
+2024-12-23 11:45:52,872 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:45:52,872 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/list.html.jinja
+2024-12-23 11:45:58,998 - application - DEBUG - after_request_time [__init__.py:42] - Request to /create/Pin/21 took 0.012232303619384766 seconds
+2024-12-23 11:45:58,998 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:45:58,998 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/model/pin.html.jinja
+2024-12-23 11:46:00,099 - application - DEBUG - after_request_time [__init__.py:42] - Request to /update_list_order/21 took 0.11669301986694336 seconds
+2024-12-23 11:46:00,100 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:46:00,101 - application - DEBUG - after_request_time [__init__.py:42] - Request to /update_list_order/41 took 0.11402606964111328 seconds
+2024-12-23 11:46:00,101 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:46:00,101 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:46:00,103 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:46:06,228 - application - DEBUG - after_request_time [__init__.py:42] - Request to /create/Task took 0.020267009735107422 seconds
+2024-12-23 11:46:06,228 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:46:06,229 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/model/task.html.jinja
+2024-12-23 11:46:12,729 - application - DEBUG - after_request_time [__init__.py:42] - Request to /update_list_order/41 took 0.0680999755859375 seconds
+2024-12-23 11:46:12,730 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:46:12,730 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:46:16,770 - application - DEBUG - after_request_time [__init__.py:42] - Request to /walkthrough/Bedroom 1/room took 0.008014202117919922 seconds
+2024-12-23 11:46:16,771 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:46:16,771 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:46:16,788 - application - DEBUG - after_request_time [__init__.py:42] - Request to /walkthrough/steps took 0.0030791759490966797 seconds
+2024-12-23 11:46:16,788 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:46:16,788 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): walkthrough/index.html.jinja
+2024-12-23 11:46:16,950 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/css/main.css took 0.0025110244750976562 seconds
+2024-12-23 11:46:16,951 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/js/bundle.js took 0.0017137527465820312 seconds
+2024-12-23 11:46:16,951 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:46:16,951 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:46:16,952 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:46:16,953 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:46:17,030 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/css/color-mode.css took 0.0011701583862304688 seconds
+2024-12-23 11:46:17,030 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:46:17,030 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:46:17,039 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/css/flash-message.css took 0.003998994827270508 seconds
+2024-12-23 11:46:17,041 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/css/typography.css took 0.0020110607147216797 seconds
+2024-12-23 11:46:17,041 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:46:17,044 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:46:17,045 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/css/sortables.css took 0.0018351078033447266 seconds
+2024-12-23 11:46:17,045 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:46:17,046 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:46:17,046 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:46:17,049 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:46:17,341 - application - DEBUG - after_request_time [__init__.py:42] - Request to /show_list/ took 0.02348017692565918 seconds
+2024-12-23 11:46:17,343 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:46:17,343 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/list.html.jinja
+2024-12-23 11:46:17,356 - application - DEBUG - after_request_time [__init__.py:42] - Request to /show_list/ took 0.0395200252532959 seconds
+2024-12-23 11:46:17,358 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:46:17,359 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/list.html.jinja
+2024-12-23 11:46:17,364 - application - DEBUG - after_request_time [__init__.py:42] - Request to /walkthrough/steps took 0.006466865539550781 seconds
+2024-12-23 11:46:17,364 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:46:17,364 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): walkthrough/parts/room.html.jinja
+2024-12-23 11:46:17,548 - application - DEBUG - after_request_time [__init__.py:42] - Request to /show_photo_entry/8 took 0.014767169952392578 seconds
+2024-12-23 11:46:17,548 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:46:17,549 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/model/photo.html.jinja
+2024-12-23 11:46:17,570 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/defaults/generic_room.jpg took 0.0020380020141601562 seconds
+2024-12-23 11:46:17,572 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:46:17,574 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:46:17,617 - application - DEBUG - after_request_time [__init__.py:42] - Request to /show_list/ took 0.08152031898498535 seconds
+2024-12-23 11:46:17,618 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:46:17,618 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/list.html.jinja
+2024-12-23 11:46:17,668 - application - DEBUG - after_request_time [__init__.py:42] - Request to /show_list/21 took 0.06502199172973633 seconds
+2024-12-23 11:46:17,668 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:46:17,668 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/list.html.jinja
+2024-12-23 11:46:20,564 - application - DEBUG - after_request_time [__init__.py:42] - Request to /create/Pin/21 took 0.016955852508544922 seconds
+2024-12-23 11:46:20,564 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:46:20,565 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/model/pin.html.jinja
+2024-12-23 11:46:21,674 - application - DEBUG - after_request_time [__init__.py:42] - Request to /update_list_order/21 took 0.12680506706237793 seconds
+2024-12-23 11:46:21,676 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:46:21,678 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:46:21,680 - application - DEBUG - after_request_time [__init__.py:42] - Request to /update_list_order/41 took 0.1264350414276123 seconds
+2024-12-23 11:46:21,682 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:46:21,683 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:46:36,752 - application - DEBUG - after_request_time [__init__.py:42] - Request to /update_list_order/41 took 0.058175086975097656 seconds
+2024-12-23 11:46:36,752 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:46:36,752 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:47:37,522 - application - DEBUG - after_request_time [__init__.py:42] - Request to /walkthrough/Bedroom 1/room took 0.00879526138305664 seconds
+2024-12-23 11:47:37,522 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:47:37,524 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:47:37,543 - application - DEBUG - after_request_time [__init__.py:42] - Request to /walkthrough/steps took 0.0029649734497070312 seconds
+2024-12-23 11:47:37,544 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:47:37,544 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): walkthrough/index.html.jinja
+2024-12-23 11:47:37,749 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/css/main.css took 0.0012307167053222656 seconds
+2024-12-23 11:47:37,750 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:47:37,750 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:47:37,763 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/js/bundle.js took 0.001447916030883789 seconds
+2024-12-23 11:47:37,763 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:47:37,764 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:47:37,872 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/css/color-mode.css took 0.005203962326049805 seconds
+2024-12-23 11:47:37,875 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/css/flash-message.css took 0.00520014762878418 seconds
+2024-12-23 11:47:37,877 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:47:37,876 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/css/sortables.css took 0.0028581619262695312 seconds
+2024-12-23 11:47:37,876 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:47:37,875 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/css/typography.css took 0.005275726318359375 seconds
+2024-12-23 11:47:37,877 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:47:37,878 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:47:37,878 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:47:37,879 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:47:37,881 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:47:37,884 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:47:38,124 - application - DEBUG - after_request_time [__init__.py:42] - Request to /show_list/ took 0.017009973526000977 seconds
+2024-12-23 11:47:38,124 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:47:38,125 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/list.html.jinja
+2024-12-23 11:47:38,152 - application - DEBUG - after_request_time [__init__.py:42] - Request to /show_list/ took 0.010734081268310547 seconds
+2024-12-23 11:47:38,152 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:47:38,152 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/list.html.jinja
+2024-12-23 11:47:38,170 - application - DEBUG - after_request_time [__init__.py:42] - Request to /walkthrough/steps took 0.004558086395263672 seconds
+2024-12-23 11:47:38,170 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:47:38,170 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): walkthrough/parts/room.html.jinja
+2024-12-23 11:47:38,351 - application - DEBUG - after_request_time [__init__.py:42] - Request to /show_photo_entry/8 took 0.018122196197509766 seconds
+2024-12-23 11:47:38,352 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:47:38,352 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/model/photo.html.jinja
+2024-12-23 11:47:38,444 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/defaults/generic_room.jpg took 0.00870823860168457 seconds
+2024-12-23 11:47:38,446 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:47:38,447 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:47:38,502 - application - DEBUG - after_request_time [__init__.py:42] - Request to /show_list/ took 0.16690731048583984 seconds
+2024-12-23 11:47:38,503 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:47:38,503 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/list.html.jinja
+2024-12-23 11:47:38,551 - application - DEBUG - after_request_time [__init__.py:42] - Request to /show_list/21 took 0.11504101753234863 seconds
+2024-12-23 11:47:38,551 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:47:38,552 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/list.html.jinja
+2024-12-23 11:47:43,844 - application - DEBUG - after_request_time [__init__.py:42] - Request to /update_list_order/41 took 0.06944680213928223 seconds
+2024-12-23 11:47:43,845 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:47:43,845 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:47:49,047 - application - DEBUG - after_request_time [__init__.py:42] - Request to /update_list_order/41 took 0.06028318405151367 seconds
+2024-12-23 11:47:49,047 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:47:49,048 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:47:50,349 - application - DEBUG - after_request_time [__init__.py:42] - Request to /walkthrough/Bedroom 1/room took 0.006724119186401367 seconds
+2024-12-23 11:47:50,349 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:47:50,349 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:47:50,368 - application - DEBUG - after_request_time [__init__.py:42] - Request to /walkthrough/steps took 0.00494837760925293 seconds
+2024-12-23 11:47:50,369 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:47:50,369 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): walkthrough/index.html.jinja
+2024-12-23 11:47:50,470 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/css/main.css took 0.0010540485382080078 seconds
+2024-12-23 11:47:50,470 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:47:50,470 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:47:50,475 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/js/bundle.js took 0.0013608932495117188 seconds
+2024-12-23 11:47:50,477 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:47:50,477 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:47:50,549 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/css/color-mode.css took 0.006279945373535156 seconds
+2024-12-23 11:47:50,551 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/css/flash-message.css took 0.004113912582397461 seconds
+2024-12-23 11:47:50,553 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/css/sortables.css took 0.0027871131896972656 seconds
+2024-12-23 11:47:50,553 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:47:50,554 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/css/typography.css took 0.00197601318359375 seconds
+2024-12-23 11:47:50,554 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:47:50,554 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:47:50,555 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:47:50,555 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:47:50,556 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:47:50,556 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:47:50,557 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:47:50,816 - application - DEBUG - after_request_time [__init__.py:42] - Request to /walkthrough/steps took 0.015491008758544922 seconds
+2024-12-23 11:47:50,817 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:47:50,818 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): walkthrough/parts/room.html.jinja
+2024-12-23 11:47:50,833 - application - DEBUG - after_request_time [__init__.py:42] - Request to /show_list/ took 0.03354477882385254 seconds
+2024-12-23 11:47:50,836 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:47:50,837 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/list.html.jinja
+2024-12-23 11:47:50,846 - application - DEBUG - after_request_time [__init__.py:42] - Request to /show_list/ took 0.05015420913696289 seconds
+2024-12-23 11:47:50,847 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:47:50,847 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/list.html.jinja
+2024-12-23 11:47:51,045 - application - DEBUG - after_request_time [__init__.py:42] - Request to /show_photo_entry/8 took 0.020689010620117188 seconds
+2024-12-23 11:47:51,046 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:47:51,046 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/model/photo.html.jinja
+2024-12-23 11:47:51,093 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/defaults/generic_room.jpg took 0.0021300315856933594 seconds
+2024-12-23 11:47:51,094 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:47:51,095 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:47:51,162 - application - DEBUG - after_request_time [__init__.py:42] - Request to /show_list/ took 0.13228511810302734 seconds
+2024-12-23 11:47:51,163 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:47:51,163 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/list.html.jinja
+2024-12-23 11:47:51,209 - application - DEBUG - after_request_time [__init__.py:42] - Request to /show_list/21 took 0.09130477905273438 seconds
+2024-12-23 11:47:51,209 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:47:51,209 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/list.html.jinja
+2024-12-23 11:47:54,492 - application - DEBUG - after_request_time [__init__.py:42] - Request to /create/Pin/21 took 0.01403498649597168 seconds
+2024-12-23 11:47:54,493 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:47:54,494 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/model/pin.html.jinja
+2024-12-23 11:47:55,669 - application - DEBUG - after_request_time [__init__.py:42] - Request to /update_list_order/21 took 0.11405587196350098 seconds
+2024-12-23 11:47:55,671 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:47:55,673 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:47:55,674 - application - DEBUG - after_request_time [__init__.py:42] - Request to /update_list_order/41 took 0.1144399642944336 seconds
+2024-12-23 11:47:55,676 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:47:55,677 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:48:24,059 - application - DEBUG - after_request_time [__init__.py:42] - Request to /walkthrough/Bedroom 1/room took 0.008573055267333984 seconds
+2024-12-23 11:48:24,060 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:48:24,061 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:48:24,085 - application - DEBUG - after_request_time [__init__.py:42] - Request to /walkthrough/steps took 0.0030727386474609375 seconds
+2024-12-23 11:48:24,085 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:48:24,086 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): walkthrough/index.html.jinja
+2024-12-23 11:48:24,283 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/css/main.css took 0.0009329319000244141 seconds
+2024-12-23 11:48:24,283 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:48:24,284 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:48:24,298 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/js/bundle.js took 0.0011680126190185547 seconds
+2024-12-23 11:48:24,299 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:48:24,299 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:48:24,351 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/css/flash-message.css took 0.001374959945678711 seconds
+2024-12-23 11:48:24,351 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/css/color-mode.css took 0.004057168960571289 seconds
+2024-12-23 11:48:24,353 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:48:24,356 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:48:24,357 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/css/typography.css took 0.0028738975524902344 seconds
+2024-12-23 11:48:24,358 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:48:24,358 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:48:24,359 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/css/sortables.css took 0.0021140575408935547 seconds
+2024-12-23 11:48:24,360 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:48:24,362 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:48:24,363 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:48:24,364 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:48:24,606 - application - DEBUG - after_request_time [__init__.py:42] - Request to /show_list/ took 0.01744675636291504 seconds
+2024-12-23 11:48:24,607 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:48:24,607 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/list.html.jinja
+2024-12-23 11:48:24,633 - application - DEBUG - after_request_time [__init__.py:42] - Request to /walkthrough/steps took 0.007616996765136719 seconds
+2024-12-23 11:48:24,634 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:48:24,634 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): walkthrough/parts/room.html.jinja
+2024-12-23 11:48:24,644 - application - DEBUG - after_request_time [__init__.py:42] - Request to /show_list/ took 0.02027583122253418 seconds
+2024-12-23 11:48:24,644 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:48:24,645 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/list.html.jinja
+2024-12-23 11:48:24,791 - application - DEBUG - after_request_time [__init__.py:42] - Request to /show_photo_entry/8 took 0.018020153045654297 seconds
+2024-12-23 11:48:24,791 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:48:24,792 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/model/photo.html.jinja
+2024-12-23 11:48:24,817 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/defaults/generic_room.jpg took 0.0015492439270019531 seconds
+2024-12-23 11:48:24,819 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:48:24,821 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:48:24,862 - application - DEBUG - after_request_time [__init__.py:42] - Request to /show_list/ took 0.08301520347595215 seconds
+2024-12-23 11:48:24,864 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:48:24,864 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/list.html.jinja
+2024-12-23 11:48:24,937 - application - DEBUG - after_request_time [__init__.py:42] - Request to /show_list/21 took 0.08879828453063965 seconds
+2024-12-23 11:48:24,937 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:48:24,937 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/list.html.jinja
+2024-12-23 11:48:30,543 - application - DEBUG - after_request_time [__init__.py:42] - Request to /create/Pin/21 took 0.013518095016479492 seconds
+2024-12-23 11:48:30,543 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:48:30,543 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/model/pin.html.jinja
+2024-12-23 11:48:31,679 - application - DEBUG - after_request_time [__init__.py:42] - Request to /update_list_order/21 took 0.11747193336486816 seconds
+2024-12-23 11:48:31,682 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:48:31,683 - application - DEBUG - after_request_time [__init__.py:42] - Request to /update_list_order/41 took 0.1183328628540039 seconds
+2024-12-23 11:48:31,684 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:48:31,684 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:48:31,685 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-23 11:48:35,210 - application - DEBUG - after_request_time [__init__.py:42] - Request to /update_list_order/21 took 0.05698680877685547 seconds
+2024-12-23 11:48:35,210 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): room
+2024-12-23 11:48:35,210 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None

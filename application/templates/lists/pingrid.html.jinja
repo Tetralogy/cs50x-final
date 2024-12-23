@@ -1,6 +1,6 @@
 <!-- Overlay Grid -->
 <div
-    class="position-absolute top-0 start-0 w-100 h-100 row g-0 pingrid {% if view == 'pingrid' %}sortable{% endif %}"
+    class="position-absolute top-0 start-0 w-100 h-100 row g-0 pingrid dropzone {% if view == 'pingrid' %}sortable{% endif %}"
     hx-put="/update_list_order/{{ list_obj.id }}"
     hx-include="[name='items']"
     hx-trigger="end delay:1s, remove delay:1s, add delay:1s"
