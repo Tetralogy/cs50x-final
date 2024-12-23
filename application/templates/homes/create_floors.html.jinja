@@ -3,91 +3,48 @@
     Create New Home Form: floors
 {% endblock %}
 
-{% block main %} #BUG: HIGHLIGHT ACTIVE FLOOR BY DEFAULT
+{% block main %}
     <h2>Floors</h2>
     <h3>Add New Floors and name them</h3>
-    <h4>active floor #{{ current_user.active_home.active_floor_id }}</h4>
+    <p>Please follow the steps below to define the floors in your house:</p>
+    <ol>
+        <li>
+            <strong>View Active Floor:</strong> The active floor number is
+            displayed. This is the floor you are currently editing.
+        </li>
+        <li>
+            <strong>Set Ground Floor:</strong> The ground floor number and name
+            are displayed. This is the main entry floor.
+        </li>
+        <li>
+            <strong>Add New Floors:</strong> Use the "Add Upper Floor" button to
+            add a new floor above the current floors. Use the "Add Basement"
+            button to add a floor below the ground floor.
+        </li>
+        <li>
+            <strong>Rename Floors:</strong> After adding a floor, you can rename
+            it by clicking on the floor name field and typing a new name.
+        </li>
+        <li>
+            <strong>Reorder Floors:</strong> Drag and drop floor names to
+            reorder them. Drag a name outside the list to delete that floor.
+        </li>
+    </ol>
 
-    <h4>
-        current ground floor #{{ current_user.active_home.ground_floor_id }}
-        {{ current_user.active_home.ground_floor.name }}
-    </h4>
-    {#<form
-        action="/home/floors/setup"
-        method="POST"
-        hx-trigger="click from:#submitButton"
-    >
-        <div class="row">
-            <div class="col-12">
-                <button
-                    data-bs-toggle="tooltip"
-                    data-bs-html="true"
-                    data-bs-title="<em>Tooltip</em> <u>with</u> <b>HTML</b>"
-                    hx-post="/create/Floor/{{ floor_list.id }}"
-                    hx-vals='{"order": "0"}'
-                    hx-target="#floor-list-container"
-                    hx-swap="afterbegin"
-                    hx-on::after-request="triggerUpdateOrder()"
-                    class="btn btn-primary"
-                    type="button"
-                >
-                    Add Upper Floor
-                </button>
-            </div>
-        </div>
-
-        <div
-            id="floor-list-container"
-            class="sortable"
-            hx-get="/show_list/{{ floor_list.id }}"
-            hx-trigger="load"
-            hx-target="this"
-        ></div>
-
-        <div class="row">
-            <div class="col-12">
-                <button
-                    hx-post="/create/Floor/{{ floor_list.id }}"
-                    hx-vals='{"name": "Basement"}'
-                    hx-target="#floor-list-container"
-                    hx-swap="beforeend"
-                    class="btn btn-primary"
-                    type="button"
-                >
-                    Add Basement
-                </button>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-12">
-                <button class="btn btn-primary" id="submitButton" type="button">
-                    Confirm Floors and go to create rooms
-                </button>
-            </div>
-        </div>
-    </form>#}
-    <button type="button" class="btn btn-primary" 
-    hx-post="/create/Floor"
-    hx-target="[id*='list-updater-']"
-    hx-vals='{"order_index": "0"}'
-    hx-swap="afterbegin"
-    hx-indicator="#updating-indicator"
-    
-    class="d-flex justify-content-center align-items-center input-group"
-    style="min-width: 20em; max-width: 40em; display: block;"
-    >Add Upper Floor</button>
-
-    <button type="button" class="btn btn-primary" 
-    hx-post="/create/Floor"
-    hx-target="[id*='list-updater-']"
-    hx-vals='{"name": "Basement"}'
-    hx-swap="beforeend"
-    hx-indicator="#updating-indicator"
-    
-    class="d-flex justify-content-center align-items-center input-group"
-    style="min-width: 20em; max-width: 40em; display: block;"
-    >Add Lower Floor</button>
+    <div id="floor-container">
+        <button
+            type="button"
+            class="btn btn-primary"
+            hx-post="/create/Floor"
+            hx-target="[id*='list-updater-']"
+            hx-vals='{"order_index": "0"}'
+            hx-swap="afterbegin"
+            hx-indicator="#updating-indicator"
+            class="d-flex justify-content-center align-items-center input-group"
+            style="min-width: 20em; max-width: 40em; display: block;"
+        >
+            Add Upper Floor
+        </button>
 
         <div
             class="row g-0 row-cols-4 container-fluid bg-dark border border-success border-5 rounded-bottom-4 p-1"
@@ -104,9 +61,24 @@
             </div>
         </div>
 
-    
-                <button class="btn btn-primary" id="submitButton" type="submit">
-                    Confirm Floors and go to create rooms #todo: show link after active floor is selected create rooms
-                </button>
-#Bug: make obvious selector for active floor
+        <button
+            type="button"
+            class="btn btn-primary"
+            hx-post="/create/Floor"
+            hx-target="[id*='list-updater-']"
+            hx-vals='{"name": "Basement"}'
+            hx-swap="beforeend"
+            hx-indicator="#updating-indicator"
+            class="d-flex justify-content-center align-items-center input-group"
+            style="min-width: 20em; max-width: 40em; display: block;"
+        >
+            Add Lower Floor
+        </button>
+    </div>
+
+    <br />
+    <div
+        hx-get="/go_define_rooms_button"
+        hx-trigger="click from:#floor-container .floor once"
+    ></div>
 {% endblock %}

@@ -197,7 +197,10 @@ def room_dashboard(list_id: int):
     #return render_template('room/index.html.jinja')
 
 
-
+@rooms.route('/go_define_rooms_button', methods=['GET'])
+@login_required
+def go_define_rooms_button():
+    return render_template('homes/go_define_rooms_button.html.jinja')
 
 #____________________________________________________________________________________________________________________#
 

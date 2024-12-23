@@ -5,6 +5,13 @@
 
 {% block main %}
     <h1>Create New Home</h1>
+    <p>Please follow the steps below to set up your home:</p>
+    <ol>
+        <li><strong>Enter Home Name:</strong> Choose a unique name for your home.</li>
+        <li><strong>Select Home Type:</strong> Use the dropdown menu to select the type of your home.</li>
+        <li><strong>Specify Home Layout:</strong> Indicate if your home is multi-story by toggling the checkbox.</li>
+        <li><strong>Submit Form:</strong> Click the "Submit" button to save your home details.</li>
+    </ol>
     <form action="/create/Home" method="post">
         <div class="form-floating mb-3" hx-target="this" hx-swap="outerHTML">
             <input hx-post="/validate/Home" hx-indicator="#updating-indicator"
@@ -52,19 +59,6 @@
                 Multi-Story
             </div>
         </div>
-
-        {# <div class="form-check">
-  <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
-  <label class="form-check-label" for="flexRadioDefault1">
-    Default radio
-  </label>
-</div>
-<div class="form-check">
-  <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2">
-  <label class="form-check-label" for="flexRadioDefault2">
-    Default checked radio
-  </label>
-</div> #}
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
 {% endblock %}

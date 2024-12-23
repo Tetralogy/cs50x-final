@@ -148,7 +148,7 @@ export function initializeSortableLists() {
                             confirm(
                                 "Are you sure you want to select this item? " +
                                 evt.item.dataset.name +
-                                " This cannot be undone.",
+                                " This will set the ground floor for this home.",
                             )
                         )
                         {
