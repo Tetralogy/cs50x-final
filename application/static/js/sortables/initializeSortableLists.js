@@ -108,6 +108,7 @@ export function initializeSortableLists() {
                     console.log("onSelect evt.newIndicies " + evt.newIndicies);
                     console.log(evt.newIndicies.map(newIndex => newIndex)); */
                     if (itemEl.dataset.model === "Room") {
+                        if (itemEl.dataset.view !== 'create_rooms'){
                         singleSelect(itemEl, evt);
                         // update active room as current selected
                         const room_id = itemEl.dataset.item_id;
@@ -121,7 +122,7 @@ export function initializeSortableLists() {
                         ); */
                         console.log("PUT: select active room");
                         window.location = `/walkthrough/${room_id}`; // also sets active room
-                    }
+                    }}
                     else if (itemEl.dataset.model === "Photo") { console.log("onSelect Photo");
                         singleSelect(itemEl, evt);
                         if (

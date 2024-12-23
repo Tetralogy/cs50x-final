@@ -1,0 +1,481 @@
+2024-12-22 20:29:11,090 - logs.logging_config - DEBUG - configure_logging [logging_config.py:178] - Application logging configured
+2024-12-22 20:29:11,093 - logs.logging_config - INFO - configure_logging [logging_config.py:187] - Application started in production environment
+2024-12-22 20:29:11,093 - application - DEBUG - create_app [__init__.py:28] - test2
+2024-12-22 20:29:11,924 - application - DEBUG - after_request_time [__init__.py:42] - Request to / took 0.010409116744995117 seconds
+2024-12-22 20:29:11,925 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): map
+2024-12-22 20:29:11,926 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-22 20:29:11,959 - application.rooms - DEBUG - define_rooms [rooms.py:23] - define_rooms called with floor_id: 3
+2024-12-22 20:29:11,969 - application.rooms - DEBUG - floor_room_check [rooms.py:169] - inside floor_room_check A: floor_id: 3, has_rooms: True
+2024-12-22 20:29:11,971 - application.rooms - DEBUG - check_each_floor_for_rooms [rooms.py:176] - floor.rooms.count() <Floor 1> = 1
+2024-12-22 20:29:11,973 - application.rooms - DEBUG - check_each_floor_for_rooms [rooms.py:176] - floor.rooms.count() <Floor 2> = 1
+2024-12-22 20:29:11,975 - application.rooms - DEBUG - check_each_floor_for_rooms [rooms.py:176] - floor.rooms.count() <Floor 3> = 1
+2024-12-22 20:29:11,977 - application.rooms - DEBUG - check_each_floor_for_rooms [rooms.py:176] - floor.rooms.count() <Floor 4> = 1
+2024-12-22 20:29:11,978 - application.rooms - DEBUG - floor_room_check [rooms.py:171] - inside floor_room_check B: floor_id: 3, has_rooms: True
+2024-12-22 20:29:11,978 - application.floors - DEBUG - set_active_floor [floors.py:43] - set_active_floor called with floor_id: 3
+2024-12-22 20:29:11,984 - application.floors - DEBUG - set_active_floor [floors.py:54] - current_user.active_home.active_floor: <Floor 3>
+2024-12-22 20:29:11,986 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:428] - found_entries for <Home 1>: [<UserListEntry 1>]
+2024-12-22 20:29:11,990 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:436] - Entry: <UserListEntry 1>
+2024-12-22 20:29:11,991 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:437] - Item Model: Home, Item ID: 1
+2024-12-22 20:29:11,991 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:438] - User List ID: 1 User List Name: bob Homes
+2024-12-22 20:29:11,991 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:439] - user: 1
+2024-12-22 20:29:11,991 - application.list_utils - DEBUG - get_userlist [list_utils.py:308] - get_userlist(): item_model: Floor, list_name: None, parent_entry_id: 1
+2024-12-22 20:29:11,995 - application.list_utils - DEBUG - get_userlist [list_utils.py:322] - lists found (model, parent): [<UserList 2>]
+2024-12-22 20:29:11,995 - application.list_utils - DEBUG - get_userlist [list_utils.py:349] - len(lists) == 1: None Floor 1
+2024-12-22 20:29:11,996 - application.list_utils - DEBUG - get_userlist [list_utils.py:368] - userlist.entries: [<UserListEntry 2>, <UserListEntry 3>, <UserListEntry 4>, <UserListEntry 21>] List type: <class 'sqlalchemy.orm.collections.InstrumentedList'>
+2024-12-22 20:29:11,997 - application.list_utils - DEBUG - get_userlist [list_utils.py:370] - List: iotsmstmi Floors, Order: 2
+2024-12-22 20:29:11,997 - application.list_utils - DEBUG - get_userlist [list_utils.py:370] - List: iotsmstmi Floors, Order: 6
+2024-12-22 20:29:11,997 - application.list_utils - DEBUG - get_userlist [list_utils.py:370] - List: iotsmstmi Floors, Order: 4
+2024-12-22 20:29:11,997 - application.list_utils - DEBUG - get_userlist [list_utils.py:370] - List: iotsmstmi Floors, Order: 0
+2024-12-22 20:29:11,998 - application.rooms - DEBUG - get_room_list [rooms.py:44] - floor_list: <UserList 2> (type: <class 'application.database.models.UserList'>)
+2024-12-22 20:29:11,999 - application.rooms - DEBUG - get_room_list [rooms.py:45] - floor_list entries count: 4
+2024-12-22 20:29:11,999 - application.rooms - DEBUG - get_room_list [rooms.py:52] - floor list get floor_entry.id: 2
+2024-12-22 20:29:12,000 - application.rooms - DEBUG - get_room_list [rooms.py:53] - floor list get floor_entry.get_item().name: Main Floor
+2024-12-22 20:29:12,006 - application.rooms - DEBUG - get_room_list [rooms.py:58] - room_list: <UserList 3> (type: <class 'application.database.models.UserList'>) parent: Main Floor
+2024-12-22 20:29:12,006 - application.rooms - DEBUG - get_room_list [rooms.py:52] - floor list get floor_entry.id: 3
+2024-12-22 20:29:12,007 - application.rooms - DEBUG - get_room_list [rooms.py:53] - floor list get floor_entry.get_item().name: Basement 1
+2024-12-22 20:29:12,008 - application.rooms - DEBUG - get_room_list [rooms.py:58] - room_list: <UserList 4> (type: <class 'application.database.models.UserList'>) parent: Basement 1
+2024-12-22 20:29:12,009 - application.rooms - DEBUG - get_room_list [rooms.py:52] - floor list get floor_entry.id: 4
+2024-12-22 20:29:12,009 - application.rooms - DEBUG - get_room_list [rooms.py:53] - floor list get floor_entry.get_item().name: 3rd Floor
+2024-12-22 20:29:12,010 - application.rooms - DEBUG - get_room_list [rooms.py:58] - room_list: <UserList 5> (type: <class 'application.database.models.UserList'>) parent: 3rd Floor
+2024-12-22 20:29:12,010 - application.rooms - DEBUG - get_room_list [rooms.py:52] - floor list get floor_entry.id: 21
+2024-12-22 20:29:12,011 - application.rooms - DEBUG - get_room_list [rooms.py:53] - floor list get floor_entry.get_item().name: 4th Floor
+2024-12-22 20:29:12,012 - application.rooms - DEBUG - get_room_list [rooms.py:58] - room_list: <UserList 7> (type: <class 'application.database.models.UserList'>) parent: 4th Floor
+2024-12-22 20:29:12,013 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:428] - found_entries for <Home 1>: [<UserListEntry 1>]
+2024-12-22 20:29:12,014 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:436] - Entry: <UserListEntry 1>
+2024-12-22 20:29:12,014 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:437] - Item Model: Home, Item ID: 1
+2024-12-22 20:29:12,015 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:438] - User List ID: 1 User List Name: bob Homes
+2024-12-22 20:29:12,015 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:439] - user: 1
+2024-12-22 20:29:12,015 - application.rooms - DEBUG - get_room_list [rooms.py:59] - get_userlist(Room, current_user.active_home.name:iotsmstmi current_user.active_home.active_floor.name:3rd Floor Rooms, get_list_entries_for_item(current_user.active_home)[0].id:1
+2024-12-22 20:29:12,016 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:428] - found_entries for <Floor 3>: [<UserListEntry 4>]
+2024-12-22 20:29:12,016 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:436] - Entry: <UserListEntry 4>
+2024-12-22 20:29:12,017 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:437] - Item Model: Floor, Item ID: 3
+2024-12-22 20:29:12,017 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:438] - User List ID: 2 User List Name: iotsmstmi Floors
+2024-12-22 20:29:12,017 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:439] - user: 1
+2024-12-22 20:29:12,017 - application.list_utils - DEBUG - get_userlist [list_utils.py:308] - get_userlist(): item_model: Room, list_name: None, parent_entry_id: 4
+2024-12-22 20:29:12,018 - application.list_utils - DEBUG - get_userlist [list_utils.py:322] - lists found (model, parent): [<UserList 5>]
+2024-12-22 20:29:12,019 - application.list_utils - DEBUG - get_userlist [list_utils.py:349] - len(lists) == 1: None Room 4
+2024-12-22 20:29:12,019 - application.list_utils - DEBUG - get_userlist [list_utils.py:368] - userlist.entries: [<UserListEntry 27>] List type: <class 'sqlalchemy.orm.collections.InstrumentedList'>
+2024-12-22 20:29:12,019 - application.list_utils - DEBUG - get_userlist [list_utils.py:370] - List: iotsmstmi 3rd Floor Rooms, Order: 0
+2024-12-22 20:29:12,019 - application.rooms - DEBUG - define_rooms [rooms.py:31] - floor_list: <UserList 2> (type: <class 'application.database.models.UserList'>)
+2024-12-22 20:29:12,058 - application.rooms - DEBUG - load_default_room_types [rooms.py:80] - defaults_list: <UserList 6>
+2024-12-22 20:29:12,059 - application.rooms - DEBUG - define_rooms [rooms.py:33] - defaults_list: <UserList 6> (type: <class 'application.database.models.UserList'>)
+2024-12-22 20:29:12,059 - application.rooms - DEBUG - define_rooms [rooms.py:35] - has_rooms: True (type: <class 'bool'>)
+2024-12-22 20:29:12,101 - application - DEBUG - after_request_time [__init__.py:42] - Request to /home/rooms/setup/3 took 0.14386582374572754 seconds
+2024-12-22 20:29:12,102 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): rooms
+2024-12-22 20:29:12,102 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): homes/create_rooms.html.jinja
+2024-12-22 20:29:12,167 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/js/bundle.js took 0.012187719345092773 seconds
+2024-12-22 20:29:12,173 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): rooms
+2024-12-22 20:29:12,175 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-22 20:29:12,174 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/css/main.css took 0.009069204330444336 seconds
+2024-12-22 20:29:12,178 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): rooms
+2024-12-22 20:29:12,179 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-22 20:29:12,208 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/css/color-mode.css took 0.002685070037841797 seconds
+2024-12-22 20:29:12,210 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): rooms
+2024-12-22 20:29:12,211 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/css/flash-message.css took 0.005038261413574219 seconds
+2024-12-22 20:29:12,212 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-22 20:29:12,214 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/css/typography.css took 0.002193927764892578 seconds
+2024-12-22 20:29:12,214 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): rooms
+2024-12-22 20:29:12,215 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/css/sortables.css took 0.002343893051147461 seconds
+2024-12-22 20:29:12,216 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): rooms
+2024-12-22 20:29:12,217 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-22 20:29:12,217 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): rooms
+2024-12-22 20:29:12,218 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-22 20:29:12,220 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-22 20:29:12,253 - application - DEBUG - after_request_time [__init__.py:42] - Request to /favicon.ico took 0.00048804283142089844 seconds
+2024-12-22 20:29:12,253 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): rooms
+2024-12-22 20:29:12,253 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-22 20:29:12,285 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:428] - found_entries for <Home 1>: [<UserListEntry 1>]
+2024-12-22 20:29:12,286 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:271] - get_userlists_by_parent: lists found (parent_entry_id)27: [<UserList 12>]
+2024-12-22 20:29:12,287 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:436] - Entry: <UserListEntry 1>
+2024-12-22 20:29:12,289 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:437] - Item Model: Home, Item ID: 1
+2024-12-22 20:29:12,289 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:273] - get_userlists_by_parent: No lists found for parent_entry_id 5
+2024-12-22 20:29:12,295 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:438] - User List ID: 1 User List Name: bob Homes
+2024-12-22 20:29:12,328 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:273] - get_userlists_by_parent: No lists found for parent_entry_id 6
+2024-12-22 20:29:12,328 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:439] - user: 1
+2024-12-22 20:29:12,329 - application.list_utils - DEBUG - get_userlist [list_utils.py:308] - get_userlist(): item_model: Floor, list_name: None, parent_entry_id: 1
+2024-12-22 20:29:12,331 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:273] - get_userlists_by_parent: No lists found for parent_entry_id 7
+2024-12-22 20:29:12,334 - application.list_utils - DEBUG - get_userlist [list_utils.py:322] - lists found (model, parent): [<UserList 2>]
+2024-12-22 20:29:12,335 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:273] - get_userlists_by_parent: No lists found for parent_entry_id 8
+2024-12-22 20:29:12,340 - application.list_utils - DEBUG - get_userlist [list_utils.py:349] - len(lists) == 1: None Floor 1
+2024-12-22 20:29:12,341 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:273] - get_userlists_by_parent: No lists found for parent_entry_id 9
+2024-12-22 20:29:12,359 - application.list_utils - DEBUG - get_userlist [list_utils.py:368] - userlist.entries: [<UserListEntry 2>, <UserListEntry 3>, <UserListEntry 4>, <UserListEntry 21>] List type: <class 'sqlalchemy.orm.collections.InstrumentedList'>
+2024-12-22 20:29:12,367 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:273] - get_userlists_by_parent: No lists found for parent_entry_id 10
+2024-12-22 20:29:12,368 - application.list_utils - DEBUG - get_userlist [list_utils.py:370] - List: iotsmstmi Floors, Order: 2
+2024-12-22 20:29:12,369 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:273] - get_userlists_by_parent: No lists found for parent_entry_id 11
+2024-12-22 20:29:12,369 - application.list_utils - DEBUG - get_userlist [list_utils.py:370] - List: iotsmstmi Floors, Order: 6
+2024-12-22 20:29:12,381 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:273] - get_userlists_by_parent: No lists found for parent_entry_id 12
+2024-12-22 20:29:12,387 - application.list_utils - DEBUG - get_userlist [list_utils.py:370] - List: iotsmstmi Floors, Order: 4
+2024-12-22 20:29:12,396 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:273] - get_userlists_by_parent: No lists found for parent_entry_id 13
+2024-12-22 20:29:12,398 - application.list_utils - DEBUG - get_userlist [list_utils.py:370] - List: iotsmstmi Floors, Order: 0
+2024-12-22 20:29:12,400 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:273] - get_userlists_by_parent: No lists found for parent_entry_id 14
+2024-12-22 20:29:12,401 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:271] - get_userlists_by_parent: lists found (parent_entry_id)2: [<UserList 3>]
+2024-12-22 20:29:12,407 - application - DEBUG - after_request_time [__init__.py:42] - Request to /show_list/5 took 0.1313340663909912 seconds
+2024-12-22 20:29:12,405 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:273] - get_userlists_by_parent: No lists found for parent_entry_id 15
+2024-12-22 20:29:12,407 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): rooms
+2024-12-22 20:29:12,408 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/list.html.jinja
+2024-12-22 20:29:12,407 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:271] - get_userlists_by_parent: lists found (parent_entry_id)3: [<UserList 4>]
+2024-12-22 20:29:12,408 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:273] - get_userlists_by_parent: No lists found for parent_entry_id 16
+2024-12-22 20:29:12,411 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:271] - get_userlists_by_parent: lists found (parent_entry_id)4: [<UserList 5>]
+2024-12-22 20:29:12,414 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:273] - get_userlists_by_parent: No lists found for parent_entry_id 17
+2024-12-22 20:29:12,414 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:271] - get_userlists_by_parent: lists found (parent_entry_id)21: [<UserList 7>]
+2024-12-22 20:29:12,417 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:273] - get_userlists_by_parent: No lists found for parent_entry_id 18
+2024-12-22 20:29:12,419 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:273] - get_userlists_by_parent: No lists found for parent_entry_id 19
+2024-12-22 20:29:12,420 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:273] - get_userlists_by_parent: No lists found for parent_entry_id 20
+2024-12-22 20:29:12,475 - application - DEBUG - after_request_time [__init__.py:42] - Request to /show_list/ took 0.20606184005737305 seconds
+2024-12-22 20:29:12,478 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:428] - found_entries for <Photo 3>: [<UserListEntry 26>]
+2024-12-22 20:29:12,477 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): rooms
+2024-12-22 20:29:12,479 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:436] - Entry: <UserListEntry 26>
+2024-12-22 20:29:12,481 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/list.html.jinja
+2024-12-22 20:29:12,482 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:437] - Item Model: Photo, Item ID: 3
+2024-12-22 20:29:12,484 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:438] - User List ID: 12 User List Name: Garage 1 Photos
+2024-12-22 20:29:12,485 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:439] - user: 1
+2024-12-22 20:29:12,524 - application - DEBUG - after_request_time [__init__.py:42] - Request to /show_photo_entry/3 took 0.053861141204833984 seconds
+2024-12-22 20:29:12,525 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): rooms
+2024-12-22 20:29:12,527 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/model/photo.html.jinja
+2024-12-22 20:29:12,546 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/defaults/generic_room.jpg took 0.0019071102142333984 seconds
+2024-12-22 20:29:12,546 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): rooms
+2024-12-22 20:29:12,549 - application - DEBUG - after_request_time [__init__.py:42] - Request to /show_list/6 took 0.27672386169433594 seconds
+2024-12-22 20:29:12,549 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-22 20:29:12,550 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): rooms
+2024-12-22 20:29:12,552 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/list.html.jinja
+2024-12-22 20:29:12,620 - application - DEBUG - after_request_time [__init__.py:42] - Request to /show_list/13 took 0.04349684715270996 seconds
+2024-12-22 20:29:12,620 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): rooms
+2024-12-22 20:29:12,620 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/list.html.jinja
+2024-12-22 20:29:18,713 - application.map - DEBUG - home_map [map.py:26] - map called with floor_id: 3
+2024-12-22 20:29:18,714 - application.rooms - DEBUG - floor_room_check [rooms.py:169] - inside floor_room_check A: floor_id: 3, has_rooms: True
+2024-12-22 20:29:18,716 - application.rooms - DEBUG - check_each_floor_for_rooms [rooms.py:176] - floor.rooms.count() <Floor 1> = 1
+2024-12-22 20:29:18,718 - application.rooms - DEBUG - check_each_floor_for_rooms [rooms.py:176] - floor.rooms.count() <Floor 2> = 1
+2024-12-22 20:29:18,720 - application.rooms - DEBUG - check_each_floor_for_rooms [rooms.py:176] - floor.rooms.count() <Floor 3> = 1
+2024-12-22 20:29:18,722 - application.rooms - DEBUG - check_each_floor_for_rooms [rooms.py:176] - floor.rooms.count() <Floor 4> = 1
+2024-12-22 20:29:18,723 - application.rooms - DEBUG - floor_room_check [rooms.py:171] - inside floor_room_check B: floor_id: 3, has_rooms: True
+2024-12-22 20:29:18,723 - application.map - DEBUG - home_map [map.py:29] - room check: floor_id: 3, has_rooms: True
+2024-12-22 20:29:18,724 - application.floors - DEBUG - set_active_floor [floors.py:43] - set_active_floor called with floor_id: 3
+2024-12-22 20:29:18,727 - application.floors - DEBUG - set_active_floor [floors.py:54] - current_user.active_home.active_floor: <Floor 3>
+2024-12-22 20:29:18,727 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:428] - found_entries for <Home 1>: [<UserListEntry 1>]
+2024-12-22 20:29:18,728 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:436] - Entry: <UserListEntry 1>
+2024-12-22 20:29:18,728 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:437] - Item Model: Home, Item ID: 1
+2024-12-22 20:29:18,728 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:438] - User List ID: 1 User List Name: bob Homes
+2024-12-22 20:29:18,728 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:439] - user: 1
+2024-12-22 20:29:18,729 - application.list_utils - DEBUG - get_userlist [list_utils.py:308] - get_userlist(): item_model: Floor, list_name: None, parent_entry_id: 1
+2024-12-22 20:29:18,730 - application.list_utils - DEBUG - get_userlist [list_utils.py:322] - lists found (model, parent): [<UserList 2>]
+2024-12-22 20:29:18,730 - application.list_utils - DEBUG - get_userlist [list_utils.py:349] - len(lists) == 1: None Floor 1
+2024-12-22 20:29:18,730 - application.list_utils - DEBUG - get_userlist [list_utils.py:368] - userlist.entries: [<UserListEntry 2>, <UserListEntry 3>, <UserListEntry 4>, <UserListEntry 21>] List type: <class 'sqlalchemy.orm.collections.InstrumentedList'>
+2024-12-22 20:29:18,731 - application.list_utils - DEBUG - get_userlist [list_utils.py:370] - List: iotsmstmi Floors, Order: 2
+2024-12-22 20:29:18,731 - application.list_utils - DEBUG - get_userlist [list_utils.py:370] - List: iotsmstmi Floors, Order: 6
+2024-12-22 20:29:18,731 - application.list_utils - DEBUG - get_userlist [list_utils.py:370] - List: iotsmstmi Floors, Order: 4
+2024-12-22 20:29:18,732 - application.list_utils - DEBUG - get_userlist [list_utils.py:370] - List: iotsmstmi Floors, Order: 0
+2024-12-22 20:29:18,732 - application.rooms - DEBUG - get_room_list [rooms.py:44] - floor_list: <UserList 2> (type: <class 'application.database.models.UserList'>)
+2024-12-22 20:29:18,732 - application.rooms - DEBUG - get_room_list [rooms.py:45] - floor_list entries count: 4
+2024-12-22 20:29:18,733 - application.rooms - DEBUG - get_room_list [rooms.py:52] - floor list get floor_entry.id: 2
+2024-12-22 20:29:18,733 - application.rooms - DEBUG - get_room_list [rooms.py:53] - floor list get floor_entry.get_item().name: Main Floor
+2024-12-22 20:29:18,735 - application.rooms - DEBUG - get_room_list [rooms.py:58] - room_list: <UserList 3> (type: <class 'application.database.models.UserList'>) parent: Main Floor
+2024-12-22 20:29:18,735 - application.rooms - DEBUG - get_room_list [rooms.py:52] - floor list get floor_entry.id: 3
+2024-12-22 20:29:18,736 - application.rooms - DEBUG - get_room_list [rooms.py:53] - floor list get floor_entry.get_item().name: Basement 1
+2024-12-22 20:29:18,737 - application.rooms - DEBUG - get_room_list [rooms.py:58] - room_list: <UserList 4> (type: <class 'application.database.models.UserList'>) parent: Basement 1
+2024-12-22 20:29:18,738 - application.rooms - DEBUG - get_room_list [rooms.py:52] - floor list get floor_entry.id: 4
+2024-12-22 20:29:18,738 - application.rooms - DEBUG - get_room_list [rooms.py:53] - floor list get floor_entry.get_item().name: 3rd Floor
+2024-12-22 20:29:18,739 - application.rooms - DEBUG - get_room_list [rooms.py:58] - room_list: <UserList 5> (type: <class 'application.database.models.UserList'>) parent: 3rd Floor
+2024-12-22 20:29:18,739 - application.rooms - DEBUG - get_room_list [rooms.py:52] - floor list get floor_entry.id: 21
+2024-12-22 20:29:18,740 - application.rooms - DEBUG - get_room_list [rooms.py:53] - floor list get floor_entry.get_item().name: 4th Floor
+2024-12-22 20:29:18,742 - application.rooms - DEBUG - get_room_list [rooms.py:58] - room_list: <UserList 7> (type: <class 'application.database.models.UserList'>) parent: 4th Floor
+2024-12-22 20:29:18,743 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:428] - found_entries for <Home 1>: [<UserListEntry 1>]
+2024-12-22 20:29:18,743 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:436] - Entry: <UserListEntry 1>
+2024-12-22 20:29:18,743 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:437] - Item Model: Home, Item ID: 1
+2024-12-22 20:29:18,743 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:438] - User List ID: 1 User List Name: bob Homes
+2024-12-22 20:29:18,743 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:439] - user: 1
+2024-12-22 20:29:18,744 - application.rooms - DEBUG - get_room_list [rooms.py:59] - get_userlist(Room, current_user.active_home.name:iotsmstmi current_user.active_home.active_floor.name:3rd Floor Rooms, get_list_entries_for_item(current_user.active_home)[0].id:1
+2024-12-22 20:29:18,744 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:428] - found_entries for <Floor 3>: [<UserListEntry 4>]
+2024-12-22 20:29:18,744 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:436] - Entry: <UserListEntry 4>
+2024-12-22 20:29:18,744 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:437] - Item Model: Floor, Item ID: 3
+2024-12-22 20:29:18,745 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:438] - User List ID: 2 User List Name: iotsmstmi Floors
+2024-12-22 20:29:18,745 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:439] - user: 1
+2024-12-22 20:29:18,745 - application.list_utils - DEBUG - get_userlist [list_utils.py:308] - get_userlist(): item_model: Room, list_name: None, parent_entry_id: 4
+2024-12-22 20:29:18,746 - application.list_utils - DEBUG - get_userlist [list_utils.py:322] - lists found (model, parent): [<UserList 5>]
+2024-12-22 20:29:18,746 - application.list_utils - DEBUG - get_userlist [list_utils.py:349] - len(lists) == 1: None Room 4
+2024-12-22 20:29:18,746 - application.list_utils - DEBUG - get_userlist [list_utils.py:368] - userlist.entries: [<UserListEntry 27>] List type: <class 'sqlalchemy.orm.collections.InstrumentedList'>
+2024-12-22 20:29:18,746 - application.list_utils - DEBUG - get_userlist [list_utils.py:370] - List: iotsmstmi 3rd Floor Rooms, Order: 0
+2024-12-22 20:29:18,746 - application.map - DEBUG - home_map [map.py:36] - floor_list MAP: <UserList 2>
+2024-12-22 20:29:18,755 - application - DEBUG - after_request_time [__init__.py:42] - Request to /map/Floor/3 took 0.04376506805419922 seconds
+2024-12-22 20:29:18,756 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): map
+2024-12-22 20:29:18,756 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): map/index.html.jinja
+2024-12-22 20:29:18,830 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:415] - input_string: <Home 1>, item_model: Home, item_id: 1
+2024-12-22 20:29:18,834 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:428] - found_entries for <Floor 3>: [<UserListEntry 4>]
+2024-12-22 20:29:18,837 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:428] - found_entries for <Home 1>: [<UserListEntry 1>]
+2024-12-22 20:29:18,837 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:428] - found_entries for <Home 1>: [<UserListEntry 1>]
+2024-12-22 20:29:18,837 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:436] - Entry: <UserListEntry 4>
+2024-12-22 20:29:18,840 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:436] - Entry: <UserListEntry 1>
+2024-12-22 20:29:18,841 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:436] - Entry: <UserListEntry 1>
+2024-12-22 20:29:18,841 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:437] - Item Model: Floor, Item ID: 3
+2024-12-22 20:29:18,841 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:437] - Item Model: Home, Item ID: 1
+2024-12-22 20:29:18,841 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:437] - Item Model: Home, Item ID: 1
+2024-12-22 20:29:18,842 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:438] - User List ID: 2 User List Name: iotsmstmi Floors
+2024-12-22 20:29:18,842 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:438] - User List ID: 1 User List Name: bob Homes
+2024-12-22 20:29:18,843 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:438] - User List ID: 1 User List Name: bob Homes
+2024-12-22 20:29:18,843 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:439] - user: 1
+2024-12-22 20:29:18,843 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:439] - user: 1
+2024-12-22 20:29:18,843 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:439] - user: 1
+2024-12-22 20:29:18,844 - application.list_utils - DEBUG - get_userlist [list_utils.py:308] - get_userlist(): item_model: Room, list_name: None, parent_entry_id: 4
+2024-12-22 20:29:18,844 - application.list_utils - DEBUG - get_userlist [list_utils.py:308] - get_userlist(): item_model: Floor, list_name: None, parent_entry_id: 1
+2024-12-22 20:29:18,844 - application.list_utils - DEBUG - get_top_userlists_by_root_parent [list_utils.py:279] - input root_parent_entry_id: 1 model: Task
+2024-12-22 20:29:18,845 - application.list_utils - DEBUG - get_userlist [list_utils.py:322] - lists found (model, parent): [<UserList 5>]
+2024-12-22 20:29:18,848 - application.list_utils - DEBUG - get_userlist [list_utils.py:322] - lists found (model, parent): [<UserList 2>]
+2024-12-22 20:29:18,849 - application.list_utils - DEBUG - get_userlist [list_utils.py:349] - len(lists) == 1: None Room 4
+2024-12-22 20:29:18,850 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:271] - get_userlists_by_parent: lists found (parent_entry_id)1: [<UserList 2>]
+2024-12-22 20:29:18,850 - application.list_utils - DEBUG - get_userlist [list_utils.py:349] - len(lists) == 1: None Floor 1
+2024-12-22 20:29:18,850 - application.list_utils - DEBUG - get_userlist [list_utils.py:368] - userlist.entries: [<UserListEntry 27>] List type: <class 'sqlalchemy.orm.collections.InstrumentedList'>
+2024-12-22 20:29:18,851 - application.list_utils - DEBUG - get_userlist [list_utils.py:368] - userlist.entries: [<UserListEntry 2>, <UserListEntry 3>, <UserListEntry 4>, <UserListEntry 21>] List type: <class 'sqlalchemy.orm.collections.InstrumentedList'>
+2024-12-22 20:29:18,851 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:271] - get_userlists_by_parent: lists found (parent_entry_id)2: [<UserList 3>]
+2024-12-22 20:29:18,852 - application.list_utils - DEBUG - get_userlist [list_utils.py:370] - List: iotsmstmi 3rd Floor Rooms, Order: 0
+2024-12-22 20:29:18,852 - application.list_utils - DEBUG - get_userlist [list_utils.py:370] - List: iotsmstmi Floors, Order: 2
+2024-12-22 20:29:18,853 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:271] - get_userlists_by_parent: lists found (parent_entry_id)3: [<UserList 4>]
+2024-12-22 20:29:18,854 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:271] - get_userlists_by_parent: lists found (parent_entry_id)27: [<UserList 12>]
+2024-12-22 20:29:18,854 - application.list_utils - DEBUG - get_userlist [list_utils.py:370] - List: iotsmstmi Floors, Order: 6
+2024-12-22 20:29:18,855 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:271] - get_userlists_by_parent: lists found (parent_entry_id)4: [<UserList 5>]
+2024-12-22 20:29:18,856 - application.list_utils - DEBUG - get_userlist [list_utils.py:370] - List: iotsmstmi Floors, Order: 4
+2024-12-22 20:29:18,858 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:271] - get_userlists_by_parent: lists found (parent_entry_id)21: [<UserList 7>]
+2024-12-22 20:29:18,860 - application - DEBUG - after_request_time [__init__.py:42] - Request to /show_list/ took 0.03737306594848633 seconds
+2024-12-22 20:29:18,859 - application.list_utils - DEBUG - get_userlist [list_utils.py:370] - List: iotsmstmi Floors, Order: 0
+2024-12-22 20:29:18,861 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): map
+2024-12-22 20:29:18,861 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:271] - get_userlists_by_parent: lists found (parent_entry_id)25: [<UserList 10>]
+2024-12-22 20:29:18,862 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:271] - get_userlists_by_parent: lists found (parent_entry_id)2: [<UserList 3>]
+2024-12-22 20:29:18,862 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/list.html.jinja
+2024-12-22 20:29:18,863 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:271] - get_userlists_by_parent: lists found (parent_entry_id)30: [<UserList 16>]
+2024-12-22 20:29:18,864 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:271] - get_userlists_by_parent: lists found (parent_entry_id)3: [<UserList 4>]
+2024-12-22 20:29:18,866 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:271] - get_userlists_by_parent: lists found (parent_entry_id)27: [<UserList 12>]
+2024-12-22 20:29:18,867 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:271] - get_userlists_by_parent: lists found (parent_entry_id)4: [<UserList 5>]
+2024-12-22 20:29:18,869 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:271] - get_userlists_by_parent: lists found (parent_entry_id)21: [<UserList 7>]
+2024-12-22 20:29:18,873 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:271] - get_userlists_by_parent: lists found (parent_entry_id)23: [<UserList 8>]
+2024-12-22 20:29:18,875 - application - DEBUG - after_request_time [__init__.py:42] - Request to /show_list/ took 0.054492950439453125 seconds
+2024-12-22 20:29:18,876 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): map
+2024-12-22 20:29:18,876 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:271] - get_userlists_by_parent: lists found (parent_entry_id)24: [<UserList 11>]
+2024-12-22 20:29:18,876 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/list.html.jinja
+2024-12-22 20:29:18,878 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:271] - get_userlists_by_parent: lists found (parent_entry_id)29: [<UserList 14>, <UserList 17>]
+2024-12-22 20:29:18,880 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:271] - get_userlists_by_parent: lists found (parent_entry_id)26: [<UserList 13>]
+2024-12-22 20:29:18,882 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:271] - get_userlists_by_parent: lists found (parent_entry_id)22: [<UserList 9>]
+2024-12-22 20:29:18,885 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:271] - get_userlists_by_parent: lists found (parent_entry_id)28: [<UserList 15>]
+2024-12-22 20:29:18,885 - application.list_utils - DEBUG - get_top_userlists_by_root_parent [list_utils.py:294] - get_top_userlists_by_root_parent: No Task lists found for root_parent_entry_id 1
+2024-12-22 20:29:18,886 - application - DEBUG - after_request_time [__init__.py:42] - Request to /show_list/ took 0.057541847229003906 seconds
+2024-12-22 20:29:18,886 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): map
+2024-12-22 20:29:18,887 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-22 20:29:18,901 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:428] - found_entries for <Photo 3>: [<UserListEntry 26>]
+2024-12-22 20:29:18,902 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:436] - Entry: <UserListEntry 26>
+2024-12-22 20:29:18,902 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:437] - Item Model: Photo, Item ID: 3
+2024-12-22 20:29:18,903 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:438] - User List ID: 12 User List Name: Garage 1 Photos
+2024-12-22 20:29:18,903 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:439] - user: 1
+2024-12-22 20:29:18,904 - application - DEBUG - after_request_time [__init__.py:42] - Request to /show_photo_entry/3 took 0.0053310394287109375 seconds
+2024-12-22 20:29:18,904 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): map
+2024-12-22 20:29:18,905 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/model/photo.html.jinja
+2024-12-22 20:29:18,948 - application - DEBUG - after_request_time [__init__.py:42] - Request to /show_list/13 took 0.01088404655456543 seconds
+2024-12-22 20:29:18,948 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): map
+2024-12-22 20:29:18,948 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/list.html.jinja
+2024-12-22 20:29:20,331 - application.rooms - DEBUG - set_active_room [rooms.py:120] - current_user.active_home.active_room: <Room 3>
+2024-12-22 20:29:20,332 - application.walkthrough - DEBUG - walk_start [walkthrough.py:34] - get room_name: None
+2024-12-22 20:29:20,332 - application.walkthrough - DEBUG - walk_start [walkthrough.py:35] - get view: None
+2024-12-22 20:29:20,332 - application.walkthrough - DEBUG - walk_start [walkthrough.py:52] - view: None
+2024-12-22 20:29:20,332 - application - DEBUG - after_request_time [__init__.py:42] - Request to /walkthrough/3 took 0.008501052856445312 seconds
+2024-12-22 20:29:20,332 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): None
+2024-12-22 20:29:20,333 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-22 20:29:20,345 - application.walkthrough - DEBUG - views [walkthrough.py:70] - view?: None
+2024-12-22 20:29:20,345 - application.walkthrough - DEBUG - views [walkthrough.py:76] - File not found! None.html.jinja
+2024-12-22 20:29:20,363 - application - DEBUG - after_request_time [__init__.py:42] - Request to /walkthrough/steps took 0.01960301399230957 seconds
+2024-12-22 20:29:20,363 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): None
+2024-12-22 20:29:20,363 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): walkthrough/index.html.jinja
+2024-12-22 20:29:20,422 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/js/bundle.js took 0.0008881092071533203 seconds
+2024-12-22 20:29:20,422 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): None
+2024-12-22 20:29:20,423 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-22 20:29:20,429 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/css/main.css took 0.0009541511535644531 seconds
+2024-12-22 20:29:20,429 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): None
+2024-12-22 20:29:20,430 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-22 20:29:20,468 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/css/color-mode.css took 0.005513906478881836 seconds
+2024-12-22 20:29:20,470 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/css/typography.css took 0.0033578872680664062 seconds
+2024-12-22 20:29:20,471 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/css/sortables.css took 0.0015769004821777344 seconds
+2024-12-22 20:29:20,471 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): None
+2024-12-22 20:29:20,471 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/css/flash-message.css took 0.0024209022521972656 seconds
+2024-12-22 20:29:20,472 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): None
+2024-12-22 20:29:20,472 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): None
+2024-12-22 20:29:20,472 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-22 20:29:20,473 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): None
+2024-12-22 20:29:20,473 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-22 20:29:20,473 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-22 20:29:20,475 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-22 20:29:20,529 - application.walkthrough - DEBUG - views [walkthrough.py:70] - view?: None
+2024-12-22 20:29:20,535 - application.walkthrough - DEBUG - views [walkthrough.py:76] - File not found! None.html.jinja
+2024-12-22 20:29:20,539 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:428] - found_entries for <Home 1>: [<UserListEntry 1>]
+2024-12-22 20:29:20,540 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:428] - found_entries for <Floor 3>: [<UserListEntry 4>]
+2024-12-22 20:29:20,540 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:436] - Entry: <UserListEntry 1>
+2024-12-22 20:29:20,561 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:437] - Item Model: Home, Item ID: 1
+2024-12-22 20:29:20,562 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:436] - Entry: <UserListEntry 4>
+2024-12-22 20:29:20,562 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:438] - User List ID: 1 User List Name: bob Homes
+2024-12-22 20:29:20,568 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:437] - Item Model: Floor, Item ID: 3
+2024-12-22 20:29:20,568 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:439] - user: 1
+2024-12-22 20:29:20,569 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:438] - User List ID: 2 User List Name: iotsmstmi Floors
+2024-12-22 20:29:20,569 - application.list_utils - DEBUG - get_userlist [list_utils.py:308] - get_userlist(): item_model: Floor, list_name: None, parent_entry_id: 1
+2024-12-22 20:29:20,569 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:439] - user: 1
+2024-12-22 20:29:20,572 - application.list_utils - DEBUG - get_userlist [list_utils.py:322] - lists found (model, parent): [<UserList 2>]
+2024-12-22 20:29:20,572 - application.list_utils - DEBUG - get_userlist [list_utils.py:308] - get_userlist(): item_model: Room, list_name: None, parent_entry_id: 4
+2024-12-22 20:29:20,579 - application.list_utils - DEBUG - get_userlist [list_utils.py:349] - len(lists) == 1: None Floor 1
+2024-12-22 20:29:20,581 - application.list_utils - DEBUG - get_userlist [list_utils.py:368] - userlist.entries: [<UserListEntry 2>, <UserListEntry 3>, <UserListEntry 4>, <UserListEntry 21>] List type: <class 'sqlalchemy.orm.collections.InstrumentedList'>
+2024-12-22 20:29:20,581 - application.list_utils - DEBUG - get_userlist [list_utils.py:370] - List: iotsmstmi Floors, Order: 2
+2024-12-22 20:29:20,582 - application.list_utils - DEBUG - get_userlist [list_utils.py:370] - List: iotsmstmi Floors, Order: 6
+2024-12-22 20:29:20,579 - application - DEBUG - after_request_time [__init__.py:42] - Request to /walkthrough/steps took 0.05230307579040527 seconds
+2024-12-22 20:29:20,583 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): None
+2024-12-22 20:29:20,583 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): walkthrough/parts/rename.html.jinja
+2024-12-22 20:29:20,581 - application.list_utils - DEBUG - get_userlist [list_utils.py:322] - lists found (model, parent): [<UserList 5>]
+2024-12-22 20:29:20,582 - application.list_utils - DEBUG - get_userlist [list_utils.py:370] - List: iotsmstmi Floors, Order: 4
+2024-12-22 20:29:20,585 - application.list_utils - DEBUG - get_userlist [list_utils.py:349] - len(lists) == 1: None Room 4
+2024-12-22 20:29:20,586 - application.list_utils - DEBUG - get_userlist [list_utils.py:370] - List: iotsmstmi Floors, Order: 0
+2024-12-22 20:29:20,587 - application.list_utils - DEBUG - get_userlist [list_utils.py:368] - userlist.entries: [<UserListEntry 27>] List type: <class 'sqlalchemy.orm.collections.InstrumentedList'>
+2024-12-22 20:29:20,589 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:271] - get_userlists_by_parent: lists found (parent_entry_id)2: [<UserList 3>]
+2024-12-22 20:29:20,589 - application.list_utils - DEBUG - get_userlist [list_utils.py:370] - List: iotsmstmi 3rd Floor Rooms, Order: 0
+2024-12-22 20:29:20,591 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:271] - get_userlists_by_parent: lists found (parent_entry_id)3: [<UserList 4>]
+2024-12-22 20:29:20,593 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:271] - get_userlists_by_parent: lists found (parent_entry_id)27: [<UserList 12>]
+2024-12-22 20:29:20,594 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:271] - get_userlists_by_parent: lists found (parent_entry_id)4: [<UserList 5>]
+2024-12-22 20:29:20,596 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:271] - get_userlists_by_parent: lists found (parent_entry_id)21: [<UserList 7>]
+2024-12-22 20:29:20,596 - application - DEBUG - after_request_time [__init__.py:42] - Request to /show_list/ took 0.06572699546813965 seconds
+2024-12-22 20:29:20,598 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): None
+2024-12-22 20:29:20,599 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/list.html.jinja
+2024-12-22 20:29:20,607 - application - DEBUG - after_request_time [__init__.py:42] - Request to /show_list/ took 0.07793617248535156 seconds
+2024-12-22 20:29:20,608 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): None
+2024-12-22 20:29:20,608 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/list.html.jinja
+2024-12-22 20:29:22,768 - application.map - DEBUG - home_map [map.py:26] - map called with floor_id: 3
+2024-12-22 20:29:22,770 - application.rooms - DEBUG - floor_room_check [rooms.py:169] - inside floor_room_check A: floor_id: 3, has_rooms: True
+2024-12-22 20:29:22,772 - application.rooms - DEBUG - check_each_floor_for_rooms [rooms.py:176] - floor.rooms.count() <Floor 1> = 1
+2024-12-22 20:29:22,775 - application.rooms - DEBUG - check_each_floor_for_rooms [rooms.py:176] - floor.rooms.count() <Floor 2> = 1
+2024-12-22 20:29:22,777 - application.rooms - DEBUG - check_each_floor_for_rooms [rooms.py:176] - floor.rooms.count() <Floor 3> = 1
+2024-12-22 20:29:22,780 - application.rooms - DEBUG - check_each_floor_for_rooms [rooms.py:176] - floor.rooms.count() <Floor 4> = 1
+2024-12-22 20:29:22,781 - application.rooms - DEBUG - floor_room_check [rooms.py:171] - inside floor_room_check B: floor_id: 3, has_rooms: True
+2024-12-22 20:29:22,781 - application.map - DEBUG - home_map [map.py:29] - room check: floor_id: 3, has_rooms: True
+2024-12-22 20:29:22,781 - application.floors - DEBUG - set_active_floor [floors.py:43] - set_active_floor called with floor_id: 3
+2024-12-22 20:29:22,784 - application.floors - DEBUG - set_active_floor [floors.py:54] - current_user.active_home.active_floor: <Floor 3>
+2024-12-22 20:29:22,785 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:428] - found_entries for <Home 1>: [<UserListEntry 1>]
+2024-12-22 20:29:22,785 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:436] - Entry: <UserListEntry 1>
+2024-12-22 20:29:22,785 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:437] - Item Model: Home, Item ID: 1
+2024-12-22 20:29:22,786 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:438] - User List ID: 1 User List Name: bob Homes
+2024-12-22 20:29:22,786 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:439] - user: 1
+2024-12-22 20:29:22,786 - application.list_utils - DEBUG - get_userlist [list_utils.py:308] - get_userlist(): item_model: Floor, list_name: None, parent_entry_id: 1
+2024-12-22 20:29:22,787 - application.list_utils - DEBUG - get_userlist [list_utils.py:322] - lists found (model, parent): [<UserList 2>]
+2024-12-22 20:29:22,788 - application.list_utils - DEBUG - get_userlist [list_utils.py:349] - len(lists) == 1: None Floor 1
+2024-12-22 20:29:22,788 - application.list_utils - DEBUG - get_userlist [list_utils.py:368] - userlist.entries: [<UserListEntry 2>, <UserListEntry 3>, <UserListEntry 4>, <UserListEntry 21>] List type: <class 'sqlalchemy.orm.collections.InstrumentedList'>
+2024-12-22 20:29:22,788 - application.list_utils - DEBUG - get_userlist [list_utils.py:370] - List: iotsmstmi Floors, Order: 2
+2024-12-22 20:29:22,788 - application.list_utils - DEBUG - get_userlist [list_utils.py:370] - List: iotsmstmi Floors, Order: 6
+2024-12-22 20:29:22,788 - application.list_utils - DEBUG - get_userlist [list_utils.py:370] - List: iotsmstmi Floors, Order: 4
+2024-12-22 20:29:22,788 - application.list_utils - DEBUG - get_userlist [list_utils.py:370] - List: iotsmstmi Floors, Order: 0
+2024-12-22 20:29:22,789 - application.rooms - DEBUG - get_room_list [rooms.py:44] - floor_list: <UserList 2> (type: <class 'application.database.models.UserList'>)
+2024-12-22 20:29:22,789 - application.rooms - DEBUG - get_room_list [rooms.py:45] - floor_list entries count: 4
+2024-12-22 20:29:22,789 - application.rooms - DEBUG - get_room_list [rooms.py:52] - floor list get floor_entry.id: 2
+2024-12-22 20:29:22,790 - application.rooms - DEBUG - get_room_list [rooms.py:53] - floor list get floor_entry.get_item().name: Main Floor
+2024-12-22 20:29:22,793 - application.rooms - DEBUG - get_room_list [rooms.py:58] - room_list: <UserList 3> (type: <class 'application.database.models.UserList'>) parent: Main Floor
+2024-12-22 20:29:22,794 - application.rooms - DEBUG - get_room_list [rooms.py:52] - floor list get floor_entry.id: 3
+2024-12-22 20:29:22,794 - application.rooms - DEBUG - get_room_list [rooms.py:53] - floor list get floor_entry.get_item().name: Basement 1
+2024-12-22 20:29:22,796 - application.rooms - DEBUG - get_room_list [rooms.py:58] - room_list: <UserList 4> (type: <class 'application.database.models.UserList'>) parent: Basement 1
+2024-12-22 20:29:22,796 - application.rooms - DEBUG - get_room_list [rooms.py:52] - floor list get floor_entry.id: 4
+2024-12-22 20:29:22,796 - application.rooms - DEBUG - get_room_list [rooms.py:53] - floor list get floor_entry.get_item().name: 3rd Floor
+2024-12-22 20:29:22,797 - application.rooms - DEBUG - get_room_list [rooms.py:58] - room_list: <UserList 5> (type: <class 'application.database.models.UserList'>) parent: 3rd Floor
+2024-12-22 20:29:22,798 - application.rooms - DEBUG - get_room_list [rooms.py:52] - floor list get floor_entry.id: 21
+2024-12-22 20:29:22,799 - application.rooms - DEBUG - get_room_list [rooms.py:53] - floor list get floor_entry.get_item().name: 4th Floor
+2024-12-22 20:29:22,801 - application.rooms - DEBUG - get_room_list [rooms.py:58] - room_list: <UserList 7> (type: <class 'application.database.models.UserList'>) parent: 4th Floor
+2024-12-22 20:29:22,802 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:428] - found_entries for <Home 1>: [<UserListEntry 1>]
+2024-12-22 20:29:22,802 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:436] - Entry: <UserListEntry 1>
+2024-12-22 20:29:22,803 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:437] - Item Model: Home, Item ID: 1
+2024-12-22 20:29:22,803 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:438] - User List ID: 1 User List Name: bob Homes
+2024-12-22 20:29:22,803 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:439] - user: 1
+2024-12-22 20:29:22,803 - application.rooms - DEBUG - get_room_list [rooms.py:59] - get_userlist(Room, current_user.active_home.name:iotsmstmi current_user.active_home.active_floor.name:3rd Floor Rooms, get_list_entries_for_item(current_user.active_home)[0].id:1
+2024-12-22 20:29:22,804 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:428] - found_entries for <Floor 3>: [<UserListEntry 4>]
+2024-12-22 20:29:22,804 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:436] - Entry: <UserListEntry 4>
+2024-12-22 20:29:22,804 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:437] - Item Model: Floor, Item ID: 3
+2024-12-22 20:29:22,804 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:438] - User List ID: 2 User List Name: iotsmstmi Floors
+2024-12-22 20:29:22,805 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:439] - user: 1
+2024-12-22 20:29:22,805 - application.list_utils - DEBUG - get_userlist [list_utils.py:308] - get_userlist(): item_model: Room, list_name: None, parent_entry_id: 4
+2024-12-22 20:29:22,806 - application.list_utils - DEBUG - get_userlist [list_utils.py:322] - lists found (model, parent): [<UserList 5>]
+2024-12-22 20:29:22,806 - application.list_utils - DEBUG - get_userlist [list_utils.py:349] - len(lists) == 1: None Room 4
+2024-12-22 20:29:22,807 - application.list_utils - DEBUG - get_userlist [list_utils.py:368] - userlist.entries: [<UserListEntry 27>] List type: <class 'sqlalchemy.orm.collections.InstrumentedList'>
+2024-12-22 20:29:22,807 - application.list_utils - DEBUG - get_userlist [list_utils.py:370] - List: iotsmstmi 3rd Floor Rooms, Order: 0
+2024-12-22 20:29:22,807 - application.map - DEBUG - home_map [map.py:36] - floor_list MAP: <UserList 2>
+2024-12-22 20:29:22,808 - application - DEBUG - after_request_time [__init__.py:42] - Request to /map/Floor/3 took 0.0420839786529541 seconds
+2024-12-22 20:29:22,809 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): map
+2024-12-22 20:29:22,809 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): map/index.html.jinja
+2024-12-22 20:29:22,908 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:428] - found_entries for <Home 1>: [<UserListEntry 1>]
+2024-12-22 20:29:22,909 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:436] - Entry: <UserListEntry 1>
+2024-12-22 20:29:22,909 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:437] - Item Model: Home, Item ID: 1
+2024-12-22 20:29:22,910 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:438] - User List ID: 1 User List Name: bob Homes
+2024-12-22 20:29:22,910 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:439] - user: 1
+2024-12-22 20:29:22,910 - application.list_utils - DEBUG - get_userlist [list_utils.py:308] - get_userlist(): item_model: Floor, list_name: None, parent_entry_id: 1
+2024-12-22 20:29:22,911 - application.list_utils - DEBUG - get_userlist [list_utils.py:322] - lists found (model, parent): [<UserList 2>]
+2024-12-22 20:29:22,911 - application.list_utils - DEBUG - get_userlist [list_utils.py:349] - len(lists) == 1: None Floor 1
+2024-12-22 20:29:22,911 - application.list_utils - DEBUG - get_userlist [list_utils.py:368] - userlist.entries: [<UserListEntry 2>, <UserListEntry 3>, <UserListEntry 4>, <UserListEntry 21>] List type: <class 'sqlalchemy.orm.collections.InstrumentedList'>
+2024-12-22 20:29:22,911 - application.list_utils - DEBUG - get_userlist [list_utils.py:370] - List: iotsmstmi Floors, Order: 2
+2024-12-22 20:29:22,911 - application.list_utils - DEBUG - get_userlist [list_utils.py:370] - List: iotsmstmi Floors, Order: 6
+2024-12-22 20:29:22,912 - application.list_utils - DEBUG - get_userlist [list_utils.py:370] - List: iotsmstmi Floors, Order: 4
+2024-12-22 20:29:22,912 - application.list_utils - DEBUG - get_userlist [list_utils.py:370] - List: iotsmstmi Floors, Order: 0
+2024-12-22 20:29:22,912 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:271] - get_userlists_by_parent: lists found (parent_entry_id)2: [<UserList 3>]
+2024-12-22 20:29:22,913 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:271] - get_userlists_by_parent: lists found (parent_entry_id)3: [<UserList 4>]
+2024-12-22 20:29:22,915 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:271] - get_userlists_by_parent: lists found (parent_entry_id)4: [<UserList 5>]
+2024-12-22 20:29:22,917 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:271] - get_userlists_by_parent: lists found (parent_entry_id)21: [<UserList 7>]
+2024-12-22 20:29:22,919 - application - DEBUG - after_request_time [__init__.py:42] - Request to /show_list/ took 0.013631105422973633 seconds
+2024-12-22 20:29:22,919 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): map
+2024-12-22 20:29:22,920 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/list.html.jinja
+2024-12-22 20:29:22,945 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:415] - input_string: <Home 1>, item_model: Home, item_id: 1
+2024-12-22 20:29:22,950 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:428] - found_entries for <Home 1>: [<UserListEntry 1>]
+2024-12-22 20:29:22,950 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:428] - found_entries for <Floor 3>: [<UserListEntry 4>]
+2024-12-22 20:29:22,951 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:436] - Entry: <UserListEntry 1>
+2024-12-22 20:29:22,952 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:436] - Entry: <UserListEntry 4>
+2024-12-22 20:29:22,952 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:437] - Item Model: Home, Item ID: 1
+2024-12-22 20:29:22,953 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:437] - Item Model: Floor, Item ID: 3
+2024-12-22 20:29:22,953 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:438] - User List ID: 1 User List Name: bob Homes
+2024-12-22 20:29:22,953 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:438] - User List ID: 2 User List Name: iotsmstmi Floors
+2024-12-22 20:29:22,953 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:439] - user: 1
+2024-12-22 20:29:22,953 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:439] - user: 1
+2024-12-22 20:29:22,954 - application.list_utils - DEBUG - get_top_userlists_by_root_parent [list_utils.py:279] - input root_parent_entry_id: 1 model: Task
+2024-12-22 20:29:22,954 - application.list_utils - DEBUG - get_userlist [list_utils.py:308] - get_userlist(): item_model: Room, list_name: None, parent_entry_id: 4
+2024-12-22 20:29:22,956 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:271] - get_userlists_by_parent: lists found (parent_entry_id)1: [<UserList 2>]
+2024-12-22 20:29:22,956 - application.list_utils - DEBUG - get_userlist [list_utils.py:322] - lists found (model, parent): [<UserList 5>]
+2024-12-22 20:29:22,958 - application.list_utils - DEBUG - get_userlist [list_utils.py:349] - len(lists) == 1: None Room 4
+2024-12-22 20:29:22,958 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:271] - get_userlists_by_parent: lists found (parent_entry_id)2: [<UserList 3>]
+2024-12-22 20:29:22,959 - application.list_utils - DEBUG - get_userlist [list_utils.py:368] - userlist.entries: [<UserListEntry 27>] List type: <class 'sqlalchemy.orm.collections.InstrumentedList'>
+2024-12-22 20:29:22,960 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:271] - get_userlists_by_parent: lists found (parent_entry_id)3: [<UserList 4>]
+2024-12-22 20:29:22,960 - application.list_utils - DEBUG - get_userlist [list_utils.py:370] - List: iotsmstmi 3rd Floor Rooms, Order: 0
+2024-12-22 20:29:22,962 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:271] - get_userlists_by_parent: lists found (parent_entry_id)4: [<UserList 5>]
+2024-12-22 20:29:22,965 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:271] - get_userlists_by_parent: lists found (parent_entry_id)27: [<UserList 12>]
+2024-12-22 20:29:22,967 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:271] - get_userlists_by_parent: lists found (parent_entry_id)21: [<UserList 7>]
+2024-12-22 20:29:22,969 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:271] - get_userlists_by_parent: lists found (parent_entry_id)25: [<UserList 10>]
+2024-12-22 20:29:22,970 - application - DEBUG - after_request_time [__init__.py:42] - Request to /show_list/ took 0.026795148849487305 seconds
+2024-12-22 20:29:22,971 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:271] - get_userlists_by_parent: lists found (parent_entry_id)30: [<UserList 16>]
+2024-12-22 20:29:22,971 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): map
+2024-12-22 20:29:22,972 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:271] - get_userlists_by_parent: lists found (parent_entry_id)27: [<UserList 12>]
+2024-12-22 20:29:22,973 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/list.html.jinja
+2024-12-22 20:29:22,974 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:271] - get_userlists_by_parent: lists found (parent_entry_id)23: [<UserList 8>]
+2024-12-22 20:29:22,975 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:271] - get_userlists_by_parent: lists found (parent_entry_id)24: [<UserList 11>]
+2024-12-22 20:29:22,977 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:271] - get_userlists_by_parent: lists found (parent_entry_id)29: [<UserList 14>, <UserList 17>]
+2024-12-22 20:29:22,979 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:271] - get_userlists_by_parent: lists found (parent_entry_id)26: [<UserList 13>]
+2024-12-22 20:29:22,981 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:271] - get_userlists_by_parent: lists found (parent_entry_id)22: [<UserList 9>]
+2024-12-22 20:29:22,984 - application.list_utils - DEBUG - get_userlists_by_parent [list_utils.py:271] - get_userlists_by_parent: lists found (parent_entry_id)28: [<UserList 15>]
+2024-12-22 20:29:22,984 - application.list_utils - DEBUG - get_top_userlists_by_root_parent [list_utils.py:294] - get_top_userlists_by_root_parent: No Task lists found for root_parent_entry_id 1
+2024-12-22 20:29:22,985 - application - DEBUG - after_request_time [__init__.py:42] - Request to /show_list/ took 0.042523860931396484 seconds
+2024-12-22 20:29:22,985 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): map
+2024-12-22 20:29:22,985 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-22 20:29:23,016 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:428] - found_entries for <Photo 3>: [<UserListEntry 26>]
+2024-12-22 20:29:23,017 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:436] - Entry: <UserListEntry 26>
+2024-12-22 20:29:23,017 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:437] - Item Model: Photo, Item ID: 3
+2024-12-22 20:29:23,017 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:438] - User List ID: 12 User List Name: Garage 1 Photos
+2024-12-22 20:29:23,018 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:439] - user: 1
+2024-12-22 20:29:23,019 - application - DEBUG - after_request_time [__init__.py:42] - Request to /show_photo_entry/3 took 0.0049097537994384766 seconds
+2024-12-22 20:29:23,019 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): map
+2024-12-22 20:29:23,020 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/model/photo.html.jinja
+2024-12-22 20:29:23,033 - application - DEBUG - after_request_time [__init__.py:42] - Request to /static/defaults/generic_room.jpg took 0.0027289390563964844 seconds
+2024-12-22 20:29:23,034 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): map
+2024-12-22 20:29:23,034 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-22 20:29:23,069 - application - DEBUG - after_request_time [__init__.py:42] - Request to /show_list/13 took 0.011889934539794922 seconds
+2024-12-22 20:29:23,069 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): map
+2024-12-22 20:29:23,069 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): lists/list.html.jinja
+2024-12-22 20:29:27,032 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:428] - found_entries for <Room 3>: [<UserListEntry 27>]
+2024-12-22 20:29:27,038 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:436] - Entry: <UserListEntry 27>
+2024-12-22 20:29:27,039 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:437] - Item Model: Room, Item ID: 3
+2024-12-22 20:29:27,039 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:438] - User List ID: 5 User List Name: iotsmstmi 3rd Floor Rooms
+2024-12-22 20:29:27,039 - application.list_utils - DEBUG - get_list_entries_for_item [list_utils.py:439] - user: 1
+2024-12-22 20:29:27,040 - application.rooms - DEBUG - get_active_room_entry_id [rooms.py:130] - get_active_room_entry_id called 27
+2024-12-22 20:29:27,043 - application - DEBUG - after_request_time [__init__.py:42] - Request to /get_active_room_entry_id took 0.01970195770263672 seconds
+2024-12-22 20:29:27,043 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): map
+2024-12-22 20:29:27,044 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-22 20:29:28,634 - application - DEBUG - after_request_time [__init__.py:42] - Request to /update_list_order/5 took 0.058757781982421875 seconds
+2024-12-22 20:29:28,634 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): map
+2024-12-22 20:29:28,635 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None

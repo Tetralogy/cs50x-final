@@ -531,8 +531,7 @@ def update_entry_order(user_list_entry_id: int, new_order: int) -> Optional[User
                 raise e
 
 def delete_entry_and_item(user_list_entry_id: int) -> bool:
-    userlist_entry = UserListEntry.query.get(user_list_entry_id)
-    
+    userlist_entry = db.get_or_404(UserListEntry, user_list_entry_id) # UserListEntry.query.get(user_list_entry_id)
     if userlist_entry:
         item = userlist_entry.get_item()  # Use the get_item method to fetch the item
         if item is None:

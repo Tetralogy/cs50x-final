@@ -100,3 +100,12 @@ def update_active_floor(mapper, connection, target):
         if target.active_room_id is not None:
             room = session.query(Room).get(target.active_room_id)
             target.active_floor_id = room.floor_id
+            
+
+@event.listens_for(Room, 'before_delete')
+def clear_active_room_id(mapper, connection, target):
+    session = object_session(target)
+    home = session.query(Home).get(target.home_id)
+    if home and home.active_room_id == target.id:
+        home.active_room_id = None
+        session.add(home)

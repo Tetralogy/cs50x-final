@@ -104,3 +104,11 @@
     background-repeat: no-repeat;
     background-size: contain;
 }
+
+.rooms:empty::after {
+    content: "Drop Room Here";
+    background-color: #ff9900 !important;
+    border: 2px dashed #ccc !important;
+    height: 100px !important; /* Example height */
+    border: 5px solid red !important; /* Temporary border for testing */
+}

@@ -18,7 +18,7 @@ logger = ApplicationLogger.get_logger(__name__)
 @login_required
 #@check_prerequisites
 def define_rooms(floor_id: int=None):
-    view = 'rooms'
+    view = 'create_rooms'
     session['view'] = view
     logger.debug(f'define_rooms called with floor_id: {floor_id}')
     if request.method == 'GET':
@@ -125,9 +125,11 @@ def set_active_room(room_id):
 @rooms.route('/get_active_room_entry_id', methods=['GET'])
 @login_required
 def get_active_room_entry_id():
-    room_entry_id = get_list_entries_for_item(current_user.active_home.active_room, 'Room', current_user.id)[0].id
-    logger.debug(f'get_active_room_entry_id called {room_entry_id}')
-    return str(room_entry_id), 200
+    if current_user.active_home.active_room_id:
+        room_entry_id = get_list_entries_for_item(current_user.active_home.active_room, 'Room', current_user.id)[0].id
+        logger.debug(f'get_active_room_entry_id called {room_entry_id}')
+        return str(room_entry_id), 200
+    return ('', 404)
 
 @rooms.route('/set_room_cover_photo/<int:photo_id>', methods=['PUT'])
 @login_required
