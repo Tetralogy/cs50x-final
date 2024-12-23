@@ -1,5 +1,5 @@
 <div title="{{ entry.get_item().name }}" 
-    class="col  {% if current_user.active_home.active_room.current_cover_photo_id == entry.item_id and entry.item_model == 'Photo' and view == 'sortphotos' %}selected{% endif %}"
+    class="col  {% if current_user.active_home.active_room.current_cover_photo_id == entry.item_id and entry.item_model == 'Photo' and view == 'selectcoverphoto' %}selected{% endif %}"
     id="{{ entry.item_model }}list-{{ entry.id }}"
     data-id="{{ entry.id }}"
     data-item_id="{{ entry.item_id }}"
@@ -21,7 +21,7 @@
                     class=""
                     id="pingrid-list-loader"
                     hx-get="/show_list/{{ entry.get_item().pins_list_id }}"
-                    
+                    {% if view == 'pingrid' %}hx-vals='{"view_override":"pingrid"}'{% endif %}
                     hx-trigger="load once"
                     hx-swap="outerHTML"
                     hx-indicator="#updating-indicator"

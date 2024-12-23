@@ -216,7 +216,7 @@ def show_list(list_id: int = None):
         view = view_override
     else:
         view = session.get('view')
-    #logger.debug(f'view: {view}')
+    logger.debug(f'view: {view}')
     #logger.debug(f'list_id1: {list_id}')
     sublevel_limit = request.args.get('sublevel_limit')
     #logger.debug(f'sublevel_limit: {sublevel_limit}')
@@ -295,7 +295,7 @@ def show_list(list_id: int = None):
     if any(found_lists):
         child_lists = get_immediate_child_lists(found_lists)
         #logger.debug(f'found_lists - inner return: {found_lists}')
-        return render_template('lists/list.html.jinja', userlists=found_lists, view=view, reversed=reversed, sublevel=sublevel, sublevel_limit=sublevel_limit, view_override=view_override, child_lists=child_lists)
+        return render_template('lists/list.html.jinja', userlists=found_lists, view=view, reversed=reversed, sublevel=sublevel, sublevel_limit=sublevel_limit, child_lists=child_lists)
     else:
         #logger.debug("no lists found - return")
         return '', 204
@@ -308,7 +308,14 @@ def show_photo_entry(photo_id):
     photo = db.get_or_404(Photo, photo_id)
     entry_id = get_list_entries_for_item(photo, list_model='Photo')[0].id
     photo_entry = db.get_or_404(UserListEntry, entry_id)
-    return render_template('lists/model/photo.html.jinja', entry=photo_entry)
+    view_override = request.args.get('view_override')
+    logger.debug(f'view_override: {view_override}')
+    if view_override:
+        view = view_override
+    else:
+        view = session.get('view')
+    logger.debug(f'view: {view}')
+    return render_template('lists/model/photo.html.jinja', entry=photo_entry, view=view)
 
 
 @lists.route('/rename/<string:item_model>/<int:item_id>', methods=['GET', 'PUT'])

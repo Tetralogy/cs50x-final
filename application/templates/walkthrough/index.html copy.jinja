@@ -32,14 +32,29 @@
         Updating...
     </div>
 </div>
-
+    <h1>This is walkthrough/index.html.jinja</h1>
+    <h1>onboarding Walkthrough</h1>
+    <h2>
+        active floor name: {{ current_user.active_home.active_floor.name }} id:
+        {{ current_user.active_home.active_floor.id }}
+    </h2>
+    <h2>
+        active room name: {{ current_user.active_home.active_room.name }} id:
+        {{ current_user.active_home.active_room.id }}
+    </h2>
     <div
         id="walkthrough-steps"
         hx-get="/walkthrough/steps"
         hx-indicator="#updating-indicator"
         hx-trigger="load"
     ></div>
-
+    <div
+        id="updating-indicator"
+        class="htmx-indicator spinner-border"
+        role="status"
+    >
+        <span class="visually-hidden">Loading...</span>
+    </div>
     <p>
         <button
             hx-put="/walkthrough/steps"
@@ -88,14 +103,6 @@
             class="btn btn-primary"
         >
             pingrid test
-        </button>
-                        <button
-            hx-put="/walkthrough/steps"
-            hx-target="#walkthrough-steps"
-            hx-vals='{"view": "room"}'
-            class="btn btn-primary"
-        >
-            room
         </button>
         {#
     <button
