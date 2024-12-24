@@ -40,14 +40,14 @@ def walk_start(room_id: int = None, room_name: str = None, view: str = None):
                 room_id = room[0].id
                 set_active_room(room_id)
                 if not view:
-                    view = 'rename'
+                    view = 'room'
     if request.method == 'POST':
         logger.debug(f'post room_name: {room_name}')
         logger.debug(f'post view: {view}')
         active_room_id = request.form.get('active_room')
         set_active_room(active_room_id)
         logger.debug(f'active_room: {current_user.active_home.active_room}')
-        view = "rename"
+        view = "room"
     session['view'] = view
     logger.debug(f'view: {view}')
     #logger.debug(f'active_room: {active_room}')
@@ -74,7 +74,7 @@ def views():
         
     else:
         logger.debug(f'File not found! {view}.html.jinja')
-        view = 'rename'
+        view = 'room'
 
     if 'HX-Request' in request.headers:
         #return render_template(f'walkthrough/parts/{view}.html.jinja', view=view)

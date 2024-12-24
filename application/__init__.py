@@ -84,7 +84,7 @@ def create_app(config_filename=None):
     os.makedirs(upload_folder, exist_ok=True)
     
     app.config['ICONS_FOLDER'] = os.path.join(os.path.dirname(app.root_path), 'media/icons')
-    app.config['DEFAULT_ROOM_PHOTO_URL'] = '/static/defaults/generic_room.jpg'
+    app.config['DEFAULT_ROOM_PHOTO_URL'] = '/static/defaults/generic_room.webp'
     
     # Initialize extensions
     db.init_app(app)
@@ -94,7 +94,7 @@ def create_app(config_filename=None):
     from .main import main
     from .auth import auth
     from .database.models import Base, models, User
-    from .database.events import set_timestamp_on_completion, update_active_floor #, duplicate_pins_for_new_cover_photo, remove_old_pin_and_entry_if_duplicate_task_on_photo
+    from .database.events import set_timestamp_on_completion, update_active_floor, debug_reset_tutorials #, duplicate_pins_for_new_cover_photo, remove_old_pin_and_entry_if_duplicate_task_on_photo
     from .utils import utils
     from .upload import upload
     from .annotate import annotate
@@ -116,8 +116,6 @@ def create_app(config_filename=None):
     @login_manager.user_loader
     def load_user(user_id):
         return User.query.get(int(user_id))
-    
-    
     
     # Register blueprints
     app.register_blueprint(main)

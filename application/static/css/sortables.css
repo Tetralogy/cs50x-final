@@ -117,21 +117,23 @@
     position: relative;
 }
 .pingrid.hover::after {
+    z-index: 10; /* Higher than most elements */
+    pointer-events: none; /* Prevent it from blocking interaction */
     content: "Drop Pin Here";
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    /* background-color: rgba(0, 255, 55, 0.25); */
+
     font-size: 2vw;
     font-weight: bold;
     text-align: center;
     color: rgba(255, 255, 255, 0.5) !important;
     text-shadow: 0 0 .2 #000000;
-    /* padding: 0 !important; */
+
     line-height: .5;
     display: inline-block;
     cursor: pointer;
     border: 2vw solid rgba(255, 0, 0, .5);
-}
+} 

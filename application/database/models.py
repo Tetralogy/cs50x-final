@@ -40,6 +40,9 @@ class User(db.Model, UserMixin):
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=func.now())
     last_login: Mapped[datetime] = mapped_column(DateTime, nullable=True)
     debug: Mapped[bool] = mapped_column(Boolean, server_default="0")
+    tutorial_pingrid_dismissed: Mapped[bool] = mapped_column(Boolean, server_default="0")
+    tutorial_floors_dismissed: Mapped[bool] = mapped_column(Boolean, server_default="0")
+    tutorial_rooms_dismissed: Mapped[bool] = mapped_column(Boolean, server_default="0")
     # Define relationships
     #abilities = relationship('UserAbility', back_populates="user", lazy='dynamic')
     #preferences = relationship('UserPreference', back_populates="user", lazy='dynamic')

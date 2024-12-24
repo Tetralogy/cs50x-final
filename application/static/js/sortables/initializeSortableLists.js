@@ -4,6 +4,7 @@ import { updateDropzones } from "./dropzones.js";
 import { addedItem } from "./addedListItem.js";
 import { getSelectedActive, singleSelect } from './getSelected.js';
 import { tasktoPin } from './tasktoPin.js';
+import { throttle } from "../throttle.js";
 
 // Create a global map to track Sortable instances
 const sortableInstances = new Map();
@@ -96,6 +97,7 @@ export function initializeSortableLists() {
                     //console.log("onMove isDragging " + getIsDragging());
                     updateDropzones(evt);
                     //console.dir(evt.related);
+                    
                     if (evt.related !== null) {
                         if (evt.related.parentNode.classList.contains("pingrid")) {
                             evt.related.parentNode.classList.add("hover");

@@ -9,6 +9,29 @@ from logs.logging_config import ApplicationLogger
 onboard = Blueprint('onboard', __name__)
 logger = ApplicationLogger.get_logger(__name__)
 
+@onboard.route('/tutorial/pingrid', methods=['POST'])
+@login_required
+def pingrid_tutorial():
+    if request.method == "POST":
+        current_user.tutorial_pingrid_dismissed = True
+        db.session.commit()
+        return "", 204
+    
+@onboard.route('/tutorial/floors', methods=['POST'])
+@login_required
+def floors_tutorial():
+    if request.method == "POST":
+        current_user.tutorial_floors_dismissed = True
+        db.session.commit()
+        return "", 204 
+
+@onboard.route('/tutorial/rooms', methods=['POST'])
+@login_required
+def rooms_tutorial():
+    if request.method == "POST":
+        current_user.tutorial_rooms_dismissed = True
+        db.session.commit()
+        return "", 204
 '''@onboard.route('/onboarding', methods=['GET'])
 @login_required
 def onboarding():

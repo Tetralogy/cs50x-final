@@ -2,7 +2,7 @@
     <a class="btn btn-info btn-sm" href="#scroll-start-{{list_obj.id}}"><</a>
     <ul class="sticky-top nav nav-tabs d-flex flex-nowrap text-nowrap overflow-x-auto bg-body">
     <a id="scroll-start-{{list_obj.id}}"></a>
-        {% for naventry in list_obj.entries | sort(attribute='order') %}
+        {% for naventry in list_obj.entries | sort(attribute='order') | reverse %}
             <li class="nav-item">
                 <a
                     class="nav-link h-100 

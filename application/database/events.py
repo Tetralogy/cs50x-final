@@ -3,7 +3,7 @@ import logging
 from sqlalchemy.orm import Mapped, mapped_column, relationship, column_property, attributes, object_session
 from sqlalchemy import Boolean, String, Integer, DateTime, UniqueConstraint, and_, delete, func, ForeignKey, select, text, event, Enum
 
-from application.database.models import Home, Photo, Pin, Room, Task, TaskStatus, UserListEntry
+from application.database.models import Home, Photo, Pin, Room, Task, TaskStatus, User, UserListEntry
 from application.list_utils import get_userlist
 from application.extension import db
 from logs.logging_config import ApplicationLogger
@@ -109,3 +109,10 @@ def clear_active_room_id(mapper, connection, target):
     if home and home.active_room_id == target.id:
         home.active_room_id = None
         session.add(home)
+        
+@event.listens_for(User, 'before_update')
+def debug_reset_tutorials(mapper, connection, target):
+    if target.debug == True:
+        target.tutorial_pingrid_dismissed = False
+        target.tutorial_floors_dismissed = False
+        target.tutorial_rooms_dismissed = False
