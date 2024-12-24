@@ -1,14 +1,24 @@
-<div
-    id="photo-loader"
-    hx-get="/show_photo_entry/{{ current_user.active_home.active_room.current_cover_photo_id }}"
-    hx-vals='{"view_override":"pingrid"}'
-    hx-trigger="load once"
-    hx-swap="outerHTML"
-    hx-indicator="#updating-indicator"
-></div>
+
+<div class="sticky-top">
+<div class="row g-0">
+    <div
+        id="photo-loader"
+        hx-get="/show_photo_entry/{{ current_user.active_home.active_room.current_cover_photo_id }}"
+        hx-vals='{"view_override":"pingrid"}'
+        hx-trigger="load once"
+        hx-swap="outerHTML"
+        hx-indicator="#updating-indicator"
+    ></div>
+</div>
+</div>
 
 {% include 'walkthrough/parts/create_tasks.html.jinja' %}
-
+|tasklist | photo|
+<br>
+<p>
+    ------------------------------------------------------------------------------
+</p>
+<br>
 <!-- Button trigger modal -->
 <button
     type="button"

@@ -13,9 +13,10 @@
     data-bs-title="<u>Drag</u> to <span class='text-nowrap'><b>reorder</b> {{ entry.item_model }}</span>"
 >
 <input type="hidden" name="items" value="{{ entry.id }}" />
-        <div class="position-relative">
+        <div class="position-relative" style="max-height: fit-content; max-width: fit-content;">
+
             <!-- Image -->
-            <img src="{{ entry.get_item().photo_url }}" class="img-fluid">
+            <img src="{{ entry.get_item().photo_url }}" style="max-height: 50vh;">
             <!-- Overlay Grid -->
                 <div
                     class=""
@@ -28,5 +29,6 @@
                 >
                     <input id="dummy-placeholder" type="hidden" name="items" />
                 </div>
+
         </div>
 </div>
