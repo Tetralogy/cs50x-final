@@ -17,7 +17,7 @@ def pingrid_tutorial():
         db.session.commit()
         return "", 204
     if request.method == "GET":
-        return render_template('walkthrough/parts/modal_room.jinja')
+        return render_template('onboarding/modal/modal_roompingrid.jinja')
     
 @onboard.route('/tutorial/create_floors', methods=['GET', 'POST'])
 @login_required
@@ -27,7 +27,7 @@ def floors_tutorial():
         db.session.commit()
         return "", 204 
     if request.method == "GET":
-        return render_template('homes/modal_floors.jinja')
+        return render_template('onboarding/modal/modal_floors.jinja')
 
 @onboard.route('/tutorial/create_rooms', methods=['GET', 'POST'])
 @login_required
@@ -37,7 +37,7 @@ def rooms_tutorial():
         db.session.commit()
         return "", 204
     if request.method == "GET":
-        return render_template('homes/modal_rooms.jinja')
+        return render_template('onboarding/modal/modal_rooms.jinja')
     
 @onboard.route('/tutorial/create_homes', methods=['GET', 'POST'])
 @login_required
@@ -47,7 +47,7 @@ def home_tutorial():
         db.session.commit()
         return "", 204
     if request.method == "GET":
-        return render_template('homes/modal_home.jinja')
+        return render_template('onboarding/modal/modal_home.jinja')
 
 '''@onboard.route('/onboarding', methods=['GET'])
 @login_required

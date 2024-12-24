@@ -77,10 +77,5 @@
 </div>
 
 {% if not current_user.tutorial_pingrid_dismissed %}
-    <script>
-        const tutorialModal = new bootstrap.Modal(
-            document.getElementById("tutorialModal"),
-        );
-        tutorialModal.show();
-    </script>
+{% include 'onboarding/modal/showmodal.html' %}
 {% endif %}
