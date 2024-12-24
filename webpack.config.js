@@ -1,4 +1,5 @@
 const path = require('path');
+const webpack = require('webpack');
 
 module.exports = {
   mode: 'development', // or 'production'
@@ -7,7 +8,19 @@ module.exports = {
     path: path.resolve(__dirname, 'application/static/js'),
     filename: 'bundle.js',
   },
-//   resolve: {
-//     modules: [path.resolve(__dirname, 'application/static/js'), 'node_modules'],
-//   },
+  module: {
+    rules: [
+      {
+        test: /\.css$/i,
+        use: ['style-loader', 'css-loader'],
+      },
+    ],
+  },
+  // This ensures proper source maps for debugging
+  devtool: 'source-map',
+  resolve: {
+    alias: {
+      bootstrap: path.resolve(__dirname, 'node_modules/bootstrap'),
+    },
+  },
 };

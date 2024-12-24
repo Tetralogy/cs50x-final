@@ -12,11 +12,11 @@ const sortableInstances = new Map();
 export function initializeSortableLists() {
     const sortableElements = document.querySelectorAll(".sortable");
     sortableElements.forEach(function (sortableElement) {
-            // First, destroy any existing instance for this element
+        // First, destroy any existing instance for this element
         if (sortableInstances.has(sortableElement)) {
-                const existingInstance = sortableInstances.get(sortableElement);
-                existingInstance.destroy();
-            }
+            const existingInstance = sortableInstances.get(sortableElement);
+            existingInstance.destroy();
+        }
         if (sortableElement !== null) {
             function handlePointerDown(evt) {
                 if (evt.pointerType === 'mouse') {
@@ -25,7 +25,7 @@ export function initializeSortableLists() {
                     console.log("Direct pointerdown event:", evt);
                 }
             }
-        
+
             function handlePointerUp(evt) {
                 if (evt.pointerType === 'mouse') {
                     evt.preventDefault();
@@ -33,23 +33,23 @@ export function initializeSortableLists() {
                     console.log("Direct pointerup event:", evt);
                 }
             }
-        
+
             function handleTouchStart(evt) {
                 evt.preventDefault();
                 //evt.stopPropagation();
                 console.log("Direct touchstart event:", evt);
             }
-        
+
             function handleTouchEnd(evt) {
                 evt.preventDefault();
                 //evt.stopPropagation();
                 console.log("Direct touchend event:", evt);
             }
-        
+
             // Add pointerdown and pointerup event listeners directly
             //sortableElement.addEventListener('pointerdown', handlePointerDown);
             //sortableElement.addEventListener('pointerup', handlePointerUp);
-        
+
             // Add touchstart and touchend event listeners directly
             sortableElement.addEventListener('touchstart', handleTouchStart);
             //sortableElement.addEventListener('touchend', handleTouchEnd);
@@ -97,7 +97,7 @@ export function initializeSortableLists() {
                     //console.log("onMove isDragging " + getIsDragging());
                     updateDropzones(evt);
                     //console.dir(evt.related);
-                    
+
                     if (evt.related !== null) {
                         if (evt.related.parentNode.classList.contains("pingrid")) {
                             evt.related.parentNode.classList.add("hover");
@@ -116,22 +116,24 @@ export function initializeSortableLists() {
                     console.log("onSelect evt.newIndicies " + evt.newIndicies);
                     console.log(evt.newIndicies.map(newIndex => newIndex)); */
                     if (itemEl.dataset.model === "Room") {
-                        if (itemEl.dataset.view !== 'create_rooms'){
-                        singleSelect(itemEl, evt);
-                        // update active room as current selected
-                        const room_id = itemEl.dataset.item_id;
-                        /* htmx.ajax(
-                            "PUT",
-                            `/set_active_room/${room_id}`,
-                            {
-                                swap: "none",
-                                target: itemEl,
-                            },
-                        ); */
-                        console.log("PUT: select active room");
-                        window.location = `/walkthrough/${room_id}`; // also sets active room
-                    }}
-                    else if (itemEl.dataset.model === "Photo") { console.log("onSelect Photo");
+                        if (itemEl.dataset.view !== 'create_rooms') {
+                            singleSelect(itemEl, evt);
+                            // update active room as current selected
+                            const room_id = itemEl.dataset.item_id;
+                            /* htmx.ajax(
+                                "PUT",
+                                `/set_active_room/${room_id}`,
+                                {
+                                    swap: "none",
+                                    target: itemEl,
+                                },
+                            ); */
+                            console.log("PUT: select active room");
+                            window.location = `/walkthrough/${room_id}`; // also sets active room
+                        }
+                    }
+                    else if (itemEl.dataset.model === "Photo") {
+                        console.log("onSelect Photo");
                         singleSelect(itemEl, evt);
                         if (
                             confirm(
@@ -139,19 +141,20 @@ export function initializeSortableLists() {
                                 evt.item.dataset.name +
                                 " This cannot be undone.",
                             )
-                        )
-                        {
-                        // update active cover photo as current selected
-                        htmx.ajax(
-                            "PUT",
-                            `/set_room_cover_photo/${itemEl.dataset.item_id}`,
-                            {
-                                swap: "none",
-                                target: itemEl,
-                            },
-                        );}
+                        ) {
+                            // update active cover photo as current selected
+                            htmx.ajax(
+                                "PUT",
+                                `/set_room_cover_photo/${itemEl.dataset.item_id}`,
+                                {
+                                    swap: "none",
+                                    target: itemEl,
+                                },
+                            );
+                        }
                     }
-                    else if (itemEl.dataset.model === "Floor") { console.log("onSelect Floor");
+                    else if (itemEl.dataset.model === "Floor") {
+                        console.log("onSelect Floor");
                         singleSelect(itemEl, evt);
                         if (
                             confirm(
@@ -159,17 +162,22 @@ export function initializeSortableLists() {
                                 evt.item.dataset.name +
                                 " This will set the ground floor for this home.",
                             )
-                        )
-                        {
-                        // update active ground floor as current selected
-                        htmx.ajax(
-                            "PUT",
-                            `/set_active_and_ground_floor/${itemEl.dataset.item_id}`,
-                            {
-                                swap: "none",
-                                target: itemEl,
-                            },
-                        );}
+                        ) {
+                            // update active ground floor as current selected
+                            htmx.ajax(
+                                "PUT",
+                                `/set_active_and_ground_floor/${itemEl.dataset.item_id}`,
+                                {
+                                    swap: "none",
+                                    target: itemEl,
+                                },
+                            );
+                        }else{
+                            //getSelectedActive(evt, parent_entry_id);
+                            //singleSelect(itemEl, evt);
+                        }
+                        
+                        
                     }
                 },
                 onDeselect: function (evt) {
@@ -281,13 +289,14 @@ export function initializeSortableLists() {
                             "No sublists found in target container.",
                         );
                     }
-                    evt.items.forEach(function (item) { console.log("onEnd deselect item: " + item);
+                    evt.items.forEach(function (item) {
+                        console.log("onEnd deselect item: " + item);
                         Sortable.utils.deselect(item)
                     });
                     console.log("isDragging onEnd: " + getIsDragging());
                     updateDropzones(evt);
                     getSelectedActive(evt, parent_entry_id);
-                },       
+                },
             };
 
             if (sortableElement.classList.contains("tasks")) {
@@ -342,7 +351,7 @@ export function initializeSortableLists() {
                         //originalFunction(evt); //continue with original function
                         if (evt.items.length > 1) { //for multi-drag
                             evt.items.forEach((item, index) => {
-                                setTimeout(() => { 
+                                setTimeout(() => {
                                     // Get the corresponding new and old indices
                                     console.log("item: " + item);
                                     console.log("foreach more than 1 item");
@@ -358,7 +367,7 @@ export function initializeSortableLists() {
                                     addedItem(evt, clonedNode, newIndex, oldIndex, model, sortableElement);
                                 }, index * 100); // Add a delay for each request so it works
                             })
-                        } else { 
+                        } else {
                             const itemEl = evt.item; // dragged HTMLElement
                             const clonedNode = itemEl.cloneNode(true);
                             const oldIndex = evt.oldIndex;
@@ -384,7 +393,7 @@ export function initializeSortableLists() {
             const instance = new Sortable(sortableElement, sortableOptions);
             // Store the instance in the map
             sortableInstances.set(sortableElement, instance);
-            
+
             //console.log("instance: " + instance);
             //console.dir(instance);
         }

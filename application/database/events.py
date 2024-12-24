@@ -116,3 +116,4 @@ def debug_reset_tutorials(mapper, connection, target):
         target.tutorial_pingrid_dismissed = False
         target.tutorial_floors_dismissed = False
         target.tutorial_rooms_dismissed = False
+        target.tutorial_home_dismissed = False

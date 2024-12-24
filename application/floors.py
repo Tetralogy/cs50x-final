@@ -78,7 +78,7 @@ def set_ground_floor(floor_id):
 def set_active_and_ground_floor(floor_id):
     floor = set_active_floor(floor_id)
     floor = set_ground_floor(floor_id)
-    return floor
+    return '', 200
 
 @floors.route('/get_ground_floor_entry_id', methods=['GET'])
 @login_required

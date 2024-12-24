@@ -9,29 +9,46 @@ from logs.logging_config import ApplicationLogger
 onboard = Blueprint('onboard', __name__)
 logger = ApplicationLogger.get_logger(__name__)
 
-@onboard.route('/tutorial/pingrid', methods=['POST'])
+@onboard.route('/tutorial/pingrid', methods=['GET', 'POST'])
 @login_required
 def pingrid_tutorial():
     if request.method == "POST":
         current_user.tutorial_pingrid_dismissed = True
         db.session.commit()
         return "", 204
+    if request.method == "GET":
+        return render_template('walkthrough/parts/modal_room.jinja')
     
-@onboard.route('/tutorial/floors', methods=['POST'])
+@onboard.route('/tutorial/create_floors', methods=['GET', 'POST'])
 @login_required
 def floors_tutorial():
     if request.method == "POST":
         current_user.tutorial_floors_dismissed = True
         db.session.commit()
         return "", 204 
+    if request.method == "GET":
+        return render_template('homes/modal_floors.jinja')
 
-@onboard.route('/tutorial/rooms', methods=['POST'])
+@onboard.route('/tutorial/create_rooms', methods=['GET', 'POST'])
 @login_required
 def rooms_tutorial():
     if request.method == "POST":
         current_user.tutorial_rooms_dismissed = True
         db.session.commit()
         return "", 204
+    if request.method == "GET":
+        return render_template('homes/modal_rooms.jinja')
+    
+@onboard.route('/tutorial/create_homes', methods=['GET', 'POST'])
+@login_required
+def home_tutorial():
+    if request.method == "POST":
+        current_user.tutorial_home_dismissed = True
+        db.session.commit()
+        return "", 204
+    if request.method == "GET":
+        return render_template('homes/modal_home.jinja')
+
 '''@onboard.route('/onboarding', methods=['GET'])
 @login_required
 def onboarding():

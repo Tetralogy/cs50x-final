@@ -5,16 +5,12 @@
 
 {% block main %}
     <h1>Create New Home</h1>
-    <p>Please follow the steps below to set up your home:</p>
-    <ol>
-        <li><strong>Enter Home Name:</strong> Choose a unique name for your home.</li>
-        <li><strong>Select Home Type:</strong> Use the dropdown menu to select the type of your home.</li>
-        <li><strong>Specify Home Layout:</strong> Indicate if your home is multi-story by toggling the checkbox.</li>
-        <li><strong>Submit Form:</strong> Click the "Submit" button to save your home details.</li>
-    </ol>
+
     <form action="/create/Home" method="post">
         <div class="form-floating mb-3" hx-target="this" hx-swap="outerHTML">
-            <input hx-post="/validate/Home" hx-indicator="#updating-indicator"
+            <input
+                hx-post="/validate/Home"
+                hx-indicator="#updating-indicator"
                 type="text"
                 class="form-control"
                 id="HomeName"
@@ -61,4 +57,22 @@
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
+
+    <!-- Button trigger modal -->
+    <button
+        type="button"
+        class="btn btn-primary"
+        data-bs-toggle="modal"
+        data-bs-target="#tutorialModal"
+    >
+        Show Instructions
+    </button>
+
+
+<div id="modal-loader"
+hx-get="/tutorial/create_home"
+hx-trigger="load once"
+hx-swap="outerHTML">
+</div>
+
 {% endblock %}

@@ -1,0 +1,103 @@
+<!-- Modal -->
+    <div
+        class="modal fade"
+        id="tutorialModal"
+        tabindex="-1"
+        aria-labelledby="tutorialModalLabel"
+        aria-hidden="true"
+    >
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="tutorialModalLabel">
+                        Create Rooms Tutorial
+                    </h1>
+                    <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                    ></button>
+                </div>
+                <div class="modal-body">
+                    <p>
+                        Follow the instructions below to create and customize
+                        rooms for your home:
+                    </p>
+                    <ol>
+                        #bug edit this
+                        <li>
+                            Review Default Room Types:
+                            <ul>
+                                <li>
+                                    The default room types are listed in the
+                                    container below. These include common room
+                                    types like 'Living Room', 'Bedroom', etc.
+                                </li>
+                                <li>
+                                    If you wish to use any of these default
+                                    types, simply drag and drop them into the
+                                    desired position.
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            Customize Your Room List:
+                            <ul>
+                                <li>
+                                    In the yellow container, you will see the
+                                    list of rooms you are creating for your
+                                    home.
+                                </li>
+                                <li>
+                                    You can add new custom rooms or modify
+                                    existing ones.
+                                </li>
+                                <li>
+                                    Use the drag-and-drop feature to organize
+                                    the rooms in the order you prefer.
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            Save and Continue:
+                            <ul>
+                                <li>
+                                    You can then proceed to the next step of
+                                    your home setup.
+                                </li>
+                            </ul>
+                        </li>
+                    </ol>
+                </div>
+
+                <div class="modal-footer">
+                    <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal"
+                    >
+                        Close
+                    </button>
+                    <button
+                        hx-post="/tutorial/create_rooms"
+                        data-bs-dismiss="modal"
+                        type="button"
+                        class="btn btn-primary"
+                        id="saveChanges"
+                    >
+                        Got it, Don't show again
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if not current_user.tutorial_pingrid_dismissed %}
+        <script>
+            const tutorialModal = new bootstrap.Modal(
+                document.getElementById("tutorialModal"),
+            );
+            tutorialModal.show();
+        </script>
+    {% endif %}

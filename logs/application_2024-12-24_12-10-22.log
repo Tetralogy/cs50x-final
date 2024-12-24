@@ -1,0 +1,11 @@
+2024-12-24 12:10:22,351 - application.map - DEBUG - home_map [map.py:26] - map called with floor_id: 2
+2024-12-24 12:10:22,370 - application.map - DEBUG - home_map [map.py:29] - room check: floor_id: 2, has_rooms: True
+2024-12-24 12:10:22,454 - application.map - DEBUG - home_map [map.py:36] - floor_list MAP: <UserList 2>
+2024-12-24 12:10:22,794 - application.list_routes - DEBUG - show_list [list_routes.py:219] - view: horiz-scroll
+2024-12-24 12:10:22,800 - application.list_routes - DEBUG - show_list [list_routes.py:219] - view: map
+2024-12-24 12:10:22,806 - application.list_routes - DEBUG - show_list [list_routes.py:219] - view: map
+2024-12-24 12:10:23,199 - application.list_routes - DEBUG - show_photo_entry [list_routes.py:312] - view_override: None
+2024-12-24 12:10:23,201 - application.list_routes - DEBUG - show_photo_entry [list_routes.py:317] - view: map
+2024-12-24 12:10:23,311 - application.list_routes - DEBUG - show_list [list_routes.py:219] - view: map
+2024-12-24 12:10:45,051 - application.list_routes - DEBUG - show_list [list_routes.py:219] - view: map
+2024-12-24 12:10:59,587 - application.list_routes - DEBUG - show_list [list_routes.py:219] - view: map

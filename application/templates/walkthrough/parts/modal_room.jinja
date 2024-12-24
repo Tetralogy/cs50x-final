@@ -1,0 +1,86 @@
+<!-- Modal -->
+<div
+    class="modal fade"
+    id="tutorialModal"
+    tabindex="-1"
+    aria-labelledby="tutorialModalLabel"
+    aria-hidden="true"
+>
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="tutorialModalLabel">
+                    Room Task Board Tutorial
+                </h1>
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                ></button>
+            </div>
+            <div class="modal-body">
+                {# #BUG: rewrite intro text #BUG: format the photo layout to make
+                the tasks easier to see and drag #BUG: simplify the task card layout#}
+                
+                <h3>Welcome to Your Task Board!</h3>
+                <p>Follow these simple steps to get started:</p>
+
+                <ol>
+                    <li>
+                        <strong>Create a Task</strong><br />Click
+                        <strong>“+ Add Task”</strong>, type a name, and hit
+                        <strong>Enter</strong>.
+                    </li>
+                    <li>
+                        <strong>Reorder Tasks</strong><br />Drag and drop tasks
+                        to reorder them.
+                    </li>
+                    <li>
+                        <strong>Make a Subtask</strong><br />Drag a task onto
+                        another task’s subtask area to make it a subtask.
+                    </li>
+                    <li>
+                        <strong>Pin Tasks to the Room</strong><br />Drag a task
+                        and drop it onto the room photo to pin it as a visual
+                        marker.
+                    </li>
+                </ol>
+
+                <p>
+                    <strong>Done!</strong><br />Click
+                    <strong>“Show Instructions”</strong> for help anytime, or
+                    click <strong>“Dismiss”</strong> to get started.
+                </p>
+            </div>
+
+            <div class="modal-footer">
+                <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal"
+                >
+                    Close
+                </button>
+                <button
+                    hx-post="/tutorial/pingrid"
+                    data-bs-dismiss="modal"
+                    type="button"
+                    class="btn btn-primary"
+                    id="saveChanges"
+                >
+                    Got it, Don't show again
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if not current_user.tutorial_pingrid_dismissed %}
+    <script>
+        const tutorialModal = new bootstrap.Modal(
+            document.getElementById("tutorialModal"),
+        );
+        tutorialModal.show();
+    </script>
+{% endif %}
