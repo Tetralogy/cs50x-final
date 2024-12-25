@@ -3,14 +3,28 @@
 }
 
 /* scale titles */
-.scalename {
+.scalename.room {
     font-size: 4vw;
     font-weight: bold;
     text-align: center;
     color: white !important;
     text-shadow: 0 0 3px #000;
 }
+.scalename {
+    font-size: 2vw;
+    line-height: 1;
+}
 
+/* Apply a different font size when the screen width is over a certain width */
+@media (min-width: 1000px) {
+    .scalename {
+    font-size: 20px;
+    }
+}
+
+/* .pin {
+background-color: green;
+} */
 .rename {
     background-color: transparent !important;
 }

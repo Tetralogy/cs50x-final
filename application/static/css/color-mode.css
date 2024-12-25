@@ -24,3 +24,9 @@ nav {
 .modal-content {
     color: black;
 }
+
+.pin.gradient {
+    background: radial-gradient(rgba(14,9,252,0.7) 0%, transparent 50%),
+    radial-gradient(rgba(236,9,9,0.71) 0%, transparent 75%);
+
+}

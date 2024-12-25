@@ -8477,7 +8477,13 @@ nav {
 
 .modal-content {
     color: black;
-}`, "",{"version":3,"sources":["webpack://./application/static/css/color-mode.css"],"names":[],"mappings":"AAAA,8BAA8B;AAC9B;IACI;QACI,oCAAoC;QACpC,YAAY;IAChB;AACJ;;AAEA,qBAAqB;AACrB;IACI;QACI,iCAAiC;QACjC,yBAAyB;IAC7B;AACJ;;AAEA;IACI,cAAc;AAClB;AACA;IACI,YAAY;AAChB;;AAEA;IACI,YAAY;AAChB","sourcesContent":["/* Default light mode styles */\n@media (prefers-color-scheme: light) {\n    body {\n        background-color: rgb(212, 212, 212);\n        color: black;\n    }\n}\n\n/* Dark mode styles */\n@media (prefers-color-scheme: dark) {\n    body {\n        background-color: rgb(70, 70, 70);\n        color: rgb(255, 255, 255);\n    }\n}\n\nnav {\n    color: #cc0000;\n}\n.form-floating {\n    color: black;\n}\n\n.modal-content {\n    color: black;\n}"],"sourceRoot":""}]);
+}
+
+.pin.gradient {
+    background: radial-gradient(rgba(14,9,252,0.7) 0%, transparent 50%),
+    radial-gradient(rgba(236,9,9,0.71) 0%, transparent 75%);
+
+}`, "",{"version":3,"sources":["webpack://./application/static/css/color-mode.css"],"names":[],"mappings":"AAAA,8BAA8B;AAC9B;IACI;QACI,oCAAoC;QACpC,YAAY;IAChB;AACJ;;AAEA,qBAAqB;AACrB;IACI;QACI,iCAAiC;QACjC,yBAAyB;IAC7B;AACJ;;AAEA;IACI,cAAc;AAClB;AACA;IACI,YAAY;AAChB;;AAEA;IACI,YAAY;AAChB;;AAEA;IACI;2DACuD;;AAE3D","sourcesContent":["/* Default light mode styles */\n@media (prefers-color-scheme: light) {\n    body {\n        background-color: rgb(212, 212, 212);\n        color: black;\n    }\n}\n\n/* Dark mode styles */\n@media (prefers-color-scheme: dark) {\n    body {\n        background-color: rgb(70, 70, 70);\n        color: rgb(255, 255, 255);\n    }\n}\n\nnav {\n    color: #cc0000;\n}\n.form-floating {\n    color: black;\n}\n\n.modal-content {\n    color: black;\n}\n\n.pin.gradient {\n    background: radial-gradient(rgba(14,9,252,0.7) 0%, transparent 50%),\n    radial-gradient(rgba(236,9,9,0.71) 0%, transparent 75%);\n\n}"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -8779,14 +8785,28 @@ ___CSS_LOADER_EXPORT___.push([module.id, `.editabletext {
 }
 
 /* scale titles */
-.scalename {
+.scalename.room {
     font-size: 4vw;
     font-weight: bold;
     text-align: center;
     color: white !important;
     text-shadow: 0 0 3px #000;
 }
+.scalename {
+    font-size: 2vw;
+    line-height: 1;
+}
 
+/* Apply a different font size when the screen width is over a certain width */
+@media (min-width: 1000px) {
+    .scalename {
+    font-size: 20px;
+    }
+}
+
+/* .pin {
+background-color: green;
+} */
 .rename {
     background-color: transparent !important;
 }
@@ -8794,7 +8814,7 @@ ___CSS_LOADER_EXPORT___.push([module.id, `.editabletext {
 .debug-info {
     color: red;
     font-size: .75em !important;
-}`, "",{"version":3,"sources":["webpack://./application/static/css/typography.css"],"names":[],"mappings":"AAAA;IACI,YAAY;AAChB;;AAEA,iBAAiB;AACjB;IACI,cAAc;IACd,iBAAiB;IACjB,kBAAkB;IAClB,uBAAuB;IACvB,yBAAyB;AAC7B;;AAEA;IACI,wCAAwC;AAC5C;;AAEA;IACI,UAAU;IACV,2BAA2B;AAC/B","sourcesContent":[".editabletext {\n    cursor: text;\n}\n\n/* scale titles */\n.scalename {\n    font-size: 4vw;\n    font-weight: bold;\n    text-align: center;\n    color: white !important;\n    text-shadow: 0 0 3px #000;\n}\n\n.rename {\n    background-color: transparent !important;\n}\n\n.debug-info {\n    color: red;\n    font-size: .75em !important;\n}"],"sourceRoot":""}]);
+}`, "",{"version":3,"sources":["webpack://./application/static/css/typography.css"],"names":[],"mappings":"AAAA;IACI,YAAY;AAChB;;AAEA,iBAAiB;AACjB;IACI,cAAc;IACd,iBAAiB;IACjB,kBAAkB;IAClB,uBAAuB;IACvB,yBAAyB;AAC7B;AACA;IACI,cAAc;IACd,cAAc;AAClB;;AAEA,8EAA8E;AAC9E;IACI;IACA,eAAe;IACf;AACJ;;AAEA;;GAEG;AACH;IACI,wCAAwC;AAC5C;;AAEA;IACI,UAAU;IACV,2BAA2B;AAC/B","sourcesContent":[".editabletext {\n    cursor: text;\n}\n\n/* scale titles */\n.scalename.room {\n    font-size: 4vw;\n    font-weight: bold;\n    text-align: center;\n    color: white !important;\n    text-shadow: 0 0 3px #000;\n}\n.scalename {\n    font-size: 2vw;\n    line-height: 1;\n}\n\n/* Apply a different font size when the screen width is over a certain width */\n@media (min-width: 1000px) {\n    .scalename {\n    font-size: 20px;\n    }\n}\n\n/* .pin {\nbackground-color: green;\n} */\n.rename {\n    background-color: transparent !important;\n}\n\n.debug-info {\n    color: red;\n    font-size: .75em !important;\n}"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 

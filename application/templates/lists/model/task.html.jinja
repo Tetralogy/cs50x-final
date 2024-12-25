@@ -59,15 +59,15 @@
                 <label class="form-check-label " for="flexCheckDefault">
                     <input type="hidden" name="items" value="{{ entry.id }}" />
                     {{ entry.get_item().name }}
-                    {{ entry.get_item().status }}
+                    {# {{ entry.get_item().status }} #}
                     {% include 'base/parts/debug/order.html.jinja' %}
                 </label>
             </div>
         </div>
-        <div class="vr"></div>
+        {# <div class="vr"></div>
         <div>task_description</div>
         <div class="ms-auto vr"></div>
-        <div class="">task_due_date</div>
+        <div class="">task_due_date</div> #}
 
         <div
             class="ms-auto sortable task dropzone d-none"
