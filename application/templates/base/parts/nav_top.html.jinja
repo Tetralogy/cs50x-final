@@ -15,7 +15,9 @@
     aria-labelledby="offcanvasRightLabel"
 >
     <div class="offcanvas-header">
-        <h5 class="offcanvas-title" id="offcanvasRightLabel">Untitled Cleaning Todo App</h5>
+        <a href="/" class="navbar-brand">
+    <h5 class="offcanvas-title navbar-brand" id="offcanvasRightLabel">Untitled Cleaning Todo App</h5>
+</a>
         <button
             type="button"
             class="btn-close"
@@ -24,6 +26,7 @@
         ></button>
     </div>
     <div class="offcanvas-body list-group">
+    {% if current_user.is_authenticated %}
         <ul class="list-group">
             Edit Home
             {# <li><a class="nav-item" href="/home/rename">Rename Home</a></li> #}
@@ -61,7 +64,25 @@
             </li>
             <li class="list-group-item list-group-item-action">{% include 'base/parts/debug/debug_switch.html.jinja' %}</li>
         </ul>
-                        
+    {% else %}
+        <ul class="list-group">
+            User
+            <li>
+                <a
+                    class="list-group-item list-group-item-action"
+                    href="{{ url_for('auth.register') }}"
+                        >Register</a
+                >
+            </li>
+            <li>
+                <a
+                    class="list-group-item list-group-item-action"
+                    href="{{ url_for('auth.login') }}"
+                        >Login</a
+                >
+            </li>
+        </ul>
+    {% endif %}
     </div>
 </div>
 

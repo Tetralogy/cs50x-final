@@ -1,43 +1,49 @@
-<form hx-post="/upload/Photo" enctype="multipart/form-data" hx-trigger="change" hx-target="#test-photo-list-loader"
-        hx-swap="beforebegin" hx-on::after-request="this.reset()">
-    <label for="room-photo-take" class="btn btn-primary btn-lg">
-    📷 Take Photo
-    <input hidden
-        id="room-photo-take"
-        type="file"
-        accept="image/*"
-        capture="environment"
-        name="room_photos" 
-        multiple
-    />
-    </label>
-
-    <label for="room-photo-choose"  class="btn btn-primary btn-lg">
-    📂 Choose Photos
-    <input hidden
-        id="room-photo-choose"
-        type="file"
-        accept="image/*"
-        name="room_photos"
-        multiple
+<form hx-post="/upload/Photo" enctype="multipart/form-data" hx-trigger="change" hx-target="next [id*='list-updater-']"
+        hx-swap="afterbegin" hx-on::after-request="this.reset()">
+    
+<div class="d-flex justify-content-center align-items-center">
+        <label for="room-photo-take" class="btn btn-primary btn-lg">
+        📷 Take Photo
+        <input hidden
+            id="room-photo-take"
+            type="file"
+            accept="image/*"
+            capture="environment"
+            name="room_photos" 
+            multiple
+        />
+        </label>
+    or
+        <label for="room-photo-choose"  class="btn btn-primary btn-lg">
+        📂 Choose Photos
+        <input hidden
+            id="room-photo-choose"
+            type="file"
+            accept="image/*"
+            name="room_photos"
+            multiple
+            
+        /></label>
         
-    /></label>
+</div>
 </form>
 
+<h2>Select the current cover photo:</h2>
 <div class="container-fluid" id="photo-list-container">
             <div
-                class="row g-0 row-cols-4 container-fluid bg-dark border border-success border-5 rounded-bottom-4 p-1"
-                id="task-list-loader"
+                class=""
+                id="photo-list-loader"
                 hx-get="/show_list/"
                 hx-vals='{"list_model": "Photo", "view_override":"selectcoverphoto"}'
                 hx-trigger="load once"
                 hx-swap="outerHTML"
                 hx-indicator="#updating-indicator"
-            >
+            >row g-0 row-cols-4 container-fluid bg-dark border border-success border-5 rounded-bottom-4 p-1
                 <input id="dummy-placeholder" type="hidden" name="items" />
             </div>
 </div>
 
+<br>
 <!-- Button trigger modal -->
 <button
     type="button"
@@ -53,13 +59,4 @@ hx-get="/tutorial/photo"
 hx-trigger="load once"
 hx-swap="outerHTML">
 </div>
-
-<p>------------------------------------------------------------------------------------</p>
-<p>temporary for testing: show photos here:</p>
-
-<div id="test-photo-list-loader"
-    hx-get="/show_list/"
-    hx-vals='{"list_model": "Photo", "reversed": "True"}'
-    hx-trigger="load once"
->
 

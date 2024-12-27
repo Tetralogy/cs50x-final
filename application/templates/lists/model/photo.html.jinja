@@ -1,5 +1,5 @@
 <div title="{{ entry.get_item().name }}" 
-    class="col-auto {% if current_user.active_home.active_room.current_cover_photo_id == entry.item_id and entry.item_model == 'Photo' and view == 'selectcoverphoto' %}selected{% endif %}"
+    class="col {% if current_user.active_home.active_room.current_cover_photo_id == entry.item_id and entry.item_model == 'Photo' and view == 'selectcoverphoto' %}selected{% endif %}"
     id="{{ entry.item_model }}list-{{ entry.id }}"
     data-id="{{ entry.id }}"
     data-item_id="{{ entry.item_id }}"
