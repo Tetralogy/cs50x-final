@@ -1,21 +1,78 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<button
+    class="navbar bg-light navbar-toggler position-absolute top-0 end-0"
+    type="button"
+    data-bs-toggle="offcanvas"
+    data-bs-target="#offcanvasRight"
+    aria-controls="offcanvasRight"
+>
+    <span class="navbar-toggler-icon"></span>
+</button>
+
+<div
+    class="offcanvas offcanvas-end"
+    tabindex="-1"
+    id="offcanvasRight"
+    aria-labelledby="offcanvasRightLabel"
+>
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasRightLabel">Untitled Cleaning Todo App</h5>
+        <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="offcanvas"
+            aria-label="Close"
+        ></button>
+    </div>
+    <div class="offcanvas-body list-group">
+        <ul class="list-group">
+            Edit Home
+            {# <li><a class="nav-item" href="/home/rename">Rename Home</a></li> #}
+            <li>
+                <a
+                    class="list-group-item list-group-item-action"
+                    href="/home/floors/setup"
+                    >Edit Floors</a
+                >
+            </li>
+            <li>
+                <a
+                    class="list-group-item list-group-item-action"
+                    href="/home/rooms/setup/{{ current_user.active_home.active_floor_id }}"
+                    >Add Rooms</a
+                >
+            </li>
+        </ul>
+
+        <ul class="list-group">
+            User
+            <li>
+                <a
+                    class="list-group-item list-group-item-action"
+                    href="{{ url_for('auth.logout') }}"
+                        >Logout</a
+                >
+            </li>
+            <li>
+                <a
+                    class="list-group-item list-group-item-action"
+                    href="{{ url_for('auth.password') }}"
+                        >Password Reset</a
+                >
+            </li>
+            <li class="list-group-item list-group-item-action">{% include 'base/parts/debug/debug_switch.html.jinja' %}</li>
+        </ul>
+                        
+    </div>
+</div>
+
+{# <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" href="/">Todo App</a>
     <div class="d-flex">{% include 'profile/parts/avatar.html.jinja' %}</div>
-    <button
-        class="navbar-toggler"
-        type="button"
-        data-bs-toggle="collapse"
-        data-bs-target="#navbarNav"
-        aria-controls="navbarNav"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-    >
-        <span class="navbar-toggler-icon"></span>
-    </button>
+
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             {% if current_user.is_authenticated %}
-{% include 'base/parts/debug/debug_switch.html.jinja %}
+{% include 'base/parts/debug/debug_switch.html.jinja' %}
 
                 <div class="d-flex">
                     {% include 'profile/parts/avatar.html.jinja' %}
@@ -92,4 +149,4 @@
             </li>
         </ul>
     </div>
-</nav>
+</nav> #}

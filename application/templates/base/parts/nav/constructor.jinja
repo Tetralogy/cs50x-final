@@ -1,9 +1,12 @@
 {% if current_user.is_authenticated %}
-    {% include 'base/parts/nav/default_nav_bottom.html.jinja' %}
-    {% if session['view'] == 'room' %}
+    {% if session['view'] == 'map' %}
+    
+    {% elif session['view'] == 'room' %}
         {% include 'base/parts/nav/room_nav_bottom.html.jinja' %}
     {% elif session['view'] == 'photo' %}
         {% include 'base/parts/nav/photo_nav_bottom.html.jinja' %}
+    {% else %}
+        {% include 'base/parts/nav/default_nav_bottom.html.jinja' %}
     {% endif %}
 {% else %}
     {% include 'base/parts/nav/landing_nav_bottom.html.jinja' %}

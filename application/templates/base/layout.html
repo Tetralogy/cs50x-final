@@ -18,6 +18,7 @@
         <script type="module" src="/static/js/bundle.js"></script>
     </head>
     <body hx-boost="true" hx-indicator="#updating-indicator">
+    {% include 'base/parts/nav_top.html.jinja' %}
         {% from 'base/parts/debug_text.html.jinja' import debug_text %}
         <div
             class="position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center"
@@ -32,7 +33,7 @@
             </div>
         </div>
         <main class="container-fluid p-0">
-            {# {% include 'base/parts/nav_top.html.jinja' %} #}
+            
             {#{% include 'base/parts/flash_container.html.jinja' %}#}
 
             <div class="row g-0">
