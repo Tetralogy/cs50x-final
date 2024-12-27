@@ -41,4 +41,6 @@ def home_map(floor_id: int=None):
 @login_required
 def room_redirect(room_id: int):
     set_active_room(room_id)
+    if not session['view']:
+        session['view'] = 'room'
     return render_template('walkthrough/index.html.jinja')

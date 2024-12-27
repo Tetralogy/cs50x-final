@@ -3,7 +3,9 @@
     House Map
 {% endblock %}
 
-{% block main %}
+{% block main %} #bug move photo button
+
+<!-- top nav bar -->
 <div
     class=""
     id="floor-list-loader"
@@ -32,13 +34,16 @@
         Updating...
     </div>
 </div>
-
+<!-- end top nav bar -->
+<!-- main -->
     <div
         id="walkthrough-steps"
         hx-get="/walkthrough/steps"
         hx-indicator="#updating-indicator"
         hx-trigger="load"
     ></div>
+<!-- end main -->
+
 
     <p>
         <button
@@ -55,7 +60,7 @@
             hx-vals='{"view": "photo"}'
             class="btn btn-primary"
         >
-            photo
+            Change Cover Photo
         </button>
         {# <button
             hx-put="/walkthrough/steps"
@@ -95,7 +100,7 @@
             hx-vals='{"view": "room"}'
             class="btn btn-primary"
         >
-            room
+            Room Tasks
         </button>
         {#
     <button

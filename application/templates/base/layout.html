@@ -31,7 +31,7 @@
                 <span class="visually-hidden">Loading...</span>
             </div>
         </div>
-        <div class="container-fluid p-0">
+        <main class="container-fluid p-0">
             {# {% include 'base/parts/nav_top.html.jinja' %} #}
             {#{% include 'base/parts/flash_container.html.jinja' %}#}
 
@@ -42,7 +42,7 @@
                 </div>
                 <div class="col-1 bg-secondary"></div>
             </div>
-        </div>
+        </main>
 
         {# <script>
            // htmx.config.indicatorClass = ".spinner-border .text-warning"; //# [ ] need to fix and style
@@ -60,6 +60,6 @@
             //});
         </script>
 
-        <footer>{% include 'base/parts/nav_bottom.html.jinja' %}</footer>
+        <footer>{% include 'base/parts/nav/index.html.jinja' %}</footer>
     </body>
 </html>

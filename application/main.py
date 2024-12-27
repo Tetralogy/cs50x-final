@@ -44,6 +44,9 @@ def index():
     
     return render_template('onboarding/index.html.jinja', user=current_user, onboarded=False)#[ ]: complete onboarding loop'''
 
+@main.route('/nav', methods=['GET'])
+def nav():
+    return render_template('base/parts/nav/constructor.jinja')
 
 
 @main.route('/debug', methods=['PUT'])

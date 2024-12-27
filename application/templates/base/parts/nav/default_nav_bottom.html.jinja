@@ -1,0 +1,61 @@
+
+        {# <div><a href="/" class="btn btn-primary">Home</a></div> #}
+        <div><a href="/map" class="btn btn-secondary">Map</a></div>
+        {# <div><a href="/tasks" class="btn btn-secondary">Tasks</a></div> #}
+
+        <div class="dropup-center dropup">
+            <button 
+                class="btn btn-secondary dropdown-toggle"
+                type="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+                
+            >
+                Edit Home
+            </button>
+
+            <ul class="dropdown-menu" style="z-index: 5000;" >
+                {# <li><a class="dropdown-item" href="/home/rename">Rename Home</a></li> #}
+                <li>
+                    <a class="dropdown-item" href="/home/floors/setup"
+                        >Edit Floors</a
+                    >
+                </li>
+                <li>
+                    <a
+                        class="dropdown-item"
+                        href="/home/rooms/setup/{{ current_user.active_home.active_floor_id }}"
+                        >Add Rooms</a
+                    >
+                </li>
+            </ul>
+        </div>
+
+
+        <div class="dropup-center dropup">
+            <button
+                class="btn btn-secondary dropdown-toggle"
+                type="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+                
+            >
+                User
+            </button>
+            <ul class="dropdown-menu">
+            <li class="dropdown-item">{% include 'base/parts/debug/debug_switch.html.jinja' %}</li>
+                <li>
+                    <a class="dropdown-item" href="{{ url_for('auth.logout') }}"
+                        >Logout</a
+                    >
+                </li>
+                <li>
+                    <a class="dropdown-item" href="{{ url_for('auth.password') }}"
+                        >Password Reset</a
+                    >
+                </li>
+            </ul>
+        </div>
+
+
+    

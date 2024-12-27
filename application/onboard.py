@@ -18,6 +18,16 @@ def pingrid_tutorial():
         return "", 204
     if request.method == "GET":
         return render_template('onboarding/modal/modal_roompingrid.jinja')
+
+@onboard.route('/tutorial/photo', methods=['GET', 'POST'])
+@login_required
+def photo_tutorial():
+    if request.method == "POST":
+        current_user.tutorial_photo_dismissed = True
+        db.session.commit()
+        return "", 204
+    if request.method == "GET":
+        return render_template('onboarding/modal/modal_photo.jinja')
     
 @onboard.route('/tutorial/create_floors', methods=['GET', 'POST'])
 @login_required
@@ -39,7 +49,7 @@ def rooms_tutorial():
     if request.method == "GET":
         return render_template('onboarding/modal/modal_rooms.jinja')
     
-@onboard.route('/tutorial/create_homes', methods=['GET', 'POST'])
+@onboard.route('/tutorial/create_home', methods=['GET', 'POST'])
 @login_required
 def home_tutorial():
     if request.method == "POST":

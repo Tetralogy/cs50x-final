@@ -25,7 +25,6 @@
                         rooms for your home:
                     </p>
                     <ol>
-                        #bug edit this
                         <li>
                             Review Default Room Types:
                             <ul>
@@ -60,7 +59,7 @@
                             </ul>
                         </li>
                         <li>
-                            Save and Continue:
+                            Continue:
                             <ul>
                                 <li>
                                     You can then proceed to the next step of
@@ -93,6 +92,6 @@
         </div>
     </div>
 
-    {% if not current_user.tutorial_pingrid_dismissed %}
+    {% if not current_user.tutorial_rooms_dismissed %}
 <script src="/static/js/showModal.js"></script>
     {% endif %}

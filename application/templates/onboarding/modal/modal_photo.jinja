@@ -1,0 +1,76 @@
+<!-- Modal -->
+<div
+    class="modal fade"
+    id="tutorialModal"
+    tabindex="-1"
+    aria-labelledby="tutorialModalLabel"
+    aria-hidden="true"
+>
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="tutorialModalLabel">
+                    Room Photo Tutorial
+                </h1>
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                ></button>
+            </div>
+            <div class="modal-body">
+                <h3>To change the cover photo of a room</h3>
+                <p>Follow these simple steps to get started:</p>
+                <ol>
+                    <li>
+                        <strong>Take a New Room Photo</strong><br />
+                        Click <strong>“📷 Take Photo”</strong>, go to the middle or corner of the room with a view of everything, and capture.
+                    </li>
+                    <li>
+                        <strong>Import Multiple Room Photos</strong><br />
+                        Click <strong>“📂 Choose Photos”</strong>, select and add from your photos library.
+                    </li>
+                    <li>
+                        <strong>Select the New Room Photo</strong><br />
+                        In the list of photos, select the one you just captured or imported.
+                    </li>
+                    <li>
+                        <strong>Drag to Reorder Photos</strong><br />
+                        If you want to organize your photos, drag and drop to reorder them however you like.
+                        A feature to add closeup photos for detailed tasks to a room will be added in the future.
+                        As of now the tasks you pin on a photo will be lost when you change the photo, this is a known issue.
+                    </li>
+                </ol>
+                <p>
+                    <strong>Done!</strong><br />Click
+                    <strong>“Show Instructions”</strong> for help anytime, or
+                    click <strong>“Dismiss”</strong> to get started.
+                </p>
+            </div>
+
+            <div class="modal-footer">
+                <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal"
+                >
+                    Close
+                </button>
+                <button
+                    hx-post="/tutorial/photo"
+                    data-bs-dismiss="modal"
+                    type="button"
+                    class="btn btn-primary"
+                    id="saveChanges"
+                >
+                    Got it, Don't show again
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if not current_user.tutorial_photo_dismissed %}
+<script src="/static/js/showModal.js"></script>
+{% endif %}
