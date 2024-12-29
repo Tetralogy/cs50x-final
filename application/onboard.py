@@ -47,7 +47,7 @@ def rooms_tutorial():
         db.session.commit()
         return "", 204
     if request.method == "GET":
-        return render_template('onboarding/modal/modal_rooms.jinja')
+        return render_template('onboarding/modal/modal_create_rooms.jinja')
     
 @onboard.route('/tutorial/create_home', methods=['GET', 'POST'])
 @login_required

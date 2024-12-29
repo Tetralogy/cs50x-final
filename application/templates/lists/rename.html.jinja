@@ -1,6 +1,6 @@
-<input
+<input 
     required
-    class="form-control rename scalename"
+    class="form-control rename scalename z-3"
     type="text"
     id="input_{{ entry.item_model }}_name-{{ entry.item_id }}"
     name="input_{{ entry.item_model }}_name-{{ entry.item_id }}"
@@ -10,5 +10,22 @@
     hx-trigger="blur, keyup[key=='Enter'] from:window, keyup changed delay:1s from:window, drag from:window"
     hx-swap="outerHTML"
     value="{{ entry.get_item().name }}"
-    hx-on::load="this.focus();"
-/>
+    autofocus
+    ontouchstart="this.removeAttribute('readonly'); this.focus();">
+
+<script>
+    const input = document.getElementById('input_{{ entry.item_model }}_name-{{ entry.item_id }}');
+
+input.addEventListener('touchstart', (event) => {
+  // Get touch coordinates within the input element
+  const rect = input.getBoundingClientRect();
+  const touchX = event.touches[0].clientX - rect.left; 
+
+  // Estimate cursor position based on touchX (you'll need to refine this logic)
+  let cursorPosition = Math.floor((touchX / rect.width) * input.value.length); 
+  cursorPosition = Math.max(0, Math.min(cursorPosition, input.value.length)); 
+
+  // Set cursor position
+  input.setSelectionRange(cursorPosition, cursorPosition); 
+});
+</script>

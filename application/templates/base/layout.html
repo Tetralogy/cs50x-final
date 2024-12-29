@@ -8,13 +8,8 @@
 
 
         <title>Untitled Cleaning App: {% block title %}{% endblock %}</title>
-        <script
-            defer
-            src="https://unpkg.com/htmx.org@2.0.3"
-            integrity="sha384-0895/pl2MU10Hqc6jd4RvrthNlDiE9U1tWmX7WRESftEDRosgxNsQG/Ze9YMRzHq"
-            crossorigin="anonymous"
-        ></script>
-
+        <script src="https://unpkg.com/htmx.org@2.0.4/dist/htmx.js" integrity="sha384-oeUn82QNXPuVkGCkcrInrS1twIxKhkZiFfr2TdiuObZ3n3yIeMiqcRzkIcguaof1" crossorigin="anonymous">htmx.logAll();</script>
+        {# <script src="https://unpkg.com/htmx.org@2.0.4" integrity="sha384-HGfztofotfshcF7+8n44JQL2oJmowVChPTg48S+jvZoztPfvwD79OC/LTtG6dMp+" crossorigin="anonymous"></script> #}
         <script type="module" src="/static/js/bundle.js"></script>
     </head>
     <body hx-boost="true" hx-indicator="#updating-indicator">
@@ -60,6 +55,9 @@
             //    }, 5000); // 5 seconds delay
             //});
         </script>
+
+        
+        
 
         <footer>{% include 'base/parts/nav/index.html.jinja' %}</footer>
     </body>

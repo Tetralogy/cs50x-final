@@ -4,6 +4,7 @@
 {% endblock %}
 
 {% block main %}
+<!-- top nav bar -->
 <div
     class=""
     id="floor-list-loader"
@@ -18,10 +19,8 @@
         Updating...
     </div>
 </div>
-
-
-{# <div class="container-fluid"> #}
-
+<!-- end top nav bar -->
+<!-- room list -->
 <div class="row g-0 overflow-auto" style="height: 50vh;">
             <div class="col-11">
                 
@@ -57,7 +56,7 @@
             <a class="btn btn-info btn-sm" href="#scroll-start-rooms">↑</a>
             </div>
 </div>
-
+<!-- task list -->
 <div class="row g-0 overflow-auto" style="height: 50vh;">
 <div class="col-11">
 {% include 'tasks/all_tasks_loader.html.jinja' %}
@@ -65,5 +64,5 @@
 <div class="col-1 bg-light">
 </div>
 </div>
-{# </div> #}
+
 {% endblock %}

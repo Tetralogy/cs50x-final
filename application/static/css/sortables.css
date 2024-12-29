@@ -49,10 +49,10 @@
     background: #99ff00;
 } */
 
-.selected {
+.selected .selectable {
     position: relative;
 }
-.selected::after {
+.selected .selectable::after {
     content: "Selected";
     position: absolute;
     top: 0;
@@ -72,16 +72,16 @@
     border: 2vw solid rgba(255, 0, 0, .5);
     /* box-shadow: inset 0 0 0 1vw yellow; */ /* Simulates an inside outline */
 }
-.selected:hover::after {
-    content: "Enter Room";
+/* .selected:hover::after {
+    content: "Edit";
     border: 4vw solid rgba(255, 255, 0, 0.25);
     background-color: rgba(0, 255, 55, 0.5);
-}
+} */
 .selected.task {
     background-color: rgba(85, 0, 255, 0.5);
 }
 .selected.floor::after {
-    content: "Ground Floor #todo: style this";
+    content: "Ground Floor";
     background-color: rgba(255, 0, 255, 0.5);
 }
 .task.dropzone {

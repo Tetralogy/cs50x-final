@@ -8,9 +8,9 @@ import { throttle } from "../throttle.js";
 
 // Create a global map to track Sortable instances
 const sortableInstances = new Map();
-
 export function initializeSortableLists() {
     const sortableElements = document.querySelectorAll(".sortable");
+    let selectable = true;
     sortableElements.forEach(function (sortableElement) {
         // First, destroy any existing instance for this element
         if (sortableInstances.has(sortableElement)) {
@@ -35,10 +35,31 @@ export function initializeSortableLists() {
             }
 
             function handleTouchStart(evt) {
-                evt.preventDefault();
-                //evt.stopPropagation();
-                console.log("Direct touchstart event:", evt);
+                if (evt.target.tagName !== "BUTTON") {console.log("sortable disabled1:", sortableInstances.get(sortableElement).option("disabled"));
+                    evt.preventDefault(); // Prevent default touch behavior for non-button elements
+                    console.log("preventDefault:", evt);
+
+                    // Simulate a click event
+                    const touch = evt.changedTouches[0]; // Get the first touch point
+                    const simulatedClick = new MouseEvent('click', {
+                        bubbles: true,
+                        cancelable: true,
+                        clientX: touch.clientX,
+                        clientY: touch.clientY
+                    });
+
+                    evt.target.dispatchEvent(simulatedClick); // Dispatch the simulated click event
+                }
+                if (evt.target.classList.contains("editabletext") || evt.target.classList.contains("rename")) {
+                    selectable = false;
+                    sortableInstances.get(sortableElement).option("disabled", true);
+                    console.log("sortable disabled2:", sortableInstances.get(sortableElement).option("disabled"));
+                }
+                console.log("touchstart event classes:", evt.target.classList);
+                console.log("Direct touchstart event:", evt.target.tagName);
             }
+
+
 
             function handleTouchEnd(evt) {
                 evt.preventDefault();
@@ -51,8 +72,10 @@ export function initializeSortableLists() {
             //sortableElement.addEventListener('pointerup', handlePointerUp);
 
             // Add touchstart and touchend event listeners directly
-            sortableElement.addEventListener('touchstart', handleTouchStart);
+            sortableElement.addEventListener('touchstart', handleTouchStart, { passive: false });
             //sortableElement.addEventListener('touchend', handleTouchEnd);
+
+
 
             const model = sortableElement.dataset.model;
             const parent_entry_id = sortableElement.dataset.parent_entry_id;
@@ -66,17 +89,17 @@ export function initializeSortableLists() {
                 animation: 150,
                 swapThreshold: 0.65,
                 invertSwap: true,
-                fallbackOnBody: true,
+                fallbackOnBody: false,
                 //draggable: "li",
                 multiDrag: true, // Enable multi-drag
                 selectedClass: "selected", // The class applied to the selected items
                 fallbackTolerance: 3, // So that we can select items on mobile
                 // Prevent dragging on specific elements
                 filter: ".htmx-indicator, .rename", //.listname, .accordion-header, .accordion-button, .accordion",
-                //handle: ".taskhandletest",
+                handle: "",
                 ghostClass: "ghost",
                 dragClass: "ghost-red", //[ ] test if this is needed
-                chosenClass: "ghost-red",
+                //chosenClass: "ghost-red",
                 //removeOnSpill: true,
                 revertOnSpill: true, //needs to be revert to work with the confirm dialog
                 sort: true,
@@ -84,6 +107,7 @@ export function initializeSortableLists() {
                     //if (evt.type === 'pointerdown') {
                     //    console.log("Sortable pointerdown event:", evt);
                     //}
+                    console.log("onStart event type:", evt.type);
                     if (evt.type === 'touchstart') {
                         console.log("Touch event started:", evt);
                     }
@@ -151,33 +175,36 @@ export function initializeSortableLists() {
                                     target: itemEl,
                                 },
                             );
+                            // Trigger for htmx
+                            htmx.trigger(document.body, "cover-photo-updated");
+
                         }
                     }
                     else if (itemEl.dataset.model === "Floor") {
-                        console.log("onSelect Floor");
-                        singleSelect(itemEl, evt);
-                        if (
-                            confirm(
-                                "Are you sure you want to select this item? " +
-                                evt.item.dataset.name +
-                                " This will set the ground floor for this home.",
-                            )
-                        ) {
-                            // update active ground floor as current selected
-                            htmx.ajax(
-                                "PUT",
-                                `/set_active_and_ground_floor/${itemEl.dataset.item_id}`,
-                                {
-                                    swap: "none",
-                                    target: itemEl,
-                                },
-                            );
-                        }else{
-                            //getSelectedActive(evt, parent_entry_id);
-                            //singleSelect(itemEl, evt);
+                        if (selectable === true) {
+                            console.log("onSelect Floor: " + itemEl.classList);
+                            singleSelect(itemEl, evt);
+                            if (
+                                confirm(
+                                    "Are you sure you want to select this item? " +
+                                    evt.item.dataset.name +
+                                    " This will set the ground floor for this home.",
+                                )
+                            ) {
+                                // update active ground floor as current selected
+                                htmx.ajax(
+                                    "PUT",
+                                    `/set_active_and_ground_floor/${itemEl.dataset.item_id}`,
+                                    {
+                                        swap: "none",
+                                        target: itemEl,
+                                    },
+                                );
+                            } else {
+                                //getSelectedActive(evt, parent_entry_id);
+                                //singleSelect(itemEl, evt);
+                            }
                         }
-                        
-                        
                     }
                 },
                 onDeselect: function (evt) {
@@ -300,6 +327,7 @@ export function initializeSortableLists() {
             };
 
             if (sortableElement.classList.contains("tasks")) {
+                //sortableOptions.handle = ".handle";
             }
             else if (sortableElement.classList.contains("roomdefaults")) {
                 console.log("roomdefaults");
@@ -387,7 +415,9 @@ export function initializeSortableLists() {
                 sortableOptions.group.put.push('roomdefaults');
             }
 
-            else if (sortableElement.classList.contains("floors")) { }
+            else if (sortableElement.classList.contains("floors")) {
+                sortableOptions.handle = ".handle";
+            }
 
 
             const instance = new Sortable(sortableElement, sortableOptions);

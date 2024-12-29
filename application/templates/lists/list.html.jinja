@@ -34,7 +34,7 @@
                 </div>
                 <a href="/room/{{ list_obj.id }}" class="accordion-header text-center flex-grow-1">
                     
-                    {{ list_obj.list_name }}
+                    {{ list_obj.list_name }} {# todo: get number of incomplete tasks #}
                     {% include 'base/parts/debug/order.html.jinja' %}
                 </a>
             </div>
@@ -44,7 +44,8 @@
             >
                 <div class="accordion-item">
                     <div
-                        class="accordion-collapse collapse show"
+                        class="accordion-collapse collapse 
+                        {% if session['view'] != 'map' %} show {% endif %}"
                         id="toplist-collapse-{{ list_obj.list_model }}list-{{ list_obj.id }}"
                     >
     {% endif %}
@@ -67,6 +68,9 @@
                 {% elif list_obj.list_model == "RoomDefault" %}
                     class="list-group list-group-horizontal d-flex flex-wrap border border-primary border-5
                     rounded-4 p-1 sortable roomdefaults typeslist"
+                {% elif list_obj.list_model == "Floor" %}
+                class="list-group row g-0 row-cols-1 border border-primary border-5
+                    rounded-4 floors sortable"
                 {% else %}
                     class="list-group row g-0 row-cols-1 border border-primary border-5
                     rounded-4 sortable"

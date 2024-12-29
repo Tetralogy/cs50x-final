@@ -1,0 +1,21 @@
+{% if entry.get_item().status.value == "completed" %}
+    <button
+        class="btn btn-success z-3"
+        id="task-check-button{{ entry.item_model }}list-{{ entry.id }}"
+        hx-put="/update/{{ entry.id }}"
+        hx-swap="outerHTML"
+        hx-vals='{"completed": "false"}'
+    >
+        X
+    </button>
+{% else %}
+    <button
+        class="btn btn-primary z-3"
+        id="task-check-button{{ entry.item_model }}list-{{ entry.id }}"
+        hx-put="/update/{{ entry.id }}"
+        hx-swap="outerHTML"
+        hx-vals='{"completed": "true"}'
+    >
+        O
+    </button>
+{% endif %}

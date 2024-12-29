@@ -153,14 +153,16 @@ def update(entry_id): #currently only for tasks
     if entry.item_model == 'Task':
         #logger.debug(f'test')
         task = entry.get_item()
-        is_checked = request.form.get('isChecked')#, 'off') == 'on'
-        #logger.debug(f'is_checked: {is_checked}')
-        if is_checked:
-            #logger.debug(f'{task.name} is_checked: {is_checked}')
+        completed = request.form.get('completed') == 'true'
+        logger.debug(f'completed: {completed}')
+        if completed:
+            logger.debug(f'{task.name} completed: {completed}')
             task.mark_as_completed()
         else:
             task.mark_as_pending()
-    return ('', 204)
+    return render_template('lists/model/task_check.html.jinja', entry=entry)
+
+
 
 @lists.route('/update_list_order/', methods=['PUT', 'POST', 'DELETE', 'GET'])
 @lists.route('/update_list_order/<int:list_id>', methods=['PUT', 'POST', 'DELETE', 'GET'])
@@ -305,6 +307,23 @@ def show_list(list_id: int = None):
 @lists.route('/show_photo_entry/<int:photo_id>', methods=['GET'])
 @login_required
 def show_photo_entry(photo_id):
+    photo = db.get_or_404(Photo, photo_id)
+    entry_id = get_list_entries_for_item(photo, list_model='Photo')[0].id
+    photo_entry = db.get_or_404(UserListEntry, entry_id)
+    view_override = request.args.get('view_override')
+    logger.debug(f'view_override: {view_override}')
+    if view_override:
+        view = view_override
+    else:
+        view = session.get('view')
+    logger.debug(f'view: {view}')
+    return render_template('lists/model/photo.html.jinja', entry=photo_entry, view=view)
+
+@lists.route('/room_cover/<int:room_id>', methods=['GET'])
+@login_required
+def show_room_cover_photo(room_id):
+    room = db.get_or_404(Room, room_id)
+    photo_id = room.current_cover_photo_id
     photo = db.get_or_404(Photo, photo_id)
     entry_id = get_list_entries_for_item(photo, list_model='Photo')[0].id
     photo_entry = db.get_or_404(UserListEntry, entry_id)

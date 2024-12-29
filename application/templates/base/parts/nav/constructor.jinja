@@ -1,6 +1,6 @@
 {% if current_user.is_authenticated %}
     {% if session['view'] == 'map' %}
-    
+    {% elif session['view'] == 'create_rooms' %}
     {% elif session['view'] == 'room' %}
         {% include 'base/parts/nav/room_nav_bottom.html.jinja' %}
     {% elif session['view'] == 'photo' %}

@@ -44,25 +44,18 @@
                 {% include 'base/parts/debug/listname.html.jinja' %}
             </button>
         </div>
-        <div>
-            <div class="form-check">
-                <input
-                    class="form-check-input"
-                    hx-put="/update/{{ entry.id }}"
-                    hx-trigger="change"
-                    name="isChecked"
-                    type="checkbox"
-                    hx-vals='{"isChecked": this.checked}'
-                    id="checkbox-{{ entry.item_model }}list-{{ entry.id }}"
-                    {% if entry.get_item().status.value == "completed" %}checked{% endif %}
-                />
-                <label class="form-check-label " for="flexCheckDefault">
+            {% include 'lists/model/task_check.html.jinja' %}
+        <div class="handle flex-grow-1 d-flex h-100">
+
+                
+
                     <input type="hidden" name="items" value="{{ entry.id }}" />
-                    {{ entry.get_item().name }}
+                    <!-- {{ entry.get_item().name }} -->
+                    {% include 'lists/name.html.jinja' %}
                     {# {{ entry.get_item().status }} #}
                     {% include 'base/parts/debug/order.html.jinja' %}
-                </label>
-            </div>
+
+
         </div>
         {# <div class="vr"></div>
         <div>task_description</div>

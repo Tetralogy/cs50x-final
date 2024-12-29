@@ -1,6 +1,16 @@
+<div
+id="photo-loader"
+hx-get="/room_cover/{{ current_user.active_home.active_room_id }}"
+hx-trigger="load, cover-photo-updated from:body delay:100ms, load from:body"
+hx-swap="innerHTML"
+hx-indicator="#updating-indicator"
+>
+</div>
+
+
+
 <form hx-post="/upload/Photo" enctype="multipart/form-data" hx-trigger="change" hx-target="next [id*='list-updater-']"
         hx-swap="afterbegin" hx-on::after-request="this.reset()">
-    
 <div class="d-flex justify-content-center align-items-center">
         <label for="room-photo-take" class="btn btn-primary btn-lg">
         📷 Take Photo
@@ -24,7 +34,6 @@
             multiple
             
         /></label>
-        
 </div>
 </form>
 

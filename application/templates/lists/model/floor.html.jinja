@@ -9,10 +9,17 @@ title="{{ entry.get_item().name }}"
     data-list_id="{{ entry.user_list_id }}"
     data-model="{{ entry.item_model }}"
 ><input type='hidden' name='items' value='{{ entry.id }}'/>
-<div class="flex-grow-1">
-    <input type="hidden" name="items" value="{{ entry.id }}" />
-    {{ entry.get_item().name }}
-    {% include 'base/parts/debug/order.html.jinja' %}
+<div class="hstack gap-3">
+    <div class="vr handle">↕️</div>
+    <div class="input-group mx-5">
+        <!-- <div class="selectable">{{ entry.order }}</div> -->
+        <div class="flex-grow-1">
+            <!-- {{ entry.get_item().name }} -->
+            {% include 'lists/name.html.jinja' %}
+            {% include 'base/parts/debug/order.html.jinja' %}
+        </div>
+    </div>
+    <div class="vr"></div>
 </div>
 </li>
 

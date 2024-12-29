@@ -444,9 +444,9 @@ __webpack_require__.r(__webpack_exports__);
 
 // Create a global map to track Sortable instances
 const sortableInstances = new Map();
-
 function initializeSortableLists() {
     const sortableElements = document.querySelectorAll(".sortable");
+    let selectable = true;
     sortableElements.forEach(function (sortableElement) {
         // First, destroy any existing instance for this element
         if (sortableInstances.has(sortableElement)) {
@@ -471,10 +471,31 @@ function initializeSortableLists() {
             }
 
             function handleTouchStart(evt) {
-                evt.preventDefault();
-                //evt.stopPropagation();
-                console.log("Direct touchstart event:", evt);
+                if (evt.target.tagName !== "BUTTON") {console.log("sortable disabled1:", sortableInstances.get(sortableElement).option("disabled"));
+                    evt.preventDefault(); // Prevent default touch behavior for non-button elements
+                    console.log("preventDefault:", evt);
+
+                    // Simulate a click event
+                    const touch = evt.changedTouches[0]; // Get the first touch point
+                    const simulatedClick = new MouseEvent('click', {
+                        bubbles: true,
+                        cancelable: true,
+                        clientX: touch.clientX,
+                        clientY: touch.clientY
+                    });
+
+                    evt.target.dispatchEvent(simulatedClick); // Dispatch the simulated click event
+                }
+                if (evt.target.classList.contains("editabletext") || evt.target.classList.contains("rename")) {
+                    selectable = false;
+                    sortableInstances.get(sortableElement).option("disabled", true);
+                    console.log("sortable disabled2:", sortableInstances.get(sortableElement).option("disabled"));
+                }
+                console.log("touchstart event classes:", evt.target.classList);
+                console.log("Direct touchstart event:", evt.target.tagName);
             }
+
+
 
             function handleTouchEnd(evt) {
                 evt.preventDefault();
@@ -487,8 +508,10 @@ function initializeSortableLists() {
             //sortableElement.addEventListener('pointerup', handlePointerUp);
 
             // Add touchstart and touchend event listeners directly
-            sortableElement.addEventListener('touchstart', handleTouchStart);
+            sortableElement.addEventListener('touchstart', handleTouchStart, { passive: false });
             //sortableElement.addEventListener('touchend', handleTouchEnd);
+
+
 
             const model = sortableElement.dataset.model;
             const parent_entry_id = sortableElement.dataset.parent_entry_id;
@@ -502,17 +525,17 @@ function initializeSortableLists() {
                 animation: 150,
                 swapThreshold: 0.65,
                 invertSwap: true,
-                fallbackOnBody: true,
+                fallbackOnBody: false,
                 //draggable: "li",
                 multiDrag: true, // Enable multi-drag
                 selectedClass: "selected", // The class applied to the selected items
                 fallbackTolerance: 3, // So that we can select items on mobile
                 // Prevent dragging on specific elements
                 filter: ".htmx-indicator, .rename", //.listname, .accordion-header, .accordion-button, .accordion",
-                //handle: ".taskhandletest",
+                handle: "",
                 ghostClass: "ghost",
                 dragClass: "ghost-red", //[ ] test if this is needed
-                chosenClass: "ghost-red",
+                //chosenClass: "ghost-red",
                 //removeOnSpill: true,
                 revertOnSpill: true, //needs to be revert to work with the confirm dialog
                 sort: true,
@@ -520,6 +543,7 @@ function initializeSortableLists() {
                     //if (evt.type === 'pointerdown') {
                     //    console.log("Sortable pointerdown event:", evt);
                     //}
+                    console.log("onStart event type:", evt.type);
                     if (evt.type === 'touchstart') {
                         console.log("Touch event started:", evt);
                     }
@@ -587,33 +611,36 @@ function initializeSortableLists() {
                                     target: itemEl,
                                 },
                             );
+                            // Trigger for htmx
+                            htmx.trigger(document.body, "cover-photo-updated");
+
                         }
                     }
                     else if (itemEl.dataset.model === "Floor") {
-                        console.log("onSelect Floor");
-                        (0,_getSelected_js__WEBPACK_IMPORTED_MODULE_4__.singleSelect)(itemEl, evt);
-                        if (
-                            confirm(
-                                "Are you sure you want to select this item? " +
-                                evt.item.dataset.name +
-                                " This will set the ground floor for this home.",
-                            )
-                        ) {
-                            // update active ground floor as current selected
-                            htmx.ajax(
-                                "PUT",
-                                `/set_active_and_ground_floor/${itemEl.dataset.item_id}`,
-                                {
-                                    swap: "none",
-                                    target: itemEl,
-                                },
-                            );
-                        }else{
-                            //getSelectedActive(evt, parent_entry_id);
-                            //singleSelect(itemEl, evt);
+                        if (selectable === true) {
+                            console.log("onSelect Floor: " + itemEl.classList);
+                            (0,_getSelected_js__WEBPACK_IMPORTED_MODULE_4__.singleSelect)(itemEl, evt);
+                            if (
+                                confirm(
+                                    "Are you sure you want to select this item? " +
+                                    evt.item.dataset.name +
+                                    " This will set the ground floor for this home.",
+                                )
+                            ) {
+                                // update active ground floor as current selected
+                                htmx.ajax(
+                                    "PUT",
+                                    `/set_active_and_ground_floor/${itemEl.dataset.item_id}`,
+                                    {
+                                        swap: "none",
+                                        target: itemEl,
+                                    },
+                                );
+                            } else {
+                                //getSelectedActive(evt, parent_entry_id);
+                                //singleSelect(itemEl, evt);
+                            }
                         }
-                        
-                        
                     }
                 },
                 onDeselect: function (evt) {
@@ -736,6 +763,7 @@ function initializeSortableLists() {
             };
 
             if (sortableElement.classList.contains("tasks")) {
+                //sortableOptions.handle = ".handle";
             }
             else if (sortableElement.classList.contains("roomdefaults")) {
                 console.log("roomdefaults");
@@ -823,7 +851,9 @@ function initializeSortableLists() {
                 sortableOptions.group.put.push('roomdefaults');
             }
 
-            else if (sortableElement.classList.contains("floors")) { }
+            else if (sortableElement.classList.contains("floors")) {
+                sortableOptions.handle = ".handle";
+            }
 
 
             const instance = new sortablejs_modular_sortable_complete_esm_js__WEBPACK_IMPORTED_MODULE_0__["default"](sortableElement, sortableOptions);
@@ -8667,10 +8697,10 @@ ___CSS_LOADER_EXPORT___.push([module.id, `.grabbable {
     background: #99ff00;
 } */
 
-.selected {
+.selected .selectable {
     position: relative;
 }
-.selected::after {
+.selected .selectable::after {
     content: "Selected";
     position: absolute;
     top: 0;
@@ -8690,16 +8720,16 @@ ___CSS_LOADER_EXPORT___.push([module.id, `.grabbable {
     border: 2vw solid rgba(255, 0, 0, .5);
     /* box-shadow: inset 0 0 0 1vw yellow; */ /* Simulates an inside outline */
 }
-.selected:hover::after {
-    content: "Enter Room";
+/* .selected:hover::after {
+    content: "Edit";
     border: 4vw solid rgba(255, 255, 0, 0.25);
     background-color: rgba(0, 255, 55, 0.5);
-}
+} */
 .selected.task {
     background-color: rgba(85, 0, 255, 0.5);
 }
 .selected.floor::after {
-    content: "Ground Floor #todo: style this";
+    content: "Ground Floor";
     background-color: rgba(255, 0, 255, 0.5);
 }
 .task.dropzone {
@@ -8754,7 +8784,7 @@ ___CSS_LOADER_EXPORT___.push([module.id, `.grabbable {
     display: inline-block;
     cursor: pointer;
     border: 2vw solid rgba(255, 0, 0, .5);
-} `, "",{"version":3,"sources":["webpack://./application/static/css/sortables.css"],"names":[],"mappings":"AAAA;IACI,YAAY,EAAE,2CAA2C;IACzD,YAAY;IACZ,iBAAiB;IACjB,oBAAoB;AACxB;AACA,mEAAmE;AACnE;IACI,gBAAgB;IAChB,qBAAqB;IACrB,wBAAwB;AAC5B;;AAEA,eAAe;AACf;IACI,YAAY;IACZ,mBAAmB;AACvB;;AAEA;IACI,YAAY;IACZ,mBAAmB;AACvB;;AAEA;IACI,wBAAwB;IACxB,YAAY;IACZ,mBAAmB;IACnB,kBAAkB;AACtB;AACA,0DAA0D;AAC1D;IACI,8BAA8B;;IAE9B,mBAAmB;IACnB,YAAY,EAAE,6BAA6B;IAC3C,0BAA0B,EAAE,yBAAyB;IACrD,kBAAkB;IAClB,wBAAwB,EAAE,gCAAgC;AAC9D;;AAEA;IACI,yBAAyB;IACzB,YAAY;IACZ,mBAAmB;AACvB;AACA;;;GAGG;;AAEH;IACI,kBAAkB;AACtB;AACA;IACI,mBAAmB;IACnB,kBAAkB;IAClB,MAAM;IACN,OAAO;IACP,QAAQ;IACR,SAAS;IACT,8CAA8C;IAC9C,cAAc;IACd,iBAAiB;IACjB,kBAAkB;IAClB,0CAA0C;IAC1C,2BAA2B;IAC3B,2BAA2B;IAC3B,eAAe;IACf,qBAAqB;IACrB,eAAe;IACf,qCAAqC;IACrC,wCAAwC,EAAE,gCAAgC;AAC9E;AACA;IACI,qBAAqB;IACrB,yCAAyC;IACzC,uCAAuC;AAC3C;AACA;IACI,uCAAuC;AAC3C;AACA;IACI,yCAAyC;IACzC,wCAAwC;AAC5C;AACA;IACI,qBAAqB;IACrB,6BAA6B;IAC7B,mBAAmB;IACnB,oBAAoB;IACpB,eAAe;IACf,gBAAgB;IAChB,kBAAkB;IAClB,oBAAoB;AACxB;;AAEA;IACI,gBAAgB;IAChB,iBAAiB;;IAEjB,yDAA+C;IAC/C,2BAA2B;IAC3B,4BAA4B;IAC5B,wBAAwB;AAC5B;;AAEA;IACI,yBAAyB;IACzB,oCAAoC;IACpC,kCAAkC;IAClC,wBAAwB,EAAE,mBAAmB;IAC7C,gCAAgC,EAAE,iCAAiC;AACvE;;AAEA;IACI,kBAAkB;AACtB;AACA;IACI,WAAW,EAAE,8BAA8B;IAC3C,oBAAoB,EAAE,yCAAyC;IAC/D,wBAAwB;IACxB,kBAAkB;IAClB,MAAM;IACN,OAAO;IACP,QAAQ;IACR,SAAS;;IAET,cAAc;IACd,iBAAiB;IACjB,kBAAkB;IAClB,0CAA0C;IAC1C,2BAA2B;;IAE3B,eAAe;IACf,qBAAqB;IACrB,eAAe;IACf,qCAAqC;AACzC","sourcesContent":[".grabbable {\n    cursor: move; /* fallback if grab cursor is unsupported */\n    cursor: grab;\n    cursor: -moz-grab;\n    cursor: -webkit-grab;\n}\n/* (Optional) Apply a \"closed-hand\" cursor during drag operation. */\n.grabbable:active {\n    cursor: grabbing;\n    cursor: -moz-grabbing;\n    cursor: -webkit-grabbing;\n}\n\n/* ghostClass */\n.ghost {\n    opacity: 0.5;\n    background: #c8ebfb;\n}\n\n.ghost-red {\n    opacity: 0.5;\n    background: #ff0000;\n}\n\n.none-ghost {\n    display: none !important;\n    opacity: 0.5;\n    background: #05f5f5;\n    /* height: auto; */\n}\n/* Style the static ghost to look like the original item */\n.static-ghost {\n    /* display: none !important; */\n\n    background: #ff00e6;\n    opacity: 0.5; /* Make it semi-transparent */\n    /* pointer-events: none; */ /* Disable interactions */\n    /* height: auto; */\n    /* position: relative; */ /* Ensure it stays in the flow */\n}\n\n.test-fallback {\n    display: block !important;\n    opacity: 0.5;\n    background: #ff00e6;\n}\n/* .selected {\n    opacity: .5;\n    background: #99ff00;\n} */\n\n.selected {\n    position: relative;\n}\n.selected::after {\n    content: \"Selected\";\n    position: absolute;\n    top: 0;\n    left: 0;\n    right: 0;\n    bottom: 0;\n    /* background-color: rgba(0, 255, 55, 0.25); */\n    font-size: 2vw;\n    font-weight: bold;\n    text-align: center;\n    color: rgba(255, 255, 255, 0.5) !important;\n    text-shadow: 0 0 .2 #000000;\n    /* padding: 0 !important; */\n    line-height: .5;\n    display: inline-block;\n    cursor: pointer;\n    border: 2vw solid rgba(255, 0, 0, .5);\n    /* box-shadow: inset 0 0 0 1vw yellow; */ /* Simulates an inside outline */\n}\n.selected:hover::after {\n    content: \"Enter Room\";\n    border: 4vw solid rgba(255, 255, 0, 0.25);\n    background-color: rgba(0, 255, 55, 0.5);\n}\n.selected.task {\n    background-color: rgba(85, 0, 255, 0.5);\n}\n.selected.floor::after {\n    content: \"Ground Floor #todo: style this\";\n    background-color: rgba(255, 0, 255, 0.5);\n}\n.task.dropzone {\n    display: inline-block;\n    background: rgb(108, 99, 255);\n    align-items: center;\n    justify-content: end;\n    min-width: 50px;\n    min-height: 50px;\n    border: 5px dashed;\n    transition: all 0.3s;\n}\n\n.task.dropzone.hover {\n    min-width: 100px;\n    min-height: 100px;\n\n    background-image: url(\"plus-square-dotted.svg\");\n    background-position: center;\n    background-repeat: no-repeat;\n    background-size: contain;\n}\n\n.rooms:empty::after {\n    content: \"Drop Room Here\";\n    background-color: #ff9900 !important;\n    border: 2px dashed #ccc !important;\n    height: 100px !important; /* Example height */\n    border: 5px solid red !important; /* Temporary border for testing */\n}\n\n.pingrid.hover {\n    position: relative;\n}\n.pingrid.hover::after {\n    z-index: 10; /* Higher than most elements */\n    pointer-events: none; /* Prevent it from blocking interaction */\n    content: \"Drop Pin Here\";\n    position: absolute;\n    top: 0;\n    left: 0;\n    right: 0;\n    bottom: 0;\n\n    font-size: 2vw;\n    font-weight: bold;\n    text-align: center;\n    color: rgba(255, 255, 255, 0.5) !important;\n    text-shadow: 0 0 .2 #000000;\n\n    line-height: .5;\n    display: inline-block;\n    cursor: pointer;\n    border: 2vw solid rgba(255, 0, 0, .5);\n} "],"sourceRoot":""}]);
+} `, "",{"version":3,"sources":["webpack://./application/static/css/sortables.css"],"names":[],"mappings":"AAAA;IACI,YAAY,EAAE,2CAA2C;IACzD,YAAY;IACZ,iBAAiB;IACjB,oBAAoB;AACxB;AACA,mEAAmE;AACnE;IACI,gBAAgB;IAChB,qBAAqB;IACrB,wBAAwB;AAC5B;;AAEA,eAAe;AACf;IACI,YAAY;IACZ,mBAAmB;AACvB;;AAEA;IACI,YAAY;IACZ,mBAAmB;AACvB;;AAEA;IACI,wBAAwB;IACxB,YAAY;IACZ,mBAAmB;IACnB,kBAAkB;AACtB;AACA,0DAA0D;AAC1D;IACI,8BAA8B;;IAE9B,mBAAmB;IACnB,YAAY,EAAE,6BAA6B;IAC3C,0BAA0B,EAAE,yBAAyB;IACrD,kBAAkB;IAClB,wBAAwB,EAAE,gCAAgC;AAC9D;;AAEA;IACI,yBAAyB;IACzB,YAAY;IACZ,mBAAmB;AACvB;AACA;;;GAGG;;AAEH;IACI,kBAAkB;AACtB;AACA;IACI,mBAAmB;IACnB,kBAAkB;IAClB,MAAM;IACN,OAAO;IACP,QAAQ;IACR,SAAS;IACT,8CAA8C;IAC9C,cAAc;IACd,iBAAiB;IACjB,kBAAkB;IAClB,0CAA0C;IAC1C,2BAA2B;IAC3B,2BAA2B;IAC3B,eAAe;IACf,qBAAqB;IACrB,eAAe;IACf,qCAAqC;IACrC,wCAAwC,EAAE,gCAAgC;AAC9E;AACA;;;;GAIG;AACH;IACI,uCAAuC;AAC3C;AACA;IACI,uBAAuB;IACvB,wCAAwC;AAC5C;AACA;IACI,qBAAqB;IACrB,6BAA6B;IAC7B,mBAAmB;IACnB,oBAAoB;IACpB,eAAe;IACf,gBAAgB;IAChB,kBAAkB;IAClB,oBAAoB;AACxB;;AAEA;IACI,gBAAgB;IAChB,iBAAiB;;IAEjB,yDAA+C;IAC/C,2BAA2B;IAC3B,4BAA4B;IAC5B,wBAAwB;AAC5B;;AAEA;IACI,yBAAyB;IACzB,oCAAoC;IACpC,kCAAkC;IAClC,wBAAwB,EAAE,mBAAmB;IAC7C,gCAAgC,EAAE,iCAAiC;AACvE;;AAEA;IACI,kBAAkB;AACtB;AACA;IACI,WAAW,EAAE,8BAA8B;IAC3C,oBAAoB,EAAE,yCAAyC;IAC/D,wBAAwB;IACxB,kBAAkB;IAClB,MAAM;IACN,OAAO;IACP,QAAQ;IACR,SAAS;;IAET,cAAc;IACd,iBAAiB;IACjB,kBAAkB;IAClB,0CAA0C;IAC1C,2BAA2B;;IAE3B,eAAe;IACf,qBAAqB;IACrB,eAAe;IACf,qCAAqC;AACzC","sourcesContent":[".grabbable {\n    cursor: move; /* fallback if grab cursor is unsupported */\n    cursor: grab;\n    cursor: -moz-grab;\n    cursor: -webkit-grab;\n}\n/* (Optional) Apply a \"closed-hand\" cursor during drag operation. */\n.grabbable:active {\n    cursor: grabbing;\n    cursor: -moz-grabbing;\n    cursor: -webkit-grabbing;\n}\n\n/* ghostClass */\n.ghost {\n    opacity: 0.5;\n    background: #c8ebfb;\n}\n\n.ghost-red {\n    opacity: 0.5;\n    background: #ff0000;\n}\n\n.none-ghost {\n    display: none !important;\n    opacity: 0.5;\n    background: #05f5f5;\n    /* height: auto; */\n}\n/* Style the static ghost to look like the original item */\n.static-ghost {\n    /* display: none !important; */\n\n    background: #ff00e6;\n    opacity: 0.5; /* Make it semi-transparent */\n    /* pointer-events: none; */ /* Disable interactions */\n    /* height: auto; */\n    /* position: relative; */ /* Ensure it stays in the flow */\n}\n\n.test-fallback {\n    display: block !important;\n    opacity: 0.5;\n    background: #ff00e6;\n}\n/* .selected {\n    opacity: .5;\n    background: #99ff00;\n} */\n\n.selected .selectable {\n    position: relative;\n}\n.selected .selectable::after {\n    content: \"Selected\";\n    position: absolute;\n    top: 0;\n    left: 0;\n    right: 0;\n    bottom: 0;\n    /* background-color: rgba(0, 255, 55, 0.25); */\n    font-size: 2vw;\n    font-weight: bold;\n    text-align: center;\n    color: rgba(255, 255, 255, 0.5) !important;\n    text-shadow: 0 0 .2 #000000;\n    /* padding: 0 !important; */\n    line-height: .5;\n    display: inline-block;\n    cursor: pointer;\n    border: 2vw solid rgba(255, 0, 0, .5);\n    /* box-shadow: inset 0 0 0 1vw yellow; */ /* Simulates an inside outline */\n}\n/* .selected:hover::after {\n    content: \"Edit\";\n    border: 4vw solid rgba(255, 255, 0, 0.25);\n    background-color: rgba(0, 255, 55, 0.5);\n} */\n.selected.task {\n    background-color: rgba(85, 0, 255, 0.5);\n}\n.selected.floor::after {\n    content: \"Ground Floor\";\n    background-color: rgba(255, 0, 255, 0.5);\n}\n.task.dropzone {\n    display: inline-block;\n    background: rgb(108, 99, 255);\n    align-items: center;\n    justify-content: end;\n    min-width: 50px;\n    min-height: 50px;\n    border: 5px dashed;\n    transition: all 0.3s;\n}\n\n.task.dropzone.hover {\n    min-width: 100px;\n    min-height: 100px;\n\n    background-image: url(\"plus-square-dotted.svg\");\n    background-position: center;\n    background-repeat: no-repeat;\n    background-size: contain;\n}\n\n.rooms:empty::after {\n    content: \"Drop Room Here\";\n    background-color: #ff9900 !important;\n    border: 2px dashed #ccc !important;\n    height: 100px !important; /* Example height */\n    border: 5px solid red !important; /* Temporary border for testing */\n}\n\n.pingrid.hover {\n    position: relative;\n}\n.pingrid.hover::after {\n    z-index: 10; /* Higher than most elements */\n    pointer-events: none; /* Prevent it from blocking interaction */\n    content: \"Drop Pin Here\";\n    position: absolute;\n    top: 0;\n    left: 0;\n    right: 0;\n    bottom: 0;\n\n    font-size: 2vw;\n    font-weight: bold;\n    text-align: center;\n    color: rgba(255, 255, 255, 0.5) !important;\n    text-shadow: 0 0 .2 #000000;\n\n    line-height: .5;\n    display: inline-block;\n    cursor: pointer;\n    border: 2vw solid rgba(255, 0, 0, .5);\n} "],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -8788,13 +8818,16 @@ ___CSS_LOADER_EXPORT___.push([module.id, `.editabletext {
 .scalename.room {
     font-size: 4vw;
     font-weight: bold;
+    
+    
+}
+.scalename {
+    overflow: visible;
+    font-size: 4vw;
+    line-height: 1;
     text-align: center;
     color: white !important;
     text-shadow: 0 0 3px #000;
-}
-.scalename {
-    font-size: 2vw;
-    line-height: 1;
 }
 
 /* Apply a different font size when the screen width is over a certain width */
@@ -8814,7 +8847,7 @@ background-color: green;
 .debug-info {
     color: red;
     font-size: .75em !important;
-}`, "",{"version":3,"sources":["webpack://./application/static/css/typography.css"],"names":[],"mappings":"AAAA;IACI,YAAY;AAChB;;AAEA,iBAAiB;AACjB;IACI,cAAc;IACd,iBAAiB;IACjB,kBAAkB;IAClB,uBAAuB;IACvB,yBAAyB;AAC7B;AACA;IACI,cAAc;IACd,cAAc;AAClB;;AAEA,8EAA8E;AAC9E;IACI;IACA,eAAe;IACf;AACJ;;AAEA;;GAEG;AACH;IACI,wCAAwC;AAC5C;;AAEA;IACI,UAAU;IACV,2BAA2B;AAC/B","sourcesContent":[".editabletext {\n    cursor: text;\n}\n\n/* scale titles */\n.scalename.room {\n    font-size: 4vw;\n    font-weight: bold;\n    text-align: center;\n    color: white !important;\n    text-shadow: 0 0 3px #000;\n}\n.scalename {\n    font-size: 2vw;\n    line-height: 1;\n}\n\n/* Apply a different font size when the screen width is over a certain width */\n@media (min-width: 1000px) {\n    .scalename {\n    font-size: 20px;\n    }\n}\n\n/* .pin {\nbackground-color: green;\n} */\n.rename {\n    background-color: transparent !important;\n}\n\n.debug-info {\n    color: red;\n    font-size: .75em !important;\n}"],"sourceRoot":""}]);
+}`, "",{"version":3,"sources":["webpack://./application/static/css/typography.css"],"names":[],"mappings":"AAAA;IACI,YAAY;AAChB;;AAEA,iBAAiB;AACjB;IACI,cAAc;IACd,iBAAiB;;;AAGrB;AACA;IACI,iBAAiB;IACjB,cAAc;IACd,cAAc;IACd,kBAAkB;IAClB,uBAAuB;IACvB,yBAAyB;AAC7B;;AAEA,8EAA8E;AAC9E;IACI;IACA,eAAe;IACf;AACJ;;AAEA;;GAEG;AACH;IACI,wCAAwC;AAC5C;;AAEA;IACI,UAAU;IACV,2BAA2B;AAC/B","sourcesContent":[".editabletext {\n    cursor: text;\n}\n\n/* scale titles */\n.scalename.room {\n    font-size: 4vw;\n    font-weight: bold;\n    \n    \n}\n.scalename {\n    overflow: visible;\n    font-size: 4vw;\n    line-height: 1;\n    text-align: center;\n    color: white !important;\n    text-shadow: 0 0 3px #000;\n}\n\n/* Apply a different font size when the screen width is over a certain width */\n@media (min-width: 1000px) {\n    .scalename {\n    font-size: 20px;\n    }\n}\n\n/* .pin {\nbackground-color: green;\n} */\n.rename {\n    background-color: transparent !important;\n}\n\n.debug-info {\n    color: red;\n    font-size: .75em !important;\n}"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
