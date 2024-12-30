@@ -47,14 +47,15 @@
             Edit Next Floor</a
         >
 
-        {% if has_rooms %}
+
+{#         {% if has_rooms %}
             <a
                 class="btn btn-success fixed-bottom"
                 href="/map/Floor/{{ current_user.active_home.active_floor_id }}"
             >
                 Map
             </a>
-        {% endif %}
+        {% endif %} #}
     </div>
 
     <!-- Button trigger modal -->
@@ -67,11 +68,10 @@
         Show Instructions
     </button>
 
-
-<div id="modal-loader"
-hx-get="/tutorial/create_rooms"
-hx-trigger="load"
-hx-swap="outerHTML">
-</div>
-
+    <div
+        id="modal-loader"
+        hx-get="/tutorial/create_rooms"
+        hx-trigger="load"
+        hx-swap="outerHTML"
+    ></div>
 {% endblock %}

@@ -15,17 +15,30 @@
 
 <script>
     const input = document.getElementById('input_{{ entry.item_model }}_name-{{ entry.item_id }}');
+    let isDragging = false;
 
-input.addEventListener('touchstart', (event) => {
-  // Get touch coordinates within the input element
-  const rect = input.getBoundingClientRect();
-  const touchX = event.touches[0].clientX - rect.left; 
+    function updateCursorPosition(event) {
+        const rect = input.getBoundingClientRect();
+        const touchX = event.touches[0].clientX - rect.left;
+        let cursorPosition = Math.floor((touchX / rect.width) * input.value.length);
+        cursorPosition = Math.max(0, Math.min(cursorPosition, input.value.length));
+        input.setSelectionRange(cursorPosition, cursorPosition);
+    }
 
-  // Estimate cursor position based on touchX (you'll need to refine this logic)
-  let cursorPosition = Math.floor((touchX / rect.width) * input.value.length); 
-  cursorPosition = Math.max(0, Math.min(cursorPosition, input.value.length)); 
+    input.addEventListener('touchstart', (event) => {
+        isDragging = true; // Begin tracking the drag
+        // Initial touch position is handled here
+        updateCursorPosition(event);
+    });
 
-  // Set cursor position
-  input.setSelectionRange(cursorPosition, cursorPosition); 
-});
+    input.addEventListener('touchmove', (event) => {
+        if (isDragging) {
+            updateCursorPosition(event); // Update cursor during drag
+            event.preventDefault(); // Prevent scrolling during drag
+        }
+    });
+
+    input.addEventListener('touchend', () => {
+        isDragging = false; // Stop tracking the drag
+    });
 </script>

@@ -26,7 +26,12 @@
         <div
             class="position-absolute top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center row g-0"
         >
-            {{ entry.get_item().name }}
+            <div class="col"></div>
+            
+                {# {{ entry.get_item().name }} #}
+                {% include 'lists/name.html.jinja' %}
+            
+            <div class="col"></div>
         </div>
     </div>
 </div>

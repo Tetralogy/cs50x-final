@@ -45,6 +45,7 @@ class User(db.Model, UserMixin):
     tutorial_rooms_dismissed: Mapped[bool] = mapped_column(Boolean, server_default="0")
     tutorial_home_dismissed: Mapped[bool] = mapped_column(Boolean, server_default="0")
     tutorial_photo_dismissed: Mapped[bool] = mapped_column(Boolean, server_default="0")
+    tutorial_map_dismissed: Mapped[bool] = mapped_column(Boolean, server_default="0")
     # Define relationships
     #abilities = relationship('UserAbility', back_populates="user", lazy='dynamic')
     #preferences = relationship('UserPreference', back_populates="user", lazy='dynamic')

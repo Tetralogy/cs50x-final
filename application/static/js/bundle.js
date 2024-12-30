@@ -531,7 +531,7 @@ function initializeSortableLists() {
                 selectedClass: "selected", // The class applied to the selected items
                 fallbackTolerance: 3, // So that we can select items on mobile
                 // Prevent dragging on specific elements
-                filter: ".htmx-indicator, .rename", //.listname, .accordion-header, .accordion-button, .accordion",
+                filter: ".htmx-indicator, .rename, .editabletext", //.listname, .accordion-header, .accordion-button, .accordion",
                 handle: "",
                 ghostClass: "ghost",
                 dragClass: "ghost-red", //[ ] test if this is needed
@@ -8815,8 +8815,9 @@ ___CSS_LOADER_EXPORT___.push([module.id, `.editabletext {
 }
 
 /* scale titles */
-.scalename.room {
-    font-size: 4vw;
+.room .scalename {
+    overflow: hidden;
+    font-size: 5vw;
     font-weight: bold;
     
     
@@ -8840,14 +8841,22 @@ ___CSS_LOADER_EXPORT___.push([module.id, `.editabletext {
 /* .pin {
 background-color: green;
 } */
-.rename {
+.scalename.rename {
+    font-size: 4vw;
     background-color: transparent !important;
+}
+.room .rename {
+    position: absolute;
+    left: 0;
+    right: 0;
+    width: 100vw; /* Initial wider width */
+    max-width: 100%; /* Ensures it doesn't become wider than the grandparent */
 }
 
 .debug-info {
     color: red;
     font-size: .75em !important;
-}`, "",{"version":3,"sources":["webpack://./application/static/css/typography.css"],"names":[],"mappings":"AAAA;IACI,YAAY;AAChB;;AAEA,iBAAiB;AACjB;IACI,cAAc;IACd,iBAAiB;;;AAGrB;AACA;IACI,iBAAiB;IACjB,cAAc;IACd,cAAc;IACd,kBAAkB;IAClB,uBAAuB;IACvB,yBAAyB;AAC7B;;AAEA,8EAA8E;AAC9E;IACI;IACA,eAAe;IACf;AACJ;;AAEA;;GAEG;AACH;IACI,wCAAwC;AAC5C;;AAEA;IACI,UAAU;IACV,2BAA2B;AAC/B","sourcesContent":[".editabletext {\n    cursor: text;\n}\n\n/* scale titles */\n.scalename.room {\n    font-size: 4vw;\n    font-weight: bold;\n    \n    \n}\n.scalename {\n    overflow: visible;\n    font-size: 4vw;\n    line-height: 1;\n    text-align: center;\n    color: white !important;\n    text-shadow: 0 0 3px #000;\n}\n\n/* Apply a different font size when the screen width is over a certain width */\n@media (min-width: 1000px) {\n    .scalename {\n    font-size: 20px;\n    }\n}\n\n/* .pin {\nbackground-color: green;\n} */\n.rename {\n    background-color: transparent !important;\n}\n\n.debug-info {\n    color: red;\n    font-size: .75em !important;\n}"],"sourceRoot":""}]);
+}`, "",{"version":3,"sources":["webpack://./application/static/css/typography.css"],"names":[],"mappings":"AAAA;IACI,YAAY;AAChB;;AAEA,iBAAiB;AACjB;IACI,gBAAgB;IAChB,cAAc;IACd,iBAAiB;;;AAGrB;AACA;IACI,iBAAiB;IACjB,cAAc;IACd,cAAc;IACd,kBAAkB;IAClB,uBAAuB;IACvB,yBAAyB;AAC7B;;AAEA,8EAA8E;AAC9E;IACI;IACA,eAAe;IACf;AACJ;;AAEA;;GAEG;AACH;IACI,cAAc;IACd,wCAAwC;AAC5C;AACA;IACI,kBAAkB;IAClB,OAAO;IACP,QAAQ;IACR,YAAY,EAAE,wBAAwB;IACtC,eAAe,EAAE,yDAAyD;AAC9E;;AAEA;IACI,UAAU;IACV,2BAA2B;AAC/B","sourcesContent":[".editabletext {\n    cursor: text;\n}\n\n/* scale titles */\n.room .scalename {\n    overflow: hidden;\n    font-size: 5vw;\n    font-weight: bold;\n    \n    \n}\n.scalename {\n    overflow: visible;\n    font-size: 4vw;\n    line-height: 1;\n    text-align: center;\n    color: white !important;\n    text-shadow: 0 0 3px #000;\n}\n\n/* Apply a different font size when the screen width is over a certain width */\n@media (min-width: 1000px) {\n    .scalename {\n    font-size: 20px;\n    }\n}\n\n/* .pin {\nbackground-color: green;\n} */\n.scalename.rename {\n    font-size: 4vw;\n    background-color: transparent !important;\n}\n.room .rename {\n    position: absolute;\n    left: 0;\n    right: 0;\n    width: 100vw; /* Initial wider width */\n    max-width: 100%; /* Ensures it doesn't become wider than the grandparent */\n}\n\n.debug-info {\n    color: red;\n    font-size: .75em !important;\n}"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 

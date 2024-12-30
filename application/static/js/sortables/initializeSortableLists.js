@@ -95,7 +95,7 @@ export function initializeSortableLists() {
                 selectedClass: "selected", // The class applied to the selected items
                 fallbackTolerance: 3, // So that we can select items on mobile
                 // Prevent dragging on specific elements
-                filter: ".htmx-indicator, .rename", //.listname, .accordion-header, .accordion-button, .accordion",
+                filter: ".htmx-indicator, .rename, .editabletext", //.listname, .accordion-header, .accordion-button, .accordion",
                 handle: "",
                 ghostClass: "ghost",
                 dragClass: "ghost-red", //[ ] test if this is needed

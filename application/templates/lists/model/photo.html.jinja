@@ -3,6 +3,9 @@
     class="
     {% if view == 'selectcoverphoto' %}{# bug: add previously selected class and currently selected class #}
         col
+        {% if "default_cover_image" in entry.get_item().name %}
+            d-none 
+        {% endif %}
     {% else %}
         col-auto 
     {% endif %}

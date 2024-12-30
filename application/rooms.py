@@ -154,6 +154,8 @@ def get_room_cover_photo_entry_id(parent_entry_id):
     logger.debug(f'get_cover_photo_entry_id called {cover_photo_entry_id}')
     return str(cover_photo_entry_id), 200
 
+@rooms.route('/has_rooms/<int:current_floor_id>', methods=['GET', 'PATCH'])
+@login_required
 def floor_room_check(current_floor_id):
     has_rooms = True
     if not current_floor_id:
@@ -169,6 +171,11 @@ def floor_room_check(current_floor_id):
         logger.debug(f'inside floor_room_check A: floor_id: {current_floor_id}, has_rooms: {has_rooms}')
         current_floor_id, has_rooms = check_each_floor_for_rooms(current_floor_id)
         logger.debug(f'inside floor_room_check B: floor_id: {current_floor_id}, has_rooms: {has_rooms}')
+        if request.method == 'PATCH':
+            if has_rooms:
+                return render_template('base/parts/nav/default_nav_bottom.html.jinja')
+            else:
+                return '', 204
     return current_floor_id, has_rooms
 
 def check_each_floor_for_rooms(current_floor_id):

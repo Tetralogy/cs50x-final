@@ -34,13 +34,13 @@ def index():
     #[x]: fix size of text on the pins on images
     #[x]: just have text with solid background
     #[x]: rename floors
-    #BUG: rename rooms
+    #[x]: rename rooms
     #[x]: rename tasks
-    #BUG: make modal tutorial for map view
-    #BUG: make map nav button appear automatically when room created on floor
+    #[x]: make modal tutorial for map view
+    #[x]: make map nav button appear automatically when room created on floor
     #[x]: have accordion for tasks open by default on pingrid room page
-    #BUG: fix photo upload show new photo in list at same size as older uploads in gallery
-    #BUG: fix photo upload hide the default generic room cover photo after first upload
+    #[x]: fix photo upload show new photo in list at same size as older uploads in gallery
+    #[x]: fix photo upload hide the default generic room cover photo after first upload
     #[x]: style the floor select css
     #[x]: REFACTOR SETUP STEPS return redirect(url_for('map.home_map'))
     #return redirect('/walkthrough/Dining Room 1/quicknote') #temporary for testing #xxx:remove when done

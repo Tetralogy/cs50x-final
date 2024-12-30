@@ -83,7 +83,7 @@ def upload_photo(item_model):
             
             new_items.append(new_item)
 
-    return render_template('lists/uploaded_list.html.jinja', entries=new_items)
+    return render_template('lists/uploaded_list.html.jinja', entries=new_items, view='selectcoverphoto')
     return ("", 204)  # return empty response so htmx does not overwrite the progress bar value
 
 def allowed_file(filename):

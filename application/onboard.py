@@ -58,6 +58,16 @@ def home_tutorial():
         return "", 204
     if request.method == "GET":
         return render_template('onboarding/modal/modal_home.jinja')
+    
+@onboard.route('/tutorial/map', methods=['GET', 'POST'])
+@login_required
+def map_tutorial():
+    if request.method == "POST":
+        current_user.tutorial_map_dismissed = True
+        db.session.commit()
+        return "", 204
+    if request.method == "GET":
+        return render_template('onboarding/modal/modal_map.jinja')
 
 '''@onboard.route('/onboarding', methods=['GET'])
 @login_required

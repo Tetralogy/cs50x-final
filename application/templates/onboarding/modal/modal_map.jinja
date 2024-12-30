@@ -1,0 +1,68 @@
+<!-- Modal -->
+<div
+    class="modal fade"
+    id="tutorialModal"
+    tabindex="-1"
+    aria-labelledby="tutorialModalLabel"
+    aria-hidden="true"
+>
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="tutorialModalLabel">
+                    Map view Tutorial
+                </h1>
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                ></button>
+            </div>
+            <div class="modal-body">
+                <p>
+                    Select the room that you would like to start adding tasks
+                    to.
+                </p>
+                <ul>
+                    <li>
+                        Tapping the text will allow you to edit the room name
+                    </li>
+                    <li>Tap the room image to select and enter it.</li>
+                    <li>You can also drag to reorder the rooms if you wish.</li>
+                    <li>
+                        You can select a different floor by tapping the floor
+                        name at the top of the screen.
+                    </li>
+                    <li>
+                        Below the rooms list is the list of all of the tasks
+                        that have been created for the current home.
+                    </li>
+                </ul>
+            </div>
+
+            <div class="modal-footer">
+                <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal"
+                >
+                    Close
+                </button>
+                <button
+                    hx-post="/tutorial/map"
+                    data-bs-dismiss="modal"
+                    type="button"
+                    class="btn btn-primary"
+                    id="saveChanges"
+                >
+                    Got it, Don't show again
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if not current_user.tutorial_map_dismissed %}
+    <script src="/static/js/showModal.js"></script>
+{% endif %}

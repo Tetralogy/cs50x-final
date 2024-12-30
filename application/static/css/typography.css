@@ -3,8 +3,9 @@
 }
 
 /* scale titles */
-.scalename.room {
-    font-size: 4vw;
+.room .scalename {
+    overflow: hidden;
+    font-size: 5vw;
     font-weight: bold;
     
     
@@ -28,8 +29,16 @@
 /* .pin {
 background-color: green;
 } */
-.rename {
+.scalename.rename {
+    font-size: 4vw;
     background-color: transparent !important;
+}
+.room .rename {
+    position: absolute;
+    left: 0;
+    right: 0;
+    width: 100vw; /* Initial wider width */
+    max-width: 100%; /* Ensures it doesn't become wider than the grandparent */
 }
 
 .debug-info {

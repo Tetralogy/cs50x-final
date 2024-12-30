@@ -1,0 +1,11 @@
+2024-12-29 17:45:15,214 - logs.logging_config - DEBUG - configure_logging [logging_config.py:178] - Application logging configured
+2024-12-29 17:45:15,218 - logs.logging_config - INFO - configure_logging [logging_config.py:187] - Application started in production environment
+2024-12-29 17:45:15,218 - application - DEBUG - create_app [__init__.py:28] - test2
+2024-12-29 17:45:16,006 - application - DEBUG - after_request_time [__init__.py:42] - Request to / took 0.011993169784545898 seconds
+2024-12-29 17:45:16,006 - application - DEBUG - after_request_time [__init__.py:44] - view (after_request): None
+2024-12-29 17:45:16,007 - application - DEBUG - after_request_time [__init__.py:46] - template (after_request): None
+2024-12-29 17:45:16,072 - application.rooms - DEBUG - define_rooms [rooms.py:23] - define_rooms called with floor_id: 1
+2024-12-29 17:45:16,083 - application.rooms - DEBUG - floor_room_check [rooms.py:171] - inside floor_room_check A: floor_id: 1, has_rooms: True
+2024-12-29 17:45:16,086 - application.rooms - DEBUG - check_each_floor_for_rooms [rooms.py:183] - floor.rooms.count() <Floor 1> = 3
+2024-12-29 17:45:16,087 - application.rooms - DEBUG - check_each_floor_for_rooms [rooms.py:183] - floor.rooms.count() <Floor 2> = 2
+2024-12-29 17:45:16,088 - application.rooms - DEBUG - floor_room_check [rooms.py:173] - inside floor_room_check B: floor_id: 1, has_rooms: True

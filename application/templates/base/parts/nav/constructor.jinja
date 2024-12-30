@@ -1,6 +1,8 @@
 {% if current_user.is_authenticated %}
     {% if session['view'] == 'map' %}
     {% elif session['view'] == 'create_rooms' %}
+    <div hx-patch="/has_rooms/{{ current_user.active_home.active_floor_id }}" hx-trigger="load, click from:body">
+        </div>
     {% elif session['view'] == 'room' %}
         {% include 'base/parts/nav/room_nav_bottom.html.jinja' %}
     {% elif session['view'] == 'photo' %}

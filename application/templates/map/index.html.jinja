@@ -4,65 +4,78 @@
 {% endblock %}
 
 {% block main %}
-<!-- top nav bar -->
-<div
-    class=""
-    id="floor-list-loader"
-    hx-get="/show_list/"
-    hx-vals='{"list_model": "Floor", "view_override":"horiz-scroll"}'
-    hx-trigger="load once"
-    hx-swap="outerHTML"
-    hx-indicator="#updating-indicator"
->
-    <input id="dummy-placeholder" type="hidden" name="items" />
-    <div id="updating-indicator" class="htmx-indicator">
-        Updating...
+    <!-- top nav bar -->
+    <div
+        class=""
+        id="floor-list-loader"
+        hx-get="/show_list/"
+        hx-vals='{"list_model": "Floor", "view_override":"horiz-scroll"}'
+        hx-trigger="load once"
+        hx-swap="outerHTML"
+        hx-indicator="#updating-indicator"
+    >
+        <input id="dummy-placeholder" type="hidden" name="items" />
+        <div id="updating-indicator" class="htmx-indicator">Updating...</div>
     </div>
-</div>
-<!-- end top nav bar -->
-<!-- room list -->
-<div class="row g-0 overflow-auto" style="height: 50vh;">
-            <div class="col-11">
-                
+    <!-- end top nav bar -->
+    <!-- room list -->
+    <div class="row g-0 overflow-auto" style="height: 50vh;">
+        <div class="col-11">
             {# <form method="POST" hx-boost="false" action="/walkthrough/start" id="walkthrough-form"> #}
-                        <div
-                            class=""
-                            id="room-list-loader"
-                            hx-get="/show_list/"
-                            hx-vals='{"list_model": "Room"}'
-                            hx-trigger="load once"
-                            hx-swap="outerHTML"
-                            hx-indicator="#updating-indicator"
-                        >
-                            <input id="dummy-placeholder" type="hidden" name="items" />
-                            <div id="updating-indicator" class="htmx-indicator">
-                                Updating...
-                            </div>
-                        </div>
-                    
-                    
-                        {# <button type="submit" class="btn btn-success">
+            <div
+                class=""
+                id="room-list-loader"
+                hx-get="/show_list/"
+                hx-vals='{"list_model": "Room"}'
+                hx-trigger="load once"
+                hx-swap="outerHTML"
+                hx-indicator="#updating-indicator"
+            >
+                <input id="dummy-placeholder" type="hidden" name="items" />
+                <div id="updating-indicator" class="htmx-indicator">
+                    Updating...
+                </div>
+            </div>
+
+            {# <button type="submit" class="btn btn-success">
                             Start Walkthrough
                         </button> #}
-                    
-                        {# <a class="btn btn-success" href="/walkthrough/setup">
+
+            {# <a class="btn btn-success" href="/walkthrough/setup">
                             Setup Walkthrough
                         </a> #}
-                    
-            {# </form> #}
-            </div>
-            <div class="col-1 d-flex flex-column align-items-start bg-dark">
-            <a class="btn btn-info btn-sm mb-auto p-2" href="#scroll-end-rooms">↓</a>
-            <a class="btn btn-info btn-sm" href="#scroll-start-rooms">↑</a>
-            </div>
-</div>
-<!-- task list -->
-<div class="row g-0 overflow-auto" style="height: 50vh;">
-<div class="col-11">
-{% include 'tasks/all_tasks_loader.html.jinja' %}
-</div>
-<div class="col-1 bg-light">
-</div>
-</div>
 
+            {# </form> #}
+        </div>
+        <div class="col-1 d-flex flex-column align-items-start bg-dark">
+            <a class="btn btn-info btn-sm mb-auto p-2" href="#scroll-end-rooms"
+                >↓</a
+            >
+            <a class="btn btn-info btn-sm" href="#scroll-start-rooms">↑</a>
+        </div>
+    </div>
+    <!-- task list -->
+    <div class="row g-0 overflow-auto" style="height: 50vh;">
+        <div class="col-11">
+            {% include 'tasks/all_tasks_loader.html.jinja' %}
+        </div>
+        <div class="col-1 bg-light"></div>
+    </div>
+
+    <!-- Button trigger modal -->
+    <button
+        type="button"
+        class="btn btn-primary"
+        data-bs-toggle="modal"
+        data-bs-target="#tutorialModal"
+    >
+        Show Instructions
+    </button>
+
+    <div
+        id="modal-loader"
+        hx-get="/tutorial/map"
+        hx-trigger="load once"
+        hx-swap="outerHTML"
+    ></div>
 {% endblock %}
