@@ -1,16 +1,18 @@
 <span
-class="z-3"
-hx-get="/rename/{{ entry.item_model }}/{{ entry.item_id }}"
-hx-swap="outerHTML"
-hx-trigger="click"
-hx-target="this"
-                data-bs-toggle="tooltip"
-                data-bs-html="true"
-                data-bs-placement="bottom"
-                data-bs-title="<u>Double Click</u> to <span class='text-nowrap'><b>rename</b> {{entry.item_model}}</span>"
-            >
-
-                <div id="text_{{ entry.item_model }}_name-{{ entry.item_id }}" class="scalename editabletext">
-                {{ entry.get_item().name }}
-                </div>
-            </span>
+    class="z-3"
+    hx-get="/rename/{{ entry.item_model }}/{{ entry.item_id }}"
+    hx-swap="outerHTML"
+    hx-trigger="click"
+    hx-target="this"
+    data-bs-toggle="tooltip"
+    data-bs-html="true"
+    data-bs-placement="bottom"
+    data-bs-title="<u>Double Click</u> to <span class='text-nowrap'><b>rename</b> {{ entry.item_model }}</span>"
+>
+    <div
+        id="text_{{ entry.item_model }}_name-{{ entry.item_id }}"
+        class="scalename editabletext"
+    >
+        {{ entry.get_item().name }}
+    </div>
+</span>

@@ -1,17 +1,18 @@
-[ ]: implement home rename here
+[ ]: implement home rename here 
 [ ]: remove name dependencies in all other functions so name change doesn't break anything
 
-<form action="/rename/Home/{{current_user.active_home_id}}" method="put">
-        <div class="form-floating mb-3" hx-target="this" hx-swap="outerHTML">
-            <input hx-post="/validate/Home" hx-indicator="#updating-indicator"
-                type="text"
-                class="form-control"
-                id="HomeName"
-                placeholder="Home Name"
-                name="name_input"
-                required
-            />
-            <label for="HomeName">Home Name</label>
-        </div>
+<form action="/rename/Home/{{ current_user.active_home_id }}" method="put">
+    <div class="form-floating mb-3" hx-target="this" hx-swap="outerHTML">
+        <input
+            hx-post="/validate/Home"
+            hx-indicator="#updating-indicator"
+            type="text"
+            class="form-control"
+            id="HomeName"
+            placeholder="Home Name"
+            name="name_input"
+            required
+        />
+        <label for="HomeName">Home Name</label>
+    </div>
 </form>
-

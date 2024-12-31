@@ -177,6 +177,7 @@ export function initializeSortableLists() {
                             );
                             // Trigger for htmx
                             htmx.trigger(document.body, "cover-photo-updated");
+                            
 
                         }
                     }
@@ -206,6 +207,7 @@ export function initializeSortableLists() {
                             }
                         }
                     }
+                    
                 },
                 onDeselect: function (evt) {
                     console.log(`onDeselect itemEl ${evt.item.dataset.model}`);

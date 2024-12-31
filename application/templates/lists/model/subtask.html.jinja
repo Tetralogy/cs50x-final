@@ -35,7 +35,8 @@ has_children 1: {{ ns.has_children }}
             has_children 2: {{ ns.has_children }}
                 style="display: none;"
             {% endif %} #}
-#todo: make subtasks smaller than tasks and automatically load as subtasks if entry.list_id has a task entry as parent_entry_id
+    #todo: make subtasks smaller than tasks and automatically load as subtasks
+    if entry.list_id has a task entry as parent_entry_id
     <div class="hstack gap-3">
         <div>
             <button

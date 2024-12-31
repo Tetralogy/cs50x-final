@@ -1,4 +1,3 @@
-import logging
 from flask import Blueprint, flash, jsonify, render_template
 from flask_login import current_user, login_required
 from sqlalchemy import delete

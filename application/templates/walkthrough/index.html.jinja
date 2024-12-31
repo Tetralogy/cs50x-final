@@ -4,44 +4,38 @@
 {% endblock %}
 
 {% block main %}
-
-<!-- top nav bar -->
-<div
-    class=""
-    id="floor-list-loader"
-    hx-get="/show_list/"
-    hx-vals='{"list_model": "Floor", "view_override":"horiz-scroll"}'
-    hx-trigger="load once"
-    hx-swap="outerHTML"
-    hx-indicator="#updating-indicator"
->
-    <input id="dummy-placeholder" type="hidden" name="items" />
-    <div id="updating-indicator" class="htmx-indicator">
-        Updating...
+    <!-- top nav bar -->
+    <div
+        class=""
+        id="floor-list-loader"
+        hx-get="/show_list/"
+        hx-vals='{"list_model": "Floor", "view_override":"horiz-scroll"}'
+        hx-trigger="load once"
+        hx-swap="outerHTML"
+        hx-indicator="#updating-indicator"
+    >
+        <input id="dummy-placeholder" type="hidden" name="items" />
+        <div id="updating-indicator" class="htmx-indicator">Updating...</div>
     </div>
-</div>
-<div
-    class=""
-    id="room-list-loader"
-    hx-get="/show_list/"
-    hx-vals='{"list_model": "Room", "view_override":"horiz-scroll"}'
-    hx-trigger="load once"
-    hx-swap="outerHTML"
-    hx-indicator="#updating-indicator"
->
-    <input id="dummy-placeholder" type="hidden" name="items" />
-    <div id="updating-indicator" class="htmx-indicator">
-        Updating...
+    <div
+        class=""
+        id="room-list-loader"
+        hx-get="/show_list/"
+        hx-vals='{"list_model": "Room", "view_override":"horiz-scroll"}'
+        hx-trigger="load once"
+        hx-swap="outerHTML"
+        hx-indicator="#updating-indicator"
+    >
+        <input id="dummy-placeholder" type="hidden" name="items" />
+        <div id="updating-indicator" class="htmx-indicator">Updating...</div>
     </div>
-</div>
-<!-- end top nav bar -->
-<!-- main -->
+    <!-- end top nav bar -->
+    <!-- main -->
     <div
         id="walkthrough-steps"
         hx-get="/walkthrough/steps"
         hx-indicator="#updating-indicator"
         hx-trigger="load"
     ></div>
-<!-- end main -->
-
+    <!-- end main -->
 {% endblock %}

@@ -10,25 +10,24 @@
     data-list_id="{{ list_obj.id }}"
     data-parent_entry_id="{{ list_obj.parent_entry_id }}"
 >
-{% if list_obj %}
-    {% set rows = 12 %}
-    {% set columns = 12 %}
-    {% set cells = (columns * rows) + 1 %}
-    {% set sorted_entries = list_obj.entries | sort(attribute='order') %}
-    {% for i in range(1, cells) %}
-        {% set found = namespace(pin=False) %}
-        {% for entry in sorted_entries if not found.pin %}
-            {% if entry.order == i %}
-                {% include 'lists/model/pin.html.jinja' %}
-                {% set found.pin = True %}
+    {% if list_obj %}
+        {% set rows = 12 %}
+        {% set columns = 12 %}
+        {% set cells = (columns * rows) + 1 %}
+        {% set sorted_entries = list_obj.entries | sort(attribute='order') %}
+        {% for i in range(1, cells) %}
+            {% set found = namespace(pin=False) %}
+            {% for entry in sorted_entries if not found.pin %}
+                {% if entry.order == i %}
+                    {% include 'lists/model/pin.html.jinja' %}
+                    {% set found.pin = True %}
+                {% endif %}
+            {% endfor %}
+            {% if not found.pin %}
+                {% include 'lists/model/gridcell.html.jinja' %}
             {% endif %}
         {% endfor %}
-        {% if not found.pin %}
-            {% include 'lists/model/gridcell.html.jinja' %}
-        {% endif %}
-    {% endfor %}
-{% else %}
-    <h1>Failed to load list</h1>
-{% endif %}
-
+    {% else %}
+        <h1>Failed to load list</h1>
+    {% endif %}
 </div>

@@ -1,4 +1,3 @@
-import logging
 import time
 from typing import List, Optional
 from flask import current_app, flash
@@ -244,27 +243,6 @@ def create_new_default(user_list_id: int, item_model: str, name: str = None, pin
     else:
         raise ValueError(f'Unknown item type {item_model}')
     
-''' uploaded_files 
-def get_user_list_items(user_list_id: int) -> List[dict]:
-    items = UserListItem.query.filter_by(user_list_id=user_list_id).order_by(UserListItem.order).all()
-    result = []
-    for item in items:
-        if item.item_type == 'room':
-            obj = Room.query.get(item.item_id)
-        elif item.item_type == 'task':
-            obj = Task.query.get(item.item_id)
-        elif item.item_type == 'supply':
-            obj = Supply.query.get(item.item_id)
-        else:
-            # Handle custom items
-            obj = {'id': item.item_id, 'type': item.item_type, 'name': 'Custom Item', 'additional_info': item.custom_data}
-        
-        list_item = obj.as_list_item if hasattr(obj, 'as_list_item') else obj
-        list_item['order'] = item.order
-        list_item['custom_data'] = item.custom_data
-        result.listsend(list_item)
-    return result
-'''
 def get_userlists_by_parent(parent_entry_id: int) -> List[UserList]:
         lists = current_user.lists.filter_by(parent_entry_id=parent_entry_id).all()
         if lists:
@@ -328,7 +306,6 @@ def get_userlist(item_model: str = None, list_name: str = None, parent_entry_id:
         lists = current_user.lists.filter_by(parent_entry_id=parent_entry_id).all()
         combolist_name = f'Combo {parent_entry_id}'
         logger.debug(f'lists found (parent_entry_id): {lists}')
-    
     if not lists:
         logger.debug(f'No lists of type {item_model} found for user {current_user.id}')
         return None
@@ -459,56 +436,6 @@ def get_child_user_lists(entry_id: int) -> List[UserList]:
     
     return child_user_lists
 
-# up tree: starting from a child entry; use (user_list_id to get list > parent_entry_id) until 'specified high level entry_id'
-# down tree: starting from the specified parent_entry_id; use (find lists containing parent_entry_id to get child_user_lists > for list in child_user_lists > user_list > for entry in user_list.entries > entry) until 'specified low level entry_id'
-
-def build_hierarchy(parent_entry_id: int) -> dict: #[ ]: remove if unnecessary
-    from collections import deque
-    hierarchy = {}
-    queue = deque([parent_entry_id])
-    logger.debug(f'queue: {queue}')
-    level_counter = 0
-    while queue:
-        current_entry_id = queue.popleft()
-        
-        # Get the child user lists for the current entry
-        child_user_lists = get_child_user_lists(current_entry_id)
-        
-        for user_list in child_user_lists:
-            hierarchy[user_list.id] = {
-                'list': user_list,
-                'list_name': user_list.list_name,
-                'parent_entry_id': user_list.parent_entry_id,
-                'entries': []
-            }
-            
-            for entry in user_list.entries:
-                # Add the entry's ID to the queue to process its children
-                queue.append(entry.id)
-                
-                # Add the entry to the list's children
-                hierarchy[user_list.id]['entries'].append(entry.id)
-        level_counter += 1
-        #logger.debug(f'level_counter: {level_counter}')
-    logger.debug(f'level_counter at end: {level_counter}')
-    return hierarchy
-
-def print_hierarchy_iterative(hierarchy: dict, parent_entry_id: int = None): # [ ]: remove if unnecessary
-    logger.debug("print_hierarchy_iterative:")
-    stack = [(parent_entry_id, 0)]  # Stack to track (current_parent_id, current_indent)
-
-    while stack:
-        current_parent_id, indent = stack.pop()
-
-        for user_list_id, user_list_data in hierarchy.items():
-            if user_list_data['list'].parent_entry_id == current_parent_id:
-                logger.debug('  ' * indent + f"UserList {user_list_id}:")
-                logger.debug('  ' * indent + f"  Entries: {user_list_data['entries']}")
-                logger.debug()
-                # Add child lists to the stack with increased indentation
-                stack.append((user_list_id, indent + 1))
-def unpack_hierarchy(hierarchy: dict) -> List[dict]:
-    raise NotImplementedError("unpack_hierarchy not yet implemented") # [ ]: remove if unnecessary
 def update_entry_order(user_list_entry_id: int, new_order: int) -> Optional[UserListEntry]:
     max_retries = 3
     retry_delay = 0.5  # 500ms
@@ -542,12 +469,6 @@ def delete_entry_and_item(user_list_entry_id: int) -> bool:
         db.session.commit()
         return True
     return False
-
-'''def add_custom_item_to_list(user_list_id: int, name: str, order: int, custom_data: str = None) -> UserListEntry:
-    new_item = UserListEntry(user_list_id=user_list_id, item_type='custom', item_id=0, order=order, custom_data=custom_data)
-    db.session.add(new_item)
-    db.session.commit()
-    return new_item'''
 
 def set_default_floor_name():
     floor_count = current_user.active_home.floors.count()

@@ -32,10 +32,3 @@ const throttledInitialize = throttle(initialize, 1000);
 htmx.onLoad(throttledInitialize);
 
 
-/* fetchBoolFromEndpoint('/tutorial/pingrid', function(result) {
-    if (result) {
-        const tutorialModal = new bootstrap.Modal(
-            document.getElementById("tutorialModal"),
-        );
-        tutorialModal.show();
-}}); */

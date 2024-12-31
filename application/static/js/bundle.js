@@ -50,13 +50,7 @@ const throttledInitialize = (0,_throttle_js__WEBPACK_IMPORTED_MODULE_6__.throttl
 htmx.onLoad(throttledInitialize);
 
 
-/* fetchBoolFromEndpoint('/tutorial/pingrid', function(result) {
-    if (result) {
-        const tutorialModal = new bootstrap.Modal(
-            document.getElementById("tutorialModal"),
-        );
-        tutorialModal.show();
-}}); */
+
 
 /***/ }),
 
@@ -613,6 +607,7 @@ function initializeSortableLists() {
                             );
                             // Trigger for htmx
                             htmx.trigger(document.body, "cover-photo-updated");
+                            
 
                         }
                     }
@@ -642,6 +637,7 @@ function initializeSortableLists() {
                             }
                         }
                     }
+                    
                 },
                 onDeselect: function (evt) {
                     console.log(`onDeselect itemEl ${evt.item.dataset.model}`);
@@ -8652,7 +8648,7 @@ ___CSS_LOADER_EXPORT___.push([module.id, `.grabbable {
     cursor: -moz-grab;
     cursor: -webkit-grab;
 }
-/* (Optional) Apply a "closed-hand" cursor during drag operation. */
+/* Apply a "closed-hand" cursor during drag operation. */
 .grabbable:active {
     cursor: grabbing;
     cursor: -moz-grabbing;
@@ -8674,17 +8670,11 @@ ___CSS_LOADER_EXPORT___.push([module.id, `.grabbable {
     display: none !important;
     opacity: 0.5;
     background: #05f5f5;
-    /* height: auto; */
 }
 /* Style the static ghost to look like the original item */
 .static-ghost {
-    /* display: none !important; */
-
     background: #ff00e6;
     opacity: 0.5; /* Make it semi-transparent */
-    /* pointer-events: none; */ /* Disable interactions */
-    /* height: auto; */
-    /* position: relative; */ /* Ensure it stays in the flow */
 }
 
 .test-fallback {
@@ -8692,10 +8682,10 @@ ___CSS_LOADER_EXPORT___.push([module.id, `.grabbable {
     opacity: 0.5;
     background: #ff00e6;
 }
-/* .selected {
+.selected {
     opacity: .5;
     background: #99ff00;
-} */
+}
 
 .selected .selectable {
     position: relative;
@@ -8720,17 +8710,41 @@ ___CSS_LOADER_EXPORT___.push([module.id, `.grabbable {
     border: 2vw solid rgba(255, 0, 0, .5);
     /* box-shadow: inset 0 0 0 1vw yellow; */ /* Simulates an inside outline */
 }
-/* .selected:hover::after {
+.selected.photo:hover::after {
     content: "Edit";
     border: 4vw solid rgba(255, 255, 0, 0.25);
     background-color: rgba(0, 255, 55, 0.5);
-} */
+}
 .selected.task {
     background-color: rgba(85, 0, 255, 0.5);
 }
 .selected.floor::after {
     content: "Ground Floor";
     background-color: rgba(255, 0, 255, 0.5);
+}
+
+.selected.photo.selectable {
+    position: relative;
+}
+.selected.photo.selectable::after {
+    content: "Selected";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    /* background-color: rgba(0, 255, 55, 0.25); */
+    font-size: 2vw;
+    font-weight: bold;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.5) !important;
+    text-shadow: 0 0 .2 #000000;
+    /* padding: 0 !important; */
+    line-height: .5;
+    display: inline-block;
+    cursor: pointer;
+    border: 2vw solid rgba(255, 0, 0, .5);
+    /* box-shadow: inset 0 0 0 1vw yellow; */ /* Simulates an inside outline */
 }
 .task.dropzone {
     display: inline-block;
@@ -8784,7 +8798,11 @@ ___CSS_LOADER_EXPORT___.push([module.id, `.grabbable {
     display: inline-block;
     cursor: pointer;
     border: 2vw solid rgba(255, 0, 0, .5);
-} `, "",{"version":3,"sources":["webpack://./application/static/css/sortables.css"],"names":[],"mappings":"AAAA;IACI,YAAY,EAAE,2CAA2C;IACzD,YAAY;IACZ,iBAAiB;IACjB,oBAAoB;AACxB;AACA,mEAAmE;AACnE;IACI,gBAAgB;IAChB,qBAAqB;IACrB,wBAAwB;AAC5B;;AAEA,eAAe;AACf;IACI,YAAY;IACZ,mBAAmB;AACvB;;AAEA;IACI,YAAY;IACZ,mBAAmB;AACvB;;AAEA;IACI,wBAAwB;IACxB,YAAY;IACZ,mBAAmB;IACnB,kBAAkB;AACtB;AACA,0DAA0D;AAC1D;IACI,8BAA8B;;IAE9B,mBAAmB;IACnB,YAAY,EAAE,6BAA6B;IAC3C,0BAA0B,EAAE,yBAAyB;IACrD,kBAAkB;IAClB,wBAAwB,EAAE,gCAAgC;AAC9D;;AAEA;IACI,yBAAyB;IACzB,YAAY;IACZ,mBAAmB;AACvB;AACA;;;GAGG;;AAEH;IACI,kBAAkB;AACtB;AACA;IACI,mBAAmB;IACnB,kBAAkB;IAClB,MAAM;IACN,OAAO;IACP,QAAQ;IACR,SAAS;IACT,8CAA8C;IAC9C,cAAc;IACd,iBAAiB;IACjB,kBAAkB;IAClB,0CAA0C;IAC1C,2BAA2B;IAC3B,2BAA2B;IAC3B,eAAe;IACf,qBAAqB;IACrB,eAAe;IACf,qCAAqC;IACrC,wCAAwC,EAAE,gCAAgC;AAC9E;AACA;;;;GAIG;AACH;IACI,uCAAuC;AAC3C;AACA;IACI,uBAAuB;IACvB,wCAAwC;AAC5C;AACA;IACI,qBAAqB;IACrB,6BAA6B;IAC7B,mBAAmB;IACnB,oBAAoB;IACpB,eAAe;IACf,gBAAgB;IAChB,kBAAkB;IAClB,oBAAoB;AACxB;;AAEA;IACI,gBAAgB;IAChB,iBAAiB;;IAEjB,yDAA+C;IAC/C,2BAA2B;IAC3B,4BAA4B;IAC5B,wBAAwB;AAC5B;;AAEA;IACI,yBAAyB;IACzB,oCAAoC;IACpC,kCAAkC;IAClC,wBAAwB,EAAE,mBAAmB;IAC7C,gCAAgC,EAAE,iCAAiC;AACvE;;AAEA;IACI,kBAAkB;AACtB;AACA;IACI,WAAW,EAAE,8BAA8B;IAC3C,oBAAoB,EAAE,yCAAyC;IAC/D,wBAAwB;IACxB,kBAAkB;IAClB,MAAM;IACN,OAAO;IACP,QAAQ;IACR,SAAS;;IAET,cAAc;IACd,iBAAiB;IACjB,kBAAkB;IAClB,0CAA0C;IAC1C,2BAA2B;;IAE3B,eAAe;IACf,qBAAqB;IACrB,eAAe;IACf,qCAAqC;AACzC","sourcesContent":[".grabbable {\n    cursor: move; /* fallback if grab cursor is unsupported */\n    cursor: grab;\n    cursor: -moz-grab;\n    cursor: -webkit-grab;\n}\n/* (Optional) Apply a \"closed-hand\" cursor during drag operation. */\n.grabbable:active {\n    cursor: grabbing;\n    cursor: -moz-grabbing;\n    cursor: -webkit-grabbing;\n}\n\n/* ghostClass */\n.ghost {\n    opacity: 0.5;\n    background: #c8ebfb;\n}\n\n.ghost-red {\n    opacity: 0.5;\n    background: #ff0000;\n}\n\n.none-ghost {\n    display: none !important;\n    opacity: 0.5;\n    background: #05f5f5;\n    /* height: auto; */\n}\n/* Style the static ghost to look like the original item */\n.static-ghost {\n    /* display: none !important; */\n\n    background: #ff00e6;\n    opacity: 0.5; /* Make it semi-transparent */\n    /* pointer-events: none; */ /* Disable interactions */\n    /* height: auto; */\n    /* position: relative; */ /* Ensure it stays in the flow */\n}\n\n.test-fallback {\n    display: block !important;\n    opacity: 0.5;\n    background: #ff00e6;\n}\n/* .selected {\n    opacity: .5;\n    background: #99ff00;\n} */\n\n.selected .selectable {\n    position: relative;\n}\n.selected .selectable::after {\n    content: \"Selected\";\n    position: absolute;\n    top: 0;\n    left: 0;\n    right: 0;\n    bottom: 0;\n    /* background-color: rgba(0, 255, 55, 0.25); */\n    font-size: 2vw;\n    font-weight: bold;\n    text-align: center;\n    color: rgba(255, 255, 255, 0.5) !important;\n    text-shadow: 0 0 .2 #000000;\n    /* padding: 0 !important; */\n    line-height: .5;\n    display: inline-block;\n    cursor: pointer;\n    border: 2vw solid rgba(255, 0, 0, .5);\n    /* box-shadow: inset 0 0 0 1vw yellow; */ /* Simulates an inside outline */\n}\n/* .selected:hover::after {\n    content: \"Edit\";\n    border: 4vw solid rgba(255, 255, 0, 0.25);\n    background-color: rgba(0, 255, 55, 0.5);\n} */\n.selected.task {\n    background-color: rgba(85, 0, 255, 0.5);\n}\n.selected.floor::after {\n    content: \"Ground Floor\";\n    background-color: rgba(255, 0, 255, 0.5);\n}\n.task.dropzone {\n    display: inline-block;\n    background: rgb(108, 99, 255);\n    align-items: center;\n    justify-content: end;\n    min-width: 50px;\n    min-height: 50px;\n    border: 5px dashed;\n    transition: all 0.3s;\n}\n\n.task.dropzone.hover {\n    min-width: 100px;\n    min-height: 100px;\n\n    background-image: url(\"plus-square-dotted.svg\");\n    background-position: center;\n    background-repeat: no-repeat;\n    background-size: contain;\n}\n\n.rooms:empty::after {\n    content: \"Drop Room Here\";\n    background-color: #ff9900 !important;\n    border: 2px dashed #ccc !important;\n    height: 100px !important; /* Example height */\n    border: 5px solid red !important; /* Temporary border for testing */\n}\n\n.pingrid.hover {\n    position: relative;\n}\n.pingrid.hover::after {\n    z-index: 10; /* Higher than most elements */\n    pointer-events: none; /* Prevent it from blocking interaction */\n    content: \"Drop Pin Here\";\n    position: absolute;\n    top: 0;\n    left: 0;\n    right: 0;\n    bottom: 0;\n\n    font-size: 2vw;\n    font-weight: bold;\n    text-align: center;\n    color: rgba(255, 255, 255, 0.5) !important;\n    text-shadow: 0 0 .2 #000000;\n\n    line-height: .5;\n    display: inline-block;\n    cursor: pointer;\n    border: 2vw solid rgba(255, 0, 0, .5);\n} "],"sourceRoot":""}]);
+} 
+
+/* .replaceableitem {
+    pointer-events: none;
+} */`, "",{"version":3,"sources":["webpack://./application/static/css/sortables.css"],"names":[],"mappings":"AAAA;IACI,YAAY,EAAE,2CAA2C;IACzD,YAAY;IACZ,iBAAiB;IACjB,oBAAoB;AACxB;AACA,wDAAwD;AACxD;IACI,gBAAgB;IAChB,qBAAqB;IACrB,wBAAwB;AAC5B;;AAEA,eAAe;AACf;IACI,YAAY;IACZ,mBAAmB;AACvB;;AAEA;IACI,YAAY;IACZ,mBAAmB;AACvB;;AAEA;IACI,wBAAwB;IACxB,YAAY;IACZ,mBAAmB;AACvB;AACA,0DAA0D;AAC1D;IACI,mBAAmB;IACnB,YAAY,EAAE,6BAA6B;AAC/C;;AAEA;IACI,yBAAyB;IACzB,YAAY;IACZ,mBAAmB;AACvB;AACA;IACI,WAAW;IACX,mBAAmB;AACvB;;AAEA;IACI,kBAAkB;AACtB;AACA;IACI,mBAAmB;IACnB,kBAAkB;IAClB,MAAM;IACN,OAAO;IACP,QAAQ;IACR,SAAS;IACT,8CAA8C;IAC9C,cAAc;IACd,iBAAiB;IACjB,kBAAkB;IAClB,0CAA0C;IAC1C,2BAA2B;IAC3B,2BAA2B;IAC3B,eAAe;IACf,qBAAqB;IACrB,eAAe;IACf,qCAAqC;IACrC,wCAAwC,EAAE,gCAAgC;AAC9E;AACA;IACI,eAAe;IACf,yCAAyC;IACzC,uCAAuC;AAC3C;AACA;IACI,uCAAuC;AAC3C;AACA;IACI,uBAAuB;IACvB,wCAAwC;AAC5C;;AAEA;IACI,kBAAkB;AACtB;AACA;IACI,mBAAmB;IACnB,kBAAkB;IAClB,MAAM;IACN,OAAO;IACP,QAAQ;IACR,SAAS;IACT,8CAA8C;IAC9C,cAAc;IACd,iBAAiB;IACjB,kBAAkB;IAClB,0CAA0C;IAC1C,2BAA2B;IAC3B,2BAA2B;IAC3B,eAAe;IACf,qBAAqB;IACrB,eAAe;IACf,qCAAqC;IACrC,wCAAwC,EAAE,gCAAgC;AAC9E;AACA;IACI,qBAAqB;IACrB,6BAA6B;IAC7B,mBAAmB;IACnB,oBAAoB;IACpB,eAAe;IACf,gBAAgB;IAChB,kBAAkB;IAClB,oBAAoB;AACxB;;AAEA;IACI,gBAAgB;IAChB,iBAAiB;;IAEjB,yDAA+C;IAC/C,2BAA2B;IAC3B,4BAA4B;IAC5B,wBAAwB;AAC5B;;AAEA;IACI,yBAAyB;IACzB,oCAAoC;IACpC,kCAAkC;IAClC,wBAAwB,EAAE,mBAAmB;IAC7C,gCAAgC,EAAE,iCAAiC;AACvE;;AAEA;IACI,kBAAkB;AACtB;AACA;IACI,WAAW,EAAE,8BAA8B;IAC3C,oBAAoB,EAAE,yCAAyC;IAC/D,wBAAwB;IACxB,kBAAkB;IAClB,MAAM;IACN,OAAO;IACP,QAAQ;IACR,SAAS;;IAET,cAAc;IACd,iBAAiB;IACjB,kBAAkB;IAClB,0CAA0C;IAC1C,2BAA2B;;IAE3B,eAAe;IACf,qBAAqB;IACrB,eAAe;IACf,qCAAqC;AACzC;;AAEA;;GAEG","sourcesContent":[".grabbable {\n    cursor: move; /* fallback if grab cursor is unsupported */\n    cursor: grab;\n    cursor: -moz-grab;\n    cursor: -webkit-grab;\n}\n/* Apply a \"closed-hand\" cursor during drag operation. */\n.grabbable:active {\n    cursor: grabbing;\n    cursor: -moz-grabbing;\n    cursor: -webkit-grabbing;\n}\n\n/* ghostClass */\n.ghost {\n    opacity: 0.5;\n    background: #c8ebfb;\n}\n\n.ghost-red {\n    opacity: 0.5;\n    background: #ff0000;\n}\n\n.none-ghost {\n    display: none !important;\n    opacity: 0.5;\n    background: #05f5f5;\n}\n/* Style the static ghost to look like the original item */\n.static-ghost {\n    background: #ff00e6;\n    opacity: 0.5; /* Make it semi-transparent */\n}\n\n.test-fallback {\n    display: block !important;\n    opacity: 0.5;\n    background: #ff00e6;\n}\n.selected {\n    opacity: .5;\n    background: #99ff00;\n}\n\n.selected .selectable {\n    position: relative;\n}\n.selected .selectable::after {\n    content: \"Selected\";\n    position: absolute;\n    top: 0;\n    left: 0;\n    right: 0;\n    bottom: 0;\n    /* background-color: rgba(0, 255, 55, 0.25); */\n    font-size: 2vw;\n    font-weight: bold;\n    text-align: center;\n    color: rgba(255, 255, 255, 0.5) !important;\n    text-shadow: 0 0 .2 #000000;\n    /* padding: 0 !important; */\n    line-height: .5;\n    display: inline-block;\n    cursor: pointer;\n    border: 2vw solid rgba(255, 0, 0, .5);\n    /* box-shadow: inset 0 0 0 1vw yellow; */ /* Simulates an inside outline */\n}\n.selected.photo:hover::after {\n    content: \"Edit\";\n    border: 4vw solid rgba(255, 255, 0, 0.25);\n    background-color: rgba(0, 255, 55, 0.5);\n}\n.selected.task {\n    background-color: rgba(85, 0, 255, 0.5);\n}\n.selected.floor::after {\n    content: \"Ground Floor\";\n    background-color: rgba(255, 0, 255, 0.5);\n}\n\n.selected.photo.selectable {\n    position: relative;\n}\n.selected.photo.selectable::after {\n    content: \"Selected\";\n    position: absolute;\n    top: 0;\n    left: 0;\n    right: 0;\n    bottom: 0;\n    /* background-color: rgba(0, 255, 55, 0.25); */\n    font-size: 2vw;\n    font-weight: bold;\n    text-align: center;\n    color: rgba(255, 255, 255, 0.5) !important;\n    text-shadow: 0 0 .2 #000000;\n    /* padding: 0 !important; */\n    line-height: .5;\n    display: inline-block;\n    cursor: pointer;\n    border: 2vw solid rgba(255, 0, 0, .5);\n    /* box-shadow: inset 0 0 0 1vw yellow; */ /* Simulates an inside outline */\n}\n.task.dropzone {\n    display: inline-block;\n    background: rgb(108, 99, 255);\n    align-items: center;\n    justify-content: end;\n    min-width: 50px;\n    min-height: 50px;\n    border: 5px dashed;\n    transition: all 0.3s;\n}\n\n.task.dropzone.hover {\n    min-width: 100px;\n    min-height: 100px;\n\n    background-image: url(\"plus-square-dotted.svg\");\n    background-position: center;\n    background-repeat: no-repeat;\n    background-size: contain;\n}\n\n.rooms:empty::after {\n    content: \"Drop Room Here\";\n    background-color: #ff9900 !important;\n    border: 2px dashed #ccc !important;\n    height: 100px !important; /* Example height */\n    border: 5px solid red !important; /* Temporary border for testing */\n}\n\n.pingrid.hover {\n    position: relative;\n}\n.pingrid.hover::after {\n    z-index: 10; /* Higher than most elements */\n    pointer-events: none; /* Prevent it from blocking interaction */\n    content: \"Drop Pin Here\";\n    position: absolute;\n    top: 0;\n    left: 0;\n    right: 0;\n    bottom: 0;\n\n    font-size: 2vw;\n    font-weight: bold;\n    text-align: center;\n    color: rgba(255, 255, 255, 0.5) !important;\n    text-shadow: 0 0 .2 #000000;\n\n    line-height: .5;\n    display: inline-block;\n    cursor: pointer;\n    border: 2vw solid rgba(255, 0, 0, .5);\n} \n\n/* .replaceableitem {\n    pointer-events: none;\n} */"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 

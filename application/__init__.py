@@ -1,5 +1,3 @@
-import functools
-import logging
 import os
 from time import time
 from dotenv import load_dotenv
@@ -10,9 +8,7 @@ from flask_session import Session
 
 from logs.logging_config import ApplicationLogger, configure_logging
 
-#from application.utils import setup_recursive_detection
 from .extension import db
-
 
 # Load both .env and .flaskenv files
 load_dotenv()
@@ -45,10 +41,6 @@ def create_app(config_filename=None):
             template = getattr(g, 'template', None)
             logger.debug(f'template (after_request): {template}')
         return response
-
-    # Debug: Print current working directory
-    #logger.debug(f"Current working directory: {os.getcwd()}")
-    #logger.debug(f"Application root: {app.root_path}")
     
     # Load configurations from environment variables
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(app.root_path, 'database', 'test_database.db')
@@ -57,17 +49,6 @@ def create_app(config_filename=None):
     
     if not app.config['SECRET_KEY']:
         raise ValueError("No SECRET_KEY set for Flask application")
-    
-    # Debug: Print interpreted database path
-    #db_path = os.path.join(app.root_path, app.config['SQLALCHEMY_DATABASE_URI'].replace('sqlite:///', ''))
-    #logger.debug(f"Interpreted database path: {db_path}")
-    #logger.debug(f"Database file exists: {os.path.exists(db_path)}")
-
-    # Ensure database directory exists
-    #db_dir = os.path.dirname(db_path)
-    #os.makedirs(db_dir, exist_ok=True)
-    #logger.debug(f"Database directory: {db_dir}")
-    #logger.debug(f"Database directory exists: {os.path.exists(db_dir)}")
 
     # Configure Flask-Session
     app.config['SESSION_TYPE'] = 'sqlalchemy'
@@ -94,10 +75,9 @@ def create_app(config_filename=None):
     from .main import main
     from .auth import auth
     from .database.models import Base, models, User
-    from .database.events import set_timestamp_on_completion, update_active_floor, debug_reset_tutorials #, duplicate_pins_for_new_cover_photo, remove_old_pin_and_entry_if_duplicate_task_on_photo
+    from .database.events import set_timestamp_on_completion, update_active_floor, debug_reset_tutorials
     from .utils import utils
     from .upload import upload
-    from .annotate import annotate
     from .onboard import onboard
     from .account import account
     from .homes import homes
@@ -123,7 +103,6 @@ def create_app(config_filename=None):
     app.register_blueprint(models)
     app.register_blueprint(utils)
     app.register_blueprint(upload)
-    app.register_blueprint(annotate)
     app.register_blueprint(onboard)
     app.register_blueprint(account)
     app.register_blueprint(homes)
@@ -133,7 +112,7 @@ def create_app(config_filename=None):
     app.register_blueprint(lists)
     app.register_blueprint(map)
     
-    migrate = Migrate(app, db) # [ ]: Migrate should be initialized after all blueprints are registered
+    migrate = Migrate(app, db)
 
     with app.app_context():
         db.create_all()

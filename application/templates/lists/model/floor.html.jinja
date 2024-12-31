@@ -1,5 +1,5 @@
 <li
-title="{{ entry.get_item().name }}" 
+    title="{{ entry.get_item().name }}"
     class="floor list-group-item pe-0 shadow grabbable {% if current_user.active_home.ground_floor_id == entry.item_id and entry.item_model == 'Floor' %}selected{% endif %}"
     id="{{ entry.item_model }}list-{{ entry.id }}"
     data-id="{{ entry.id }}"
@@ -8,19 +8,20 @@ title="{{ entry.get_item().name }}"
     data-order="{{ entry.order }}"
     data-list_id="{{ entry.user_list_id }}"
     data-model="{{ entry.item_model }}"
-><input type='hidden' name='items' value='{{ entry.id }}'/>
-<div class="hstack gap-3">
-    <div class="vr handle">↕️</div>
-    <div class="input-group mx-5">
-        <!-- <div class="selectable">{{ entry.order }}</div> -->
-        <div class="flex-grow-1">
-            <!-- {{ entry.get_item().name }} -->
-            {% include 'lists/name.html.jinja' %}
-            {% include 'base/parts/debug/order.html.jinja' %}
+>
+    <input type="hidden" name="items" value="{{ entry.id }}" />
+    <div class="hstack gap-3">
+        <div class="vr handle">↕️</div>
+        <div class="input-group mx-5">
+            <!-- <div class="selectable">{{ entry.order }}</div> -->
+            <div class="flex-grow-1">
+                <!-- {{ entry.get_item().name }} -->
+                {% include 'lists/name.html.jinja' %}
+                {% include 'base/parts/debug/order.html.jinja' %}
+            </div>
         </div>
+        <div class="vr"></div>
     </div>
-    <div class="vr"></div>
-</div>
 </li>
 
 {# {% include 'lists/model/generic_text.html.jinja' %} #}

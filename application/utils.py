@@ -1,6 +1,4 @@
-
 from functools import wraps
-import logging
 from flask import Blueprint, flash, g, get_flashed_messages, redirect, render_template, request, session, url_for
 from flask_login import current_user
 from logs.logging_config import ApplicationLogger

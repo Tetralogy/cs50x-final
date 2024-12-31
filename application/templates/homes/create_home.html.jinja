@@ -38,7 +38,7 @@
                 <option value="cardboard box">Cardboard box</option>
                 <option value="boat">Boat</option>
                 <option value="other" disabled>
-                    Other #[ ]: User input custom type
+                    {# Other #[ ]: User input custom type #}
                 </option>
             </select>
             <label for="HomeType">Type of home</label>
@@ -68,11 +68,10 @@
         Show Instructions
     </button>
 
-
-<div id="modal-loader"
-hx-get="/tutorial/create_home"
-hx-trigger="load once"
-hx-swap="outerHTML">
-</div>
-
+    <div
+        id="modal-loader"
+        hx-get="/tutorial/create_home"
+        hx-trigger="load once"
+        hx-swap="outerHTML"
+    ></div>
 {% endblock %}

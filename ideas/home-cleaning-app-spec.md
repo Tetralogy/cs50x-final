@@ -17,13 +17,7 @@ Many individuals struggle with maintaining a clean and organized home environmen
 - **ORM:** SQLAlchemy 1.4+
 - **Database:** SQLite 3.35+
 - **Frontend:** HTML5, CSS3, JavaScript (ES6+)
-- # decide js framework [svelt or astro or react]
-- **Additional Libraries:**
-    - Flask-Login for user authentication
-    - Flask-WTF for form handling
-    - Pillow for image processing
-    - pandas for data analysis and visualization
-    - matplotlib for generating graphs
+- 
 
 ## 3. Key Features
 

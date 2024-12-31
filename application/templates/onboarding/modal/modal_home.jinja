@@ -1,68 +1,68 @@
- <!-- Modal -->
-    <div
-        class="modal fade"
-        id="tutorialModal"
-        tabindex="-1"
-        aria-labelledby="tutorialModalLabel"
-        aria-hidden="true"
-    >
-        <div class="modal-dialog modal-dialog-scrollable">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="tutorialModalLabel">
-                        Create Home Tutorial
-                    </h1>
-                    <button
-                        type="button"
-                        class="btn-close"
-                        data-bs-dismiss="modal"
-                        aria-label="Close"
-                    ></button>
-                </div>
-                <div class="modal-body">
-                    <p>Please follow the steps below to set up your home:</p>
-                    <ol>
-                        <li>
-                            <strong>Enter Home Name:</strong> Choose a unique
-                            name for your home.
-                        </li>
-                        <li>
-                            <strong>Select Home Type:</strong> Use the dropdown
-                            menu to select the type of your home.
-                        </li>
-                        <li>
-                            <strong>Specify Home Layout:</strong> Indicate if
-                            your home is multi-story by toggling the checkbox.
-                        </li>
-                        <li>
-                            <strong>Submit Form:</strong> Click the "Submit"
-                            button to save your home details.
-                        </li>
-                    </ol>
-                </div>
+<!-- Modal -->
+<div
+    class="modal fade"
+    id="tutorialModal"
+    tabindex="-1"
+    aria-labelledby="tutorialModalLabel"
+    aria-hidden="true"
+>
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="tutorialModalLabel">
+                    Create Home Tutorial
+                </h1>
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                ></button>
+            </div>
+            <div class="modal-body">
+                <p>Please follow the steps below to set up your home:</p>
+                <ol>
+                    <li>
+                        <strong>Enter Home Name:</strong> Choose a unique name
+                        for your home.
+                    </li>
+                    <li>
+                        <strong>Select Home Type:</strong> Use the dropdown menu
+                        to select the type of your home.
+                    </li>
+                    <li>
+                        <strong>Specify Home Layout:</strong> Indicate if your
+                        home is multi-story by toggling the checkbox.
+                    </li>
+                    <li>
+                        <strong>Submit Form:</strong> Click the "Submit" button
+                        to save your home details.
+                    </li>
+                </ol>
+            </div>
 
-                <div class="modal-footer">
-                    <button
-                        type="button"
-                        class="btn btn-secondary"
-                        data-bs-dismiss="modal"
-                    >
-                        Close
-                    </button>
-                    <button
-                        hx-post="/tutorial/create_home"
-                        data-bs-dismiss="modal"
-                        type="button"
-                        class="btn btn-primary"
-                        id="saveChanges"
-                    >
-                        Got it, Don't show again
-                    </button>
-                </div>
+            <div class="modal-footer">
+                <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal"
+                >
+                    Close
+                </button>
+                <button
+                    hx-post="/tutorial/create_home"
+                    data-bs-dismiss="modal"
+                    type="button"
+                    class="btn btn-primary"
+                    id="saveChanges"
+                >
+                    Got it, Don't show again
+                </button>
             </div>
         </div>
     </div>
+</div>
 
-    {% if not current_user.tutorial_home_dismissed %}
-<script src="/static/js/showModal.js"></script>
-    {% endif %}
+{% if not current_user.tutorial_home_dismissed %}
+    <script src="/static/js/showModal.js"></script>
+{% endif %}

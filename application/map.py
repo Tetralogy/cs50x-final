@@ -1,4 +1,3 @@
-import logging
 from flask import Blueprint, flash, redirect, render_template, session, url_for
 from flask_login import current_user, login_required
 
@@ -11,7 +10,7 @@ map = Blueprint('map', __name__)
 logger = ApplicationLogger.get_logger(__name__)
 
 @map.route('/map/', methods=['GET'])
-@map.route('/map/Floor/<int:floor_id>', methods=['GET'])
+@map.route('/map/Floor/<int:floor_id>', methods=['GET']) # Main rooms list selection view
 @login_required
 #@check_prerequisites
 def home_map(floor_id: int=None):
@@ -35,9 +34,8 @@ def home_map(floor_id: int=None):
     floor_list, room_list = get_room_list()
     logger.debug(f'floor_list MAP: {floor_list}')
     return render_template('map/index.html.jinja', view=view)
-    raise NotImplementedError("map not yet implemented")
 
-@map.route('/map/Room/<int:room_id>', methods=['GET'])
+@map.route('/map/Room/<int:room_id>', methods=['GET']) # In room task view
 @login_required
 def room_redirect(room_id: int):
     set_active_room(room_id)

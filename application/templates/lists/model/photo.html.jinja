@@ -1,8 +1,9 @@
 <div
     title="{{ entry.get_item().name }}"
-    class="
-    {% if view == 'selectcoverphoto' %}{# bug: add previously selected class and currently selected class #}
-        col
+    class="photo 
+    {% if view == 'selectcoverphoto' %}
+        {# bug: add previously selected class and currently selected class #}
+            col selectable 
         {% if "default_cover_image" in entry.get_item().name %}
             d-none 
         {% endif %}
@@ -10,7 +11,11 @@
         col-auto 
     {% endif %}
     {% if current_user.active_home.active_room.current_cover_photo_id == entry.item_id and entry.item_model == 'Photo' and view == 'selectcoverphoto' %}selected{% endif %}"
+    {% if view == 'pingrid' %}
+    id="{{ entry.item_model }}cover-{{ entry.id }}"
+    {% else %}
     id="{{ entry.item_model }}list-{{ entry.id }}"
+    {% endif %}
     data-id="{{ entry.id }}"
     data-item_id="{{ entry.item_id }}"
     data-name="{{ entry.get_item().name }}"

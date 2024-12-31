@@ -4,7 +4,7 @@
     cursor: -moz-grab;
     cursor: -webkit-grab;
 }
-/* (Optional) Apply a "closed-hand" cursor during drag operation. */
+/* Apply a "closed-hand" cursor during drag operation. */
 .grabbable:active {
     cursor: grabbing;
     cursor: -moz-grabbing;
@@ -26,17 +26,11 @@
     display: none !important;
     opacity: 0.5;
     background: #05f5f5;
-    /* height: auto; */
 }
 /* Style the static ghost to look like the original item */
 .static-ghost {
-    /* display: none !important; */
-
     background: #ff00e6;
     opacity: 0.5; /* Make it semi-transparent */
-    /* pointer-events: none; */ /* Disable interactions */
-    /* height: auto; */
-    /* position: relative; */ /* Ensure it stays in the flow */
 }
 
 .test-fallback {
@@ -44,10 +38,10 @@
     opacity: 0.5;
     background: #ff00e6;
 }
-/* .selected {
+.selected {
     opacity: .5;
     background: #99ff00;
-} */
+}
 
 .selected .selectable {
     position: relative;
@@ -72,17 +66,41 @@
     border: 2vw solid rgba(255, 0, 0, .5);
     /* box-shadow: inset 0 0 0 1vw yellow; */ /* Simulates an inside outline */
 }
-/* .selected:hover::after {
+.selected.photo:hover::after {
     content: "Edit";
     border: 4vw solid rgba(255, 255, 0, 0.25);
     background-color: rgba(0, 255, 55, 0.5);
-} */
+}
 .selected.task {
     background-color: rgba(85, 0, 255, 0.5);
 }
 .selected.floor::after {
     content: "Ground Floor";
     background-color: rgba(255, 0, 255, 0.5);
+}
+
+.selected.photo.selectable {
+    position: relative;
+}
+.selected.photo.selectable::after {
+    content: "Selected";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    /* background-color: rgba(0, 255, 55, 0.25); */
+    font-size: 2vw;
+    font-weight: bold;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.5) !important;
+    text-shadow: 0 0 .2 #000000;
+    /* padding: 0 !important; */
+    line-height: .5;
+    display: inline-block;
+    cursor: pointer;
+    border: 2vw solid rgba(255, 0, 0, .5);
+    /* box-shadow: inset 0 0 0 1vw yellow; */ /* Simulates an inside outline */
 }
 .task.dropzone {
     display: inline-block;
@@ -137,3 +155,7 @@
     cursor: pointer;
     border: 2vw solid rgba(255, 0, 0, .5);
 } 
+
+/* .replaceableitem {
+    pointer-events: none;
+} */

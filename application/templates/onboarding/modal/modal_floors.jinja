@@ -1,82 +1,82 @@
 <!-- Modal -->
-    <div
-        class="modal fade"
-        id="tutorialModal"
-        tabindex="-1"
-        aria-labelledby="tutorialModalLabel"
-        aria-hidden="true"
-    >
-        <div class="modal-dialog modal-dialog-scrollable">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="tutorialModalLabel">
-                        Create Floors Tutorial
-                    </h1>
-                    <button
-                        type="button"
-                        class="btn-close"
-                        data-bs-dismiss="modal"
-                        aria-label="Close"
-                    ></button>
-                </div>
-                <div class="modal-body">
-                    <h3>Add New Floors and name them</h3>
-                    <p>
-                        Please follow the steps below to define the floors in
-                        your house:
-                    </p>
-                    <ol>
-                        <li>
-                            <strong>View Active Floor:</strong> The active floor
-                            number is displayed. This is the floor you are
-                            currently editing.
-                        </li>
-                        <li>
-                            <strong>Set Ground Floor:</strong> The ground floor
-                            number and name are displayed. This is the main
-                            entry floor.
-                        </li>
-                        <li>
-                            <strong>Add New Floors:</strong> Use the "Add Upper
-                            Floor" button to add a new floor above the current
-                            floors. Use the "Add Basement" button to add a floor
-                            below the ground floor.
-                        </li>
-                        <li>
-                            <strong>Rename Floors:</strong> After adding a
-                            floor, you can rename it by clicking on the floor
-                            name field and typing a new name.
-                        </li>
-                        <li>
-                            <strong>Reorder Floors:</strong> Drag and drop floor
-                            names to reorder them. Drag a name outside the list
-                            to delete that floor.
-                        </li>
-                    </ol>
-                </div>
+<div
+    class="modal fade"
+    id="tutorialModal"
+    tabindex="-1"
+    aria-labelledby="tutorialModalLabel"
+    aria-hidden="true"
+>
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="tutorialModalLabel">
+                    Create Floors Tutorial
+                </h1>
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                ></button>
+            </div>
+            <div class="modal-body">
+                <h3>Add New Floors and name them</h3>
+                <p>
+                    Please follow the steps below to define the floors in your
+                    house:
+                </p>
+                <ol>
+                    <li>
+                        <strong>View Active Floor:</strong> The active floor
+                        number is displayed. This is the floor you are currently
+                        editing.
+                    </li>
+                    <li>
+                        <strong>Set Ground Floor:</strong> The ground floor
+                        number and name are displayed. This is the main entry
+                        floor.
+                    </li>
+                    <li>
+                        <strong>Add New Floors:</strong> Use the "Add Upper
+                        Floor" button to add a new floor above the current
+                        floors. Use the "Add Basement" button to add a floor
+                        below the ground floor.
+                    </li>
+                    <li>
+                        <strong>Rename Floors:</strong> After adding a floor,
+                        you can rename it by clicking on the floor name field
+                        and typing a new name.
+                    </li>
+                    <li>
+                        <strong>Reorder Floors:</strong> Drag and drop floor
+                        names to reorder them. Drag a name outside the list to
+                        delete that floor.
+                    </li>
+                </ol>
+            </div>
 
-                <div class="modal-footer">
-                    <button
-                        type="button"
-                        class="btn btn-secondary"
-                        data-bs-dismiss="modal"
-                    >
-                        Close
-                    </button>
-                    <button
-                        hx-post="/tutorial/create_floors"
-                        data-bs-dismiss="modal"
-                        type="button"
-                        class="btn btn-primary"
-                        id="saveChanges"
-                    >
-                        Got it, Don't show again
-                    </button>
-                </div>
+            <div class="modal-footer">
+                <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal"
+                >
+                    Close
+                </button>
+                <button
+                    hx-post="/tutorial/create_floors"
+                    data-bs-dismiss="modal"
+                    type="button"
+                    class="btn btn-primary"
+                    id="saveChanges"
+                >
+                    Got it, Don't show again
+                </button>
             </div>
         </div>
     </div>
+</div>
 
-    {% if not current_user.tutorial_floors_dismissed %}
-<script src="/static/js/showModal.js"></script>
-    {% endif %}
+{% if not current_user.tutorial_floors_dismissed %}
+    <script src="/static/js/showModal.js"></script>
+{% endif %}

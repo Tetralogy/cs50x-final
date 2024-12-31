@@ -1,6 +1,3 @@
-import logging
-import os
-import time
 from sqlalchemy import select
 from werkzeug.utils import secure_filename
 from flask import Blueprint, current_app, flash, redirect, render_template, request, send_from_directory, session, url_for
@@ -162,8 +159,6 @@ def update(entry_id): #currently only for tasks
             task.mark_as_pending()
     return render_template('lists/model/task_check.html.jinja', entry=entry)
 
-
-
 @lists.route('/update_list_order/', methods=['PUT', 'POST', 'DELETE', 'GET'])
 @lists.route('/update_list_order/<int:list_id>', methods=['PUT', 'POST', 'DELETE', 'GET'])
 @login_required
@@ -270,7 +265,6 @@ def show_list(list_id: int = None):
             elif list_model == 'Floor':
                 if not parent_entry_id and not combine: 
                     parent_entry_id = get_list_entries_for_item(current_user.active_home)[0].id
-                
             elif list_model == 'Room':
                 if not parent_entry_id and not combine: 
                     parent_entry_id = get_list_entries_for_item(current_user.active_home.active_floor)[0].id 
@@ -283,8 +277,6 @@ def show_list(list_id: int = None):
                     parent_entry_id = get_list_entries_for_item(current_user.active_home.active_room)[0].id
             elif list_model == 'Pin':
                 raise ValueError(f'Pin list should be served by the parent photo')
-                '''if not parent_entry_id and not combine: 
-                    parent_entry_id = get_list_entries_for_item(current_user.active_home.active_room.)[0].id'''
             else:
                 raise ValueError(f'Unknown list type {list_model}')
             # if combine is True, show combined lists, else show the first list found
@@ -396,4 +388,3 @@ def delete_list(user_list_id):
     else:
         flash('Item not found', 'danger')
     return ('', 204)
-# [ ] Cleanup unused routes when finished and testing complete

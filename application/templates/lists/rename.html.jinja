@@ -1,4 +1,4 @@
-<input 
+<input
     required
     class="form-control rename scalename z-3"
     type="text"
@@ -11,34 +11,42 @@
     hx-swap="outerHTML"
     value="{{ entry.get_item().name }}"
     autofocus
-    ontouchstart="this.removeAttribute('readonly'); this.focus();">
+    ontouchstart="this.removeAttribute('readonly'); this.focus();"
+/>
 
 <script>
-    const input = document.getElementById('input_{{ entry.item_model }}_name-{{ entry.item_id }}');
+    const input = document.getElementById(
+        "input_{{ entry.item_model }}_name-{{ entry.item_id }}",
+    );
     let isDragging = false;
 
     function updateCursorPosition(event) {
         const rect = input.getBoundingClientRect();
         const touchX = event.touches[0].clientX - rect.left;
-        let cursorPosition = Math.floor((touchX / rect.width) * input.value.length);
-        cursorPosition = Math.max(0, Math.min(cursorPosition, input.value.length));
+        let cursorPosition = Math.floor(
+            (touchX / rect.width) * input.value.length,
+        );
+        cursorPosition = Math.max(
+            0,
+            Math.min(cursorPosition, input.value.length),
+        );
         input.setSelectionRange(cursorPosition, cursorPosition);
     }
 
-    input.addEventListener('touchstart', (event) => {
+    input.addEventListener("touchstart", (event) => {
         isDragging = true; // Begin tracking the drag
         // Initial touch position is handled here
         updateCursorPosition(event);
     });
 
-    input.addEventListener('touchmove', (event) => {
+    input.addEventListener("touchmove", (event) => {
         if (isDragging) {
             updateCursorPosition(event); // Update cursor during drag
             event.preventDefault(); // Prevent scrolling during drag
         }
     });
 
-    input.addEventListener('touchend', () => {
+    input.addEventListener("touchend", () => {
         isDragging = false; // Stop tracking the drag
     });
 </script>

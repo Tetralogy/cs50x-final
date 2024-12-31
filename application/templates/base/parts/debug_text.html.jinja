@@ -1,18 +1,15 @@
-
-    {% if debugging %}
-        <div class="debug-info">
-            {% if arg == 'listname' %}
-                {% include 'lists/listname.html.jinja' %}
-            {% elif arg == 'sublevel' %}
-                sublevel: {{ sublevel }} sublevel_limit: {{ sublevel_limit }}
-                CHILDREN?: {{ child_lists }} 
-            {% elif arg == 'order' %}
-                <p class="bg-dark">order: {{ entry.order }}</p>
-            {% elif arg == 'sublist' %}
-                {{ sublevel }}
-                sublevel_limit: {{ sublevel_limit }} CHILDREN?:
-                {{ child_lists }} 
-            {% endif %}
-        </div>
-    {% endif %}
-
+{% if debugging %}
+    <div class="debug-info">
+        {% if arg == 'listname' %}
+            {% include 'lists/listname.html.jinja' %}
+        {% elif arg == 'sublevel' %}
+            sublevel: {{ sublevel }} sublevel_limit: {{ sublevel_limit }}
+            CHILDREN?: {{ child_lists }}
+        {% elif arg == 'order' %}
+            <p class="bg-dark">order: {{ entry.order }}</p>
+        {% elif arg == 'sublist' %}
+            {{ sublevel }}
+            sublevel_limit: {{ sublevel_limit }} CHILDREN?: {{ child_lists }}
+        {% endif %}
+    </div>
+{% endif %}

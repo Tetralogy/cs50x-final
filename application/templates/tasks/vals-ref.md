@@ -34,7 +34,7 @@ List of all homes for the user:
 
             hx-get="/show_list/"
 
-            hx-vals='{"parent": "{{ current_user.active_home }}", "sublevel_limit": 100, }' #todo extract and make simple list of possible actions
+            hx-vals='{"parent": "{{ current_user.active_home }}", "sublevel_limit": 100, }' 
 
             hx-trigger="load once"
 

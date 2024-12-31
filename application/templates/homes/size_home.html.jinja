@@ -4,23 +4,30 @@
 {% endblock %}
 
 {% block main %}
-
-    current size sqm: {{ current_user.active_home.home_size_sqm }}sqm
-    current size sqft: {{ current_user.active_home.home_size_sqm * 10.764}}sqft
-<div>
-<form id="home-size" action="/home/size" method="POST">
-        <label for="size" class="form-label">500sqft - 3000sqft+</label>
-        <input type="range" class="form-range" id="size" name="size" min="500" max="3000" oninput="updateOutput(this.value)">
-        <output id="size-output">? sqft</output>
-        <button class="btn btn-primary">
+    current size sqm: {{ current_user.active_home.home_size_sqm }}sqm current
+    size sqft: {{ current_user.active_home.home_size_sqm * 10.764 }}sqft
+    <div>
+        <form id="home-size" action="/home/size" method="POST">
+            <label for="size" class="form-label">500sqft - 3000sqft+</label>
+            <input
+                type="range"
+                class="form-range"
+                id="size"
+                name="size"
+                min="500"
+                max="3000"
+                oninput="updateOutput(this.value)"
+            />
+            <output id="size-output">? sqft</output>
+            <button class="btn btn-primary">
                 Confirm size and go to next step
-        </button>
-</form>
+            </button>
+        </form>
 
-<script>
-function updateOutput(value) {
-    document.getElementById('size-output').value = value + ' sqft';
-}
-</script>
-
+        <script>
+            function updateOutput(value) {
+                document.getElementById("size-output").value = value + " sqft";
+            }
+        </script>
+    </div>
 {% endblock %}

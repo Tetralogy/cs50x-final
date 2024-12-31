@@ -1,23 +1,5 @@
-<!-----
 
-Conversion time: 3.139 seconds.
 
-Using this Markdown file:
-
-1. Paste this output into your source file.
-2. See the notes and action items below regarding this conversion run.
-3. Check the rendered output (headings, lists, code blocks, tables) for proper
-
-   formatting and use a linkchecker before you publish this page.
-
-Conversion notes:
-
-- Docs to Markdown version 1.0β36
-- Mon Jul 15 2024 11:40:49 GMT-0700 (PDT)
-- Source doc: schema for cleaning app
-- Tables are currently converted to HTML tables.
-
------>
 
 Basic user experience outline
 
@@ -27,8 +9,8 @@ DONE #4 1. Register/create an account
     1. Login
     2. Logout
     3. Session cookies and user activity etc.
-2. Onboarding
-    4. Establish the user’s home environment
+1. Onboarding
+    1. Establish the user’s home environment
         1. House size
         2. Number of levels
         3. Layout

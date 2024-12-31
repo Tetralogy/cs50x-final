@@ -5,15 +5,19 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta name="color-scheme" content="dark light" />
 
-
-
         <title>Untitled Cleaning App: {% block title %}{% endblock %}</title>
-        <script src="https://unpkg.com/htmx.org@2.0.4/dist/htmx.js" integrity="sha384-oeUn82QNXPuVkGCkcrInrS1twIxKhkZiFfr2TdiuObZ3n3yIeMiqcRzkIcguaof1" crossorigin="anonymous">htmx.logAll();</script>
-        {# <script src="https://unpkg.com/htmx.org@2.0.4" integrity="sha384-HGfztofotfshcF7+8n44JQL2oJmowVChPTg48S+jvZoztPfvwD79OC/LTtG6dMp+" crossorigin="anonymous"></script> #}
+        <script
+            src="https://unpkg.com/htmx.org@2.0.4/dist/htmx.js"
+            integrity="sha384-oeUn82QNXPuVkGCkcrInrS1twIxKhkZiFfr2TdiuObZ3n3yIeMiqcRzkIcguaof1"
+            crossorigin="anonymous"
+        >
+            htmx.logAll();
+        </script>
+
         <script type="module" src="/static/js/bundle.js"></script>
     </head>
     <body hx-boost="true" hx-indicator="#updating-indicator">
-    {% include 'base/parts/nav_top.html.jinja' %}
+        {% include 'base/parts/nav_top.html.jinja' %}
         {% from 'base/parts/debug_text.html.jinja' import debug_text %}
         <div
             class="position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center"
@@ -28,7 +32,6 @@
             </div>
         </div>
         <main class="container-fluid p-0">
-            
             {#{% include 'base/parts/flash_container.html.jinja' %}#}
 
             <div class="row g-0">
@@ -40,9 +43,6 @@
             </div>
         </main>
 
-        {# <script>
-           // htmx.config.indicatorClass = ".spinner-border .text-warning"; //# [ ] need to fix and style
-        </script> #}
         <script>
             // Flash messages
             //document.addEventListener("DOMContentLoaded", (event) => {
@@ -55,9 +55,6 @@
             //    }, 5000); // 5 seconds delay
             //});
         </script>
-
-        
-        
 
         <footer>{% include 'base/parts/nav/index.html.jinja' %}</footer>
     </body>

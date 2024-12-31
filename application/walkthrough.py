@@ -1,4 +1,3 @@
-import logging
 import os
 from flask import Blueprint, current_app, make_response, redirect, render_template, request, session, url_for
 from jinja2.exceptions import TemplateNotFound
@@ -54,7 +53,6 @@ def walk_start(room_id: int = None, room_name: str = None, view: str = None):
     #logger.debug(f'active_room: {active_room}')
     return redirect(url_for('walkthrough.views', view=view))
     #return render_template('walkthrough/index.html.jinja', active_room=active_room)
-
 
 @walkthrough.route('/walkthrough/steps', methods=['GET', 'PUT'])
 @login_required

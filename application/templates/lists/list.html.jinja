@@ -1,13 +1,3 @@
-{# <div class="border border-primary"> #}
-    <!--     <div class="accordion border border-warning border-5" id="list-accordion-">
-        <div class="accordion-item border border-danger">
-
-        <h2 class="accordion-header">
-<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="" aria-expanded="true" aria-controls="multiCollapseExample1 multiCollapseExample2">hide/show</button>
-        </h2> 
-        
-            <div class="accordion-collapse collapse show">
-                <div class="accordion-body"> -->
 {% for list_obj in userlists %}
     {% if list_obj.entries | length < 1 %}
         {% if list_obj.list_model == "Room" %}
@@ -51,13 +41,13 @@
     {% endif %}
 
 {% if view == "horiz-scroll" %}
-{% include 'lists/scrollnav.html.jinja' %}
+    {% include 'lists/scrollnav.html.jinja' %}
 {% elif list_obj.list_model == "Pin" %}
-{% include 'lists/pingrid.html.jinja' %}
+    {% include 'lists/pingrid.html.jinja' %}
 {% elif list_obj.list_model == "Room" %}
-{% include 'lists/rooms_list.html.jinja' %}
+    {% include 'lists/rooms_list.html.jinja' %}
 {% elif list_obj.list_model == "Photo" %}
-{% include 'lists/photos_list.html.jinja' %}
+    {% include 'lists/photos_list.html.jinja' %}
 {% else %}
         <ul
             id="list-updater-{{ list_obj.id }}"
@@ -94,4 +84,4 @@
             </div>
         </div>
     {% endif %}
-    {% endfor %}
+{% endfor %}

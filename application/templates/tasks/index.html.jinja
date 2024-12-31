@@ -4,31 +4,15 @@
 {% endblock %}
 
 {% block main %}
-# list all tasks
-# list all rooms
-# move tasks between rooms
-# minimal style for tasks in list form
-
-
-# drop zones should show on right side of block
-
-#: attach tasks to photos
-#todo: mark a photo as wide angle landscape cover image for a room
-#todo: mark a photo as before or after image for a room
-#todo: mark a photo as detail closeup subimage for a task
-#: MARK TASKS AS DONE
-#todo: interactive tasks in photo form
-#todo: different sorting options
-#todo: remove 'zones' concept
-#: list all photos
-#: heigharchial view of tasks
-#todo: prioritize tasks
-<h1>
-    current_user.active_home 
-    {{ current_user.active_home }}
-</h1>
-<h2>view: {{ view }}</h2>
-{#<h1>List of all lists for the current home:</h1>
+    #todo: mark a photo as wide angle landscape cover image for a room 
+    #todo: mark a photo as before or after image for a room 
+    #todo: mark a photo as detail closeup subimage for a task 
+    #todo: interactive tasks in photo form
+    #todo: different sorting options #: list all photos #: heigharchial view of tasks 
+    #todo: prioritize tasks
+    <h1>current_user.active_home {{ current_user.active_home }}</h1>
+    <h2>view: {{ view }}</h2>
+    {#<h1>List of all lists for the current home:</h1>
 
     {# <div
                 class="row g-0 row-cols-4 container-fluid border border-success border-5 rounded-bottom-4 p-1"
@@ -46,59 +30,53 @@
     <h1>This is a view of all tasks for the curent home:</h1>
 
     <div
-                class="row g-0 row-cols-4 container-fluid  border border-success border-5 rounded-bottom-4 p-1"
-                id="task-list-loader"
-                hx-get="/show_list/"
-                hx-vals='{"list_model": "Task", "root_parent": "{{ current_user.active_home }}", "sublevel_limit": 100, "view_override": "text-hierarchy"}'
-                hx-trigger="load once"
-                hx-swap="outerHTML"
-                hx-indicator="#updating-indicator"
-            >
-                <input id="dummy-placeholder" type="hidden" name="items" />
+        class="row g-0 row-cols-4 container-fluid  border border-success border-5 rounded-bottom-4 p-1"
+        id="task-list-loader"
+        hx-get="/show_list/"
+        hx-vals='{"list_model": "Task", "root_parent": "{{ current_user.active_home }}", "sublevel_limit": 100, "view_override": "text-hierarchy"}'
+        hx-trigger="load once"
+        hx-swap="outerHTML"
+        hx-indicator="#updating-indicator"
+    >
+        <input id="dummy-placeholder" type="hidden" name="items" />
     </div>
-     <h1>List of all homes for the user:</h1>
+    <h1>List of all homes for the user:</h1>
     <div
-                class="row g-0 row-cols-4 container-fluid  border border-success border-5 rounded-bottom-4 p-1"
-                id="task-list-loader"
-                hx-get="/show_list/"
-                hx-vals='{"list_model": "Home", "sublevel_limit": 1, "view_override": "text-hierarchy"}'
-                hx-trigger="load once"
-                hx-swap="outerHTML"
-                hx-indicator="#updating-indicator"
-            >
-                <input id="dummy-placeholder" type="hidden" name="items" />
-                
+        class="row g-0 row-cols-4 container-fluid  border border-success border-5 rounded-bottom-4 p-1"
+        id="task-list-loader"
+        hx-get="/show_list/"
+        hx-vals='{"list_model": "Home", "sublevel_limit": 1, "view_override": "text-hierarchy"}'
+        hx-trigger="load once"
+        hx-swap="outerHTML"
+        hx-indicator="#updating-indicator"
+    >
+        <input id="dummy-placeholder" type="hidden" name="items" />
     </div>
 
     <h1>List of all rooms for the active_home:</h1>
 
     <div
-                class="row g-0 row-cols-4 container-fluid  border border-success border-5 rounded-bottom-4 p-1"
-                id="task-list-loader"
-                hx-get="/show_list/"
-                hx-vals='{"list_model": "Room", "root_parent": "{{ current_user.active_home }}", "sublevel_limit": 0, "view_override": "text-hierarchy"}'
-                hx-trigger="load once"
-                hx-swap="outerHTML"
-                hx-indicator="#updating-indicator"
-            >
-                <input id="dummy-placeholder" type="hidden" name="items" />
-                
+        class="row g-0 row-cols-4 container-fluid  border border-success border-5 rounded-bottom-4 p-1"
+        id="task-list-loader"
+        hx-get="/show_list/"
+        hx-vals='{"list_model": "Room", "root_parent": "{{ current_user.active_home }}", "sublevel_limit": 0, "view_override": "text-hierarchy"}'
+        hx-trigger="load once"
+        hx-swap="outerHTML"
+        hx-indicator="#updating-indicator"
+    >
+        <input id="dummy-placeholder" type="hidden" name="items" />
     </div>
 
     <h1>List of all photos for the user:</h1>
-        <div
-                class="row g-0 row-cols-4 container-fluid  border border-success border-5 rounded-bottom-4 p-1"
-                id="task-list-loader"
-                hx-get="/show_list/"
-                hx-vals='{"list_model": "Photo", "root_parent": "{{ current_user.active_home }}",  "view_override": "photos"}'
-                hx-trigger="load once"
-                hx-swap="outerHTML"
-                hx-indicator="#updating-indicator"
-            >
-                <input id="dummy-placeholder" type="hidden" name="items" />
-                
+    <div
+        class="row g-0 row-cols-4 container-fluid  border border-success border-5 rounded-bottom-4 p-1"
+        id="task-list-loader"
+        hx-get="/show_list/"
+        hx-vals='{"list_model": "Photo", "root_parent": "{{ current_user.active_home }}",  "view_override": "photos"}'
+        hx-trigger="load once"
+        hx-swap="outerHTML"
+        hx-indicator="#updating-indicator"
+    >
+        <input id="dummy-placeholder" type="hidden" name="items" />
     </div>
-
-
-
 {% endblock %}

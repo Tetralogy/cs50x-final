@@ -1,13 +1,15 @@
 <div class="form-floating mb-3" hx-target="this" hx-swap="outerHTML">
-            <input hx-post="/validate/{{ item_model }}" hx-indicator="#updating-indicator"
-                type="text"
-                class="form-control {{ error_class }}"
-                id="{{ id }}"
-                placeholder= "{{placeholder}}"
-                name="name_input"
-                value="{{ value }}"
-                required
-            />
-            <label for="{{ id }}">Home Name</label>
-            <div class='invalid-feedback' >{{ error_message }}</div>
-        </div>
+    <input
+        hx-post="/validate/{{ item_model }}"
+        hx-indicator="#updating-indicator"
+        type="text"
+        class="form-control {{ error_class }}"
+        id="{{ id }}"
+        placeholder="{{ placeholder }}"
+        name="name_input"
+        value="{{ value }}"
+        required
+    />
+    <label for="{{ id }}">Home Name</label>
+    <div class="invalid-feedback">{{ error_message }}</div>
+</div>

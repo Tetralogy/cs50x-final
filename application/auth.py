@@ -1,4 +1,3 @@
-import logging
 import re
 from flask import Blueprint, Flask, flash, make_response, redirect, render_template, request, session, url_for
 from flask_sqlalchemy import SQLAlchemy
