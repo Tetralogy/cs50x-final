@@ -1,36 +1,6 @@
-# cs50x-final
-Final project for CS50
-#[x]: #clean up project files
-[x] templates
-[x] python
-[x]: clean up comments
-[x] delete media
-[x] ideas folder files
-[ ] merge to main
-
-#[X]: WRITE THE PROJECT DOCUMENTATION
-#BUG: make the video demo
-
-#BUG: clean up this readme to spec of final assignment
-#hack: make git repo public
-#hack: submit to github and cs50
-
-
-
-    your project’s title;
-    your name;
-    URL of your video
-    and a description of your project.
-    your GitHub and edX usernames;
-    your city and country;
-    and, the date you have recorded this video.
-
-
-#XXX-------------------------delete above-------------------------XXX#
-
 # House Cleaning Todo App: Final Project for CS50X
 by Kyle Mausser
-#### Video Demo:  <URL HERE>
+#### Video Demo:  #BUG #xxx <URL HERE>
 
 #### Description:
 
